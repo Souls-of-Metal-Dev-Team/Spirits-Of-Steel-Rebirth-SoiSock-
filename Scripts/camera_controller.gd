@@ -4,31 +4,41 @@ extends Node
 @export var base_speed: float = 600.0
 
 var is_dragging := false
+var top_bar_height = 26
 
 
 func _process(delta: float) -> void:
-	if Console.is_visible() or GameState.decision_menu_open:
+	if get_viewport().gui_get_focus_owner() != null || GameState.decision_menu_open:
 		return
-	_handle_keyboard_movement(delta)
+	camera.position += Input.get_vector("move_left", "move_right", "move_up", "move_down") * (base_speed / camera.zoom.x) * delta
+	camera.position.y = clampf(
+		camera.position.y, 
+		-top_bar_height / camera.zoom.y,  
+		MapManager.MAP_HEIGHT - (camera.get_viewport_rect().size.y / camera.zoom.y)
+	)
 
 
 func _is_mouse_over_ui() -> bool:
-	var hovered = get_viewport().gui_get_hovered_control()
-	return hovered != null
+	return get_viewport().gui_get_hovered_control() != null
 
 
 func _input(event: InputEvent) -> void:
-	if Console.is_visible() or _is_mouse_over_ui():
+	if event is InputEventMouseButton && event.button_index == MOUSE_BUTTON_MIDDLE:
+		if event.pressed:
+			if !Console.is_visible() && !_is_mouse_over_ui():
+				is_dragging = true
+				get_viewport().set_input_as_handled()
+		else:
+			is_dragging = false
+
+	if event is InputEventMouseMotion && is_dragging:
+		camera.position -= event.relative / camera.zoom.x
 		return
 
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_MIDDLE:
-		is_dragging = event.pressed
-		get_viewport().set_input_as_handled()
+	if Console.is_visible() || _is_mouse_over_ui():
+		return
 
-	if event is InputEventMouseMotion and is_dragging:
-		camera.position -= event.relative / camera.zoom.x
-
-	if event is InputEventMouseButton and event.is_pressed():
+	if event is InputEventMouseButton && event.is_pressed():
 		var zoom_dir = 0
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
 			zoom_dir = 1
@@ -36,19 +46,17 @@ func _input(event: InputEvent) -> void:
 			zoom_dir = -1
 
 		if zoom_dir != 0:
-			_perform_zoom(zoom_dir)
+			_perform_zoom(zoom_dir * event.factor)
 
 
-func _handle_keyboard_movement(delta: float) -> void:
-	var input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
-	camera.position += input_dir * (base_speed / camera.zoom.x) * delta
-
-
-func _perform_zoom(direction: int) -> void:
+func _perform_zoom(direction: float) -> void:
 	var mouse_pos_before := camera.get_global_mouse_position()
 
-	var new_zoom := camera.zoom + Vector2.ONE * direction
-	camera.zoom = new_zoom.clamp(Vector2.ONE, Vector2.ONE * 12)
+	
 
-	var mouse_pos_after := camera.get_global_mouse_position()
-	camera.position += mouse_pos_before - mouse_pos_after
+	camera.zoom = (camera.zoom * (1.0 + direction * 0.1)).clamp(
+		Vector2.ONE * camera.get_viewport_rect().size.y / MapManager.MAP_HEIGHT,
+		Vector2.ONE * 12 
+	)
+
+	camera.position += mouse_pos_before - camera.get_global_mouse_position()

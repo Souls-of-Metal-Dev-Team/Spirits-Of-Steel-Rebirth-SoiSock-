@@ -1,12 +1,35 @@
-[gd_scene load_steps=10 format=3 uid="uid://ef1nlqkm5anw"]
+[gd_scene format=3 uid="uid://ef1nlqkm5anw"]
 
 [ext_resource type="Theme" uid="uid://c38ivksvf4is0" path="res://main_theme.tres" id="1_28flt"]
 [ext_resource type="Texture2D" uid="uid://lifcljm83dlp" path="res://assets/ui/menu.png" id="1_48xlc"]
 [ext_resource type="Texture2D" uid="uid://claivv7l8p5lc" path="res://assets/ui/logo.png" id="2_opfnp"]
+[ext_resource type="Script" uid="uid://bkclpbbspngc8" path="res://Scripts/UI/AvatarOfHate.gd" id="2_vtepg"]
 [ext_resource type="FontFile" uid="uid://bnkj3vn7gx4qu" path="res://font/Google_Sans/static/GoogleSans-BoldItalic.ttf" id="3_cp0ys"]
+[ext_resource type="Texture2D" uid="uid://bru4in3fjwdoy" path="res://assets/ui/BlebIsMyPassion.png" id="4_6m47u"]
+[ext_resource type="Texture2D" uid="uid://dx0ahfcjo7bad" path="res://assets/ui/xanax.jpg" id="4_m3bi6"]
 [ext_resource type="FontFile" uid="uid://bfw0gn63lgdhq" path="res://font/Google_Sans/static/GoogleSans-Bold.ttf" id="4_yhxw7"]
-[ext_resource type="Script" uid="uid://bmubx6hdbo3bt" path="res://Scripts/main_menu.gd" id="5_trj04"]
+[ext_resource type="Texture2D" uid="uid://bsg7ftkm5j2h3" path="res://assets/ui/fish4.jpg" id="5_84iac"]
+[ext_resource type="Script" uid="uid://bmubx6hdbo3bt" path="res://Scripts/UI/MainMenu.gd" id="5_trj04"]
+[ext_resource type="Material" uid="uid://btordm7082cxn" path="res://Materials/damaged.tres" id="5_yhxw7"]
+[ext_resource type="Shader" uid="uid://cfhel4q1boofw" path="res://shaders/petpet.gdshader" id="6_m3bi6"]
+[ext_resource type="Texture2D" uid="uid://cxh37swve7a1d" path="res://assets/ui/SoiBean.png" id="7_5n0dv"]
+[ext_resource type="Texture2D" uid="uid://c55xrkqv8k1vg" path="res://assets/ui/the_rock.png" id="7_wyh8j"]
 [ext_resource type="FontFile" uid="uid://c1jnrhadjfe68" path="res://font/Google_Sans/static/GoogleSans-Regular.ttf" id="8_trj04"]
+[ext_resource type="Texture2D" uid="uid://nb3jbdnpc4c0" path="res://assets/ui/AKey.png" id="9_ne6ao"]
+[ext_resource type="Texture2D" uid="uid://vmu5mixor70t" path="res://assets/ui/ariect.png" id="10_t1dhk"]
+[ext_resource type="Texture2D" uid="uid://cxilgtpeosl4d" path="res://assets/ui/johnjohn.png" id="10_tt8ml"]
+[ext_resource type="Shader" uid="uid://cac81x4hbfwue" path="res://shaders/goober.gdshader" id="11_6dk6o"]
+[ext_resource type="Texture2D" uid="uid://8m4mr3hoakb8" path="res://assets/ui/Soilad UI.png" id="12_fmarx"]
+[ext_resource type="Texture2D" uid="uid://dxagea0m3wa61" path="res://assets/ui/petpet.png" id="12_vtepg"]
+[ext_resource type="Script" uid="uid://cg4pa1ta81t7l" path="res://Scenes/starts.gd" id="14_8dnnj"]
+[ext_resource type="Script" uid="uid://wdpw32skvwbn" path="res://Scripts/UI/Animations/Border.gd" id="18_ehtkc"]
+[ext_resource type="Script" path="res://Scripts/UI/Links.gd" id="18_ujyyl"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ehtkc"]
+shader = ExtResource("11_6dk6o")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8dnnj"]
+shader = ExtResource("6_m3bi6")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_28flt"]
 content_margin_left = 14.0
@@ -22,28 +45,117 @@ content_margin_right = 14.0
 content_margin_bottom = 14.0
 bg_color = Color(0.08627451, 0.08627451, 0.08627451, 1)
 
-[node name="MainMenu" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="MainMenu" type="CanvasLayer" unique_id=1666967798]
 metadata/_edit_use_anchors_ = true
 
-[node name="Background" type="TextureRect" parent="."]
-layout_mode = 1
+[node name="Background" type="TextureRect" parent="." unique_id=120285262]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 texture = ExtResource("1_48xlc")
 expand_mode = 2
-stretch_mode = 5
+stretch_mode = 6
 metadata/_edit_use_anchors_ = true
 
-[node name="Logo" type="TextureRect" parent="."]
+[node name="Butter" type="Control" parent="." unique_id=166950627 node_paths=PackedStringArray("avatarImage")]
+layout_mode = 3
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -279.0
+offset_top = 209.0
+grow_horizontal = 0
+grow_vertical = 2
+script = ExtResource("2_vtepg")
+sankara = true
+ussr = Array[Texture]([ExtResource("10_t1dhk"), ExtResource("4_6m47u"), ExtResource("5_84iac"), ExtResource("4_m3bi6"), ExtResource("7_5n0dv"), ExtResource("7_wyh8j"), ExtResource("9_ne6ao"), ExtResource("10_tt8ml"), ExtResource("2_opfnp"), ExtResource("1_48xlc"), ExtResource("12_fmarx")])
+avatarImage = NodePath("TextureRect")
+
+[node name="TextureRect" type="TextureRect" parent="Butter" unique_id=88744107]
+material = SubResource("ShaderMaterial_ehtkc")
+layout_mode = 0
+offset_left = 66.0
+offset_top = 43.0
+offset_right = 231.0
+offset_bottom = 208.0
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Hand" type="TextureRect" parent="Butter" unique_id=1924079947]
+material = SubResource("ShaderMaterial_8dnnj")
+layout_mode = 0
+offset_left = 32.06256
+offset_top = 64.78296
+offset_right = 115.16809
+offset_bottom = 128.42346
+rotation = -0.351973
+texture = ExtResource("12_vtepg")
+expand_mode = 1
+
+[node name="Hand5" type="TextureRect" parent="Butter" unique_id=1572649922]
+material = SubResource("ShaderMaterial_8dnnj")
+layout_mode = 0
+offset_left = 100.00006
+offset_top = 19.0
+offset_right = 183.10559
+offset_bottom = 82.6405
+rotation = 0.21252406
+texture = ExtResource("12_vtepg")
+expand_mode = 1
+
+[node name="Hand4" type="TextureRect" parent="Butter" unique_id=885631731]
+material = SubResource("ShaderMaterial_8dnnj")
+layout_mode = 0
+offset_left = 108.772766
+offset_top = 212.75848
+offset_right = 161.23926
+offset_bottom = 252.93622
+rotation = -1.6544858
+texture = ExtResource("12_vtepg")
+expand_mode = 1
+
+[node name="Hand2" type="TextureRect" parent="Butter" unique_id=1333335628]
+material = SubResource("ShaderMaterial_8dnnj")
+layout_mode = 0
+offset_left = 270.90283
+offset_top = 193.86789
+offset_right = 365.7743
+offset_bottom = 259.91098
+rotation = 2.9900136
+texture = ExtResource("12_vtepg")
+expand_mode = 1
+
+[node name="Hand3" type="TextureRect" parent="Butter" unique_id=2140408290]
+material = SubResource("ShaderMaterial_8dnnj")
+layout_mode = 0
+offset_left = 185.0
+offset_top = 27.999985
+offset_right = 259.01367
+offset_bottom = 90.7995
+rotation = 0.5416184
+texture = ExtResource("12_vtepg")
+expand_mode = 1
+
+[node name="Timer" type="Timer" parent="Butter" unique_id=1343216001]
+process_callback = 0
+wait_time = 20.0
+autostart = true
+
+[node name="Control" type="Control" parent="." unique_id=1445080907]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -6.0
+offset_top = 40.0
+offset_right = 34.0
+offset_bottom = 80.0
+scale = Vector2(0.58154315, 0.58154315)
+
+[node name="Logo" type="TextureRect" parent="Control" unique_id=110353226]
 layout_mode = 0
 offset_left = 27.5
 offset_top = 30.0
@@ -52,7 +164,7 @@ offset_bottom = 390.0
 scale = Vector2(0.4138889, 0.4138889)
 texture = ExtResource("2_opfnp")
 
-[node name="Label2" type="Label" parent="."]
+[node name="Label2" type="Label" parent="Control" unique_id=624590657]
 layout_mode = 0
 offset_left = 463.0
 offset_top = 145.0
@@ -66,7 +178,7 @@ theme_override_fonts/font = ExtResource("3_cp0ys")
 theme_override_font_sizes/font_size = 67
 text = "Rebirth"
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="Control" unique_id=639883253]
 layout_mode = 0
 offset_left = 109.499985
 offset_top = 73.0
@@ -82,179 +194,150 @@ theme_override_fonts/font = ExtResource("4_yhxw7")
 theme_override_font_sizes/font_size = 161
 text = "Spirits Of Steel"
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
-layout_mode = 0
-offset_left = 59.49994
-offset_top = 210.0
-offset_right = 287.49994
-offset_bottom = 438.0
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=964712662 node_paths=PackedStringArray("StartsUI", "CreditsUI")]
+material = ExtResource("5_yhxw7")
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 161.0
+offset_right = 356.0
+offset_bottom = -61.0
+grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_28flt")
 script = ExtResource("5_trj04")
+StartsUI = NodePath("../TabContainer/Starts")
+CreditsUI = NodePath("../TabContainer/Credits")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=503985164]
 layout_mode = 2
-theme_override_constants/separation = 24
-alignment = 1
+theme_override_constants/separation = 8
 
-[node name="New" type="Button" parent="PanelContainer/VBoxContainer"]
+[node name="New" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1326153105]
 texture_filter = 2
+material = ExtResource("5_yhxw7")
 layout_mode = 2
 theme = ExtResource("1_28flt")
 text = "New Game
 "
+script = ExtResource("18_ehtkc")
 
-[node name="Settings" type="Button" parent="PanelContainer/VBoxContainer"]
+[node name="Settings" type="Button" parent="PanelContainer/VBoxContainer" unique_id=2088481950]
 texture_filter = 2
+material = ExtResource("5_yhxw7")
 layout_mode = 2
 theme = ExtResource("1_28flt")
 text = "Settings"
+script = ExtResource("18_ehtkc")
 
-[node name="Credits" type="Button" parent="PanelContainer/VBoxContainer"]
+[node name="Credits" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1433871763]
 texture_filter = 2
+material = ExtResource("5_yhxw7")
 layout_mode = 2
 theme = ExtResource("1_28flt")
 text = "Credits"
+script = ExtResource("18_ehtkc")
 
-[node name="Quit" type="Button" parent="PanelContainer/VBoxContainer"]
+[node name="Control" type="Control" parent="PanelContainer/VBoxContainer" unique_id=55547179]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Quit" type="Button" parent="PanelContainer/VBoxContainer" unique_id=85919368]
 texture_filter = 2
+material = ExtResource("5_yhxw7")
 layout_mode = 2
 theme = ExtResource("1_28flt")
 text = "Quit
 "
+script = ExtResource("18_ehtkc")
 
-[node name="Settings" type="Control" parent="."]
+[node name="TabContainer" type="TabContainer" parent="." unique_id=1116322658]
+material = ExtResource("5_yhxw7")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 352.0
+offset_top = 22.0
+offset_right = -184.0
+offset_bottom = -53.0
+grow_horizontal = 2
+grow_vertical = 2
+tabs_visible = false
+deselect_enabled = true
+
+[node name="Starts" type="PanelContainer" parent="TabContainer" unique_id=1804048672 node_paths=PackedStringArray("start_entry")]
 visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-metadata/_edit_use_anchors_ = true
-
-[node name="ColorRect2" type="ColorRect" parent="Settings"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 0.5019608)
-metadata/_edit_use_anchors_ = true
-
-[node name="PanelContainer2" type="PanelContainer" parent="Settings"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -114.0
-offset_top = -114.0
-offset_right = 114.0
-offset_bottom = 36.0
-grow_horizontal = 2
-grow_vertical = 2
+use_parent_material = true
+layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_vr1f0")
+script = ExtResource("14_8dnnj")
+start_entry = NodePath("ScrollContainer/HFlowContainer")
+metadata/_tab_index = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Settings/PanelContainer2"]
+[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/Starts" unique_id=356775520]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="HFlowContainer" type="HFlowContainer" parent="TabContainer/Starts/ScrollContainer" unique_id=1376363996]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Credits" type="PanelContainer" parent="TabContainer" unique_id=585752186]
+visible = false
+use_parent_material = true
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_vr1f0")
+metadata/_tab_index = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Credits" unique_id=289431072]
+use_parent_material = true
 layout_mode = 2
 theme_override_constants/separation = 24
-alignment = 1
 
-[node name="SFX" type="HSplitContainer" parent="Settings/PanelContainer2/VBoxContainer"]
-layout_mode = 2
-split_offset = 102
-dragging_enabled = false
-
-[node name="Label" type="Label" parent="Settings/PanelContainer2/VBoxContainer/SFX"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("8_trj04")
-text = "SFX Volume"
-
-[node name="HSlider" type="HSlider" parent="Settings/PanelContainer2/VBoxContainer/SFX"]
-layout_mode = 2
-max_value = 10.0
-
-[node name="Music" type="HSplitContainer" parent="Settings/PanelContainer2/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Settings/PanelContainer2/VBoxContainer/Music"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("8_trj04")
-text = "MUsic Volume"
-
-[node name="HSlider" type="HSlider" parent="Settings/PanelContainer2/VBoxContainer/Music"]
-layout_mode = 2
-max_value = 10.0
-
-[node name="Exit" type="Button" parent="Settings/PanelContainer2/VBoxContainer"]
-layout_mode = 2
-theme = ExtResource("1_28flt")
-text = "exit
-"
-
-[node name="Credits" type="Control" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-metadata/_edit_use_anchors_ = true
-
-[node name="ColorRect" type="ColorRect" parent="Credits"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 0.5019608)
-metadata/_edit_use_anchors_ = true
-
-[node name="PanelContainer" type="PanelContainer" parent="Credits"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -164.0
-offset_top = -100.5
-offset_right = 164.0
-offset_bottom = 100.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_vr1f0")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Credits/PanelContainer"]
-layout_mode = 2
-theme_override_constants/separation = 24
-alignment = 1
-
-[node name="Label" type="Label" parent="Credits/PanelContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="TabContainer/Credits/VBoxContainer" unique_id=771123924]
 texture_filter = 2
+use_parent_material = true
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_fonts/font = ExtResource("8_trj04")
 text = "Z21
 CallMePol
 Soilad
-Ariect Von don Koppan Finchendenstein II
-The spirit of GavGrub"
+Sockmit
+EsatBoucaud icon-sets
+Rosseau
+AirplaneEnjoyer
+FilipYo
+Nihal
+The Spirit of Gavin \"Grubhub\" Grubert"
 
-[node name="Exit" type="Button" parent="Credits/PanelContainer/VBoxContainer"]
+[node name="Exit" type="Button" parent="TabContainer/Credits/VBoxContainer" unique_id=1733367604]
 texture_filter = 2
+use_parent_material = true
 layout_mode = 2
 theme = ExtResource("1_28flt")
 text = "Thanks y'all"
 
+[node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=1546527840]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -154.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+bbcode_enabled = true
+text = "[url=https://discord.gg/GbyABEssVE]SOS:R Discord!!!![/url]"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("18_ujyyl")
+
+[connection signal="timeout" from="Butter/Timer" to="Butter" method="OnTimerTimeout"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/New" to="PanelContainer" method="_on_new_game_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Settings" to="PanelContainer" method="_on_settings_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Credits" to="PanelContainer" method="_on_credits_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Quit" to="PanelContainer" method="_on_quit_pressed"]
-[connection signal="value_changed" from="Settings/PanelContainer2/VBoxContainer/SFX/HSlider" to="PanelContainer" method="_on_sfx_changed"]
-[connection signal="value_changed" from="Settings/PanelContainer2/VBoxContainer/Music/HSlider" to="PanelContainer" method="_on_music_changed"]
-[connection signal="pressed" from="Settings/PanelContainer2/VBoxContainer/Exit" to="PanelContainer" method="_on_exit_settings_pressed"]
-[connection signal="pressed" from="Credits/PanelContainer/VBoxContainer/Exit" to="PanelContainer" method="_on_exit_credits_pressed"]
+[connection signal="pressed" from="TabContainer/Credits/VBoxContainer/Exit" to="PanelContainer" method="_on_exit_credits_pressed"]
+[connection signal="meta_clicked" from="RichTextLabel" to="RichTextLabel" method="_on_meta_clicked"]

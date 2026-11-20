@@ -4,50 +4,49 @@ class_name GameClock
 signal hour_passed
 signal day_passed
 
-@export var hours_per_tick := 1  # How many in-game hours pass per tick
-@export var seconds_per_tick := 1.0  # Real seconds per tick
+@export var hours_per_tick := 1 # How many in-game hours pass per tick
+@export var seconds_per_tick := 1.0 # Real seconds per tick
 
 @export var start_year := 2010
-@export var start_month := 1  # 1-12
-@export var start_day := 1  # 1-31
+@export var start_month := 1 # 1-12
+@export var start_day := 1 # 1-31
 @export var start_hour := 0
 
-var total_game_seconds: float = 0.0
-
 var time_scale := MIN_SPEED
-const MIN_SPEED := 0
+const MIN_SPEED := 8
 const MAX_SPEED := 80.0
 
 var hour: int = start_hour
 var date_dict: Dictionary = {"year": start_year, "month": start_month, "day": start_day}
 var accumulated_time: float = 0.0
 
-var paused: bool
+var paused: bool = true
 
 
 func _process(delta: float) -> void:
 	if paused:
 		return
 
-	total_game_seconds += delta * time_scale
 	accumulated_time += delta * time_scale
 	while accumulated_time >= seconds_per_tick:
 		accumulated_time -= seconds_per_tick
-		_tick_hour()
+		hour += hours_per_tick
+		hour_passed.emit()
 
-
-func _tick_hour() -> void:
-	hour += hours_per_tick
-	hour_passed.emit()
-
-	var date_dict_as_unix_time: int = Time.get_unix_time_from_datetime_dict(date_dict)
-	while hour >= 24:
-		hour -= 24
-		date_dict_as_unix_time += (24 * 60 * 60)
-		day_passed.emit()
-
-	date_dict = Time.get_datetime_dict_from_unix_time(date_dict_as_unix_time)
-
+		var date_dict_as_unix_time: int = Time.get_unix_time_from_datetime_dict(date_dict)
+		while hour >= 24:
+			hour -= 24
+			date_dict_as_unix_time += 86400
+			day_passed.emit()
+		date_dict = Time.get_datetime_dict_from_unix_time(date_dict_as_unix_time)
+	
+func get_absolute_days() -> float:
+	var date_unix: int = Time.get_unix_time_from_datetime_dict(date_dict)
+	# date_dict usually has hour 0 if updated via Time.get_datetime_dict_from_unix_time(date_dict_as_unix_time)
+	# where date_dict_as_unix_time was multiple of 86400.
+	var tick_progress := accumulated_time / seconds_per_tick
+	var hours_today := hour + (tick_progress * hours_per_tick)
+	return (float(date_unix) / 86400.0) + (hours_today / 24.0)
 
 func get_time_string() -> String:
 	return "%02d:00" % hour
@@ -58,25 +57,30 @@ func get_date_string() -> String:
 
 
 func get_datetime_string() -> String:
-	return "%s %s" % [get_time_string(), get_date_string()]
+	return "%02d:00 %04d-%02d-%02d" % [hour, date_dict.year, date_dict.month, date_dict.day]
+
+
+func ToDict() -> Dictionary:
+	return {
+		"hour": hour,
+		"date": date_dict
+	}
+
+
+func FromDict(data: Dictionary) -> void:
+	hour = data.get("hour", start_hour)
+	date_dict = data.get("date", {"year": start_year, "month": start_month, "day": start_day})
 
 
 func set_speed(scale: float) -> void:
 	time_scale = clamp(scale, MIN_SPEED, MAX_SPEED)
 	GameState.game_ui.updateProgressBar()
-	if time_scale <= 0:
-		pause()
-
 
 func decrease_speed():
 	set_speed(time_scale - 8)
 
-
 func increase_speed():
 	set_speed(time_scale + 8)
-	if paused:
-		resume()
-
 
 func pause() -> void:
 	paused = true
@@ -84,6 +88,8 @@ func pause() -> void:
 
 
 func resume() -> void:
+	if GameState.in_peace_process:
+		return
 	paused = false
 	GameState.game_ui.updateProgressBar()
 
@@ -92,6 +98,8 @@ func toggle_pause() -> void:
 	if time_scale == 0:
 		return
 	if paused:
+		if GameState.in_peace_process:
+			return
 		resume()
 	else:
 		pause()

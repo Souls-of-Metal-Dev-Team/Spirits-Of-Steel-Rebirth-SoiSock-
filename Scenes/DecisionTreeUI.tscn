@@ -1,0 +1,272 @@
+[gd_scene format=3 uid="uid://do6xny8ouo78x"]
+
+[ext_resource type="Script" uid="uid://cdspipsa2vbk5" path="res://Scripts/UI/DecisionTreeUI.gd" id="1_x8y2v"]
+[ext_resource type="Material" uid="uid://btordm7082cxn" path="res://Materials/damaged.tres" id="2_qq7pm"]
+
+[node name="DecisionTreeUI" type="CanvasLayer" unique_id=1860343269 node_paths=PackedStringArray("info_text", "info_tab", "edit_label", "edit_desc", "edit_days", "edit_ppcost", "close_button", "edit_button", "editing_buttons", "edit_function", "save_button", "add_decision", "add_req", "add_finished", "editor_tab", "reqs_block", "finished_block")]
+layer = 100
+script = ExtResource("1_x8y2v")
+info_text = NodePath("StaticUI/InfoPanel/TabContainer/InfoText")
+info_tab = NodePath("StaticUI/InfoPanel/TabContainer")
+edit_label = NodePath("StaticUI/InfoPanel/TabContainer/EditDecisions/HBoxcontainer/EditLabel")
+edit_desc = NodePath("StaticUI/InfoPanel/TabContainer/EditDecisions/HBoxcontainer/EditDesc")
+edit_days = NodePath("StaticUI/InfoPanel/TabContainer/EditDecisions/HBoxContainer/EditDays")
+edit_ppcost = NodePath("StaticUI/InfoPanel/TabContainer/EditDecisions/HBoxContainer/PPCost")
+close_button = NodePath("StaticUI/Header/HBoxContainer/CloseButton")
+edit_button = NodePath("StaticUI/Header/HBoxContainer/EditMode")
+editing_buttons = NodePath("StaticUI/Header/HBoxContainer/EditingButtons")
+edit_function = NodePath("StaticUI/Header/HBoxContainer/EditingButtons/EditFunc")
+save_button = NodePath("StaticUI/Header/HBoxContainer/EditingButtons/SaveDecisions")
+add_decision = NodePath("StaticUI/Header/HBoxContainer/EditingButtons/AddDecision")
+add_req = NodePath("StaticUI/Header/HBoxContainer/EditingButtons/AddRequirement")
+add_finished = NodePath("StaticUI/Header/HBoxContainer/EditingButtons/AddFinished")
+editor_tab = NodePath("StaticUI/TabContainer")
+reqs_block = NodePath("StaticUI/TabContainer/Requirements/ReqsBlock")
+finished_block = NodePath("StaticUI/TabContainer/Finished/FinishedBlock")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1064194189]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.05, 0.05, 0.05, 1)
+
+[node name="CanvasAnchor" type="Control" parent="." unique_id=494863825]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TreeCanvas" type="Node2D" parent="CanvasAnchor" unique_id=1189539722]
+
+[node name="StaticUI" type="Control" parent="." unique_id=1099787569]
+material = ExtResource("2_qq7pm")
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Header" type="Panel" parent="StaticUI" unique_id=1830681304]
+use_parent_material = true
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="TabsContainer" type="TabBar" parent="StaticUI/Header" unique_id=1925350161]
+use_parent_material = true
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -20.0
+offset_right = 255.0
+offset_bottom = 20.0
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="StaticUI/Header" unique_id=769223892]
+use_parent_material = true
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -214.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="EditingButtons" type="HBoxContainer" parent="StaticUI/Header/HBoxContainer" unique_id=1774232772]
+visible = false
+use_parent_material = true
+layout_mode = 2
+
+[node name="ReloadDecisions" type="Button" parent="StaticUI/Header/HBoxContainer/EditingButtons" unique_id=1987805188]
+use_parent_material = true
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "🗘"
+expand_icon = true
+
+[node name="EditFunc" type="CheckBox" parent="StaticUI/Header/HBoxContainer/EditingButtons" unique_id=1269039078]
+use_parent_material = true
+layout_mode = 2
+text = "Edit Decision Function"
+
+[node name="AddRequirement" type="Button" parent="StaticUI/Header/HBoxContainer/EditingButtons" unique_id=113244181]
+use_parent_material = true
+layout_mode = 2
+text = "Add Requirement"
+
+[node name="AddFinished" type="Button" parent="StaticUI/Header/HBoxContainer/EditingButtons" unique_id=825370584]
+use_parent_material = true
+layout_mode = 2
+text = "Add Finished"
+
+[node name="AddDecision" type="Button" parent="StaticUI/Header/HBoxContainer/EditingButtons" unique_id=956861038]
+use_parent_material = true
+layout_mode = 2
+text = "Add Decision"
+
+[node name="SaveDecisions" type="Button" parent="StaticUI/Header/HBoxContainer/EditingButtons" unique_id=1987805190]
+use_parent_material = true
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = " SAVE "
+
+[node name="EditMode" type="Button" parent="StaticUI/Header/HBoxContainer" unique_id=1987805189]
+use_parent_material = true
+layout_mode = 2
+mouse_default_cursor_shape = 2
+toggle_mode = true
+text = " EDIT "
+
+[node name="CloseButton" type="Button" parent="StaticUI/Header/HBoxContainer" unique_id=1140388651]
+use_parent_material = true
+custom_minimum_size = Vector2(150, 40)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "  CLOSE MENU [X]  "
+
+[node name="InfoPanel" type="PanelContainer" parent="StaticUI" unique_id=54472730]
+use_parent_material = true
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -173.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="TabContainer" type="TabContainer" parent="StaticUI/InfoPanel" unique_id=393909199]
+layout_mode = 2
+current_tab = 0
+tabs_visible = false
+
+[node name="InfoText" type="RichTextLabel" parent="StaticUI/InfoPanel/TabContainer" unique_id=1403528079]
+use_parent_material = true
+layout_mode = 2
+bbcode_enabled = true
+text = "[center][color=gray]Hover over a node to see info[/color][/center]"
+metadata/_tab_index = 0
+
+[node name="EditDecisions" type="VBoxContainer" parent="StaticUI/InfoPanel/TabContainer" unique_id=494517236]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="StaticUI/InfoPanel/TabContainer/EditDecisions" unique_id=50824126]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="StaticUI/InfoPanel/TabContainer/EditDecisions/HBoxContainer" unique_id=1030639422]
+layout_mode = 2
+text = "Days:"
+
+[node name="EditDays" type="SpinBox" parent="StaticUI/InfoPanel/TabContainer/EditDecisions/HBoxContainer" unique_id=1336521956]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="StaticUI/InfoPanel/TabContainer/EditDecisions/HBoxContainer" unique_id=1314679045]
+layout_mode = 2
+text = "PP Cost:"
+
+[node name="PPCost" type="SpinBox" parent="StaticUI/InfoPanel/TabContainer/EditDecisions/HBoxContainer" unique_id=644066874]
+layout_mode = 2
+
+[node name="HBoxcontainer" type="HBoxContainer" parent="StaticUI/InfoPanel/TabContainer/EditDecisions" unique_id=1300503408]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="EditLabel" type="TextEdit" parent="StaticUI/InfoPanel/TabContainer/EditDecisions/HBoxcontainer" unique_id=1714090887]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+placeholder_text = "Edit Label"
+
+[node name="EditDesc" type="TextEdit" parent="StaticUI/InfoPanel/TabContainer/EditDecisions/HBoxcontainer" unique_id=37782591]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+placeholder_text = "Edit Desc"
+
+[node name="TabContainer" type="TabContainer" parent="StaticUI" unique_id=903793033]
+visible = false
+use_parent_material = true
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -690.0
+offset_top = 80.0
+grow_horizontal = 0
+grow_vertical = 2
+current_tab = 0
+
+[node name="Requirements" type="ScrollContainer" parent="StaticUI/TabContainer" unique_id=89978896]
+layout_mode = 2
+size_flags_horizontal = 3
+metadata/_tab_index = 0
+
+[node name="ReqsBlock" type="VBoxContainer" parent="StaticUI/TabContainer/Requirements" unique_id=1332637957]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Finished" type="ScrollContainer" parent="StaticUI/TabContainer" unique_id=832013289]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+metadata/_tab_index = 1
+
+[node name="FinishedBlock" type="VBoxContainer" parent="StaticUI/TabContainer/Finished" unique_id=1249962335]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TooltipPanel" type="Panel" parent="StaticUI" unique_id=320893541]
+visible = false
+use_parent_material = true
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 0
+offset_right = 200.0
+offset_bottom = 40.0
+mouse_filter = 2
+
+[node name="TooltipLabel" type="RichTextLabel" parent="StaticUI/TooltipPanel" unique_id=1802959515]
+use_parent_material = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 5.0
+offset_right = -10.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+bbcode_enabled = true
+fit_content = true
+
+[connection signal="draw" from="CanvasAnchor/TreeCanvas" to="." method="_on_draw_canvas"]
+[connection signal="pressed" from="StaticUI/Header/HBoxContainer/EditingButtons/ReloadDecisions" to="." method="_on_reload_decisions_pressed"]
+[connection signal="toggled" from="StaticUI/Header/HBoxContainer/EditingButtons/EditFunc" to="." method="_on_edit_func_toggled"]
+[connection signal="pressed" from="StaticUI/Header/HBoxContainer/EditingButtons/AddRequirement" to="." method="_on_add_req_pressed"]
+[connection signal="pressed" from="StaticUI/Header/HBoxContainer/EditingButtons/AddFinished" to="." method="_on_add_finished_pressed"]
+[connection signal="pressed" from="StaticUI/Header/HBoxContainer/EditingButtons/AddDecision" to="." method="_on_add_decision_pressed"]
+[connection signal="pressed" from="StaticUI/Header/HBoxContainer/EditingButtons/SaveDecisions" to="." method="_on_save_decisions_pressed"]
+[connection signal="toggled" from="StaticUI/Header/HBoxContainer/EditMode" to="." method="_on_edit_mode_toggled"]
+[connection signal="pressed" from="StaticUI/Header/HBoxContainer/CloseButton" to="." method="CloseMenu"]
+[connection signal="value_changed" from="StaticUI/InfoPanel/TabContainer/EditDecisions/HBoxContainer/EditDays" to="." method="_on_edit_days_value_changed"]
+[connection signal="value_changed" from="StaticUI/InfoPanel/TabContainer/EditDecisions/HBoxContainer/PPCost" to="." method="_on_edit_ppcost_value_changed"]
+[connection signal="text_changed" from="StaticUI/InfoPanel/TabContainer/EditDecisions/HBoxcontainer/EditLabel" to="." method="_on_edit_label_text_changed"]
+[connection signal="text_changed" from="StaticUI/InfoPanel/TabContainer/EditDecisions/HBoxcontainer/EditDesc" to="." method="_on_edit_desc_text_changed"]

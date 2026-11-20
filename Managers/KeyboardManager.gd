@@ -1,36 +1,48 @@
 extends Node
 
 # Use the same names as your MapManager functions for clarity
-enum MapView { COUNTRIES, POPULATION, GDP, ETHNICITY }
-var current_view = MapView.COUNTRIES
+var settings: CanvasLayer
 
-signal toggle_menu
+func _ready() -> void:
+	settings = $/root/Main/SettingsLayer
 
-var _debounce := false
-
+# NOTE(soi): What was this even for
+# func OnWorldLoad() -> void:
+# 	settings = get_tree().root.find_child("Settings", true, false)
+# 	print(settings)
 
 func _process(_delta: float) -> void:
 	if Console.is_visible():
 		return
 	if Input.is_action_just_pressed("deselect_troops"):
-		if !TroopManager.troop_selection.selected_troops.is_empty():
-			TroopManager.troop_selection.deselect_all()
-		else:
-			get_tree().root.find_child("Menu", true, false).toggle_menu()
+		settings.visible = !settings.visible
+		match SceneSwitcher._current_type:
+			SceneSwitcher.Type.WORLD:
+				if !TroopManager.troop_selection.selected_troops.is_empty():
+					TroopManager.troop_selection.deselect_all()
+				elif GameState.game_ui.is_open:
+					MapManager.close_sidemenu.emit()
+				else:
+					pass
+					# get_tree().root.find_child("Menu", true, false).toggle_menu()
 
-	if Input.is_action_just_pressed("open_menu"):
-		if not _debounce:
-			_debounce = true
-			toggle_menu.emit()
 
-	if Input.is_action_just_released("open_menu"):
-		_debounce = false
+	if SceneSwitcher._current_type != SceneSwitcher.Type.EDITOR:
+		if Input.is_action_just_pressed("open_menu"):
+			if CountryManager.player_country:
+				GameState.game_ui.ChangeContextCategory(
+					GameState.game_ui.Context.PLAYER,
+					GameState.game_ui.Category.GENERAL,
+				)
+				GameState.game_ui.selected_country = CountryManager.player_country
+				GameState.game_ui.DoUpdateSidemenuVisuals()
+			GameState.game_ui.ToggleSideMenu()
 
 	# --- 2. MAP MODE CYCLING (Independent of Menu) ---
 	if Input.is_action_just_pressed("cycle_map_mode"):
-		_cycle_map_mode()
+		_cycle_map_mode(Input.is_action_pressed("Shift"))
 
-	if GameState.current_world:
+	if GameState.current_world && SceneSwitcher._current_type == SceneSwitcher.Type.WORLD:
 		var clock := GameState.current_world.clock
 		if Input.is_action_just_pressed("pause_game"):
 			clock.toggle_pause()
@@ -42,24 +54,5 @@ func _process(_delta: float) -> void:
 			clock.decrease_speed()
 
 
-func _cycle_map_mode() -> void:
-	match current_view:
-		MapView.COUNTRIES:
-			current_view = MapView.POPULATION
-			MapManager.show_population_map()
-			print("Map Mode: Population")
-
-		MapView.POPULATION:
-			current_view = MapView.GDP
-			MapManager.show_gdp_map()
-			print("Map Mode: GDP")
-
-		MapView.GDP:
-			current_view = MapView.ETHNICITY
-			MapManager.show_ethnic_map()
-			print("Map Mode: Ethnicity")
-
-		MapView.ETHNICITY:
-			current_view = MapView.COUNTRIES
-			MapManager.show_countries_map()
-			print("Map Mode: Countries")
+func _cycle_map_mode(shift: bool) -> void:
+	MapManager.CycleMapMode(shift)

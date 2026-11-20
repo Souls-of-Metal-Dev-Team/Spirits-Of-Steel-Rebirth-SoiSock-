@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://btudw0u6d7kad"]
+
+[ext_resource type="Theme" uid="uid://c38ivksvf4is0" path="res://main_theme.tres" id="1_1lxxj"]
+[ext_resource type="Script" uid="uid://bbx4yhdj41daj" path="res://Scripts/UI/StartEntry.gd" id="1_37b1d"]
+[ext_resource type="FontFile" uid="uid://cee8mbnpx3w3h" path="res://font/arial.TTF" id="2_37b1d"]
+[ext_resource type="Texture2D" uid="uid://lifcljm83dlp" path="res://assets/ui/menu.png" id="3_lmkek"]
+[ext_resource type="Material" uid="uid://btordm7082cxn" path="res://Materials/damaged.tres" id="4_035le"]
+
+[node name="PanelContainer" type="PanelContainer" unique_id=181871694]
+material = ExtResource("4_035le")
+custom_minimum_size = Vector2(212, 166)
+offset_right = 212.0
+offset_bottom = 166.0
+size_flags_horizontal = 3
+theme = ExtResource("1_1lxxj")
+script = ExtResource("1_37b1d")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1965051531]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="heading" type="Label" parent="VBoxContainer" unique_id=1899781520]
+visible = false
+use_parent_material = true
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("2_37b1d")
+theme_override_font_sizes/font_size = 16
+text = "War"
+horizontal_alignment = 1
+
+[node name="background" type="TextureRect" parent="VBoxContainer" unique_id=1804408493]
+use_parent_material = true
+custom_minimum_size = Vector2(50, 25)
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("3_lmkek")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Button" type="Button" parent="VBoxContainer" unique_id=343436503]
+use_parent_material = true
+layout_mode = 2
+theme = ExtResource("1_1lxxj")
+text = "Ok"
+clip_text = true

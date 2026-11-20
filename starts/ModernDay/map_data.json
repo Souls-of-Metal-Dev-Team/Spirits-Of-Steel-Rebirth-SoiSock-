@@ -1,0 +1,240 @@
+{
+	"biomes": [
+		{
+			"color": "#B38E28",
+			"name": "Mediterranean"
+		},
+		{
+			"color": "#656565",
+			"name": "Mountainous"
+		},
+		{
+			"color": "#887B6A",
+			"name": "Plateau"
+		},
+		{
+			"color": "#87AFAB",
+			"name": "Tundra"
+		},
+		{
+			"color": "#85CC54",
+			"name": "Temperate_forest"
+		},
+		{
+			"color": "#BDE526",
+			"name": "Temperate_steppe"
+		},
+		{
+			"color": "#32583F",
+			"name": "Taiga"
+		},
+		{
+			"color": "#838333",
+			"name": "Dry_steppe"
+		},
+		{
+			"color": "#FAE8B9",
+			"name": "Semi_arid_desert"
+		},
+		{
+			"color": "#88480B",
+			"name": "Arid_desert"
+		},
+		{
+			"color": "#99803E",
+			"name": "Xeric_shrubland"
+		},
+		{
+			"color": "#317E48",
+			"name": "Monsoon_forest"
+		},
+		{
+			"color": "#0D5522",
+			"name": "Tropical_rainforest"
+		},
+		{
+			"color": "#3D9B07",
+			"name": "Subtropical_evergreen"
+		},
+		{
+			"color": "#555E4F",
+			"name": "Montane_forest"
+		},
+		{
+			"color": "#B5C22B",
+			"name": "Grass_savanna"
+		},
+		{
+			"color": "#36A51C",
+			"name": "Tree_savanna"
+		},
+		{
+			"color": "#42820A",
+			"name": "Dry_forest"
+		},
+		{
+			"color": "#019A6C",
+			"name": "Temperate_broadleaf"
+		}
+	],
+	"buildings": {},
+	"clock": {
+		"date": {
+			"day": 1.0,
+			"month": 1.0,
+			"year": 2010.0
+		},
+		"hour": 0
+	},
+	"ideologies": {
+		"communist": {
+			"region": [
+				[
+					-100.0,
+					-100.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			]
+		},
+		"conservative": {
+			"region": [
+				[
+					0.0,
+					0.0
+				],
+				[
+					100.0,
+					100.0
+				]
+			]
+		},
+		"fascist": {
+			"region": [
+				[
+					0.0,
+					-100.0
+				],
+				[
+					100.0,
+					0.0
+				]
+			]
+		},
+		"liberal": {
+			"region": [
+				[
+					-100.0,
+					0.0
+				],
+				[
+					0.0,
+					100.0
+				]
+			]
+		},
+		"monarchist": {
+			"region": [
+				[
+					-50.0,
+					-50.0
+				],
+				[
+					50.0,
+					0.0
+				]
+			]
+		},
+		"neutral": {
+			"region": [
+				[
+					-25.0,
+					-25.0
+				],
+				[
+					25.0,
+					25.0
+				]
+			]
+		}
+	},
+	"resources": [
+		{
+			"color": "#71797E",
+			"icon": "Ingot",
+			"name": "Steel Ingot",
+			"tags": {
+				"metal": 1.0,
+				"structural_metal": 2.0
+			}
+		},
+		{
+			"color": "#434B4D",
+			"icon": "Ingot",
+			"name": "Iron Ore",
+			"tags": {
+				"metal": 0.5,
+				"structural_metal": 0.5
+			}
+		},
+		{
+			"color": "#8B5A2B",
+			"icon": "Lumber",
+			"name": "Lumber",
+			"tags": {
+				"fuel": 0.5,
+				"wood": 1.0
+			}
+		},
+		{
+			"color": "#111111",
+			"icon": "Ingot",
+			"name": "Coal",
+			"tags": {
+				"fuel": 2.0
+			}
+		},
+		{
+			"color": "#050505",
+			"icon": "Gas",
+			"name": "Crude Oil",
+			"tags": {
+				"fuel": 5.0
+			}
+		},
+		{
+			"color": "#0000FF",
+			"icon": "Droplet",
+			"name": "Fresh Water",
+			"tags": {
+				"water": 1.0
+			}
+		},
+		{
+			"color": "#00FF00",
+			"icon": "Ingot",
+			"name": "Basic Circuitry",
+			"tags": {
+				"electronic": 1.0
+			}
+		},
+		{
+			"color": "#DDDDDD",
+			"icon": "Ingot",
+			"name": "Limestone",
+			"tags": {
+				"stone": 1.0
+			}
+		},
+		{
+			"color": "#FFFF00",
+			"icon": "Gas",
+			"name": "Battery Pack",
+			"tags": {
+				"power": 1.0
+			}
+		}
+	]
+}
