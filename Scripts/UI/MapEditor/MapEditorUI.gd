@@ -150,7 +150,7 @@ func _handle_hover(screen_pos: Vector2) -> void:
 	if map_sprite == null:
 		return
 	var world_pos = get_viewport().get_canvas_transform().affine_inverse() * screen_pos
-	var pid = MapManager.get_province_with_radius(world_pos, map_sprite, 5)
+	var pid = MapManager.GetProvinceWithRadius(world_pos, map_sprite, 5)
 
 	if pid == hovered_pid:
 		return

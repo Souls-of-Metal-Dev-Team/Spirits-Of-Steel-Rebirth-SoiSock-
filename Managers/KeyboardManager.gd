@@ -57,5 +57,12 @@ func _process(_delta: float) -> void:
 func _cycle_map_mode(shift: bool) -> void:
 	MapManager.CycleMapMode(shift)
 
+func _is_mouse_over_ui() -> bool:
+	return get_viewport().gui_get_hovered_control() != null
 
+func HandleClickDown(_global_pos: Vector2, _map_sprite: Sprite2D) -> void:
+	if _is_mouse_over_ui() or Console.is_visible():
+		return
+
+	TroopManager.troop_selection.deselect_all()
 

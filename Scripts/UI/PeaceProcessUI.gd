@@ -410,7 +410,7 @@ func force_close():
 # Your existing logic function
 func get_province_with_radius(global_pos: Vector2, map_sprite: Sprite2D, radius: int) -> int:
 	# This uses the code logic you already have in MapManager
-	return MapManager.get_province_with_radius(global_pos, map_sprite, radius)
+	return MapManager.GetProvinceWithRadius(global_pos, map_sprite, radius)
 
 func _update_map_visual(pid: int, color: Color, secondary_color: Color):
 	# We call MapManager's lookup update to refresh the shader texture

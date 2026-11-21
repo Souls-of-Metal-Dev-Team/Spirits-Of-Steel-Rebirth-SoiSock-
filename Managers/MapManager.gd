@@ -441,7 +441,7 @@ func GetProvinceAtPos(pos: Vector2, map_sprite: Sprite2D = null) -> int:
 	return id_map_image.get_pixel(x, y).to_rgba32() >> 8
 
 func HandleHover(global_pos: Vector2, map_sprite: Sprite2D) -> void:
-	if _is_mouse_over_ui() or GameState.in_peace_process:
+	if KeyboardManager._is_mouse_over_ui() or GameState.in_peace_process:
 		GameState.tooltip.SwitchTooltip(-1)
 		if GameState.interactionType == GameState.InteractionType.SELECT_COUNTRY:
 			if last_hovered_pid > 1 && hoveredCountry != "Sea" && country_to_provinces.has(hoveredCountry):
@@ -545,21 +545,15 @@ func _get_contextual_highlight(pid: int) -> Color:
 
 	return Color.TRANSPARENT
 
-func HandleClickDown(_global_pos: Vector2, _map_sprite: Sprite2D) -> void:
-	if _is_mouse_over_ui() or Console.is_visible():
-		return
-
-	TroopManager.troop_selection.deselect_all()
-
 func GetRelativeCountryRelation(a_country1: CountryData, a_country2: CountryData):
 		var is_player_owned: bool = a_country1.country_name == CountryManager.player_country.country_name
 		var is_puppet_owned: bool = a_country1.country_name in CountryManager.player_country.puppets
 
 func HandleClick(global_pos: Vector2, map_sprite: Sprite2D) -> void:
-	if _is_mouse_over_ui() or Console.is_visible() or GameState.in_peace_process:
+	if KeyboardManager._is_mouse_over_ui() or Console.is_visible() or GameState.in_peace_process:
 		return
 
-	var pid: int = get_province_with_radius(global_pos, map_sprite, 5)
+	var pid: int = GetProvinceWithRadius(global_pos, map_sprite, 5)
 	# 1. Handle Clicks on Water or Invalid Areas
 	if pid <= 1 or province_objects[pid].type == 0: # 0 is SEA
 		if GameState.industry_building != GameState.IndustryType.DEFAULT:
@@ -569,109 +563,104 @@ func HandleClick(global_pos: Vector2, map_sprite: Sprite2D) -> void:
 			close_sidemenu.emit()
 		return
 
-	if GameState.interactionType == GameState.InteractionType.SELECT_COUNTRY:
-		GameState.game_ui.selected_country = CountryManager.countries[MapManager.province_objects[pid].GetFunctionalOwner()]
-		GameState.game_ui.DoUpdateSidemenuVisuals()
-		ShowCountriesMap()
-	else:
-		var player_country_name: String = CountryManager.player_country.country_name
-		# NOTE(soi): soo
-		# this could either be like
-		# Player                         = 00
-		# Puppet  & (Ally)               = 10
-		# Neutral & (Neutral|Ally|Enemy) = 01 | 11 | 101
+	var player_country_name: String = CountryManager.player_country.country_name
 
-		# Meaning
-		# first bit represents Neutral
-		# second and third bit represents Ally
+	# NOTE(soi): soo
+	# this could either be like
+	# Player                         = 00
+	# Puppet  & (Ally)               = 10
+	# Neutral & (Neutral|Ally|Enemy) = 01 | 11 | 101
 
-		# Player                 = 000
-		# Neutral & Neutral      = 001
-		# Puppet  & Ally         = 010
-		# Neutral & Ally         = 011
-		# Neutral & Enemy        = 101
-		# Neutral & Ally & Enemy = 111
+	# Meaning
+	# first bit represents Neutral
+	# second and third bit represents Ally
 
-		# Player  = 000
-		# Neutral = 111
-		# Puppet  = 010
+	# Player                 = 000
+	# Neutral & Neutral      = 001
+	# Puppet  & Ally         = 010
+	# Neutral & Ally         = 011
+	# Neutral & Enemy        = 101
+	# Neutral & Ally & Enemy = 111
 
-		# Neutral = 001
-		# Ally    = 011
-		# Enemy   = 101
+	# Player  = 000
+	# Neutral = 111
+	# Puppet  = 010
 
+	# Neutral = 001
+	# Ally    = 011
+	# Enemy   = 101
 
+	var is_player_owned: bool = MapManager.province_objects[pid].GetFunctionalOwner() == player_country_name
+	var is_puppet_owned: bool = MapManager.province_objects[pid].GetFunctionalOwner() in CountryManager.player_country.puppets
 
+	match GameState.interactionType:
+		GameState.InteractionType.SELECT_COUNTRY:
+			GameState.game_ui.selected_country = CountryManager.countries[
+				province_objects[pid].GetFunctionalOwner()
+			]
+			GameState.game_ui.DoUpdateSidemenuVisuals()
+			ShowCountriesMap()
 
-		var is_player_owned: bool = MapManager.province_objects[pid].GetFunctionalOwner() == player_country_name
-		var is_puppet_owned: bool = MapManager.province_objects[pid].GetFunctionalOwner() in CountryManager.player_country.puppets
+		GameState.InteractionType.DEPLOY_PROVINCE:
+				_SetDeploymentPID(pid, is_player_owned, player_country_name)
 
-		if GameState.interactionType == GameState.InteractionType.DEPLOY_PROVINCE:
-			if is_player_owned and province_objects[pid].city != "":
-				_ExecuteDeployment(pid, player_country_name)
-			else:
-				print("Action Failed: Province not owned by player or not a city.")
-
-		elif GameState.industry_building != GameState.IndustryType.DEFAULT:
-			if EconomyManager.is_province_building(pid):
-				print("Action Failed: Already building there.")
-			else:
-				if is_player_owned:
-					if _ProvinceBuildIndustry(pid, player_country_name, GameState.industry_building):
-						_cleanup_interaction_state()
-						ShowIndustryCountry(player_country_name)
-						country_clicked.emit(player_country_name)
-				elif is_puppet_owned:
-					if _ProvinceBuildIndustry(pid, province_objects[pid].GetFunctionalOwner(), GameState.industry_building):
-						_cleanup_interaction_state()
-						ShowIndustryCountry(province_objects[pid].GetFunctionalOwner())
-						country_clicked.emit(province_objects[pid].GetFunctionalOwner())
+		GameState.InteractionType.BUILD_PROVINCE:
+			if !EconomyManager.is_province_building(pid):
+				var country_name = player_country_name if is_player_owned else province_objects[pid].GetFunctionalOwner() if is_puppet_owned else "fish"
+				if _ProvinceBuildIndustry(pid, country_name, GameState.industry_building):
+					_cleanup_interaction_state()
+					ShowIndustryCountry(country_name)
+					country_clicked.emit(country_name)
 				else:
 					print("Action Failed: Cannot build in foreign territory.")
 					GameState.reset_industry_building()
 					ShowCountriesMap()
-
-		if TroopManager.troop_selection.selected_troops.is_empty(): # Prevent menu from spawning when selecting troops (annoying)
-			#print("Prae Emit Click")
-			country_clicked.emit(province_objects[pid].GetFunctionalOwner())
-			#print("Post Emit Click")
+		_:
+			if TroopManager.troop_selection.selected_troops.is_empty(): # Prevent menu from spawning when selecting troops (annoying)
+				country_clicked.emit(province_objects[pid].GetFunctionalOwner())
 
 # move this to CountryManager?
-func _ExecuteDeployment(pid: int, player_name: String) -> void:
-	country_clicked.emit(player_name)
-	CountryManager.player_country.deploy_pid = pid
-	GameState.interactionType = GameState.InteractionType.DEFAULT
-	_cleanup_interaction_state()
+func _SetDeploymentPID(
+	a_is_player_owned: bool,
+	a_pid: int,
+	a_player_name: String,
+) -> void:
+	if a_is_player_owned and province_objects[a_pid].city != "":
+		country_clicked.emit(a_player_name)
+		CountryManager.player_country.deploy_pid = a_pid
+		GameState.interactionType = GameState.InteractionType.DEFAULT
+		_cleanup_interaction_state()
 
 func _ProvinceBuildIndustry(pid: int, a_countryName: String, type: GameState.IndustryType) -> bool:
 	var province: Province = province_objects[pid]
 
 	# 1. Safety Check: Is there already something there or currently building?
 	# Using your Enums: 0 = NO, 1 = BUILDING, 2 = BUILT
-	if type == GameState.IndustryType.FACTORY:
-		if province.buildings.size() >= 4:
-			#print("Cannot build: Factory slot is busy or full.")
-			return false
-			
-		EconomyManager.start_construction(pid, "Factory", 10, 150.0, CountryManager.countries[a_countryName])
-	elif type == GameState.IndustryType.PORT:
-		if province.buildings.size() >= 4 && province.buildings.find_custom(func(a_building: BuildingData): return a_building.type != "Port") == -1:
-			#print("Cannot build: Port slot is busy or full.")
-			return false
-			
-		# 3. Sea check for Ports
-		#province_objects[pid].
-		if pid in GetProvincesNearSea(a_countryName):
-			EconomyManager.start_construction(pid, "Port", 10, 150.0, CountryManager.countries[a_countryName])
-		else:
-			print("Action Failed: Port must be on a coast!")
-			return false
-	elif type == GameState.IndustryType.INFRASTRUCTURE:
-		if province.infrastructure >= province.maxInfrastructure:
-			#print("Cannot build: Infrastructure is already maxeda.")
-			return false
-			
-		EconomyManager.StartInfrastructureConstruction(pid, 10, 150.0, CountryManager.countries[a_countryName])
+	match type:
+		GameState.IndustryType.FACTORY:
+			if province.buildings.size() >= 4:
+				#print("Cannot build: Factory slot is busy or full.")
+				return false
+				
+			EconomyManager.start_construction(pid, "Factory", 10, 150.0, CountryManager.countries[a_countryName])
+		GameState.IndustryType.PORT:
+			if province.buildings.size() >= 4 && province.buildings.find_custom(func(a_building: BuildingData): return a_building.type != "Port") == -1:
+				#print("Cannot build: Port slot is busy or full.")
+				return false
+				
+			# 3. Sea check for Ports
+			#province_objects[pid].
+			if pid in GetProvincesNearSea(a_countryName):
+				EconomyManager.start_construction(pid, "Port", 10, 150.0, CountryManager.countries[a_countryName])
+			else:
+				print("Action Failed: Port must be on a coast!")
+				return false
+		GameState.IndustryType.INFRASTRUCTURE:
+			if province.infrastructure >= province.maxInfrastructure:
+				#print("Cannot build: Infrastructure is already maxeda.")
+				return false
+				
+			EconomyManager.StartInfrastructureConstruction(pid, 10, 150.0, CountryManager.countries[a_countryName])
 		
 	return true
 
@@ -683,7 +672,7 @@ func _cleanup_interaction_state() -> void:
 		last_hovered_pid = -1
 
 # To probe around and still register a click if we hit province/coutnry border
-func get_province_with_radius(center: Vector2, map_sprite: Sprite2D, radius: int) -> int:
+func GetProvinceWithRadius(center: Vector2, map_sprite: Sprite2D, radius: int) -> int:
 	var offsets: Array[Vector2] = [
 		Vector2(0, 0),
 		Vector2(radius, 0),
@@ -1014,9 +1003,6 @@ func force_bidirectional_connections() -> void:
 				fix_count += 1
 
 	print("Graph Repair Complete: Fixed %d one-way connections in Province Resources." % fix_count)
-
-func _is_mouse_over_ui() -> bool:
-	return get_viewport().gui_get_hovered_control() != null
 
 func _get_heatmap_color(pop: int, max_pop: float) -> Color:
 	# If population is 0, return a neutral "empty" color (dark slate/gray)
