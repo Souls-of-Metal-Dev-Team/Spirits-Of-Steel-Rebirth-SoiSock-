@@ -75,7 +75,7 @@ func DoSetup(a_progress: Array) -> void:
 
 	if !CountryManager.player_country:
 		# CountryManager.set_player_country(CountryManager.countries.keys().pick_random())
-		GameState.selectingCountry = true
+		GameState.interactionType = GameState.InteractionType.SELECT_COUNTRY
 		# NOTE(soi): wait so like when i click on a country this should magically play as it?????. damm
 	# For debugging purposes. Create some troops first
 	# MapManager.force_bidirectional_connections()

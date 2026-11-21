@@ -1,10 +1,17 @@
 extends Node
 
+enum InteractionType {
+	DEFAULT,
+	SELECT_COUNTRY,
+	BUILD_PROVINCE,
+	DEPLOY_PROVINCE,
+}
+
 enum IndustryType {
-	DEFAULT = 0,
-	FACTORY = 1,
-	PORT = 2,
-	INFRASTRUCTURE = 3,
+	DEFAULT,
+	FACTORY,
+	PORT,
+	INFRASTRUCTURE,
 }
 
 var current_world: World = World.new()
@@ -13,8 +20,13 @@ var current_start: String
 
 var clock_cache: Dictionary
 
-var choosing_deploy_city := false
-var industry_building := IndustryType.DEFAULT
+# var choosing_deploy_city := false
+# var selectingCountry: bool = true
+
+var interactionType = InteractionType.DEFAULT
+
+
+var industry_building := IndustryType.FACTORY
 var instabuild: bool = false
 
 var game_ui: GameUI
@@ -22,13 +34,12 @@ var game_ui: GameUI
 var decision_menu_open: bool = false
 var in_peace_process: bool = false
 var lostTerritory: bool = false
-var selectingCountry: bool = true
 
 @export var showingTooltip: bool = false
 @export var tooltip: Tooltip
 
 func reset_industry_building():
-	industry_building = IndustryType.DEFAULT
+	industry_building = IndustryType.FACTORY
 	MapManager.ShowCountriesMap()
 
 var is_loading_game := false

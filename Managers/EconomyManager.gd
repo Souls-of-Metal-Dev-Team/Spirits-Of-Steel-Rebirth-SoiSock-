@@ -73,7 +73,12 @@ func StartInfrastructureConstruction(a_provinceID: int, a_totalDays: int, a_dail
 
 func start_construction(pid: int, type: String, total_days: int, daily_cost: float, country: CountryData):
 	# Set the province enum to BUILDING state immediately
-	MapManager.province_objects[pid].buildings.append(BuildingData.FromValues(type, BuildingData.BuildingState.CONSTRUCTION))
+	MapManager.province_objects[pid].buildings.append(
+		BuildingData.FromValues(
+			type,
+			BuildingData.BuildingState.CONSTRUCTION,
+		),
+	)
 	
 	if country == CountryManager.player_country:
 		MusicManager.play_sfx(MusicManager.SFX.BUILD)

@@ -426,7 +426,7 @@ func _group_troops_by_visual_position(troops: Array) -> Dictionary:
 
 # --- Battles ---
 func _update_battles() -> void:
-	var player_country := _player_country_name() if !GameState.selectingCountry else ""
+	var player_country := _player_country_name() if GameState.interactionType != GameState.InteractionType.SELECT_COUNTRY else ""
 
 	var alive := {}
 	for battle in WarManager.active_battles:

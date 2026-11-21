@@ -56,3 +56,6 @@ func _process(_delta: float) -> void:
 
 func _cycle_map_mode(shift: bool) -> void:
 	MapManager.CycleMapMode(shift)
+
+
+

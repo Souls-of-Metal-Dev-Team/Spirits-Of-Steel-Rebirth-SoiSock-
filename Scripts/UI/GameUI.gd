@@ -405,7 +405,7 @@ func DoUpdateSidemenuVisuals() -> void:
 	puppetBadge.modulate = PUPPET_COLOR if selected_country.is_puppet else FALSE_COLOR
 	warBadge.modulate = WAR_COLOR if selected_country.is_at_war else FALSE_COLOR
 
-	if GameState.selectingCountry:
+	if GameState.interactionType == GameState.InteractionType.SELECT_COUNTRY:
 		for stat in GameState.game_ui.select_player_stat.get_children(): stat.queue_free()
 		for stat: String in [
 			"money",
@@ -512,7 +512,7 @@ func ChangeContextCategory(
 func OpenSideMenu(
 ) -> void:
 	if (
-		GameState.choosing_deploy_city
+		GameState.interactionType == GameState.InteractionType.DEPLOY_PROVINCE
 		or GameState.industry_building != GameState.IndustryType.DEFAULT
 	):
 		return
@@ -757,7 +757,7 @@ func slide_out() -> void:
 	create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN).tween_property(sidemenu, "position", pos_closed, slide_duration)
 
 func _choose_deploy_city():
-	GameState.choosing_deploy_city = true
+	GameState.interactionType = GameState.InteractionType.DEPLOY_PROVINCE
 
 func _declare_war():
 	var cost = action_costs["_declare_war"].call(CountryManager.player_country, selected_country)["cost"]
@@ -1168,5 +1168,5 @@ func m_OnGovernmentPressed() -> void:
 
 func _on_play_as_pressed() -> void:
 	CountryManager.set_player_country(selected_country.country_name)
-	GameState.selectingCountry = false
+	GameState.interactionType = GameState.InteractionType.DEFAULT
 	_on_province_clicked(CountryManager.player_country.country_name)

@@ -443,7 +443,7 @@ func GetProvinceAtPos(pos: Vector2, map_sprite: Sprite2D = null) -> int:
 func HandleHover(global_pos: Vector2, map_sprite: Sprite2D) -> void:
 	if _is_mouse_over_ui() or GameState.in_peace_process:
 		GameState.tooltip.SwitchTooltip(-1)
-		if GameState.selectingCountry:
+		if GameState.interactionType == GameState.InteractionType.SELECT_COUNTRY:
 			if last_hovered_pid > 1 && hoveredCountry != "Sea" && country_to_provinces.has(hoveredCountry):
 				original_hover_color = GetCountryDisplayColor(hoveredCountry)
 				for province in country_to_provinces[hoveredCountry]:
@@ -460,7 +460,7 @@ func HandleHover(global_pos: Vector2, map_sprite: Sprite2D) -> void:
 
 	# NOTE(soi): AHHHHH THIS MUCH NESTING IS MAKING MY EYES HURT
 	if pid != last_hovered_pid:
-		if GameState.selectingCountry:
+		if GameState.interactionType == GameState.InteractionType.SELECT_COUNTRY:
 			if (last_hovered_pid in province_objects
 				&& pid in province_objects
 				&& province_objects[last_hovered_pid].GetFunctionalOwner() == province_objects[pid].GetFunctionalOwner()):
@@ -506,7 +506,7 @@ func HandleHover(global_pos: Vector2, map_sprite: Sprite2D) -> void:
 					UpdateLookup(pid, highlight_color, highlight_color)
 					last_hovered_pid = pid
 					Input.set_default_cursor_shape(Input.CURSOR_POINTING_HAND)
-					province_hovered.emit(pid, CountryManager.player_country.country_name if !GameState.selectingCountry else "")
+					province_hovered.emit(pid, CountryManager.player_country.country_name if GameState.interactionType != GameState.InteractionType.SELECT_COUNTRY else "")
 			else:
 				Input.set_default_cursor_shape(Input.CURSOR_ARROW)
 				province_hovered.emit(-1, "")
@@ -521,7 +521,7 @@ func _get_contextual_highlight(pid: int) -> Color:
 	if pid <= 1:
 		return Color.TRANSPARENT
 	
-	if GameState.selectingCountry:
+	if GameState.interactionType == GameState.InteractionType.SELECT_COUNTRY:
 		return Color.ANTIQUE_WHITE
 
 	var player_name: String = CountryManager.player_country.country_name
@@ -536,7 +536,7 @@ func _get_contextual_highlight(pid: int) -> Color:
 			return Color.CYAN
 		else:
 			return Color.TRANSPARENT
-	elif GameState.choosing_deploy_city:
+	elif GameState.interactionType == GameState.InteractionType.DEPLOY_PROVINCE:
 		if province_objects[pid].city.length() > 0:
 			return Color.CYAN.lightened(0.3)
 		return Color.TRANSPARENT # Don't highlight non-city provinces during deploy
@@ -569,7 +569,7 @@ func HandleClick(global_pos: Vector2, map_sprite: Sprite2D) -> void:
 			close_sidemenu.emit()
 		return
 
-	if GameState.selectingCountry:
+	if GameState.interactionType == GameState.InteractionType.SELECT_COUNTRY:
 		GameState.game_ui.selected_country = CountryManager.countries[MapManager.province_objects[pid].GetFunctionalOwner()]
 		GameState.game_ui.DoUpdateSidemenuVisuals()
 		ShowCountriesMap()
@@ -606,7 +606,7 @@ func HandleClick(global_pos: Vector2, map_sprite: Sprite2D) -> void:
 		var is_player_owned: bool = MapManager.province_objects[pid].GetFunctionalOwner() == player_country_name
 		var is_puppet_owned: bool = MapManager.province_objects[pid].GetFunctionalOwner() in CountryManager.player_country.puppets
 
-		if GameState.choosing_deploy_city:
+		if GameState.interactionType == GameState.InteractionType.DEPLOY_PROVINCE:
 			if is_player_owned and province_objects[pid].city != "":
 				_ExecuteDeployment(pid, player_country_name)
 			else:
@@ -640,7 +640,7 @@ func HandleClick(global_pos: Vector2, map_sprite: Sprite2D) -> void:
 func _ExecuteDeployment(pid: int, player_name: String) -> void:
 	country_clicked.emit(player_name)
 	CountryManager.player_country.deploy_pid = pid
-	GameState.choosing_deploy_city = false
+	GameState.interactionType = GameState.InteractionType.DEFAULT
 	_cleanup_interaction_state()
 
 func _ProvinceBuildIndustry(pid: int, a_countryName: String, type: GameState.IndustryType) -> bool:
@@ -1092,7 +1092,7 @@ func _ShowInfrastructureMap() -> void:
 	for pid in province_objects.keys():
 		if pid <= 1 || province_objects[pid].country == "Sea":
 			continue
-		if !GameState.selectingCountry and CountryManager.player_country.country_name != province_objects[pid].country and !CountryManager.player_country.get_all_allowed_countries().has(province_objects[pid].country):
+		if GameState.interactionType != GameState.InteractionType.SELECT_COUNTRY and CountryManager.player_country.country_name != province_objects[pid].country and !CountryManager.player_country.get_all_allowed_countries().has(province_objects[pid].country):
 			state_color_image.set_pixel(pid, 0, CountryManager.GetCountryColor(province_objects[pid].country))
 		else:
 			var infra: int = province_objects[pid].infrastructure
