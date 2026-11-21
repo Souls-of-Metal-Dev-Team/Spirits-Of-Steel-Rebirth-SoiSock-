@@ -43,7 +43,7 @@ var resources: Dictionary[String, ResourceData] = {}
 # var adjacency_list: Dictionary = {} # Stores {ID: [Neighbor_ID_1, Neighbor_ID_2, ...]}
 var current_hovered_pid: int = -1
 var last_hovered_pid: int = -1
-var original_hover_color: Color
+var original_color: Color
 var province_centers: Dictionary = {} # Stores {ID: Vector2(x, y)}
 var unique_regions: Dictionary = {} # NOTE(soi): eh
 var province_graph: SoiStar = SoiStar.new() # NOTE(soi): ehh
@@ -370,7 +370,7 @@ func UpdateProvinceColor(pid: int, country_name: String) -> void:
 	UpdateLookup(pid, new_color, new_color)
 
 	if pid == last_hovered_pid:
-		original_hover_color = new_color
+		original_color = new_color
 		UpdateLookup(pid, new_color + Color(0.15, 0.15, 0.15, 0), new_color + Color(0.15, 0.15, 0.15, 0))
 
 func SetProvinceColor(pid: int, primaryColor: Color) -> void:
@@ -406,7 +406,7 @@ func SetCountryColor(country_name: String, custom_color: Color = Color.TRANSPARE
 		UpdateLookup(pid, new_color, new_color)
 
 		if pid == last_hovered_pid:
-			original_hover_color = new_color
+			original_color = new_color
 			UpdateLookup(pid, new_color + Color(0.15, 0.15, 0.15, 0), new_color + Color(0.15, 0.15, 0.15, 0))
 
 func GetProvinceAtPos(pos: Vector2, map_sprite: Sprite2D = null) -> int:
@@ -440,84 +440,101 @@ func GetProvinceAtPos(pos: Vector2, map_sprite: Sprite2D = null) -> int:
 
 	return id_map_image.get_pixel(x, y).to_rgba32() >> 8
 
-func HandleHover(global_pos: Vector2, map_sprite: Sprite2D) -> void:
-	if KeyboardManager._is_mouse_over_ui() or GameState.in_peace_process:
-		GameState.tooltip.SwitchTooltip(-1)
-		if GameState.interactionType == GameState.InteractionType.SELECT_COUNTRY:
-			if last_hovered_pid > 1 && hoveredCountry != "Sea" && country_to_provinces.has(hoveredCountry):
-				original_hover_color = GetCountryDisplayColor(hoveredCountry)
-				for province in country_to_provinces[hoveredCountry]:
-					UpdateLookup(province, original_hover_color, GetCountryDisplayColor(province_objects[province].GetFunctionalOwner()))
-			last_hovered_pid = -1
-		else:
-			_reset_last_hover()
+func _GetHoverViewer() -> String:
+	if GameState.interactionType == GameState.InteractionType.SELECT_COUNTRY:
+		return ""
+	return CountryManager.player_country.country_name
+
+func UnhighlightCountry() -> void:
+	if hoveredCountry == "Sea":
 		return
 
-	var pid: int = GetProvinceAtPos(global_pos, map_sprite)
-	current_hovered_pid = pid
+	var countryColor: Color = GetCountryDisplayColor(hoveredCountry)
+	for province: int in country_to_provinces.get(hoveredCountry, []):
+		UpdateLookup(
+			province,
+			GetCountryDisplayColor(province_objects[province].country),
+			countryColor,
+		)
+	for province: int in country_to_rightful_provinces.get(hoveredCountry, []):
+		UpdateLookup(
+			province,
+			countryColor,
+			GetCountryDisplayColor(province_objects[province].GetFunctionalOwner()),
+		)
+	hoveredCountry = "Sea"
 
-	var highlight_color: Color = _get_contextual_highlight(pid)
+func HighlightCountry(a_pid: int, a_highlightColor: Color) -> void:
+	var newHoveredCountry: String = province_objects[a_pid].GetFunctionalOwner()
 
-	# NOTE(soi): AHHHHH THIS MUCH NESTING IS MAKING MY EYES HURT
-	if pid != last_hovered_pid:
-		if GameState.interactionType == GameState.InteractionType.SELECT_COUNTRY:
-			if (last_hovered_pid in province_objects
-				&& pid in province_objects
-				&& province_objects[last_hovered_pid].GetFunctionalOwner() == province_objects[pid].GetFunctionalOwner()):
-				pass
-			else:
-				last_hovered_pid = -1
-				if pid > 1 && highlight_color != Color.TRANSPARENT && hoveredCountry != province_objects[pid].GetFunctionalOwner():
-					if hoveredCountry != "Sea":
-						original_hover_color = GetCountryDisplayColor(hoveredCountry)
-						for province: int in country_to_provinces.get(hoveredCountry, []):
-							UpdateLookup(province, GetCountryDisplayColor(province_objects[province].country), original_hover_color)
-						for province: int in country_to_rightful_provinces.get(hoveredCountry, []):
-							UpdateLookup(province, original_hover_color, GetCountryDisplayColor(province_objects[province].GetFunctionalOwner()))
-					if pid in province_objects:
-						if province_objects[pid].country != "Sea":
-							original_hover_color = state_color_image.get_pixel(pid, 0)
-							var tempChecker: String = province_objects[pid].GetFunctionalOwner()
-							for province in country_to_provinces[tempChecker]:
-								UpdateLookup(province, highlight_color if province_objects[province].occupier == tempChecker else GetCountryDisplayColor(province_objects[province].country), highlight_color)
-								
-							for province: int in country_to_rightful_provinces[tempChecker]:
-								UpdateLookup(province, highlight_color, GetCountryDisplayColor(province_objects[province].GetFunctionalOwner()))
-							
-							last_hovered_pid = pid
-							Input.set_default_cursor_shape(Input.CURSOR_POINTING_HAND)
-							province_hovered.emit(pid, CountryManager.player_country.country_name if !GameState.selectingCountry else "")
-						
-						hoveredCountry = province_objects[pid].GetFunctionalOwner()
-		else:
-			_reset_last_hover() # Clean up the old one
+	for province: int in country_to_provinces.get(newHoveredCountry, []):
+		UpdateLookup(
+			province,
+			GetCountryDisplayColor(province_objects[province].country) if province_objects[province].occupier == newHoveredCountry else a_highlightColor,
+			a_highlightColor,
+		)
+	for province: int in country_to_rightful_provinces.get(newHoveredCountry, []):
+		UpdateLookup(
+			province,
+			a_highlightColor,
+			GetCountryDisplayColor(province_objects[province].GetFunctionalOwner()),
+		)
+	hoveredCountry = newHoveredCountry
 
-			if pid > 1:
-				match current_view:
-					MapView.COUNTRIES:
-						GameState.tooltip.SwitchTooltip(1)
-					MapView.RESOURCES:
-						GameState.tooltip.SwitchTooltip(0)
-					_:
-						GameState.tooltip.SwitchTooltip(-1)
-				
-				if (highlight_color != Color.TRANSPARENT):
-					original_hover_color = state_color_image.get_pixel(pid, 0)
-					UpdateLookup(pid, highlight_color, highlight_color)
-					last_hovered_pid = pid
-					Input.set_default_cursor_shape(Input.CURSOR_POINTING_HAND)
-					province_hovered.emit(pid, CountryManager.player_country.country_name if GameState.interactionType != GameState.InteractionType.SELECT_COUNTRY else "")
-			else:
-				Input.set_default_cursor_shape(Input.CURSOR_ARROW)
-				province_hovered.emit(-1, "")
-				GameState.tooltip.SwitchTooltip(-1)
+func HoverCountry(a_pid: int, a_highlightColor: Color) -> void:
+	# Still inside the same country, so the highlight is already correct.
+	if a_pid in province_objects && province_objects[a_pid].GetFunctionalOwner() == hoveredCountry:
+		last_hovered_pid = a_pid
+		return
 
-func _reset_last_hover() -> void:
-	if last_hovered_pid > 1:
-		UpdateLookup(last_hovered_pid, original_hover_color, original_hover_color)
+	ResetHover()
+
+	if a_highlightColor == Color.TRANSPARENT || a_pid not in province_objects || province_objects[a_pid].country == "Sea":
+		Input.set_default_cursor_shape(Input.CURSOR_ARROW)
+		province_hovered.emit(-1, "")
+		return
+
+	HighlightCountry(a_pid, a_highlightColor)
+	last_hovered_pid = a_pid
+	Input.set_default_cursor_shape(Input.CURSOR_POINTING_HAND)
+	province_hovered.emit(a_pid, _GetHoverViewer())
+
+func HoverProvince(a_pid: int, a_highlightColor: Color) -> void:
+	ResetHover()
+
+	if a_pid <= 1:
+		Input.set_default_cursor_shape(Input.CURSOR_ARROW)
+		province_hovered.emit(-1, "")
+		GameState.tooltip.SwitchTooltip(-1)
+		return
+
+	match current_view:
+		MapView.COUNTRIES:
+			GameState.tooltip.SwitchTooltip(1)
+		MapView.RESOURCES:
+			GameState.tooltip.SwitchTooltip(0)
+		_:
+			GameState.tooltip.SwitchTooltip(-1)
+
+	if a_highlightColor != Color.TRANSPARENT:
+		original_color = state_color_image.get_pixel(a_pid, 0)
+		UpdateLookup(a_pid, a_highlightColor, a_highlightColor)
+		last_hovered_pid = a_pid
+		Input.set_default_cursor_shape(Input.CURSOR_POINTING_HAND)
+		province_hovered.emit(a_pid, _GetHoverViewer())
+
+func ClearHover() -> void:
+	GameState.tooltip.SwitchTooltip(-1)
+	ResetHover()
+
+func ResetHover() -> void:
+	if GameState.interactionType == GameState.InteractionType.SELECT_COUNTRY:
+		UnhighlightCountry()
+	elif last_hovered_pid > 1:
+		UpdateLookup(last_hovered_pid, original_color, original_color)
 	last_hovered_pid = -1
 
-func _get_contextual_highlight(pid: int) -> Color:
+func GetContextualHighlight(pid: int) -> Color:
 	if pid <= 1:
 		return Color.TRANSPARENT
 	
@@ -549,18 +566,30 @@ func GetRelativeCountryRelation(a_country1: CountryData, a_country2: CountryData
 		var is_player_owned: bool = a_country1.country_name == CountryManager.player_country.country_name
 		var is_puppet_owned: bool = a_country1.country_name in CountryManager.player_country.puppets
 
-func HandleClick(global_pos: Vector2, map_sprite: Sprite2D) -> void:
-	if KeyboardManager._is_mouse_over_ui() or Console.is_visible() or GameState.in_peace_process:
-		return
+func IsLandProvince(pid: int) -> bool:
+	return pid > 1 and province_objects[pid].type != 0 # 0 is SEA
 
-	var pid: int = GetProvinceWithRadius(global_pos, map_sprite, 5)
-	# 1. Handle Clicks on Water or Invalid Areas
-	if pid <= 1 or province_objects[pid].type == 0: # 0 is SEA
-		if GameState.industry_building != GameState.IndustryType.DEFAULT:
-			GameState.reset_industry_building()
-			ShowCountriesMap()
-		else:
-			close_sidemenu.emit()
+func ClickSea() -> void:
+	if GameState.industry_building != GameState.IndustryType.DEFAULT:
+		GameState.reset_industry_building()
+		ShowCountriesMap()
+	else:
+		close_sidemenu.emit()
+
+func SelectCountryAt(pid: int) -> void:
+	GameState.game_ui.selected_country = CountryManager.countries[
+		province_objects[pid].GetFunctionalOwner()
+	]
+	GameState.game_ui.DoUpdateSidemenuVisuals()
+	ShowCountriesMap()
+
+func DeployAt(pid: int) -> void:
+	var player_country_name: String = CountryManager.player_country.country_name
+	var is_player_owned: bool = province_objects[pid].GetFunctionalOwner() == player_country_name
+	_SetDeploymentPID(is_player_owned, pid, player_country_name)
+
+func BuildAt(pid: int) -> void:
+	if EconomyManager.is_province_building(pid):
 		return
 
 	var player_country_name: String = CountryManager.player_country.country_name
@@ -590,34 +619,18 @@ func HandleClick(global_pos: Vector2, map_sprite: Sprite2D) -> void:
 	# Ally    = 011
 	# Enemy   = 101
 
-	var is_player_owned: bool = MapManager.province_objects[pid].GetFunctionalOwner() == player_country_name
-	var is_puppet_owned: bool = MapManager.province_objects[pid].GetFunctionalOwner() in CountryManager.player_country.puppets
+	var is_player_owned: bool = province_objects[pid].GetFunctionalOwner() == player_country_name
+	var is_puppet_owned: bool = province_objects[pid].GetFunctionalOwner() in CountryManager.player_country.puppets
 
-	match GameState.interactionType:
-		GameState.InteractionType.SELECT_COUNTRY:
-			GameState.game_ui.selected_country = CountryManager.countries[
-				province_objects[pid].GetFunctionalOwner()
-			]
-			GameState.game_ui.DoUpdateSidemenuVisuals()
-			ShowCountriesMap()
-
-		GameState.InteractionType.DEPLOY_PROVINCE:
-				_SetDeploymentPID(pid, is_player_owned, player_country_name)
-
-		GameState.InteractionType.BUILD_PROVINCE:
-			if !EconomyManager.is_province_building(pid):
-				var country_name = player_country_name if is_player_owned else province_objects[pid].GetFunctionalOwner() if is_puppet_owned else "fish"
-				if _ProvinceBuildIndustry(pid, country_name, GameState.industry_building):
-					_cleanup_interaction_state()
-					ShowIndustryCountry(country_name)
-					country_clicked.emit(country_name)
-				else:
-					print("Action Failed: Cannot build in foreign territory.")
-					GameState.reset_industry_building()
-					ShowCountriesMap()
-		_:
-			if TroopManager.troop_selection.selected_troops.is_empty(): # Prevent menu from spawning when selecting troops (annoying)
-				country_clicked.emit(province_objects[pid].GetFunctionalOwner())
+	var country_name = player_country_name if is_player_owned else province_objects[pid].GetFunctionalOwner() if is_puppet_owned else "fish"
+	if _ProvinceBuildIndustry(pid, country_name, GameState.industry_building):
+		_cleanup_interaction_state()
+		ShowIndustryCountry(country_name)
+		country_clicked.emit(country_name)
+	else:
+		print("Action Failed: Cannot build in foreign territory.")
+		GameState.reset_industry_building()
+		ShowCountriesMap()
 
 # move this to CountryManager?
 func _SetDeploymentPID(
@@ -668,7 +681,7 @@ func _ProvinceBuildIndustry(pid: int, a_countryName: String, type: GameState.Ind
 func _cleanup_interaction_state() -> void:
 	Input.set_default_cursor_shape(Input.CURSOR_ARROW)
 	if last_hovered_pid > 1:
-		UpdateLookup(last_hovered_pid, original_hover_color, original_hover_color)
+		UpdateLookup(last_hovered_pid, original_color, original_color)
 		last_hovered_pid = -1
 
 # To probe around and still register a click if we hit province/coutnry border

@@ -465,7 +465,7 @@ func _on_province_clicked(country_name: String) -> void:
 	_update_sidemenu_visuals()
 
 	if (
-		!GameState.choosing_deploy_city
+		GameState.interactionType == GameState.InteractionType.BUILD_PROVINCE
 		|| GameState.industry_building == GameState.IndustryType.DEFAULT
 	):
 		var new_context = Context.NEUTRAL

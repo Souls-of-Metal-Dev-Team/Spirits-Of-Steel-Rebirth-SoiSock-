@@ -23,7 +23,7 @@ var clock_cache: Dictionary
 # var choosing_deploy_city := false
 # var selectingCountry: bool = true
 
-var interactionType = InteractionType.DEFAULT
+var interactionType = InteractionType.SELECT_COUNTRY
 
 
 var industry_building := IndustryType.FACTORY

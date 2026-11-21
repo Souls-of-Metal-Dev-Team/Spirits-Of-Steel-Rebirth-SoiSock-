@@ -268,8 +268,8 @@ func _create_ghost_map(offset: Vector2, p_material: ShaderMaterial) -> void:
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
-			MapManager.HandleClickDown(get_global_mouse_position(), map_sprite)
+			KeyboardManager.HandleClickDown(get_global_mouse_position(), map_sprite)
 		else:
-			MapManager.HandleClick(get_global_mouse_position(), map_sprite)
+			KeyboardManager.HandleClick(get_global_mouse_position(), map_sprite)
 	if event is InputEventMouseMotion:
-		MapManager.HandleHover(get_global_mouse_position(), map_sprite)
+		KeyboardManager.HandleHover(get_global_mouse_position(), map_sprite)

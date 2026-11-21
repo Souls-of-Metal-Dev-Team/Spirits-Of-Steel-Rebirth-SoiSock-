@@ -66,3 +66,40 @@ func HandleClickDown(_global_pos: Vector2, _map_sprite: Sprite2D) -> void:
 
 	TroopManager.troop_selection.deselect_all()
 
+func HandleHover(global_pos: Vector2, map_sprite: Sprite2D) -> void:
+	if _is_mouse_over_ui() or GameState.in_peace_process:
+		MapManager.ClearHover()
+		return
+
+	var pid: int = MapManager.GetProvinceAtPos(global_pos, map_sprite)
+	MapManager.current_hovered_pid = pid
+	if pid == MapManager.last_hovered_pid:
+		return
+
+	var highlightColor: Color = MapManager.GetContextualHighlight(pid)
+	if GameState.interactionType == GameState.InteractionType.SELECT_COUNTRY:
+		MapManager.HoverCountry(pid, highlightColor)
+	else:
+		MapManager.HoverProvince(pid, highlightColor)
+
+func HandleClick(global_pos: Vector2, map_sprite: Sprite2D) -> void:
+	if _is_mouse_over_ui() or Console.is_visible() or GameState.in_peace_process:
+		return
+
+	var pid: int = MapManager.GetProvinceWithRadius(global_pos, map_sprite, 5)
+	if !MapManager.IsLandProvince(pid):
+		MapManager.ClickSea()
+		return
+
+	match GameState.interactionType:
+		GameState.InteractionType.SELECT_COUNTRY:
+			MapManager.SelectCountryAt(pid)
+		GameState.InteractionType.DEPLOY_PROVINCE:
+			MapManager.DeployAt(pid)
+		GameState.InteractionType.BUILD_PROVINCE:
+			MapManager.BuildAt(pid)
+		_:
+			# Prevent menu from spawning when selecting troops (annoying)
+			if TroopManager.troop_selection.selected_troops.is_empty():
+				MapManager.country_clicked.emit(MapManager.province_objects[pid].GetFunctionalOwner())
+
