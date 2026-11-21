@@ -18,6 +18,19 @@ const ALL_DIRECTIONS: Array[Vector2i] = [
 	Vector2i(0, -1),
 ]
 
+# Relation of a country to the player, as bitflags.
+# NEUTRAL bit = foreign country. Player and puppets are never foreign, so they lack it.
+const RELATION_NEUTRAL_BIT: int = 0b001
+const RELATION_ALLY_BIT: int = 0b010
+const RELATION_ENEMY_BIT: int = 0b100
+enum CountryRelation {
+	PLAYER = 0b000,
+	NEUTRAL = 0b001,
+	PUPPET = 0b010, # ally bit, no neutral bit
+	ALLY = 0b011,
+	ENEMY = 0b101,
+}
+
 var hoveredCountry: String = "Sea"
 
 # --- DATA ---
@@ -163,6 +176,14 @@ func Initialize(
 
 	var inc: float = 0.1 / (MAP_WIDTH * MAP_HEIGHT)
 
+	# Flat per-province arrays, indexed by pid. Positions are interleaved: [x0, y0, x1, y1, ...].
+	# pid 0 and 1 are unused placeholders, so real province IDs index directly.
+	var first_pos: PackedInt32Array = PackedInt32Array([0, 0, 0, 0])
+	var last_pos: PackedInt32Array = PackedInt32Array([0, 0, 0, 0])
+	var pixel_count: PackedInt32Array = PackedInt32Array([0, 0])
+
+	var mapImageArray = mapImage.get_data()
+
 	for i: int in range(MAP_WIDTH * MAP_HEIGHT):
 		#print("%d/%d -> %f" % [i, blink, a_progress[0]])
 		a_progress[0] += inc
@@ -188,20 +209,36 @@ func Initialize(
 			province.id = next_id
 
 			province_objects[next_id] = province
-			
+
+			# First pixel of a province in scan order. Last starts here and moves on.
+			first_pos.append(x)
+			first_pos.append(y)
+			last_pos.append(x)
+			last_pos.append(y)
+			pixel_count.append(0)
+
 			next_id += 1
 
 		# Write the unique ID to your id_map_image
+		var pid: int = unique_regions[index]
 		id_map_image.set_pixel(
 			x,
 			y,
-			Color.hex((unique_regions[index] << 8) | 0x000000FF),
+			Color.hex((pid << 8) | 0x000000FF),
 		)
+
+		var k: int = pid * 2
+		last_pos[k] = x
+		last_pos[k + 1] = y
+		pixel_count[pid] += 1
+
+		
 		
 	max_province_id = next_id - 1
 	BuildLookupTexture()
 	a_progress[0] += 0.015
-	_calculate_province_centroids()
+
+	_calculate_province_centroids(first_pos, last_pos, pixel_count)
 	a_progress[0] += 0.01
 	
 	# Pass 2: Load troops now that centroids (positions) are definitely known
@@ -562,9 +599,19 @@ func GetContextualHighlight(pid: int) -> Color:
 
 	return Color.TRANSPARENT
 
-func GetRelativeCountryRelation(a_country1: CountryData, a_country2: CountryData):
-		var is_player_owned: bool = a_country1.country_name == CountryManager.player_country.country_name
-		var is_puppet_owned: bool = a_country1.country_name in CountryManager.player_country.puppets
+# Relation of a_country1 as seen from a_country2. Returns CountryRelation bitflags.
+func GetRelativeCountryRelation(a_country1: CountryData, a_country2: CountryData) -> int:
+	if a_country1.country_name == a_country2.country_name:
+		return CountryRelation.PLAYER
+	if a_country1.country_name in a_country2.puppets:
+		return CountryRelation.PUPPET # never neutral
+
+	var relation: int = RELATION_NEUTRAL_BIT
+	if FactionManager.in_faction(a_country2, a_country1):
+		relation |= RELATION_ALLY_BIT
+	if WarManager.is_at_war(a_country1, a_country2):
+		relation |= RELATION_ENEMY_BIT
+	return relation
 
 func IsLandProvince(pid: int) -> bool:
 	return pid > 1 and province_objects[pid].type != 0 # 0 is SEA
@@ -592,38 +639,11 @@ func BuildAt(pid: int) -> void:
 	if EconomyManager.is_province_building(pid):
 		return
 
-	var player_country_name: String = CountryManager.player_country.country_name
-
-	# NOTE(soi): soo
-	# this could either be like
-	# Player                         = 00
-	# Puppet  & (Ally)               = 10
-	# Neutral & (Neutral|Ally|Enemy) = 01 | 11 | 101
-
-	# Meaning
-	# first bit represents Neutral
-	# second and third bit represents Ally
-
-	# Player                 = 000
-	# Neutral & Neutral      = 001
-	# Puppet  & Ally         = 010
-	# Neutral & Ally         = 011
-	# Neutral & Enemy        = 101
-	# Neutral & Ally & Enemy = 111
-
-	# Player  = 000
-	# Neutral = 111
-	# Puppet  = 010
-
-	# Neutral = 001
-	# Ally    = 011
-	# Enemy   = 101
-
-	var is_player_owned: bool = province_objects[pid].GetFunctionalOwner() == player_country_name
-	var is_puppet_owned: bool = province_objects[pid].GetFunctionalOwner() in CountryManager.player_country.puppets
-
-	var country_name = player_country_name if is_player_owned else province_objects[pid].GetFunctionalOwner() if is_puppet_owned else "fish"
-	if _ProvinceBuildIndustry(pid, country_name, GameState.industry_building):
+	var owner_name: String = province_objects[pid].GetFunctionalOwner()
+	var relation: int = GetRelativeCountryRelation(CountryManager.countries[owner_name], CountryManager.player_country)
+	# Only player and puppets (no neutral bit) can be built in.
+	var country_name: String = owner_name if (relation & RELATION_NEUTRAL_BIT) == 0 else ""
+	if country_name != "" and _ProvinceBuildIndustry(pid, country_name, GameState.industry_building):
 		_cleanup_interaction_state()
 		ShowIndustryCountry(country_name)
 		country_clicked.emit(country_name)
@@ -710,39 +730,25 @@ func UpdateLookup(pid: int, colorMain: Color, colorSecondary: Color) -> void:
 	state_color_image.set_pixel(pid, 1, colorSecondary)
 	state_color_texture.update(state_color_image)
 
-func _calculate_province_centroids() -> void:
-	# Use a dictionary to accumulate data: {ID: [total_x, total_y, pixel_count]}
-	var accumulators: Dictionary = {}
+# Center = midpoint of first and last pixel seen in scan order (top-left-most, bottom-right-most).
+func _calculate_province_centroids(
+	a_first_pos: PackedInt32Array,
+	a_last_pos: PackedInt32Array,
+	a_pixel_count: PackedInt32Array,
+) -> void:
+	for pid: int in range(2, a_pixel_count.size()):
+		if a_pixel_count[pid] <= 0:
+			continue
 
-	# Initialize accumulators for all valid province IDs (IDs > 1)
-	for i: int in range(2, max_province_id + 1):
-		accumulators[i] = [0.0, 0.0, 0]
+		var k: int = pid * 2
+		var center: Vector2 = Vector2(
+			(a_first_pos[k] + a_last_pos[k]) * 0.5,
+			(a_first_pos[k + 1] + a_last_pos[k + 1]) * 0.5,
+		)
 
-	# --- Pass 1: Accumulate Coordinates ---
-	for i: int in range(MAP_WIDTH * MAP_HEIGHT):
-		var x: int = i % MAP_WIDTH
-		@warning_ignore("integer_division")
-		var y: int = i / MAP_WIDTH
-		var pid: int = GetProvinceAtPos(Vector2(x, y), null) # Use direct coordinates, sprite is null
-
-		if pid > 1 && accumulators.has(pid):
-			accumulators[pid][0] += x
-			accumulators[pid][1] += y
-			accumulators[pid][2] += 1
-
-	# --- Pass 2: Calculate Average (Centroid) ---
-	for pid: int in accumulators:
-		var data = accumulators[pid]
-		var total_pixels: int = data[2]
-
-		if total_pixels > 0:
-			var center_x: float = data[0] / total_pixels
-			var center_y: float = data[1] / total_pixels
-
-			# Store the resulting centroid as a Vector2
-			province_centers[pid] = Vector2(center_x, center_y)
-			if province_objects.has(pid):
-				province_objects[pid].center = Vector2(center_x, center_y)
+		province_centers[pid] = center
+		if province_objects.has(pid):
+			province_objects[pid].center = center
 
 	print("MapManager: Centroids calculated for %d provinces." % province_centers.size())
 
