@@ -467,33 +467,28 @@ func HandleHover(global_pos: Vector2, map_sprite: Sprite2D) -> void:
 				pass
 			else:
 				last_hovered_pid = -1
-				if pid > 1 && highlight_color != Color.TRANSPARENT:
-					if hoveredCountry != province_objects[pid].GetFunctionalOwner():
-						if hoveredCountry != "Sea":
-							original_hover_color = GetCountryDisplayColor(hoveredCountry)
-							if (country_to_provinces.has(hoveredCountry)):
-								for province: int in country_to_provinces[hoveredCountry]:
-									UpdateLookup(province, GetCountryDisplayColor(province_objects[province].country), original_hover_color)
-							if (country_to_rightful_provinces.has(hoveredCountry)):
-								for province: int in country_to_rightful_provinces[hoveredCountry]:
-									UpdateLookup(province, original_hover_color, GetCountryDisplayColor(province_objects[province].GetFunctionalOwner()))
-						if pid in province_objects:
-							if province_objects[pid].country != "Sea":
-								original_hover_color = state_color_image.get_pixel(pid, 0)
-								var tempChecker: String = province_objects[pid].GetFunctionalOwner()
-								for province in country_to_provinces[tempChecker]:
-									if (province_objects[province].occupier == tempChecker):
-										UpdateLookup(province, GetCountryDisplayColor(province_objects[province].country), highlight_color)
-									else:
-										UpdateLookup(province, highlight_color, highlight_color)
-									
-								for province: int in country_to_rightful_provinces[tempChecker]:
-									UpdateLookup(province, highlight_color, GetCountryDisplayColor(province_objects[province].GetFunctionalOwner()))
+				if pid > 1 && highlight_color != Color.TRANSPARENT && hoveredCountry != province_objects[pid].GetFunctionalOwner():
+					if hoveredCountry != "Sea":
+						original_hover_color = GetCountryDisplayColor(hoveredCountry)
+						for province: int in country_to_provinces.get(hoveredCountry, []):
+							UpdateLookup(province, GetCountryDisplayColor(province_objects[province].country), original_hover_color)
+						for province: int in country_to_rightful_provinces.get(hoveredCountry, []):
+							UpdateLookup(province, original_hover_color, GetCountryDisplayColor(province_objects[province].GetFunctionalOwner()))
+					if pid in province_objects:
+						if province_objects[pid].country != "Sea":
+							original_hover_color = state_color_image.get_pixel(pid, 0)
+							var tempChecker: String = province_objects[pid].GetFunctionalOwner()
+							for province in country_to_provinces[tempChecker]:
+								UpdateLookup(province, highlight_color if province_objects[province].occupier == tempChecker else GetCountryDisplayColor(province_objects[province].country), highlight_color)
 								
-								last_hovered_pid = pid
-								Input.set_default_cursor_shape(Input.CURSOR_POINTING_HAND)
-								province_hovered.emit(pid, CountryManager.player_country.country_name if !GameState.selectingCountry else "")
-							hoveredCountry = province_objects[pid].GetFunctionalOwner()
+							for province: int in country_to_rightful_provinces[tempChecker]:
+								UpdateLookup(province, highlight_color, GetCountryDisplayColor(province_objects[province].GetFunctionalOwner()))
+							
+							last_hovered_pid = pid
+							Input.set_default_cursor_shape(Input.CURSOR_POINTING_HAND)
+							province_hovered.emit(pid, CountryManager.player_country.country_name if !GameState.selectingCountry else "")
+						
+						hoveredCountry = province_objects[pid].GetFunctionalOwner()
 		else:
 			_reset_last_hover() # Clean up the old one
 
