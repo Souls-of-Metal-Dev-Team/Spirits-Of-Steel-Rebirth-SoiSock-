@@ -186,6 +186,8 @@ func Initialize(
 
 	# RGB8 raw bytes: 3 per pixel, row-major. Index = packed RGB, same as old to_rgba32() >> 8.
 	var mapData: PackedByteArray = mapImage.get_data()
+	# pid of the pixel to the left. Only read when x > 0, so no reset needed per row.
+	var left_pid: int = 1
 
 	for i: int in range(MAP_WIDTH * MAP_HEIGHT):
 		#print("%d/%d -> %f" % [i, blink, a_progress[0]])
@@ -200,6 +202,7 @@ func Initialize(
 		# Check for Borders/Grid (ID 1)
 		if index == 0:
 			id_map_image.set_pixel(x, y, 1)
+			left_pid = 1
 			continue
 
 		# If this is a new region (Unique Sea Zone or Land Province)
@@ -234,10 +237,10 @@ func Initialize(
 			province_graph.add_point(pid, Vector2i(x, y))
 
 		if x:
-			var left_pid = _get_pid_fast(x-1, y)
 			if left_pid != pid:
 				if !province_graph.are_points_connected(pid, left_pid):
 					province_graph.connect_points(pid, left_pid)
+		left_pid = pid
 
 		if y:
 			var top_pid = _get_pid_fast(x, y-1)

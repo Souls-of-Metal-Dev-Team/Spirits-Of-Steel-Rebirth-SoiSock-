@@ -21,7 +21,9 @@ var tooltipLatch: bool = false
 var shouldBeVisible: bool = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
+# NOTE(soi): This rlly shouldnt be called every frame
 func _process(_delta: float) -> void:
+	if !visible: return
 	set_position(get_global_mouse_position() + offset)
 	position.x = clamp(position.x, 0, get_viewport_rect().size.x - size.x)
 	position.y = clamp(position.y, 0, get_viewport_rect().size.y - size.y)

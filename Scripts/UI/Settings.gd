@@ -1,5 +1,7 @@
 extends Control
 
+const SAVE_ENTRY_SCENE = preload("res://Scenes/SaveEntry.tscn")
+
 @export var save_list: VBoxContainer
 @export var line_edit: TextEdit
 @export var saveButton: Button
@@ -118,58 +120,37 @@ func _on_music_changed(value: float) -> void:
 
 
 func _add_save_row(parent: Node, save_name: String, file_path: String) -> void:
-	var hbox = HBoxContainer.new()
-	hbox.add_theme_constant_override("separation", 10)
-	
 	# Validate scenario path before allowing load
 	var scenario_exists = true
 	var scenario_path = ""
 	
 	var file = FileAccess.open(file_path, FileAccess.READ)
 	if file:
-		var json_str = file.get_as_text()
-		var data = JSON.parse_string(json_str)
+		var data = JSON.parse_string(file.get_as_text())
 		if data is Dictionary:
 			scenario_path = data.get("scenario_path", "res://starts/ModernDay/map_data.json")
-			
 			if not FileAccess.file_exists(scenario_path):
 				scenario_exists = false
 	
-	var lbl = Label.new()
-	lbl.text = save_name
-	lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	if not scenario_exists:
-		lbl.modulate = Color(0.5, 0.5, 0.5)
-	hbox.add_child(lbl)
+	var entry: SaveEntry = SAVE_ENTRY_SCENE.instantiate()
+	parent.add_child(entry)
+	entry.Setup(save_name, scenario_exists, scenario_path)
+	entry.load_requested.connect(_on_save_load_requested)
+	entry.delete_requested.connect(_on_save_delete_requested)
 
-	var load_btn = Button.new()
-	load_btn.text = "Load"
-	load_btn.custom_minimum_size.x = 80
-	
-	if not scenario_exists:
-		load_btn.disabled = true
-		load_btn.tooltip_text = "Scenario file missing: " + scenario_path
-	
-	load_btn.pressed.connect(func():
-		if GameState.current_world:
-			GameState.current_world.load_game(save_name)
-		else:
-			# We are in the Main Menu
-			GameState.pending_load_save = save_name
-			SceneSwitcher.switch_to(SceneSwitcher.Type.WORLD)
-	)
-	
-	var del_btn = Button.new()
-	del_btn.text = "X"
-	del_btn.modulate = Color(1, 0.4, 0.4)
-	del_btn.pressed.connect(func():
-		DirAccess.remove_absolute("res://saves/" + save_name + ".json")
-		_refresh_saves()
-	)
 
-	hbox.add_child(load_btn)
-	hbox.add_child(del_btn)
-	parent.add_child(hbox)
+func _on_save_load_requested(save_name: String) -> void:
+	if GameState.current_world:
+		GameState.current_world.load_game(save_name)
+	else:
+		# We are in the Main Menu
+		GameState.pending_load_save = save_name
+		SceneSwitcher.switch_to(SceneSwitcher.Type.WORLD)
+
+
+func _on_save_delete_requested(save_name: String) -> void:
+	DirAccess.remove_absolute("res://saves/" + save_name + ".json")
+	_refresh_saves()
 
 
 func _on_save_game_pressed():
