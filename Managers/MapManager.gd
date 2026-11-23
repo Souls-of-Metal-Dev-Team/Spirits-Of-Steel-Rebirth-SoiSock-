@@ -172,6 +172,8 @@ func Initialize(
 	var next_id: int = 2
 
 	var mapImage: Image = a_map.get_image()
+	if mapImage.get_format() != Image.FORMAT_RGB8:
+		mapImage.convert(Image.FORMAT_RGB8)
 	($"../Main/MapContainer/CultureSprite" as Sprite2D).texture = a_map
 
 	var inc: float = 0.1 / (MAP_WIDTH * MAP_HEIGHT)
@@ -182,7 +184,8 @@ func Initialize(
 	var last_pos: PackedInt32Array = PackedInt32Array([0, 0, 0, 0])
 	var pixel_count: PackedInt32Array = PackedInt32Array([0, 0])
 
-	var mapImageArray = mapImage.get_data()
+	# RGB8 raw bytes: 3 per pixel, row-major. Index = packed RGB, same as old to_rgba32() >> 8.
+	var mapData: PackedByteArray = mapImage.get_data()
 
 	for i: int in range(MAP_WIDTH * MAP_HEIGHT):
 		#print("%d/%d -> %f" % [i, blink, a_progress[0]])
@@ -190,13 +193,12 @@ func Initialize(
 		var x: int = i % MAP_WIDTH
 		@warning_ignore("integer_division")
 		var y: int = i / MAP_WIDTH
-		var r_color: Color = mapImage.get_pixel(x, y)
-
-		var index := (r_color.to_rgba32() >> 8) # I hate alpha.
+		var byte_offset: int = i * 3
+		var index: int = (mapData[byte_offset] << 16) | (mapData[byte_offset + 1] << 8) | mapData[byte_offset + 2]
 
 
 		# Check for Borders/Grid (ID 1)
-		if r_color == Color.BLACK:
+		if index == 0:
 			id_map_image.set_pixel(x, y, 1)
 			continue
 
@@ -227,6 +229,23 @@ func Initialize(
 			Color.hex((pid << 8) | 0x000000FF),
 		)
 
+		# NOTE(soi): its soiladin time 2
+		if !province_graph.has_point(pid):
+			province_graph.add_point(pid, Vector2i(x, y))
+
+		if x:
+			var left_pid = _get_pid_fast(x-1, y)
+			if left_pid != pid:
+				if !province_graph.are_points_connected(pid, left_pid):
+					province_graph.connect_points(pid, left_pid)
+
+		if y:
+			var top_pid = _get_pid_fast(x, y-1)
+			if top_pid != pid:
+				if !province_graph.are_points_connected(pid, top_pid):
+					province_graph.connect_points(pid, top_pid)
+
+
 		var k: int = pid * 2
 		last_pos[k] = x
 		last_pos[k + 1] = y
@@ -251,7 +270,7 @@ func Initialize(
 	a_progress[0] += 0.025
 	_build_country_to_provinces()
 	a_progress[0] += 0.025
-	_build_adjacency_list(a_progress)
+	# _build_adjacency_list(a_progress)
 	_BuildGlobalRegistry()
 	a_progress[0] += 0.025
 
