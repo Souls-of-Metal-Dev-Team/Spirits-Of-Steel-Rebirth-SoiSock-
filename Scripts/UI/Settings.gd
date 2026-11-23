@@ -38,22 +38,30 @@ var settings = {}
 
 func _initialize_ui_values():
 	var s = SettingsManager.settings
-	sfx_slider.value = s.sfx_volume
-	music_slider.value = s.music_volume
-	scanlines_slider.value = s.scanlines
-	vignette_lower_slider.value = s.vignette_lower
-	vignette_upper_slider.value = s.vignette_upper
-	map_effects_btn.button_pressed = s.map_effects
-	provinceBorderThicknessSlider.value = s.provinceBorderThickness
-	province_borders_slider.value = s.province_borders
-	ui_upper_slider.value = s.ui_upper
-	ui_lower_slider.value = s.ui_lower
-	ui_dirt_slider.value = s.ui_dirt
-	daynight_contrast_slider.value = s.daynight_contrast
-	daynight_smoothness_slider.value = s.daynight_smoothness
-	clouds_slider.value = s.clouds
-	edgeness_slider.value = s.clouds_edgeness
-	debug_mode_btn.button_pressed = s.debug_mode
+	sfx_slider.value = s.get_value("Sound", "sfx_volume")
+	music_slider.value = s.get_value("Sound", "music_volume")
+	scanlines_slider.value = s.get_value("Graphics", "scanlines")
+	vignette_lower_slider.value = s.get_value("Graphics", "vignette_lower")
+	vignette_upper_slider.value = s.get_value("Graphics", "vignette_upper")
+	map_effects_btn.button_pressed = s.get_value("Graphics", "map_effects") > 0.0
+	provinceBorderThicknessSlider.value = s.get_value("Graphics", "provinceBorderThickness")
+	province_borders_slider.value = s.get_value("Graphics", "province_borders")
+	ui_upper_slider.value = s.get_value("Graphics", "ui_upper")
+	ui_lower_slider.value = s.get_value("Graphics", "ui_lower")
+	ui_dirt_slider.value = s.get_value("Graphics", "ui_dirt")
+	daynight_contrast_slider.value = s.get_value("Graphics", "daynight_contrast")
+	daynight_smoothness_slider.value = s.get_value("Graphics", "daynight_smoothness")
+	clouds_slider.value = s.get_value("Graphics", "clouds")
+	edgeness_slider.value = s.get_value("Graphics", "clouds_edgeness")
+	debug_mode_btn.button_pressed = s.get_value("Developer Options", "debug_mode")
+
+
+# Set a value in the ConfigFile, optionally apply it, then persist.
+func _set_setting(section: String, key: String, value, apply := true) -> void:
+	SettingsManager.settings.set_value(section, key, value)
+	if apply:
+		SettingsManager.apply_settings(SettingsManager.settings)
+	SettingsManager.settings.save(SettingsManager.SETTINGS_FILE)
 
 
 func _notification(what):
@@ -69,8 +77,7 @@ func _ready():
 
 
 func _on_save_settings_pressed() -> void:
-	SettingsManager.save_settings()
-
+	SettingsManager.settings.save(SettingsManager.SETTINGS_FILE)
 
 func _refresh_saves():
 	if not save_list: return
@@ -103,15 +110,11 @@ func _refresh_saves():
 
 
 func _on_sfx_changed(value: float) -> void:
-	SettingsManager.settings.sfx_volume = value
-	SettingsManager.apply_settings()
-	SettingsManager.save_settings()
+	_set_setting("Sound", "sfx_volume", value)
 
 
 func _on_music_changed(value: float) -> void:
-	SettingsManager.settings.music_volume = value
-	SettingsManager.apply_settings()
-	SettingsManager.save_settings()
+	_set_setting("Sound", "music_volume", value)
 
 
 func _add_save_row(parent: Node, save_name: String, file_path: String) -> void:
@@ -174,94 +177,67 @@ func _on_save_game_pressed():
 	_refresh_saves()
 
 func _on_scanlines_changed(value: float) -> void:
-	SettingsManager.settings.scanlines = value
-	SettingsManager.apply_settings()
-	SettingsManager.save_settings()
-	
+	_set_setting("Graphics", "scanlines", value)
 
 func _on_vignette_upper_changed(value: float) -> void:
-	SettingsManager.settings.vignette_upper = value
-	SettingsManager.apply_settings()
-	SettingsManager.save_settings()
+	_set_setting("Graphics", "vignette_upper", value)
 
 
 func _on_vignette_lower_changed(value: float) -> void:
-	SettingsManager.settings.vignette_lower = value
-	SettingsManager.apply_settings()
-	SettingsManager.save_settings()
+	_set_setting("Graphics", "vignette_lower", value)
 
 
 func _on_map_effects_pressed() -> void:
-	SettingsManager.settings.map_effects = !SettingsManager.settings.map_effects
+	var enabled: bool = SettingsManager.settings.get_value("Graphics", "map_effects") > 0.0
 	graphics_path.visible = !graphics_path.visible
-	SettingsManager.apply_settings()
-	SettingsManager.save_settings()
+	_set_setting("Graphics", "map_effects", 0.0 if enabled else 1.0)
 
 
 func m_OnProvinceBorderThicknessChanged(value: float) -> void:
-	SettingsManager.settings.provinceBorderThickness = value
-	SettingsManager.apply_settings()
-	SettingsManager.save_settings()
-	
+	_set_setting("Graphics", "provinceBorderThickness", value)
 func _on_province_borders_changed(value: float) -> void:
-	SettingsManager.settings.province_borders = value
-	SettingsManager.apply_settings()
-	SettingsManager.save_settings()
+	_set_setting("Graphics", "province_borders", value)
 
 
 func _on_ui_upper_changed(value: float) -> void:
-	SettingsManager.settings.ui_upper = value
+	_set_setting("Graphics", "ui_upper", value, false)
 	material.set_shader_parameter("upper", value)
-	SettingsManager.save_settings()
 
 
 func _on_ui_lower_changed(value: float) -> void:
-	SettingsManager.settings.ui_lower = value
+	_set_setting("Graphics", "ui_lower", value, false)
 	material.set_shader_parameter("lower", value)
-	SettingsManager.save_settings()
 
 
 func _on_ui_dirt_changed(value: float) -> void:
-	SettingsManager.settings.ui_dirt = value
+	_set_setting("Graphics", "ui_dirt", value, false)
 	material.set_shader_parameter("dirt", value)
-	SettingsManager.save_settings()
 
 
 func _on_daynight_contrast_changed(value: float) -> void:
-	SettingsManager.settings.daynight_contrast = value
-	SettingsManager.apply_settings()
-	SettingsManager.save_settings()
+	_set_setting("Graphics", "daynight_contrast", value)
 
 
 func _on_daynight_smoothness_changed(value: float) -> void:
-	SettingsManager.settings.daynight_smoothness = value
-	SettingsManager.apply_settings()
-	SettingsManager.save_settings()
+	_set_setting("Graphics", "daynight_smoothness", value)
 
 
 func _on_clouds_changed(value: float) -> void:
-	SettingsManager.settings.clouds = value
-	SettingsManager.apply_settings()
-	SettingsManager.save_settings()
+	_set_setting("Graphics", "clouds", value)
 
 
 func _on_edgeness_changed(value: float) -> void:
-	SettingsManager.settings.clouds_edgeness = value
-	SettingsManager.apply_settings()
-	SettingsManager.save_settings()
+	_set_setting("Graphics", "clouds_edgeness", value)
 
 
 func _on_debug_mode_pressed() -> void:
-	SettingsManager.settings.debug_mode = !SettingsManager.settings.debug_mode
-	SettingsManager.apply_settings()
-	SettingsManager.save_settings()
+	var current: bool = SettingsManager.settings.get_value("Developer Options", "debug_mode")
+	_set_setting("Developer Options", "debug_mode", !current)
 
 
 func _on_exit_start_pressed() -> void:
 	KeyboardManager.settings.visible = false
 	SceneSwitcher.switch_to(SceneSwitcher.Type.MENU)
-
-
 
 
 func _on_tab_container_tab_changed(tab: int) -> void:

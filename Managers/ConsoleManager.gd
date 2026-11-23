@@ -350,8 +350,14 @@ func _reload_decisions():
 	DecisionManager._load_decisions("res://starts/"+GameState.current_start+"/decisions/")
 
 func _debug_decisions():
-	DecisionManager.debug = !DecisionManager.debug
-
+	SettingsManager.settings.set_value(
+		"Developer Options",
+		"debug_mode",
+		SettingsManager.get_value(
+			"Developer Options",
+			"debug_mode",
+		)
+	)
 
 func _puppet_country(country_name: String):
 	CountryManager.make_puppet(CountryManager.player_country, CountryManager.countries[country_name])

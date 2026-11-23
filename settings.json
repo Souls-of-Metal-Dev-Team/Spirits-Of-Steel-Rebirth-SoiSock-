@@ -1,23 +1,25 @@
-{
-  "clouds": 0.43,
-  "clouds_edgeness": 0.7,
-  "daynight_contrast": 0.05,
-  "daynight_smoothness": 0.01,
-  "debug_mode": true,
-  "edgeness_slider": 0.69,
-  "map_effects": true,
-  "music_volume": 0.0,
-  "provinceBorderThickness": 0.52,
-  "province_borders": 0.11,
-  "radios": [
-    "Ultrakill",
-    "Terraria"
-  ],
-  "scanlines": 0.06,
-  "sfx_volume": 0.26,
-  "ui_dirt": 0.39,
-  "ui_lower": 0.08,
-  "ui_upper": 0.64,
-  "vignette_lower": 0.63,
-  "vignette_upper": 0.19
-}
+[Developer Options]
+
+debug_mode=false
+
+[Sound]
+
+radios=["default", "Lead poisoning", "Terraria", "Ultrakill"]
+sfx_volume=0.1
+music_volume=0.5
+
+[Graphics]
+
+scanlines=0.05
+vignette_lower=0.64
+vignette_upper=0.35
+map_effects=1.0
+provinceBorderThickness=0.5
+province_borders=0.14
+ui_upper=0.75
+ui_lower=0.19
+ui_dirt=0.25
+daynight_contrast=0.01
+daynight_smoothness=0.01
+clouds=0.22
+clouds_edgeness=0.0

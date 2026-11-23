@@ -82,9 +82,6 @@ func get_param_name(func_name: String, index: int) -> String:
 		return ""
 	return names[min(index, names.size() - 1)]
 
-var debug: bool:
-	get:
-		return SettingsManager.settings.debug_mode
 var heap: Dictionary = {}
 const DUMMY_FUNC = {"func": "return", "args": [true]}
 

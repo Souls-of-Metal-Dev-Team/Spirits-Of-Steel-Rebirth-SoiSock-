@@ -56,7 +56,7 @@ var _is_loading_expr: bool = false
 
 func _ready():
 	DecisionManager.ui_overlay = self
-	edit_button.visible = DecisionManager.debug
+	edit_button.visible = SettingsManager.settings.get_value("Developer Options", "debug_mode")
 	_on_edit_mode_toggled(false)
 	tabs_container.tab_changed.connect(_on_tab_changed)
 
@@ -123,8 +123,8 @@ func OpenMenu():
 	_load_category(current_category)
 	GameState.decision_menu_open = true
 	# Editing is only available in debug mode
-	edit_button.visible = DecisionManager.debug
-	if not DecisionManager.debug:
+	edit_button.visible = SettingsManager.settings.get_value("Developer Options", "debug_mode")
+	if not SettingsManager.settings.get_value("Developer Options", "debug_mode"):
 		edit_button.set_pressed_no_signal(false)
 	_on_edit_mode_toggled(edit_button.button_pressed)
 	_toggle_pause(true)
@@ -490,7 +490,7 @@ func _on_reload_decisions_pressed():
 
 
 func _on_edit_mode_toggled(toggled_on: bool):
-	edit_mode = toggled_on and DecisionManager.debug
+	edit_mode = toggled_on and SettingsManager.settings.get_value("Developer Options", "debug_mode")
 	editing_buttons.visible = edit_mode
 
 	if info_tab:

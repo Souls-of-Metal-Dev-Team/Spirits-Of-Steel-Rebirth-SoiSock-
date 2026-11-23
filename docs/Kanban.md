@@ -13,7 +13,6 @@ kanban-plugin: board
 - [ ] [[makeCharactersDoStuff]]
 - [ ] fix starts loading too long
 - [ ] [[multiplayer]]
-- [ ] Separate Repo
 
 
 ## Features
@@ -25,6 +24,7 @@ kanban-plugin: board
 - [ ] [[animations]]
 - [ ] flags with puppet owner canton should only have 1 shade
 - [ ] [[Country Tags]]
+- [ ] AssetManager
 
 
 ## Rewrites
@@ -51,6 +51,7 @@ kanban-plugin: board
 ## Done
 
 **Complete**
+- [x] Separate Repo
 
 
 ***

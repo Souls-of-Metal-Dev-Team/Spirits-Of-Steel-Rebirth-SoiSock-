@@ -135,7 +135,7 @@ func DoSetup(a_progress: Array) -> void:
 	else:
 		push_error("CustomRenderer node not found!")
 
-	SettingsManager.apply_settings()
+	SettingsManager.apply_settings(SettingsManager.settings)
 
 	a_progress[0] = 1.0
 	

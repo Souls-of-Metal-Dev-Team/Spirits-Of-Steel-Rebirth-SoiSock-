@@ -332,7 +332,7 @@ func set_tooltips_of_tabcontainers():
 
 
 func _on_compass_gui_input(event: InputEvent) -> void:
-	if not SettingsManager.settings.debug_mode or not selected_country:
+	if !(SettingsManager.settings.get_value("Developer Options", "debug_mode") && selected_country):
 		return
 		
 	if event is InputEventMouseButton:
@@ -357,7 +357,7 @@ func _update_ideology_from_mouse(local_pos: Vector2, do_save: bool) -> void:
 	selected_country.ideology = Vector2(ideology_x, ideology_y)
 	DoUpdateSidemenuVisuals()
 	
-	if do_save and SettingsManager.settings.debug_mode:
+	if do_save and SettingsManager.settings.get_value("Developer Options", "debug_mode"):
 		MapData.SaveMapData("user://map_data.json")
 
 func _update_radio_visuals() -> void:
@@ -639,6 +639,7 @@ func _on_menu_button_button_up(_menu_index: int) -> void:
 		else:
 			MapManager.SetCountryColor(CountryManager.player_country.country_name, Color.TRANSPARENT)
 			GameState.industry_building = GameState.IndustryType.DEFAULT
+			GameState.interactionType = GameState.InteractionType.DEFAULT
 			MapManager.ShowCountriesMap()
 
 	# _build_action_list()
@@ -892,7 +893,11 @@ func open_research_tree():
 	print("Opening Research")
 
 func open_decisions_tree():
-	get_tree().root.find_child("DecisionTreeUI", true, false).OpenMenu()
+	get_tree().root.find_child(
+		"DecisionTreeUI",
+		true,
+		false,
+	).OpenMenu()
 
 func _open_faction():
 	faction_prompt.visible = !faction_prompt.visible
@@ -1035,7 +1040,9 @@ func _on_input_division_text_changed(_value: float) -> void:
 
 func _on_music_pressed():
 	radios_panel.visible = !radios_panel.visible
-	SettingsManager.save_settings()
+	SettingsManager.settings.save(
+		SettingsManager.SETTINGS_FILE
+	)
 
 func _on_create_faction_pressed() -> void:
 	FactionManager.create_faction(
@@ -1169,4 +1176,8 @@ func m_OnGovernmentPressed() -> void:
 func _on_play_as_pressed() -> void:
 	CountryManager.set_player_country(selected_country.country_name)
 	GameState.interactionType = GameState.InteractionType.DEFAULT
+	GameState.game_ui.ChangeContextCategory(
+		GameState.game_ui.Context.PLAYER,
+		GameState.game_ui.Category.GENERAL,
+	)
 	_on_province_clicked(CountryManager.player_country.country_name)

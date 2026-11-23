@@ -521,6 +521,7 @@ layout_mode = 0
 offset_left = 356.0
 offset_right = 956.0
 offset_bottom = 32.0
+mouse_filter = 2
 mouse_behavior_recursive = 2
 
 [node name="Content" type="VBoxContainer" parent="Control/SIDEBAR/SidemenuBG" unique_id=1423441942]
@@ -742,17 +743,18 @@ size_flags_vertical = 3
 theme = ExtResource("13_sdmnd")
 theme_type_variation = &"InfoTabContainer"
 theme_override_styles/panel = SubResource("StyleBoxEmpty_ilaaa")
-current_tab = 0
+current_tab = 5
 tabs_visible = false
 
 [node name="PlayerTabs" type="TabContainer" parent="Control/SIDEBAR/SidemenuBG/Content/ContextAndButtons" unique_id=1238660091]
 unique_name_in_owner = true
+visible = false
 use_parent_material = true
 layout_mode = 2
 theme = ExtResource("13_sdmnd")
 theme_type_variation = &"InfoTabContainer"
 tab_alignment = 1
-current_tab = 3
+current_tab = 0
 clip_tabs = false
 tab_0/icon = ExtResource("5_0e43j")
 tab_1/icon = ExtResource("7_lpwmk")
@@ -761,7 +763,6 @@ tab_3/icon = ExtResource("24_5hlpc")
 metadata/_tab_index = 0
 
 [node name="Diplomacy" type="VBoxContainer" parent="Control/SIDEBAR/SidemenuBG/Content/ContextAndButtons/PlayerTabs" unique_id=1476595681]
-visible = false
 use_parent_material = true
 layout_mode = 2
 theme_override_constants/separation = 4
@@ -1221,6 +1222,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Cultures" type="VBoxContainer" parent="Control/SIDEBAR/SidemenuBG/Content/ContextAndButtons/PlayerTabs" unique_id=992805009]
+visible = false
 use_parent_material = true
 layout_mode = 2
 metadata/_tab_index = 3
@@ -2056,7 +2058,6 @@ text = "Kindly Ask For Manpower"
 script = ExtResource("29_0c8l0")
 
 [node name="Select" type="VBoxContainer" parent="Control/SIDEBAR/SidemenuBG/Content/ContextAndButtons" unique_id=1473921671]
-visible = false
 use_parent_material = true
 layout_mode = 2
 theme_override_constants/separation = 4

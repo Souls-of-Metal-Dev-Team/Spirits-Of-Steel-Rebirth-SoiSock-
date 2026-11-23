@@ -283,7 +283,7 @@ func play_music(track: int):
 		else:
 			print("MusicManager: Manual Fallback - No songs found!")
 
-	var vol = music_volume_map.get(track, 1.0) * SettingsManager.settings["music_volume"]
+	var vol = music_volume_map.get(track, 1.0) * SettingsManager.settings.get_value("Sound", "music_volume")
 	m_player.volume_db = linear_to_db(vol)
 	print("MusicManager: Playing track ", track, " at volume linear: ", vol, " (db: ", m_player.volume_db, ")")
 
@@ -357,7 +357,7 @@ func play_sfx(sfx: int):
 	var filtered = players.filter(func(p): return not p.playing)
 	var player = filtered.front() if filtered else players[0]
 	player.stream = sfx_map[sfx]
-	player.volume_db = linear_to_db(1.0 * SettingsManager.settings["sfx_volume"])
+	player.volume_db = linear_to_db(1.0 * SettingsManager.settings.get_value("Sound", "sfx_volume"))
 	player.play()
 
 
