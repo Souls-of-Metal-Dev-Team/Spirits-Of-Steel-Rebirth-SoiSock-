@@ -241,13 +241,15 @@ func _execute_war() -> bool:
 		puppeter.append(country.owner)
 		puppeter.append_array(CountryManager.countries[country.owner].puppets)
 
+	var own_members: Array[String] = _get_side_members(country.country_name)
+	var own_side_strength: float = _estimate_side_strength(country.country_name)
+	
 	for target_name: String in candidates:
 		var target_data: CountryData = CountryManager.countries[target_name]
 		if FactionManager.in_faction(country, target_data) || WarManager.is_at_war_names(country.country_name, target_name) || puppeter.has(target_name):
 			continue
 
 		# 3. SCALE ANALYSIS (Prevent massive world wars)
-		var own_members = _get_side_members(country.country_name)
 		var target_members = _get_side_members(target_name)
 		
 		# If the conflict would involve too many countries, skip (unless aggressive)
@@ -256,7 +258,6 @@ func _execute_war() -> bool:
 
 		# 4. STRENGTH & DISTANCE ANALYSIS
 		# Collective Security: Calculate strength of the entire "side" (factions + puppets)
-		var own_side_strength = _estimate_side_strength(country.country_name)
 		var target_side_strength = _estimate_side_strength(target_name)
 		
 		var ratio: float = own_side_strength / max(1.0, target_side_strength)

@@ -102,4 +102,3 @@ func HandleClick(global_pos: Vector2, map_sprite: Sprite2D) -> void:
 			# Prevent menu from spawning when selecting troops (annoying)
 			if TroopManager.troop_selection.selected_troops.is_empty():
 				MapManager.country_clicked.emit(MapManager.province_objects[pid].GetFunctionalOwner())
-
