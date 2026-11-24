@@ -39,7 +39,7 @@ const TROOP_BORDER := 2.0
 # Troops (box, background, flag and text) are hidden while the raw Camera2D zoom
 # is below this value. Compare against the raw zoom, not
 # _current_inv_zoom: that value is clamped, so it stops changing at zoom <= 2.
-const TROOP_DETAIL_MIN_ZOOM := 4.0
+const TROOP_DETAIL_MIN_ZOOM := 0.5
 
 const BASE_DOT_RADIUS = 4.0
 const DOT_SEGMENTS = 12

@@ -11,8 +11,8 @@ music_volume=0.5
 [Graphics]
 
 scanlines=0.05
-vignette_lower=0.64
-vignette_upper=0.35
+vignette_lower=0.59
+vignette_upper=0.46
 map_effects=1.0
 provinceBorderThickness=0.5
 province_borders=0.14

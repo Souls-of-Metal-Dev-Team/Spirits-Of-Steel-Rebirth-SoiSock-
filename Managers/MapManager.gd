@@ -176,6 +176,9 @@ func Initialize(
 		mapImage.convert(Image.FORMAT_RGB8)
 	($"../Main/MapContainer/CultureSprite" as Sprite2D).texture = a_map
 
+	province_graph.neighbor_filter_enabled = true
+	province_graph.clear()
+
 	var inc: float = 0.1 / (MAP_WIDTH * MAP_HEIGHT)
 
 	# Flat per-province arrays, indexed by pid. Positions are interleaved: [x0, y0, x1, y1, ...].
@@ -186,8 +189,10 @@ func Initialize(
 
 	# RGB8 raw bytes: 3 per pixel, row-major. Index = packed RGB, same as old to_rgba32() >> 8.
 	var mapData: PackedByteArray = mapImage.get_data()
-	# pid of the pixel to the left. Only read when x > 0, so no reset needed per row.
-	var left_pid: int = 1
+	# pid of every pixel scanned so far, indexed by i. Border pixels stay 0.
+	# Left / top / two-left / two-up neighbours have already been scanned when we read them.
+	var pid_buf: PackedInt32Array = PackedInt32Array()
+	pid_buf.resize(MAP_WIDTH * MAP_HEIGHT)
 
 	for i: int in range(MAP_WIDTH * MAP_HEIGHT):
 		#print("%d/%d -> %f" % [i, blink, a_progress[0]])
@@ -201,8 +206,8 @@ func Initialize(
 
 		# Check for Borders/Grid (ID 1)
 		if index == 0:
+			# NOTE: int 1 converts to Color.hex(1), so this pixel reads back as pid 0.
 			id_map_image.set_pixel(x, y, 1)
-			left_pid = 1
 			continue
 
 		# If this is a new region (Unique Sea Zone or Land Province)
@@ -236,20 +241,26 @@ func Initialize(
 		if !province_graph.has_point(pid):
 			province_graph.add_point(pid, Vector2i(x, y))
 
+		pid_buf[i] = pid
+
+		# Connect to the left / top pixel. If that pixel is a 1px border (0),
+		# look one pixel further across it, like _scan_across_border did.
 		if x:
-			if left_pid != pid:
-				if !province_graph.are_points_connected(pid, left_pid):
-					province_graph.connect_points(pid, left_pid)
-		left_pid = pid
+			var left_pid: int = pid_buf[i - 1]
+			if left_pid == 0 && x >= 2:
+				left_pid = pid_buf[i - 2]
+			if left_pid > 1 && left_pid != pid && !province_graph.are_points_connected(pid, left_pid):
+				province_graph.connect_points(pid, left_pid)
 
 		if y:
-			var top_pid = _get_pid_fast(x, y-1)
-			if top_pid != pid:
-				if !province_graph.are_points_connected(pid, top_pid):
-					province_graph.connect_points(pid, top_pid)
+			var top_pid: int = pid_buf[i - MAP_WIDTH]
+			if top_pid == 0 && y >= 2:
+				top_pid = pid_buf[i - 2 * MAP_WIDTH]
+			if top_pid > 1 && top_pid != pid && !province_graph.are_points_connected(pid, top_pid):
+				province_graph.connect_points(pid, top_pid)
 
 
-		var k: int = pid * 2
+		var k: int = pid << 1
 		last_pos[k] = x
 		last_pos[k + 1] = y
 		pixel_count[pid] += 1
@@ -553,6 +564,9 @@ func HoverCountry(a_pid: int, a_highlightColor: Color) -> void:
 		province_hovered.emit(-1, "")
 		return
 
+	if current_view != MapView.COUNTRIES:
+		return
+
 	HighlightCountry(a_pid, a_highlightColor)
 	last_hovered_pid = a_pid
 	Input.set_default_cursor_shape(Input.CURSOR_POINTING_HAND)
@@ -769,6 +783,10 @@ func _calculate_province_centroids(
 		)
 
 		province_centers[pid] = center
+		# Graph point starts at the province's first scanned pixel. Move it to the center
+		# so SoiStar path costs use real province distances.
+		if province_graph.has_point(pid):
+			province_graph.set_point_position(pid, center)
 		if province_objects.has(pid):
 			province_objects[pid].center = center
 

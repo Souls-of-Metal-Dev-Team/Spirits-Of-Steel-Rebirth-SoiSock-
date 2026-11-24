@@ -37,12 +37,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "animations.md",
+                "file": "Saves Storing Diffs.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "animations"
+              "title": "Saves Storing Diffs"
             }
           }
         ],
@@ -216,12 +216,13 @@
   },
   "active": "a2d4df98253d25ca",
   "lastOpenFiles": [
-    "AssetManager.md",
     "Kanban.md",
+    "Saves Storing Diffs.md",
+    "animations.md",
+    "AssetManager.md",
     "civilWars.md",
     "NodeDependencies.md",
     "buildingTypes.md",
-    "animations.md",
     "interpreterManager.md",
     "sigFigs.md",
     "filipsFocus.md",

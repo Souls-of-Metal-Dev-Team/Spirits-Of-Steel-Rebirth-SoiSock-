@@ -9,7 +9,7 @@ func _compute_cost(from_id: int, to_id: int) -> float:
 	return get_point_position(from_id).distance_to(get_point_position(to_id))
 
 func _estimate_cost(from_id: int, to_id: int) -> float:
-	return get_point_position(from_id).distance_squared_to(get_point_position(to_id))
+	return get_point_position(from_id).distance_to(get_point_position(to_id))
 
 func _filter_neighbor(
 	from_id: int,

@@ -29,7 +29,7 @@ kanban-plugin: board
 
 ## Rewrites
 
-- [ ] saves should only store things different to the start
+- [ ] [[Saves Storing Diffs]]
 - [ ] [[Unify Events]]
 
 

@@ -46,6 +46,7 @@ func _initialize_ui_values():
 	vignette_lower_slider.value = s.get_value("Graphics", "vignette_lower")
 	vignette_upper_slider.value = s.get_value("Graphics", "vignette_upper")
 	map_effects_btn.button_pressed = s.get_value("Graphics", "map_effects") > 0.0
+	graphics_path.visible = map_effects_btn.button_pressed
 	provinceBorderThicknessSlider.value = s.get_value("Graphics", "provinceBorderThickness")
 	province_borders_slider.value = s.get_value("Graphics", "province_borders")
 	ui_upper_slider.value = s.get_value("Graphics", "ui_upper")
@@ -119,18 +120,23 @@ func _on_music_changed(value: float) -> void:
 	_set_setting("Sound", "music_volume", value)
 
 
-func _add_save_row(parent: Node, save_name: String, file_path: String) -> void:
+func _add_save_row(
+	parent: Node,
+	save_name: String,
+	file_path: String,
+) -> void:
 	# Validate scenario path before allowing load
 	var scenario_exists = true
 	var scenario_path = ""
 	
-	var file = FileAccess.open(file_path, FileAccess.READ)
-	if file:
-		var data = JSON.parse_string(file.get_as_text())
-		if data is Dictionary:
-			scenario_path = data.get("scenario_path", "res://starts/ModernDay/map_data.json")
-			if not FileAccess.file_exists(scenario_path):
-				scenario_exists = false
+	var data = MapData._LoadJSON(file_path)
+	if data is Dictionary:
+		scenario_path = data.get(
+			"scenario_path",
+			"res://starts/ModernDay/map_data.json",
+		)
+		if not FileAccess.file_exists(scenario_path):
+			scenario_exists = false
 	
 	var entry: SaveEntry = SAVE_ENTRY_SCENE.instantiate()
 	parent.add_child(entry)
@@ -169,9 +175,9 @@ func _on_vignette_lower_changed(value: float) -> void:
 
 
 func _on_map_effects_pressed() -> void:
-	var enabled: bool = SettingsManager.settings.get_value("Graphics", "map_effects") > 0.0
-	graphics_path.visible = !graphics_path.visible
-	_set_setting("Graphics", "map_effects", 0.0 if enabled else 1.0)
+	var enabled: bool = map_effects_btn.button_pressed
+	graphics_path.visible = enabled
+	_set_setting("Graphics", "map_effects", 1.0 if enabled else 0.0)
 
 
 func m_OnProvinceBorderThicknessChanged(value: float) -> void:
