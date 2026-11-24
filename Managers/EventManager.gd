@@ -14,6 +14,15 @@ var super_events: Array = []
 func _ready():
 	ui_layer.layer = 100
 	add_child(ui_layer)
+	WarManager.warDeclared.connect(
+		func(warer: CountryData, waree: CountryData): show_alert(
+			{
+				"event": "war",
+				"c1": warer,
+				"c2": waree,
+			}
+		)
+	)
 	load_super_events("res://superevents.json")
 
 

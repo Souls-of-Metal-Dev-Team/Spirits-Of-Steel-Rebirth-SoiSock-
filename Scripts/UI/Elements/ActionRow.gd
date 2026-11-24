@@ -7,16 +7,13 @@ var base_text: String = ""
 var _callback: Callable
 var source_object: Variant = null
 
-signal training_finished
 signal pressed
 
 
 func _ready() -> void:
 	button.pressed.connect(func(): pressed.emit())
 	pressed.connect(_on_button_pressed)
-	# Assuming GameState is a global singleton
-	if GameState.current_world and GameState.current_world.clock:
-		GameState.current_world.clock.day_passed.connect(refresh_ui)
+	# NOTE: GameUI calls refresh_ui on day_passed for every row in the troop list.
 
 
 # 1. Standard Setup
@@ -73,8 +70,8 @@ func refresh_ui() -> void:
 	if source_object != null and data.get("is_status", false):
 		# Assuming 'troop' has property days_left
 		if "days_left" in source_object:
+			# CountryData.trainingFinished rebuilds the list once days_left hits 0.
 			if source_object.days_left <= 0:
-				training_finished.emit()
 				return
 			button.text = "%s (%d Days)" % [base_text, source_object.days_left]
 		return

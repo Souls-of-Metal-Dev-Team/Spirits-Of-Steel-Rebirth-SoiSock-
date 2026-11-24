@@ -43,6 +43,7 @@ const COLOR_DANGER = Color(0.7, 0.2, 0.2)
 
 func _ready() -> void:
 	self.hide()
+	WarManager.peaceConferenceRequested.connect(open_menu)
 
 func _setup_missing_ui_elements():
 	# Find the main VBoxContainer in the sidebar

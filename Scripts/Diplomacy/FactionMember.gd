@@ -1,8 +1,8 @@
-extends Resource
+extends RefCounted
 class_name FactionMember
 
-@export var polity: String
-@export var status: String
+var polity: String
+var status: String
 
 static func FromValues(a_polity: String, a_status: String) -> FactionMember:
 	var member: FactionMember = FactionMember.new()

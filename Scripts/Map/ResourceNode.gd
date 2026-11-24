@@ -1,9 +1,9 @@
-extends Resource
+extends RefCounted
 class_name ResourceNode
 
-@export var type: String
-@export var amount: int
-@export var quality: float
+var type: String
+var amount: int
+var quality: float
 
 static func FromDict(a_data: Dictionary) -> ResourceNode:
 	var resource: ResourceNode = ResourceNode.new()

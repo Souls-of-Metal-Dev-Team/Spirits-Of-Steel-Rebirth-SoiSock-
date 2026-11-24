@@ -1,5 +1,10 @@
 extends Node
 
+# Escape pressed with no troops selected. GameUI closes the side menu if open.
+signal sidemenuCloseRequested
+# Open-menu key pressed. GameUI toggles the side menu.
+signal sidemenuToggleRequested
+
 # Use the same names as your MapManager functions for clarity
 var settings: CanvasLayer
 
@@ -25,23 +30,13 @@ func _unhandled_input(
 				SceneSwitcher.Type.WORLD:
 					if !TroopManager.troop_selection.selected_troops.is_empty():
 						TroopManager.troop_selection.deselect_all()
-					elif GameState.game_ui.is_open:
-						MapManager.close_sidemenu.emit()
 					else:
-						pass
+						sidemenuCloseRequested.emit()
 						# get_tree().root.find_child("Menu", true, false).toggle_menu()
 
 		if a_event.is_action_pressed("open_menu"):
 			if SceneSwitcher._current_type != SceneSwitcher.Type.EDITOR:
-				if GameState.interactionType != GameState.InteractionType.SELECT_COUNTRY:
-					# NOTE(soi): This swtiches the sidemenu while its closing instead of swithcing after its out of view
-					GameState.game_ui.ChangeContextCategory(
-						GameState.game_ui.Context.PLAYER,
-						GameState.game_ui.Category.GENERAL,
-					)
-					GameState.game_ui.selected_country = CountryManager.player_country
-					GameState.game_ui.DoUpdateSidemenuVisuals()
-				GameState.game_ui.ToggleSideMenu()
+				sidemenuToggleRequested.emit()
 
 		# --- 2. MAP MODE CYCLING (Independent of Menu) ---
 		if a_event.is_action_pressed("cycle_map_mode"): _cycle_map_mode(a_event.is_shift_pressed())

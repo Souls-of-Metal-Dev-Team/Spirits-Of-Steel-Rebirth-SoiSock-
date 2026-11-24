@@ -1,4 +1,4 @@
-class_name NameGenerator extends Resource
+class_name NameGenerator extends RefCounted
 
 static var SHARED_CONSONANTS: Dictionary[String, float] = {
 	"b": 10.00, "bl":  1.00,

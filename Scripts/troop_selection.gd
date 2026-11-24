@@ -25,6 +25,9 @@ var max_path_length: int = 0
 
 var selected_troops: Array[TroopData] = []
 
+# Emitted when the troop selection is committed or cleared. Empty array = nothing selected.
+signal selectionChanged(troops: Array[TroopData])
+
 func _input(event) -> void:
 	if !map_sprite || Console.is_visible():
 		return
@@ -40,7 +43,7 @@ func _input(event) -> void:
 
 func deselect_all() -> void:
 	selected_troops.clear()
-	GameState.game_ui.close_troop_container()
+	selectionChanged.emit(selected_troops)
 
 
 func _handle_mouse_motion() -> void:
@@ -67,11 +70,8 @@ func _handle_left_mouse(event: InputEventMouseButton) -> void:
 
 		if selected_troops.size() > 0:
 			MusicManager.play_sfx(MusicManager.SFX.TROOP_SELECTED)
-			# Call your new function
-			GameState.game_ui.make_troop_container(selected_troops)
-		else:
-			# If we clicked empty ground, hide the container
-			GameState.game_ui.close_troop_container()
+		# Empty selection (clicked empty ground) hides the container
+		selectionChanged.emit(selected_troops)
 
 
 func _handle_right_mouse(event: InputEventMouseButton) -> void:
@@ -264,10 +264,9 @@ func _perform_path_assignment() -> void:
 	TroopManager.command_move_assigned(all_assignments)
 	_cleanup_empty_troops()
 
-	GameState.game_ui.selected_division_objects.clear()
-	GameState.game_ui.close_troop_container()
 	selected_troops.clear()
 	right_path.clear()
+	selectionChanged.emit(selected_troops)
 
 
 # --- Helper functions for the logic above ---

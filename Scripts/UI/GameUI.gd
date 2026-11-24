@@ -1,6 +1,9 @@
 extends CanvasLayer
 class_name GameUI
 
+# Emitted when a click couldn't be processed (so likely sea or border)
+signal close_sidemenu
+
 # ── Enums ─────────────────────────────────────────────
 enum Context {PLAYER, ENEMY, NEUTRAL, PUPPET, ALLY, SELECT}
 enum Category {GENERAL, ECONOMY, MILITARY}
@@ -260,16 +263,28 @@ func _ready() -> void:
 
 	MapManager.country_clicked.connect(_on_province_clicked)
 	MapManager.close_sidemenu.connect(CloseSideMenu)
+	MapManager.mapViewChanged.connect(_on_map_view_changed)
+	MapManager.countrySelected.connect(_on_country_selected)
+	KeyboardManager.sidemenuCloseRequested.connect(_on_sidemenu_close_requested)
+	KeyboardManager.sidemenuToggleRequested.connect(_on_sidemenu_toggle_requested)
+	MusicManager.trackChanged.connect(_on_track_changed)
+	EconomyManager.constructionStarted.connect(_on_construction_changed)
+	EconomyManager.constructionFinished.connect(_on_construction_changed)
+	if TroopManager.troop_selection:
+		TroopManager.troop_selection.selectionChanged.connect(_on_troop_selection_changed)
 
 	var world: World = GameState.current_world
 	if world and world.clock:
 		world.clock.hour_passed.connect(_on_hour_passed)
+		world.clock.day_passed.connect(_on_day_passed)
+		world.clock.clockUpdate.connect(updateProgressBar)
 	
 	CountryManager.player_country_changed.connect(_on_player_change)
 	if CountryManager.player_country:
 		if CountryManager.player_country.ideology_changed.is_connected(_update_flag):
 			CountryManager.player_country.ideology_changed.disconnect(_update_flag)
 		CountryManager.player_country.ideology_changed.connect(_update_flag)
+	_connect_player_training()
 	
 	_update_flag()
 	updateProgressBar()
@@ -450,6 +465,7 @@ func _on_player_change() -> void:
 		if CountryManager.player_country.ideology_changed.is_connected(_update_flag):
 			CountryManager.player_country.ideology_changed.disconnect(_update_flag)
 		CountryManager.player_country.ideology_changed.connect(_update_flag)
+	_connect_player_training()
 
 	_update_flag()
 	update_topbar_stats()
@@ -655,9 +671,7 @@ func _build_trooplist() -> void:
 		var btn = action_scene.instantiate()
 		sidemenu_trooplist.add_child(btn)
 		btn.setup_training(troop)
-		# We connect the signal emitted by ActionRow when days_left <= 0
-		if not btn.training_finished.is_connected(_build_trooplist):
-			btn.training_finished.connect(_build_trooplist)
+		# CountryData.trainingFinished rebuilds this list (see _connect_player_training)
 
 	# Ready to Deploy
 	for troop in player.ready_troops:
@@ -705,7 +719,63 @@ func _on_hour_passed() -> void:
 	update_division_menu()
 	if is_open:
 		_update_context_actions_visuals()
+
+# Construction progress and training countdowns only change once per day.
+func _on_day_passed() -> void:
+	if is_open:
 		update_economy_menu()
+	for row in sidemenu_trooplist.get_children():
+		if row is ActionRow and !row.is_queued_for_deletion():
+			row.refresh_ui()
+
+func _on_construction_changed(_pid: int, country: CountryData) -> void:
+	if country == CountryManager.player_country:
+		update_economy_menu()
+
+# Tracks which country trainingFinished is connected on, so a player switch moves it.
+var _training_signal_country: CountryData
+
+func _connect_player_training() -> void:
+	if _training_signal_country and _training_signal_country.trainingFinished.is_connected(_build_trooplist):
+		_training_signal_country.trainingFinished.disconnect(_build_trooplist)
+	_training_signal_country = CountryManager.player_country
+	if _training_signal_country:
+		_training_signal_country.trainingFinished.connect(_build_trooplist)
+
+func _on_map_view_changed(view: int) -> void:
+	# Setting current_tab emits tab_changed, which calls SetMapMode again. Only set it if it differs.
+	if map_tabs.current_tab != view:
+		map_tabs.current_tab = view
+
+func _on_country_selected(country_name: String) -> void:
+	if selected_country && selected_country.ideology_changed.is_connected(_on_selected_country_ideology_changed):
+		selected_country.ideology_changed.disconnect(_on_selected_country_ideology_changed)
+	selected_country = CountryManager.countries[country_name]
+	selected_country.ideology_changed.connect(_on_selected_country_ideology_changed)
+	DoUpdateSidemenuVisuals()
+
+func _on_sidemenu_close_requested() -> void:
+	if is_open:
+		CloseSideMenu()
+
+func _on_sidemenu_toggle_requested() -> void:
+	if GameState.interactionType != GameState.InteractionType.SELECT_COUNTRY:
+		# NOTE(soi): This swtiches the sidemenu while its closing instead of swithcing after its out of view
+		ChangeContextCategory(Context.PLAYER, Category.GENERAL)
+		selected_country = CountryManager.player_country
+		DoUpdateSidemenuVisuals()
+	ToggleSideMenu()
+
+func _on_track_changed(track_name: String) -> void:
+	if now_playing:
+		now_playing.text = track_name
+
+func _on_troop_selection_changed(troops: Array[TroopData]) -> void:
+	if troops.is_empty():
+		selected_division_objects.clear()
+		close_troop_container()
+	else:
+		make_troop_container(troops)
 
 func format_number(value: float) -> String:
 	var abs_val = abs(value)

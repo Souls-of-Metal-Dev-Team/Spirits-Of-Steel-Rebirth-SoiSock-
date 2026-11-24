@@ -1,8 +1,8 @@
-extends Resource
+extends RefCounted
 class_name BiomeData
 
-@export var name: String
-@export var color: Color
+var name: String
+var color: Color
 
 static func FromDict(a_data: Dictionary) -> BiomeData:
 	var biomeData: BiomeData = BiomeData.new()

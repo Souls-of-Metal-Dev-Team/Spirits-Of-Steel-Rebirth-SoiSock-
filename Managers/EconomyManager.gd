@@ -1,6 +1,9 @@
 extends Node
 # Autoload Name: EconomyManager
 
+signal constructionStarted(pid: int, country: CountryData)
+signal constructionFinished(pid: int, country: CountryData)
+
 # Format: { province_id: { "type": "factory", "days": 20, "daily_cost": 50, "country": CountryData } }
 var construction_queue: Dictionary = {}
 var building_functions: Dictionary = {}
@@ -57,7 +60,6 @@ func LoadBuildings(a_globohomo: Dictionary):
 func StartInfrastructureConstruction(a_provinceID: int, a_totalDays: int, a_dailyCost: float, a_country: CountryData) -> void:
 	if a_country == CountryManager.player_country:
 		MusicManager.play_sfx(MusicManager.SFX.BUILD)
-		GameState.game_ui.update_economy_menu()
 	
 	construction_queue[a_provinceID] = {
 		"type": "Infrastructure",
@@ -66,6 +68,7 @@ func StartInfrastructureConstruction(a_provinceID: int, a_totalDays: int, a_dail
 		"daily_cost": a_dailyCost,
 		"country": a_country
 	}
+	constructionStarted.emit(a_provinceID, a_country)
 
 	if GameState.instabuild:
 		_complete_construction(a_provinceID, construction_queue[a_provinceID])
@@ -82,7 +85,6 @@ func start_construction(pid: int, type: String, total_days: int, daily_cost: flo
 	
 	if country == CountryManager.player_country:
 		MusicManager.play_sfx(MusicManager.SFX.BUILD)
-		GameState.game_ui.update_economy_menu()
 
 	construction_queue[pid] = {
 		"type": type,
@@ -91,6 +93,7 @@ func start_construction(pid: int, type: String, total_days: int, daily_cost: flo
 		"daily_cost": daily_cost,
 		"country": country
 	}
+	constructionStarted.emit(pid, country)
 
 	if GameState.instabuild:
 		_complete_construction(pid, construction_queue[pid])
@@ -111,6 +114,9 @@ func _complete_construction(pid: int, project: Dictionary):
 		if GameState.industry_building:
 			MusicManager.play_sfx(MusicManager.SFX.CLAPPING)
 		MapManager.ProvinceUpdated()
+
+	# Deferred so callers erase the project from construction_queue first.
+	constructionFinished.emit.call_deferred(pid, project["country"])
 
 func is_province_building(pid: int) -> bool:
 	return construction_queue.has(pid)

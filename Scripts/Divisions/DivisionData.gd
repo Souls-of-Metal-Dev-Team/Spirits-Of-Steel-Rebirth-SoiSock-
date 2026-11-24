@@ -1,4 +1,4 @@
-class_name DivisionData extends Resource
+class_name DivisionData extends RefCounted
 
 # --- CONFIGURATION (Game Balance) ---
 

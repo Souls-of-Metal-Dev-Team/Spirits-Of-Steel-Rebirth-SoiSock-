@@ -1,9 +1,9 @@
-extends Resource
+extends RefCounted
 class_name PopulationData
 
-@export var ethnicity: String
-@export var culture: String
-@export var amount: int
+var ethnicity: String
+var culture: String
+var amount: int
 
 static func FromDict(a_data: Dictionary) -> PopulationData:
 	var population: PopulationData = PopulationData.new()

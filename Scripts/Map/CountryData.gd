@@ -1,4 +1,4 @@
-class_name CountryData extends Resource
+class_name CountryData extends RefCounted
 
 static var SEA_COUNTRY_DATA: CountryData = CountryData.new()
 
@@ -36,6 +36,8 @@ var hourly_money_income: float = 0.0 # Calculated value
 var divCostMod: float = 1.0
 
 signal ideology_changed
+# Emitted when a training batch graduates into ready_troops.
+signal trainingFinished
 
 # Politics
 var driftTargets: Dictionary[String, IdeologyDriftTarget]
@@ -361,6 +363,7 @@ func _process_training() -> void:
 
 func _graduate_troops(training: TroopTraining) -> void:
 	ready_troops.append(ReadyTroop.new(DivisionData.create_division(training.division_type), training.divisions_count))
+	trainingFinished.emit()
 	#dirty_manpower = true
 
 

@@ -1,5 +1,9 @@
 extends Node
 
+# Emitted when a country's troops or division counts change.
+# country_name is "" when every troop was cleared.
+signal troopsChanged(country_name: String)
+
 var AUTO_MERGE = true
 
 var emptyLatch: bool = false
@@ -23,6 +27,7 @@ func clear_all_troops() -> void:
 	troops_by_country.clear()
 	path_cache.clear()
 	flag_cache.clear()
+	troopsChanged.emit("")
 	#print("TroopManager: All troops and caches cleared.")
 
 
@@ -443,6 +448,8 @@ func RemoveTroop(troop: TroopData) -> void:
 		for div: DivisionData in troop.stored_divisions:
 			country.mobilized -= int(div.hp * div.manpowerPerHP)
 
+	troopsChanged.emit(countryName)
+
 ## Public hook for the WarManager to force a troop to its home province center.
 func move_to_garrison(troop: TroopData) -> void:
 	var center: Vector2 = MapManager.province_centers.get(troop.province_id, troop.position)
@@ -467,6 +474,8 @@ func _add_troop_to_indexes(troop: TroopData) -> void:
 		troops_by_country[country] = [troop]
 	else:
 		troops_by_country[country].append(troop)
+
+	troopsChanged.emit(country)
 
 ## Updates the troop's location in the spatial index (troops_by_province).
 func _move_troop_to_province_logically(troop: TroopData, new_pid: int) -> void:

@@ -7,6 +7,10 @@ signal province_ownership_changed(pid: int, old_owner: String, new_owner: String
 
 # Emitted when a click couldn't be processed (so likely sea or border)
 signal close_sidemenu
+# Emitted when the active map view changes (value is a MapView)
+signal mapViewChanged(view: int)
+# Emitted when a country is picked in SELECT_COUNTRY mode
+signal countrySelected(country_name: String)
 
 # The exact colors you provided
 const SEA_MAIN: Color = Color("#7e8e9e")
@@ -660,10 +664,7 @@ func ClickSea() -> void:
 		close_sidemenu.emit()
 
 func SelectCountryAt(pid: int) -> void:
-	GameState.game_ui.selected_country = CountryManager.countries[
-		province_objects[pid].GetFunctionalOwner()
-	]
-	GameState.game_ui.DoUpdateSidemenuVisuals()
+	countrySelected.emit(province_objects[pid].GetFunctionalOwner())
 	ShowCountriesMap()
 
 func DeployAt(pid: int) -> void:
@@ -1109,7 +1110,7 @@ func _ShowFactionMap() -> void:
 
 	state_color_texture.update(state_color_image)
 	current_view = MapView.FACTION
-	GameState.game_ui.map_tabs.current_tab = current_view
+	mapViewChanged.emit(current_view)
 	print("MapManager: Faction View Updated")
 
 func _ShowPopulationMap() -> void:
@@ -1766,7 +1767,7 @@ func CycleMapMode(shift: bool) -> void:
 
 func SetMapMode(a_mapView: MapView):
 	current_view = a_mapView
-	GameState.game_ui.map_tabs.current_tab = current_view
+	mapViewChanged.emit(current_view)
 	match a_mapView:
 		MapView.COUNTRIES:
 			ShowCountriesMap()

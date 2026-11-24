@@ -1,16 +1,16 @@
 @tool
-extends Resource
+extends RefCounted
 class_name MapData
 
 # NOTE(soi): 0 clue what we could even need these for
-@export var id_map_image: Image
-@export var adjacency_list: Dictionary
-@export var province_centers: Dictionary
+var id_map_image: Image
+var adjacency_list: Dictionary
+var province_centers: Dictionary
 
-@export var province_to_country: Dictionary
-@export var country_to_provinces: Dictionary
-@export var max_province_id: int
-@export var province_objects: Dictionary
+var province_to_country: Dictionary
+var country_to_provinces: Dictionary
+var max_province_id: int
+var province_objects: Dictionary
 
 # Keys shared by a scenario's start state and a unified game-state save.
 const STATE_KEYS: Array[String] = [

@@ -1,9 +1,9 @@
-extends Resource
+extends RefCounted
 class_name TroopData
 
 # --- Core Properties ---
 var country_name: String
-var country_obj: Resource # Changed to Resource/Object for safety
+var country_obj: RefCounted # CountryData (now RefCounted, not Resource)
 var province_id: int
 var position: Vector2
 

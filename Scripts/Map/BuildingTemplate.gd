@@ -1,23 +1,23 @@
-extends Resource
+extends RefCounted
 class_name BuildingTemplate
 
-@export var name: String
-@export var power: float
-@export var water: float
-@export var sewage: float
-@export var population: float
-@export var money_cost: float
+var name: String
+var power: float
+var water: float
+var sewage: float
+var population: float
+var money_cost: float
 
-@export var functionalities: Array = []
-@export var assigned_inputs: Dictionary = {}
+var functionalities: Array = []
+var assigned_inputs: Dictionary = {}
 
-@export var on_coast: bool
-@export var produces: float
-@export var gather_resources: Dictionary
-@export var storage: float
-@export var heal_amount: float
-@export var supply_amount: float
-@export var tech_points: float
+var on_coast: bool
+var produces: float
+var gather_resources: Dictionary
+var storage: float
+var heal_amount: float
+var supply_amount: float
+var tech_points: float
 
 static func FromDict(a_data: Dictionary) -> BuildingTemplate:
 	var building: BuildingTemplate = BuildingTemplate.new()

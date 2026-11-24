@@ -1,25 +1,25 @@
-extends Resource
+extends RefCounted
 class_name Province
 
 enum { SEA = 0, LAND = 1 }
 enum {NO_FACTORY = 0, NO_PORT = 0, FACTORY_BUILDING = 1, PORT_BUILDING = 1, FACTORY_BUILT = 2, PORT_BUILT = 2}
 
-@export var type: int = Province.LAND
-@export var id: int
-@export var name: String
-@export var country: String
-@export var occupier: String
-@export var biome: String
-@export var resources: Array[ResourceNode]
-@export var city: String
-@export var buildings: Array[BuildingData]
-@export var populations: Array[PopulationData]
-@export var gdp: int = 1000
-@export var center: Vector2
-# @export var neighbors: PackedInt32Array = []
-@export var claims: PackedStringArray = []
-@export var infrastructure: int = 0
-@export var maxInfrastructure: int = 3
+var type: int = Province.LAND
+var id: int
+var name: String
+var country: String
+var occupier: String
+var biome: String
+var resources: Array[ResourceNode]
+var city: String
+var buildings: Array[BuildingData]
+var populations: Array[PopulationData]
+var gdp: int = 1000
+var center: Vector2
+# var neighbors: PackedInt32Array = []
+var claims: PackedStringArray = []
+var infrastructure: int = 0
+var maxInfrastructure: int = 3
 
 
 func ToDict(troops_data: Array = []) -> Dictionary:

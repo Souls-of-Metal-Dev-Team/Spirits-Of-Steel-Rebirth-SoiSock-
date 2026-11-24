@@ -1,6 +1,8 @@
 extends Node
 
 signal player_country_changed
+# Emitted when the player's country has no provinces left.
+signal playerEliminated(country: CountryData)
 
 var countries: Dictionary[String, CountryData] = {}
 var countryNames: PackedStringArray = []
@@ -241,11 +243,7 @@ func cleanup_empty_countries() -> void:
 		var country: CountryData = countries[c_name]
 		if country.is_player:
 			# Uh oh.
-			var lostTerritoryUI = get_tree().root.find_child("LostTerritoryUI", true, false)
-			if lostTerritoryUI:
-				# Pass the player as the default winner/beneficiary, and the full list of winners
-				lostTerritoryUI.OpenMenu(country)
-			pass
+			playerEliminated.emit(country)
 		else:
 			var deleting: CountryData = CountryManager.countries[c_name]
 			dead_countries[c_name] = deleting

@@ -18,7 +18,10 @@ func _enter_tree() -> void:
 @export var provinceClaims: Label
 
 var tooltipLatch: bool = false
-var shouldBeVisible: bool = false
+var shouldBeVisible: bool = false:
+	set(value):
+		shouldBeVisible = value
+		visible = value #&& Input.is_key_pressed(KEY_ALT)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 # NOTE(soi): This rlly shouldnt be called every frame
@@ -27,9 +30,6 @@ func _process(_delta: float) -> void:
 	set_position(get_global_mouse_position() + offset)
 	position.x = clamp(position.x, 0, get_viewport_rect().size.x - size.x)
 	position.y = clamp(position.y, 0, get_viewport_rect().size.y - size.y)
-
-func _physics_process(_delta: float) -> void:
-	visible = shouldBeVisible #&& Input.is_key_pressed(KEY_ALT)
 
 func SwitchTooltip(a_mode: int) -> void:
 	match a_mode:
