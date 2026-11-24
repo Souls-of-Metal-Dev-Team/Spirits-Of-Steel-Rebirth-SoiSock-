@@ -122,7 +122,7 @@ flowchart LR
     SettingsManager -- "set_music_volume, set_sfx_volume, radios" --> MusicManager
     SettingsManager -- "debug" --> DecisionManager & InterpreterManager
 
-    TroopManager -- "find_path, heuristic, province_centers" --> MapManager
+    TroopManager -- "find_path, province_graph" --> MapManager
     TroopManager -- "start_battle, resolve_province_arrival, is_at_war_names" --> WarManager
     TroopManager -- "countries" --> CountryManager
 
@@ -213,7 +213,6 @@ flowchart LR
     building_designer -- "building_designs, building_functions" --> EconomyManager
     building_designer -- "uses" --> TagMatcher
     ExpressionBox -- "functions, get_param_name" --> InterpreterManager
-    custom_event_popup -- "get_element, refresh_buttons" --> InterpreterManager
     MapEditorUI -- "TransferOwnership, SetProvinceColor(s), Occupy/DeoccupyProvince" --> MapManager
     MapEditorUI -- "RenameCountry, make_puppet" --> CountryManager
     CreationPopupUI -- "InstantiateCountryFromProvinces" --> MapManager

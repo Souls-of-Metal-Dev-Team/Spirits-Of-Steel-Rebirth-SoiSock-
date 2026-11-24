@@ -42,12 +42,10 @@ func _ready() -> void:
 	_check(not SettingsManager.diff(norm_start, norm_live).has("clock"), "normalization: int/float drift ignored")
 
 	# Diff save: scenario_path + diff must rebuild the same state.
-	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
-	file.store_string(JSON.stringify({
+	MapData.SaveJSON(SAVE_PATH, {
 		"scenario_path": "res://starts/ModernDay/map_data.json",
 		"diff": diff,
-	}))
-	file.close()
+	})
 	var loaded: Dictionary = MapData.LoadSaveState(SAVE_PATH)
 	var loaded_scenario_path: String = loaded.get("scenario_path", "")
 	loaded.erase("scenario_path")
@@ -58,9 +56,7 @@ func _ready() -> void:
 	_check(MapData.ScenarioDirFromPath(start_dir) == start_dir, "ScenarioDirFromPath: dir path")
 
 	# Legacy full-state save must pass through untouched.
-	file = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
-	file.store_string(JSON.stringify(current))
-	file.close()
+	MapData.SaveJSON(SAVE_PATH, current)
 	_report_mismatch(MapData.LoadSaveState(SAVE_PATH), current, "legacy save")
 	_check(MapData.LoadSaveState(SAVE_PATH) == current, "LoadSaveState: legacy full save")
 

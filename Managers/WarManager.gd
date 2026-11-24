@@ -17,6 +17,8 @@ signal peaceConferenceRequested(winners: Array[CountryData], loser: CountryData)
 
 func reset_state() -> void:
 	wars.clear()
+	for battle in active_battles:
+		battle.cleanup()
 	active_battles.clear()
 	original_territories.clear()
 	#print("WarManager: State reset.")
@@ -103,7 +105,7 @@ class Battle:
 	var current_def_hp: float = 0.0
 	var total_starting_hp: float = 0.0
 
-	var timer := 0.0
+	var timer_node: Timer
 	var position: Vector2
 	var manager # Reference to WarManager
 
@@ -130,6 +132,13 @@ class Battle:
 		_update_hp_totals()
 		total_starting_hp = current_def_hp
 
+		timer_node = Timer.new()
+		timer_node.one_shot = false
+		timer_node.wait_time = manager.BATTLE_TICK
+		timer_node.timeout.connect(_resolve_round)
+		manager.add_child(timer_node)
+		timer_node.start()
+
 	func _update_hp_totals():
 		# This sums up the current HP of every division the defender has in the province
 		var total := 0.0
@@ -138,11 +147,11 @@ class Battle:
 				total += div.hp
 		current_def_hp = total
 
-	func tick(delta: float):
-		timer += delta
-		if timer >= manager.BATTLE_TICK:
-			timer -= manager.BATTLE_TICK
-			_resolve_round()
+	func cleanup() -> void:
+		if is_instance_valid(timer_node):
+			timer_node.stop()
+			timer_node.queue_free()
+			timer_node = null
 
 	func _resolve_round():
 		var att_troops = TroopManager.get_troops_in_province(attacker_pid).filter(
@@ -271,15 +280,19 @@ class Battle:
 		return float(TroopManager.get_province_strength(pid, country))
 
 
-func _process(delta: float):
-	if active_battles.is_empty() || GameState.current_world.clock.paused:
+func _process(_delta: float):
+	if active_battles.is_empty():
 		return
-	var current_intensity = delta * GameState.current_world.clock.time_scale
-	if current_intensity <= 0:
-		return
-
+	var clock: GameClock = GameState.current_world.clock if GameState.current_world else null
+	var paused := clock == null || clock.paused
+	var time_scale: float = maxf(clock.time_scale, 0.001) if clock else 1.0
 	for battle in active_battles:
-		battle.tick(current_intensity)
+		if !is_instance_valid(battle.timer_node):
+			continue
+		battle.timer_node.paused = paused
+		var target_wait := BATTLE_TICK / time_scale
+		if !is_equal_approx(battle.timer_node.wait_time, target_wait):
+			battle.timer_node.wait_time = target_wait
 
 
 func start_battle(attacker_pid: int, defender_pid: int):
@@ -308,6 +321,7 @@ func start_battle(attacker_pid: int, defender_pid: int):
 
 func end_battle(battle: Battle):
 	if active_battles.has(battle):
+		battle.cleanup()
 		active_battles.erase(battle)
 
 

@@ -10,8 +10,7 @@ var building_functions: Dictionary = {}
 var building_designs: Dictionary[String, Dictionary] = {}
 
 func initialize(path: String) -> void:
-	var content := FileAccess.get_file_as_string(path)
-	var parsed = JSON.parse_string(content)
+	var parsed: Variant = MapData.LoadJSON(path)
 	if parsed is Dictionary:
 		building_functions = parsed
 	else:

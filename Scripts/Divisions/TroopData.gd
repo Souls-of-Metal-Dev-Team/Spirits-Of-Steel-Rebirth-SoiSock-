@@ -17,6 +17,7 @@ var is_moving: bool = false
 var path: Array = []
 var target_position: Vector2 = Vector2.ZERO
 var progress: float = 0.0
+var move_tween: Tween = null
 
 
 func _init(

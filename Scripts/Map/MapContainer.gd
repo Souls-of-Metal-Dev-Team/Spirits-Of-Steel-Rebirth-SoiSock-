@@ -1,7 +1,13 @@
 extends Node2D
-class_name CustomRenderer
+class_name MapContainer
 
-# Retained-mode map renderer built on RenderingServer.
+# Script on Main/MapContainer: map mouse input (click/hover) and the
+# retained-mode renderer for cities, troops, battles and paths.
+#
+# MapContainer lives in the main scene, so it stays in the tree in MENU and
+# EDITOR as well. Input and rendering only run while the world is active.
+#
+# Rendering is built on RenderingServer.
 #
 # Nothing here uses _draw(). Every visual is a RenderingServer canvas item whose
 # draw commands are recorded once and kept by the server. Per frame we only move
@@ -9,7 +15,8 @@ class_name CustomRenderer
 # re-recorded only when what they show changes (division count, selection,
 # battle progress, hovered city, ...).
 #
-# Item tree (all children of this node's canvas item, drawn in this order):
+# Item tree (all children of _root, drawn in this order). _root sits on z 20 so
+# it draws above the map sprites, which are child nodes of this node:
 #   _city_roots[0..2]  one per world-wrap copy, each holds the shared city MultiMesh
 #   _city_label        hovered city name
 #   _troop_root        one child item per troop (+ a detail child for flag/text)
@@ -51,9 +58,11 @@ const BATTLE = {"base_radius": 1.0, "ring_radius": 1.2, "line_width": 0.5, "segm
 # 2D MultiMesh buffer layout: 8 floats transform + 4 floats color.
 const MM_STRIDE := 12
 
+const RENDER_Z_INDEX := 20
+
 # --- Variables ---
 var _font: Font = preload("res://font/arial.TTF")
-var map_sprite: Sprite2D
+@onready var map_sprite: Sprite2D = $CultureSprite as Sprite2D
 var map_width: float = 0.0:
 	set(value):
 		map_width = value
@@ -89,6 +98,9 @@ var _troop_items := {}
 var _battle_root: RID
 var _battle_items := {}
 
+# Root of every item below; carries the z index.
+var _root: RID
+
 # Overlay
 var _overlay: RID
 var _overlay_had_content := false
@@ -96,21 +108,84 @@ var _overlay_had_content := false
 var _signals_connected := false
 
 
+# --- Input ---
+func _input(event: InputEvent) -> void:
+	if !SceneSwitcher.is_world_active() or !map_sprite:
+		return
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			HandleClickDown(get_global_mouse_position())
+		else:
+			HandleClick(get_global_mouse_position())
+	if event is InputEventMouseMotion:
+		HandleHover(get_global_mouse_position())
+
+
+func _is_mouse_over_ui() -> bool:
+	return get_viewport().gui_get_hovered_control() != null
+
+
+func HandleClickDown(_global_pos: Vector2) -> void:
+	if _is_mouse_over_ui() or Console.is_visible():
+		return
+
+	TroopManager.troop_selection.deselect_all()
+
+
+func HandleHover(global_pos: Vector2) -> void:
+	if _is_mouse_over_ui() or GameState.in_peace_process:
+		MapManager.ClearHover()
+		return
+
+	var pid: int = MapManager.GetProvinceAtPos(global_pos, map_sprite)
+	MapManager.current_hovered_pid = pid
+	if pid == MapManager.last_hovered_pid:
+		return
+
+	var highlightColor: Color = MapManager.GetContextualHighlight(pid)
+	if GameState.interactionType == GameState.InteractionType.SELECT_COUNTRY:
+		MapManager.HoverCountry(pid, highlightColor)
+	else:
+		MapManager.HoverProvince(pid, highlightColor)
+
+
+func HandleClick(global_pos: Vector2) -> void:
+	if _is_mouse_over_ui() or Console.is_visible() or GameState.in_peace_process:
+		return
+
+	var pid: int = MapManager.GetProvinceWithRadius(global_pos, map_sprite, 5)
+	if !MapManager.IsLandProvince(pid):
+		MapManager.ClickSea()
+		return
+
+	match GameState.interactionType:
+		GameState.InteractionType.SELECT_COUNTRY:
+			MapManager.SelectCountryAt(pid)
+		GameState.InteractionType.DEPLOY_PROVINCE:
+			MapManager.DeployAt(pid)
+		GameState.InteractionType.BUILD_PROVINCE:
+			MapManager.BuildAt(pid)
+		_:
+			# Prevent menu from spawning when selecting troops (annoying)
+			if TroopManager.troop_selection.selected_troops.is_empty():
+				MapManager.country_clicked.emit(MapManager.province_objects[pid].GetFunctionalOwner())
+
+
 # --- Lifecycle ---
 func _ready() -> void:
-	z_index = 20 # Keep renderer high
 	_create_roots()
 
 
-# SceneSwitcher caches the world scene and re-adds it to the tree, so RIDs are
-# freed only when the node itself is deleted, never in _exit_tree.
+# RIDs are freed only when the node itself is deleted, never in _exit_tree.
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_PREDELETE:
 		_free_all()
 
 
 func _process(_delta: float) -> void:
-	if !map_sprite or map_width <= 0:
+	var active := SceneSwitcher.is_world_active()
+	RenderingServer.canvas_item_set_visible(_root, active)
+	if !active or !map_sprite or map_width <= 0:
 		return
 
 	var cam := get_viewport().get_camera_2d()
@@ -149,7 +224,14 @@ func _process(_delta: float) -> void:
 
 # --- Setup / teardown ---
 func _create_roots() -> void:
-	var parent := get_canvas_item()
+	# A plain child item would draw under the map sprites (parents draw before
+	# their child nodes). Raising z on _root only keeps the sprites at z 0.
+	_root = RenderingServer.canvas_item_create()
+	RenderingServer.canvas_item_set_parent(_root, get_canvas_item())
+	RenderingServer.canvas_item_set_z_index(_root, RENDER_Z_INDEX)
+	RenderingServer.canvas_item_set_visible(_root, false)
+
+	var parent := _root
 	var draw_index := 0
 
 	for m in range(-1, 2):
@@ -186,7 +268,7 @@ func _free_all() -> void:
 	for item in _city_items:
 		RenderingServer.free_rid(item)
 	_city_items.clear()
-	for rid in _city_roots + [_city_label, _troop_root, _battle_root, _overlay, _city_mm]:
+	for rid in _city_roots + [_city_label, _troop_root, _battle_root, _overlay, _city_mm, _root]:
 		if rid.is_valid():
 			RenderingServer.free_rid(rid)
 	_city_roots.clear()
@@ -415,9 +497,7 @@ func _free_troop_entry(entry: Dictionary) -> void:
 func _group_troops_by_visual_position(troops: Array) -> Dictionary:
 	var g = {}
 	for t in troops:
-		# Get interpolated position if moving, else static position
-		var visual_pos = t.position.lerp(t.target_position, t.get_meta("progress", 0.0)) if t.is_moving else t.position
-
+		var visual_pos: Vector2 = t.position
 		if !g.has(visual_pos):
 			g[visual_pos] = []
 		g[visual_pos].append(t)
@@ -560,7 +640,7 @@ func _record_active_movements() -> void:
 		var start: Vector2 = _wrap_nearest(troop.position + map_sprite.position)
 		var end: Vector2 = start + (troop.target_position - troop.position)
 		RenderingServer.canvas_item_add_line(_overlay, start, end, Color(1, 0, 0, 0.2), 1.0)
-		RenderingServer.canvas_item_add_line(_overlay, start, start.lerp(end, troop.get_meta("visual_progress", 0.0)), COLORS.movement_active, 1.5)
+		RenderingServer.canvas_item_add_line(_overlay, start, troop.position, COLORS.movement_active, 1.5)
 
 
 # --- Helpers ---

@@ -21,6 +21,8 @@ var troop_selection: TroopSelection
 
 
 func clear_all_troops() -> void:
+	for troop in troops:
+		_kill_move_tween(troop)
 	troops.clear()
 	moving_troops.clear()
 	troops_by_province.clear()
@@ -31,60 +33,104 @@ func clear_all_troops() -> void:
 	#print("TroopManager: All troops and caches cleared.")
 
 
-func _process(delta: float) -> void:
-	for troop in moving_troops:
-		_update_moving_troop(troop, delta)
-
-
-func _update_moving_troop(troop: TroopData, delta: float) -> void:
-	if GameState.current_world.clock.paused:
+func _process(_delta: float) -> void:
+	if moving_troops.is_empty():
 		return
+	var clock: GameClock = GameState.current_world.clock if GameState.current_world else null
+	var paused := clock == null || clock.paused
+	var time_scale: float = maxf(clock.time_scale, 0.001) if clock else 1.0
 
-	if troop.country_obj == null:
-		troop.country_obj = CountryManager.countries.get(troop.country_name)
-	
+	for troop in moving_troops.duplicate():
+		if !is_instance_valid(troop):
+			moving_troops.erase(troop)
+			continue
+
+		if troop.country_obj == null:
+			troop.country_obj = CountryManager.countries.get(troop.country_name)
+
+		if troop.path.is_empty():
+			_stop_troop(troop)
+			continue
+
+		var targetPID = troop.path.front()
+		var enemies = troops_by_province.get(targetPID, []).filter(
+			func(t):
+				return WarManager.is_at_war_names(t.country_name, troop.country_name)
+		)
+		if not enemies.is_empty() and not paused:
+			WarManager.start_battle(troop.province_id, targetPID)
+			pause_troop(troop)
+			for enemy in enemies:
+				pause_troop(enemy)
+			continue
+
+		var tw := troop.move_tween
+		if tw == null or !tw.is_valid():
+			if !paused:
+				_start_leg_tween(troop)
+				tw = troop.move_tween
+			else:
+				continue
+
+		if tw and tw.is_valid():
+			tw.set_speed_scale(time_scale)
+			if paused:
+				tw.pause()
+			elif !tw.is_running():
+				tw.play()
+
+
+func _kill_move_tween(troop: TroopData) -> void:
+	if troop.move_tween and troop.move_tween.is_valid():
+		troop.move_tween.kill()
+	troop.move_tween = null
+
+
+func _start_leg_tween(troop: TroopData) -> void:
+	_kill_move_tween(troop)
 	if troop.path.is_empty():
-		return
-	
-	var targetPID = troop.path.front()
-	var enemies = troops_by_province.get(targetPID, []).filter(
-		func(t):
-			return WarManager.is_at_war_names(t.country_name, troop.country_name)
-	)
-
-	if not enemies.is_empty() and not GameState.current_world.clock.paused:
-		WarManager.start_battle(troop.province_id, targetPID)
-		pause_troop(troop)
-		for enemy in enemies:
-			pause_troop(enemy)
+		_stop_troop(troop)
 		return
 
-	var start = troop.get_meta("start_pos", troop.position)
-	var end = troop.target_position
-	var total_dist = start.distance_to(end)
-
-	# Safety check for instant arrival
+	var start := troop.position
+	var end := troop.target_position
+	var total_dist := start.distance_to(end)
 	if total_dist < 0.5:
 		troop.position = end
 		_arrive_at_leg_end(troop)
 		return
 
-	# Unified progress calculation
-	var move_progress = troop.get_meta("progress", 0.0)
+	var speed_mod := troop.country_obj.troop_speed_modifier if troop.country_obj else 1.0
+	var duration: float = maxf(total_dist / maxf(1.0 * speed_mod, 0.001), 0.001)
 
-	var base_speed = 1
+	var tw := create_tween()
+	tw.set_process_mode(Tween.TWEEN_PROCESS_IDLE)
+	tw.tween_property(troop, "position", end, duration)
+	tw.finished.connect(func(): _on_leg_tween_finished(troop))
+	troop.move_tween = tw
 
-	# Increment progress based on real-time and game speed
-	move_progress += (base_speed * (troop.country_obj.troop_speed_modifier if troop.country_obj else 1.0) * GameState.current_world.clock.time_scale * delta) / total_dist
+	var clock: GameClock = GameState.current_world.clock if GameState.current_world else null
+	if clock:
+		tw.set_speed_scale(maxf(clock.time_scale, 0.001))
+		if clock.paused:
+			tw.pause()
 
-	if move_progress >= 1.0:
-		troop.position = end
-		troop.set_meta("progress", 0.0)
-		_arrive_at_leg_end(troop)
-	else:
-		# Smoothly slide from A to B
-		troop.position = start.lerp(end, move_progress)
-		troop.set_meta("progress", move_progress)
+
+func _on_leg_tween_finished(troop: TroopData) -> void:
+	if !is_instance_valid(troop):
+		return
+	# Ignore stale callbacks from killed/replaced tweens.
+	if troop.move_tween != null and troop.move_tween.is_valid() and troop.move_tween.is_running():
+		return
+	# If another tween was installed, this callback is stale.
+	# Finished tween may report invalid; only trust when no active tween owns the troop.
+	if troop.move_tween != null and troop.move_tween.is_valid():
+		return
+	troop.move_tween = null
+	if !troop.is_moving:
+		return
+	troop.position = troop.target_position
+	_arrive_at_leg_end(troop)
 
 
 func _start_next_leg(troop: TroopData) -> void:
@@ -107,14 +153,11 @@ func _start_next_leg(troop: TroopData) -> void:
 			pause_troop(enemy)
 		return
 
-	# Update targets and start movement
 	troop.target_position = MapManager.province_centers.get(int(next_pid), troop.position)
-	troop.set_meta("start_pos", troop.position)
-	troop.set_meta("progress", 0.0)
 	troop.is_moving = true
-
 	if !moving_troops.has(troop):
 		moving_troops.append(troop)
+	_start_leg_tween(troop)
 
 
 func _arrive_at_leg_end(troop: TroopData) -> void:
@@ -139,13 +182,16 @@ func _arrive_at_leg_end(troop: TroopData) -> void:
 
 
 func _stop_troop(troop: TroopData) -> void:
+	_kill_move_tween(troop)
 	moving_troops.erase(troop)
 	troop.is_moving = false
 	troop.path.clear()
+	troop.target_position = troop.position
 
 
 # Pause a troop along its path
 func pause_troop(troop: TroopData) -> void:
+	_kill_move_tween(troop)
 	moving_troops.erase(troop)
 	troop.target_position = troop.position
 	troop.is_moving = false
@@ -251,8 +297,9 @@ func _split_and_send_troop(troop: TroopData, target_pids: Array, paths: Dictiona
 
 	# 1. Sort targets by distance to move the "heaviest" part of the stack the shortest distance
 	var target_distances: Array = []
+	var troop_pos: Vector2 = MapManager.province_graph.get_point_position(troop.province_id)
 	for pid in target_pids:
-		var dist = MapManager.heuristic(troop.province_id, pid)
+		var dist: float = troop_pos.distance_to(MapManager.province_graph.get_point_position(pid))
 		target_distances.append({"pid": pid, "dist": dist})
 	target_distances.sort_custom(func(a, b): return a.dist < b.dist)
 
@@ -332,9 +379,6 @@ func _create_new_split_troop(original: TroopData, specific_divisions: Array) -> 
 	# Copy runtime metadata for new troop
 	new_troop.is_moving = false
 	new_troop.path = []
-	new_troop.set_meta("start_pos", pos)
-	new_troop.set_meta("time_left", 0.0)
-	new_troop.set_meta("progress", 0.0)
 
 	# Register the new troop in all indexes
 	troops.append(new_troop)
@@ -358,9 +402,6 @@ func create_troop(country: String, divs: int, prov_id: int) -> TroopData:
 	troop.country_obj = country_data
 
 	# Initialize runtime metadata
-	troop.set_meta("start_pos", pos)
-	troop.set_meta("time_left", 0.0)
-	troop.set_meta("progress", 0.0)
 	troop.is_moving = false
 	troop.path = []
 	troop.province_id = prov_id
@@ -429,6 +470,7 @@ func _auto_merge_in_province(province_id: int, country: String) -> void:
 				troop_selection.selected_troop = primary
 
 func RemoveTroop(troop: TroopData) -> void:
+	_kill_move_tween(troop)
 	troops.erase(troop)
 	moving_troops.erase(troop)
 
@@ -499,6 +541,8 @@ func _move_troop_to_province_logically(troop: TroopData, new_pid: int) -> void:
 
 # Careful using this
 func teleport_troop_to_province(troop: TroopData, target_pid: int) -> void:
+	_kill_move_tween(troop)
+	moving_troops.erase(troop)
 	# Remove from old province index
 	var old_pid = troop.province_id
 	if troops_by_province.has(old_pid):
@@ -513,8 +557,6 @@ func teleport_troop_to_province(troop: TroopData, target_pid: int) -> void:
 	troop.position = MapManager.province_centers.get(target_pid, Vector2.ZERO)
 	troop.target_position = troop.position
 	troop.path.clear()
-	troop.set_meta("start_pos", troop.position)
-	troop.set_meta("progress", 0.0)
 	troop.is_moving = false
 
 	# Add to new province index
@@ -619,12 +661,9 @@ func DeployReady(
 
 	# 2. Inject the specific divisions we trained
 	for i: int in range(a_readyTroops.count):
-		troop.stored_divisions.append(a_readyTroops.division.duplicate())
+		troop.stored_divisions.append(a_readyTroops.division)
 
 	# 3. Setup Runtime Metadata
-	troop.set_meta("start_pos", pos)
-	troop.set_meta("time_left", 0.0)
-	troop.set_meta("progress", 0.0)
 	troop.is_moving = false
 	troop.path = []
 	troop.province_id = prov_id
@@ -657,9 +696,6 @@ func deploy_specific_divisions(
 	troop.stored_divisions = divisions_to_deploy
 
 	# 3. Setup Runtime Metadata
-	troop.set_meta("start_pos", pos)
-	troop.set_meta("time_left", 0.0)
-	troop.set_meta("progress", 0.0)
 	troop.is_moving = false
 	troop.path = []
 	troop.province_id = prov_id
@@ -682,14 +718,9 @@ func _ready() -> void:
 
 func _load_flag_redirects() -> void:
 	var path = "res://assets/flags/flag_redirects.json"
-	if FileAccess.file_exists(path):
-		var file = FileAccess.open(path, FileAccess.READ)
-		var json = JSON.new()
-		var error = json.parse(file.get_as_text())
-		if error == OK:
-			flag_redirects = json.data
-		else:
-			push_error("TroopManager: Failed to parse flag_redirects.json")
+	var data: Variant = MapData.LoadJSON(path)
+	if data is Dictionary:
+		flag_redirects = data
 
 var custom_flag_path: String = ""
 

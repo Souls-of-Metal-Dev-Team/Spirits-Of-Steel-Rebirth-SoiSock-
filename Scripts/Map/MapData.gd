@@ -19,22 +19,31 @@ const STATE_KEYS: Array[String] = [
 	"original_territories", "scheduled_events",
 ]
 
-static func _LoadJSON(path: String):
-	return JSON.parse_string(
-		FileAccess.open(
-			path,
-			FileAccess.READ,
-		).get_as_text(),
-	)
+# Shared JSON I/O. All scenario/save JSON reads and writes go through these.
+static func LoadJSON(path: String) -> Variant:
+	if not FileAccess.file_exists(path):
+		return null
+	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
+	if not file:
+		push_error("MapData: Failed to open JSON file: " + path)
+		return null
+	var text: String = file.get_as_text()
+	file.close()
+	if text.is_empty():
+		return null
+	var parsed: Variant = JSON.parse_string(text)
+	if parsed == null:
+		push_error("MapData: Failed to parse JSON: " + path)
+	return parsed
 
-static func _SaveJSON(path, filename, string):
-	var file: FileAccess = FileAccess.open(path+filename, FileAccess.WRITE)
-	if file:
-		file.store_string(JSON.stringify(string , "\t"))
-		file.close()
-		print("Scenario exported to: ", path)
-	else:
-		push_error("Failed to export_mapdata scenario to: ", path)
+static func SaveJSON(path: String, data: Variant) -> bool:
+	var file: FileAccess = FileAccess.open(path, FileAccess.WRITE)
+	if not file:
+		push_error("MapData: Failed to write JSON file: " + path + " (error " + str(FileAccess.get_open_error()) + ")")
+		return false
+	file.store_string(JSON.stringify(data, "\t"))
+	file.close()
+	return true
 
 # scenario_path may be a folder (res://starts/Name) or the map_data.json file.
 static func ScenarioDirFromPath(a_scenario_path: String) -> String:
@@ -54,9 +63,9 @@ static func LoadStartState(a_start_dir: String) -> Dictionary:
 			push_error("MapData: Start file missing: " + paths[key])
 			return {}
 
-	var map_data: Dictionary = _LoadJSON(paths["map_data"])
-	var provinces: Dictionary = _LoadJSON(paths["provinces"])
-	var scenario_data: Dictionary = _LoadJSON(paths["scenario_data"])
+	var map_data: Dictionary = LoadJSON(paths["map_data"])
+	var provinces: Dictionary = LoadJSON(paths["provinces"])
+	var scenario_data: Dictionary = LoadJSON(paths["scenario_data"])
 
 	var combined: Dictionary = {}
 	combined.merge(map_data, true)
@@ -71,7 +80,7 @@ static func LoadStartState(a_start_dir: String) -> Dictionary:
 
 # Resolve a save file into a full game state. Diff saves are merged with their start.
 static func LoadSaveState(a_save_path: String) -> Dictionary:
-	var save_json: Variant = _LoadJSON(a_save_path)
+	var save_json: Variant = LoadJSON(a_save_path)
 	if not save_json is Dictionary:
 		push_error("MapData: Failed to parse save: " + a_save_path)
 		return {}
@@ -119,14 +128,14 @@ static func SaveMapData(path: String) -> void:
 
 	var export_province = MapManager.SaveProvinces()
 
-	_SaveJSON(path, "map_data.json",      export_map_data)
-	_SaveJSON(path, "provinces.json",     export_province)
-	_SaveJSON(path, "scenario_data.json", export_scenario)
+	SaveJSON(path + "map_data.json",      export_map_data)
+	SaveJSON(path + "provinces.json",     export_province)
+	SaveJSON(path + "scenario_data.json", export_scenario)
 
 static func LoadMapData(a_start_path: String, a_percent: Array = [0], a_state_override: Dictionary = {}):
-	var map_data:      Dictionary = _LoadJSON("%s/map_data.json"%a_start_path)
-	var provinces:     Dictionary = _LoadJSON("%s/provinces.json"%a_start_path)
-	var scenario_data: Dictionary = _LoadJSON("%s/scenario_data.json"%a_start_path)
+	var map_data:      Dictionary = LoadJSON("%s/map_data.json"%a_start_path)
+	var provinces:     Dictionary = LoadJSON("%s/provinces.json"%a_start_path)
+	var scenario_data: Dictionary = LoadJSON("%s/scenario_data.json"%a_start_path)
 
 	# Loading a save: keep the start's static data (regions, decisions, flags, ...)
 	# but replace every dynamic section with the saved state.

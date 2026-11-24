@@ -103,7 +103,7 @@ func _ready() -> void:
 		map_sprite = get_node_or_null("../../MapContainer/CultureSprite")
 
 func _unhandled_input(event: InputEvent) -> void:
-	if MapManager._is_mouse_over_ui() || Console.is_visible():
+	if get_viewport().gui_get_hovered_control() != null || Console.is_visible():
 		_clear_hover()
 		return
 

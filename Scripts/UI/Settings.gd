@@ -129,7 +129,7 @@ func _add_save_row(
 	var scenario_exists = true
 	var scenario_path = ""
 	
-	var data = MapData._LoadJSON(file_path)
+	var data = MapData.LoadJSON(file_path)
 	if data is Dictionary:
 		scenario_path = data.get(
 			"scenario_path",

@@ -3,7 +3,7 @@ class_name World
 
 @onready var map_sprite: Sprite2D = $"../../MapContainer/CultureSprite" as Sprite2D
 @onready var camera: Camera2D = $"../../Camera2D" as Camera2D
-@onready var troop_renderer: CustomRenderer = $CustomRenderer as CustomRenderer
+@onready var map_container: MapContainer = $"../../MapContainer" as MapContainer
 
 @export var map_shader: Shader
 var clock: GameClock
@@ -75,7 +75,6 @@ func DoSetup(a_progress: Array) -> void:
 		GameState.interactionType = GameState.InteractionType.SELECT_COUNTRY
 		# NOTE(soi): wait so like when i click on a country this should magically play as it?????. damm
 	# For debugging purposes. Create some troops first
-	# MapManager.force_bidirectional_connections()
 	a_progress[0] = 0.30
 	MapManager._BuildGlobalRegistry()
 	a_progress[0] = 0.35
@@ -126,11 +125,10 @@ func DoSetup(a_progress: Array) -> void:
 		_create_ghost_map(Vector2(i * map_width, 0), mat)
 		a_progress[0] += 0.015
 
-	if troop_renderer:
-		troop_renderer.map_sprite = map_sprite
-		troop_renderer.map_width = map_width
+	if map_container:
+		map_container.map_width = map_width
 	else:
-		push_error("CustomRenderer node not found!")
+		push_error("MapContainer node not found!")
 
 	SettingsManager.apply_settings(SettingsManager.settings)
 
@@ -185,17 +183,8 @@ func SaveGame(slot: String):
 		dir.make_dir_recursive("saves/")
 
 	var path = "res://saves/" + slot + ".json"
-	var file = FileAccess.open(path, FileAccess.WRITE)
-	if file:
-		var json_string = JSON.stringify(save_file_data, "\t")
-		if json_string == "":
-			push_error("Save failed! JSON stringify returned empty. Check for non-serializable types.")
-		else:
-			file.store_string(json_string)
-			file.close()
-			print("Game State saved successfully to: ", ProjectSettings.globalize_path(path))
-	else:
-		push_error("Save failed! Could not open " + path + " for writing. Error: " + str(FileAccess.get_open_error()))
+	if MapData.SaveJSON(path, save_file_data):
+		print("Game State saved successfully to: ", ProjectSettings.globalize_path(path))
 
 	
 func load_game(save_name: String):
@@ -218,8 +207,8 @@ func load_game(save_name: String):
 	var start_dir := MapData.ScenarioDirFromPath(scenario_path)
 
 	# Pause systems that react to state
-	if troop_renderer:
-		troop_renderer.set_process(false)
+	if map_container:
+		map_container.set_process(false)
 
 	# Full State Reset
 	TroopManager.clear_all_troops()
@@ -237,8 +226,8 @@ func load_game(save_name: String):
 	GameState.is_loading_game = false
 	_refresh_map_visuals()
 
-	if troop_renderer:
-		troop_renderer.set_process(true)
+	if map_container:
+		map_container.set_process(true)
 
 	print("Game loaded successfully:", save_name)
 
@@ -248,9 +237,8 @@ func _exit_tree() -> void:
 
 
 func _clear_ghost_maps() -> void:
-	var container = get_node_or_null("../../MapContainer")
-	if container:
-		for child in container.get_children():
+	if map_container:
+		for child in map_container.get_children():
 			if child.has_meta("is_ghost"):
 				child.queue_free()
 
@@ -262,14 +250,4 @@ func _create_ghost_map(offset: Vector2, p_material: ShaderMaterial) -> void:
 	ghost.material = p_material
 	ghost.position = map_sprite.position + offset
 	ghost.set_meta("is_ghost", true)
-	$"../../MapContainer".add_child(ghost)
-
-
-func _input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		if event.pressed:
-			KeyboardManager.HandleClickDown(get_global_mouse_position(), map_sprite)
-		else:
-			KeyboardManager.HandleClick(get_global_mouse_position(), map_sprite)
-	if event is InputEventMouseMotion:
-		KeyboardManager.HandleHover(get_global_mouse_position(), map_sprite)
+	map_container.add_child(ghost)

@@ -57,7 +57,7 @@ func _handle_mouse_motion() -> void:
 
 
 func _handle_left_mouse(event: InputEventMouseButton) -> void:
-	if GameState.interactionType == GameState.InteractionType.SELECT_COUNTRY || !dragging && KeyboardManager._is_mouse_over_ui():
+	if GameState.interactionType == GameState.InteractionType.SELECT_COUNTRY || !dragging && get_viewport().gui_get_hovered_control() != null:
 		return
 	
 	if event.pressed:
@@ -105,7 +105,7 @@ func _perform_selection() -> void:
 			continue
 
 		var text_size = (
-			font.get_string_size(str(t.divisions_count), HORIZONTAL_ALIGNMENT_CENTER, -1, CustomRenderer.LAYOUT.font_size) * inv_zoom
+			font.get_string_size(str(t.divisions_count), HORIZONTAL_ALIGNMENT_CENTER, -1, MapContainer.LAYOUT.font_size) * inv_zoom
 		)
 
 		var box_size = baseBoxSize + Vector2(text_size.x, max(flag_size.y, text_size.y))

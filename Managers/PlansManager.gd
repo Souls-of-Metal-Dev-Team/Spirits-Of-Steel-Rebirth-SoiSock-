@@ -11,17 +11,9 @@ func _ready() -> void:
 func load_plans_from_path(path: String):
 	current_start_folder = path.get_base_dir() + "/"
 	plans.clear()
-	if not FileAccess.file_exists(path):
-		return
-
-	var file = FileAccess.open(path, FileAccess.READ)
-	var json_string = file.get_as_text()
-	file.close()
-
-	var json = JSON.new()
-	var error = json.parse(json_string)
-	if error == OK:
-		plans = json.data
+	var data: Variant = MapData.LoadJSON(path)
+	if data is Dictionary:
+		plans = data
 
 func has_available_plans(country: CountryData) -> bool:
 	if not plans.has(country.country_name):
