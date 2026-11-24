@@ -82,23 +82,14 @@ func get_param_name(func_name: String, index: int) -> String:
 		return ""
 	return names[min(index, names.size() - 1)]
 
-var debug: bool:
-	get:
-		return SettingsManager.settings.debug_mode
 var heap: Dictionary = {}
 const DUMMY_FUNC = {"func": "return", "args": [true]}
 
-func all(args: Array) -> bool:
-	for arg in args:
-		if not arg:
-			return false
-	return true
+func _all_truthy(args: Array) -> bool:
+	return args.all(func(v): return bool(v))
 
-func any(args: Array) -> bool:
-	for arg in args:
-		if arg:
-			return true
-	return false
+func _any_truthy(args: Array) -> bool:
+	return args.any(func(v): return bool(v))
 
 func get_variable(variable):
 	if !variable is String:
@@ -232,9 +223,8 @@ func get_function(block, country: CountryData = null):
 		var prev_val = heap.get(var_name)
 		for item in block["in"]:
 			heap[var_name] = item
-			var substituted = _substitute(block["do"].duplicate(true), heap)
-			result = get_function(substituted, country)
-		
+			result = get_function(block["do"], country)
+
 		if had_prev:
 			heap[var_name] = prev_val
 		else:
@@ -269,21 +259,13 @@ func get_function(block, country: CountryData = null):
 			if evaled_args.size() == 1:
 				result = evaled_args[0]
 		# Comparison stuff
-		"and":
-			result = true
-			for val in evaled_args:
-				if not val:
-					result = false
-					break
+		"and", "all":
+			result = _all_truthy(evaled_args)
 		"not":
 			if evaled_args.size() >= 1:
 				result = !evaled_args[0]
-		"or":
-			result = false
-			for val in evaled_args:
-				if val:
-					result = true
-					break
+		"or", "any":
+			result = _any_truthy(evaled_args)
 		"xor":
 			if evaled_args.size() >= 2:
 				result = bool(evaled_args[0]) != bool(evaled_args[1])
@@ -296,10 +278,6 @@ func get_function(block, country: CountryData = null):
 		"lt":
 			if evaled_args.size() >= 2:
 				result = evaled_args[0] < evaled_args[1]
-		"all":
-			result = all(evaled_args)
-		"any":
-			result = any(evaled_args)
 		"probability":
 			result = bool(randi() % int(evaled_args[0]))
 		"get":
@@ -497,7 +475,7 @@ func format_functions(expression, indent: String = "", no_bullet: bool = false) 
 				
 	return formatted.strip_edges() if indent == "" else formatted
 
-# NOTE(soi): recursive string substitution with cycle detection
+# NOTE(soi): kept for backward compat; loop bodies now evaluate with heap-bound locals.
 func _substitute(expression, _heap: Dictionary, visited: Array = []):
 	if expression is Dictionary:
 		for key in expression.keys():

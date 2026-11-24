@@ -9,9 +9,12 @@ func _compute_cost(from_id: int, to_id: int) -> float:
 	return get_point_position(from_id).distance_to(get_point_position(to_id))
 
 func _estimate_cost(from_id: int, to_id: int) -> float:
-	return get_point_position(from_id).distance_squared_to(get_point_position(to_id))
+	return get_point_position(from_id).distance_to(get_point_position(to_id))
 
-func _filter_neighbor(from_id: int, to_id: int) -> bool:
+func _filter_neighbor(
+	from_id: int,
+	to_id: int,
+) -> bool:
 	var from_prov = MapManager.province_objects.get(from_id)
 	var to_prov = MapManager.province_objects.get(to_id)
 	
@@ -38,15 +41,16 @@ func _filter_neighbor(from_id: int, to_id: int) -> bool:
 	# 			break
 	# 	if !has_port: return true
 
-	# --- 2. Political Access (Context-aware) ---
+	# --- 2. Political Access Context-aware ---
 	if !context_allowed_countries.is_empty():
 		# Destination is allowed -> Go ahead
-		if context_allowed_countries.has(to_owner):
-			return false
-			
 		# ESCAPE RULE: Starting province is disallowed? 
 		# Allow one-step movement to find a way out.
-		if !context_allowed_countries.has(from_owner):
+			
+		if (
+			context_allowed_countries.has(to_owner)
+			|| !context_allowed_countries.has(from_owner) 
+			):
 			return false
 			
 		# Restricted: Path tries to enter territory we don't have access to

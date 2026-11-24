@@ -1,9 +1,9 @@
-extends Node
+extends RefCounted
 class_name TroopData
 
 # --- Core Properties ---
 var country_name: String
-var country_obj: Resource # Changed to Resource/Object for safety
+var country_obj: RefCounted # CountryData (now RefCounted, not Resource)
 var province_id: int
 var position: Vector2
 
@@ -17,6 +17,7 @@ var is_moving: bool = false
 var path: Array = []
 var target_position: Vector2 = Vector2.ZERO
 var progress: float = 0.0
+var move_tween: Tween = null
 
 
 func _init(

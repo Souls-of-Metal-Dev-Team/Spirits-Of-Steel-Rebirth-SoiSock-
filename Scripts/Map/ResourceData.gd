@@ -1,10 +1,10 @@
-extends Resource
+extends RefCounted
 class_name ResourceData
 
-@export var name: String
-@export var color: Color
-@export var icon: String
-@export var tags: Dictionary[String, float]
+var name: String
+var color: Color
+var icon: String
+var tags: Dictionary[String, float]
 
 static func FromDict(a_data: Dictionary) -> ResourceData:
 	var resource: ResourceData = ResourceData.new()

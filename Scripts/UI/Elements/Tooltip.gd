@@ -17,27 +17,28 @@ func _enter_tree() -> void:
 @export var provinceDestroyedIcon: TextureRect
 @export var provinceClaims: Label
 
-var tooltipLatch: bool = false
-var shouldBeVisible: bool = false
+var shouldBeVisible: bool = false:
+	set(value):
+		shouldBeVisible = value
+		visible = value
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	set_position(get_global_mouse_position() + offset)
-	position.x = clamp(position.x, 0, get_viewport_rect().size.x - size.x)
-	position.y = clamp(position.y, 0, get_viewport_rect().size.y - size.y)
+	if !visible:
+		return
+	_clamp_to_viewport(get_global_mouse_position() + offset)
 
-func _physics_process(_delta: float) -> void:
-	visible = shouldBeVisible #&& Input.is_key_pressed(KEY_ALT)
+func _clamp_to_viewport(target: Vector2) -> void:
+	var vp_size := get_viewport_rect().size
+	position = Vector2(
+		clamp(target.x, 0.0, maxf(0.0, vp_size.x - size.x)),
+		clamp(target.y, 0.0, maxf(0.0, vp_size.y - size.y)),
+	)
 
 func SwitchTooltip(a_mode: int) -> void:
 	match a_mode:
 		-1:
 			shouldBeVisible = false
 		0:
-			shouldBeVisible = true
-			if !tooltipLatch:
-				DeferredUpdate.call_deferred()
-				tooltipLatch = true
 			tabs.current_tab = 0
 			for resource: HBoxContainer in resourcesList.get_children():
 				resource.queue_free()
@@ -48,12 +49,8 @@ func SwitchTooltip(a_mode: int) -> void:
 				resourceBop.get_node("Label").text = "%s - %d (%.2f%%)" % [resource.type, resource.amount, 100 * resource.quality]
 				resourceBop.visible = true
 				resourcesList.add_child(resourceBop)
+			_ShowAfterLayout()
 		1:
-			var fmt_claims: String = ""
-			shouldBeVisible = true
-			if !tooltipLatch:
-				DeferredUpdate.call_deferred()
-				tooltipLatch = true
 			tabs.current_tab = 1
 			var prov: Province = MapManager.province_objects[MapManager.current_hovered_pid]
 			provinceName.text = prov.name
@@ -62,11 +59,13 @@ func SwitchTooltip(a_mode: int) -> void:
 			provinceConstructionIcon.visible = MapManager.current_hovered_pid in EconomyManager.construction_queue
 			provinceOccupiedIcon.visible = !prov.occupier.is_empty()
 			provinceDestroyedIcon.visible = false
+			var fmt_claims: String = ""
 			for claim in prov.claims:
-				fmt_claims += claim+"\n"
+				fmt_claims += claim + "\n"
 			provinceClaims.text = fmt_claims
+			_ShowAfterLayout()
 
-
-func DeferredUpdate() -> void:
+func _ShowAfterLayout() -> void:
 	reset_size()
-	tooltipLatch = false
+	shouldBeVisible = true
+	_clamp_to_viewport(get_global_mouse_position() + offset)

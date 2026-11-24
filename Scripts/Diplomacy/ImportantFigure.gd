@@ -1,4 +1,4 @@
-class_name ImportantFigure extends Resource
+class_name ImportantFigure extends RefCounted
 
 enum Status {
 	ALIVE,
@@ -6,15 +6,15 @@ enum Status {
 	DEAD
 }
 
-@export var name: String
-@export var skills: Dictionary
-@export var traits: Array
-@export var ideology: Vector2i
-@export var allegiance: String
-@export var occupation: String
-@export var legitimacy: int
-@export var portrait_path: String = ""
-@export var status: Status = Status.ALIVE
+var name: String
+var skills: Dictionary
+var traits: Array
+var ideology: Vector2i
+var allegiance: String
+var occupation: String
+var legitimacy: int
+var portrait_path: String = ""
+var status: Status = Status.ALIVE
 
 static var NOBLE_SKILLS: Dictionary[String, Dictionary] = {
 	"stability":                {"type": "add", "min": -1.0, "base": 0.0, "max":  1.0, "step": 0.01 , "dir": "more", "val": 1.0, "precision": 2},

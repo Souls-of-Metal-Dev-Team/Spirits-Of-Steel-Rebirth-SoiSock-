@@ -1,9 +1,9 @@
-extends Resource
+extends RefCounted
 class_name FactionData
 
-@export var name: String
-@export var color: Color
-@export var members: Array[FactionMember]
+var name: String
+var color: Color
+var members: Array[FactionMember]
 
 static func FromValues(a_name: String, a_color: Color, a_members: Array[FactionMember] = []) -> FactionData:
 	var faction: FactionData = FactionData.new()

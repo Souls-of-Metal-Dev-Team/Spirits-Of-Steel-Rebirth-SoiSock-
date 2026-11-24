@@ -1,19 +1,19 @@
-extends Resource
+extends RefCounted
 class_name DivisionTemplate
 
-@export var name: String
-@export var hp: float
-@export var manpower: int
-@export var cost: int
-@export var days: int
-@export var softAttack: float
-@export var hardAttack: float
-@export var staticDefense: float
-@export var offensiveDefense: float
-@export var cohesion: float
-@export var resiliance: float
-@export var organization: float
-@export var speed: float
+var name: String
+var hp: float
+var manpower: int
+var cost: int
+var days: int
+var softAttack: float
+var hardAttack: float
+var staticDefense: float
+var offensiveDefense: float
+var cohesion: float
+var resiliance: float
+var organization: float
+var speed: float
 
 static func FromDict(a_data: Dictionary) -> DivisionTemplate:
 	var divisionTemplate: DivisionTemplate = DivisionTemplate.new()

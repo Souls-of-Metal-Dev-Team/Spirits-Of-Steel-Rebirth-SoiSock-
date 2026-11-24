@@ -1,4 +1,4 @@
-extends Resource
+extends RefCounted
 class_name BuildingData
 
 enum BuildingState {
@@ -7,9 +7,9 @@ enum BuildingState {
 	RUIN = 2
 }
 
-@export var type: String
-@export var state: BuildingState
-@export var durability: float
+var type: String
+var state: BuildingState
+var durability: float
 
 static func FromValues(a_type: String, a_state: BuildingState, a_durability: float = 1.0) -> BuildingData:
 	var building: BuildingData = BuildingData.new()

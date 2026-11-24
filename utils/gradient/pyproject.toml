@@ -1,0 +1,24 @@
+[project]
+name = "gradient"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "soilad", email = "joshtgm@icloud.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "numpy>=2.5.5",
+    "pillow>=13.0.0",
+    "scipy>=1.18.1",
+]
+
+[project.scripts]
+gradient = "gradient:main"
+gradient-voronoi = "gradient.voronoi:main"
+gradient-sea = "gradient.sea_provinces:main"
+gradient-tectonic = "gradient.tectonic:main"
+
+[build-system]
+requires = ["uv_build>=0.13.7,<0.14.0"]
+build-backend = "uv_build"

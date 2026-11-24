@@ -3,7 +3,7 @@ class_name World
 
 @onready var map_sprite: Sprite2D = $"../../MapContainer/CultureSprite" as Sprite2D
 @onready var camera: Camera2D = $"../../Camera2D" as Camera2D
-@onready var troop_renderer: CustomRenderer = $CustomRenderer as CustomRenderer
+@onready var map_container: MapContainer = $"../../MapContainer" as MapContainer
 
 @export var map_shader: Shader
 var clock: GameClock
@@ -37,31 +37,28 @@ func _enter_tree() -> void:
 	# TODO(pol): Load CountryManager after map instead of an autoload to avoid this.
 
 func DoSetup(a_progress: Array) -> void:
-	var mapData: Dictionary = {}
 	var path = "res://starts/%s" % GameState.current_start
+	var save_state: Dictionary = {}
 
 	if GameState.pending_load_save != "":
 		var save_path = "res://saves/" + GameState.pending_load_save + ".json"
 		if FileAccess.file_exists(save_path):
-			var file = FileAccess.open(save_path, FileAccess.READ)
-			var save_json = JSON.parse_string(file.get_as_text())
-			if save_json is Dictionary:
-				mapData = save_json
-				path = mapData.get("scenario_path", path)
-				# GameState.current_scenario_path = path
+			save_state = MapData.LoadSaveState(save_path)
+			if not save_state.is_empty():
+				var scenario_path: String = save_state.get("scenario_path", "")
+				if not scenario_path.is_empty():
+					path = MapData.ScenarioDirFromPath(scenario_path)
+					GameState.current_start = path.get_file()
 				GameState.is_loading_game = true
 				print("World: Pending save found. Loading from: ", GameState.pending_load_save)
-
-	# if mapData.is_empty():
-	# 	print(path)
-	# 	var json_data = JSON.parse_string(FileAccess.open(path, FileAccess.READ).get_as_text())
-	# 	mapData = json_data if json_data is Dictionary else {}
+			else:
+				push_error("World: Failed to load save state from: " + save_path)
 
 	a_progress[0] = 0.05
 
 	# NOTE(soi): this is here bcuz sometimes main menu is used and im too lazy to comment this out
 	if MapManager.province_objects.is_empty() or GameState.is_loading_game:
-		MapData.LoadMapData(path, a_progress)
+		MapData.LoadMapData(path, a_progress, save_state)
 	
 	if GameState.is_loading_game:
 		GameState.is_loading_game = false
@@ -78,7 +75,6 @@ func DoSetup(a_progress: Array) -> void:
 		GameState.interactionType = GameState.InteractionType.SELECT_COUNTRY
 		# NOTE(soi): wait so like when i click on a country this should magically play as it?????. damm
 	# For debugging purposes. Create some troops first
-	# MapManager.force_bidirectional_connections()
 	a_progress[0] = 0.30
 	MapManager._BuildGlobalRegistry()
 	a_progress[0] = 0.35
@@ -129,13 +125,12 @@ func DoSetup(a_progress: Array) -> void:
 		_create_ghost_map(Vector2(i * map_width, 0), mat)
 		a_progress[0] += 0.015
 
-	if troop_renderer:
-		troop_renderer.map_sprite = map_sprite
-		troop_renderer.map_width = map_width
+	if map_container:
+		map_container.map_width = map_width
 	else:
-		push_error("CustomRenderer node not found!")
+		push_error("MapContainer node not found!")
 
-	SettingsManager.apply_settings()
+	SettingsManager.apply_settings(SettingsManager.settings)
 
 	a_progress[0] = 1.0
 	
@@ -166,23 +161,30 @@ func SaveGame(slot: String):
 		"scheduled_events": EventManager.save_events()
 	}
 	
+	# Store only what changed since the start; the start is loaded again on load.
+	# Normalize both sides through JSON so ints in live state match floats parsed
+	# from the start files. Otherwise every number looks changed.
+	var scenario_path := "res://starts/%s/map_data.json" % GameState.current_start
+	var start_state := MapData.LoadStartState(MapData.ScenarioDirFromPath(scenario_path))
+	if start_state.is_empty():
+		push_error("Save failed! Could not load start state: " + scenario_path)
+		return
+
+	var baseline: Dictionary = JSON.parse_string(JSON.stringify(start_state))
+	var current: Dictionary = JSON.parse_string(JSON.stringify(save_data))
+	var save_file_data: Dictionary = {
+		"scenario_path": scenario_path,
+		"diff": SettingsManager.diff(baseline, current),
+	}
+
 	# Ensure directory exists
 	var dir = DirAccess.open("res://")
 	if not dir.dir_exists("saves/"):
 		dir.make_dir_recursive("saves/")
-		
+
 	var path = "res://saves/" + slot + ".json"
-	var file = FileAccess.open(path, FileAccess.WRITE)
-	if file:
-		var json_string = JSON.stringify(save_data, "\t")
-		if json_string == "":
-			push_error("Save failed! JSON stringify returned empty. Check for non-serializable types.")
-		else:
-			file.store_string(json_string)
-			file.close()
-			print("Game State saved successfully to: ", ProjectSettings.globalize_path(path))
-	else:
-		push_error("Save failed! Could not open " + path + " for writing. Error: " + str(FileAccess.get_open_error()))
+	if MapData.SaveJSON(path, save_file_data):
+		print("Game State saved successfully to: ", ProjectSettings.globalize_path(path))
 
 	
 func load_game(save_name: String):
@@ -192,53 +194,40 @@ func load_game(save_name: String):
 		push_error("Save file not found: " + path)
 		return
 
-	var file = FileAccess.open(path, FileAccess.READ)
-	var json_text = file.get_as_text()
-	var save_data = JSON.parse_string(json_text)
-	
-	if not save_data:
-		push_error("Failed to parse save JSON: " + path)
+	# Diff saves are merged with their start; legacy full saves are used as-is.
+	var save_data: Dictionary = MapData.LoadSaveState(path)
+	if save_data.is_empty():
+		push_error("Failed to load save state: " + path)
 		return
 
-	# Pause systems that react to state
-	if troop_renderer:
-		troop_renderer.set_process(false)
+	var scenario_path: String = save_data.get(
+		"scenario_path",
+		"res://starts/%s/map_data.json" % GameState.current_start,
+	)
+	var start_dir := MapData.ScenarioDirFromPath(scenario_path)
 
-	# Update current scenario tracking
-	# GameState.current_scenario_path = save_data.get("scenario_path", "")
-	# 1. Full State Reset
+	# Pause systems that react to state
+	if map_container:
+		map_container.set_process(false)
+
+	# Full State Reset
 	TroopManager.clear_all_troops()
 	WarManager.reset_state()
-	
+
 	# Close Peace UI if open
 	var peace_ui = get_tree().root.find_child("PeaceProcessUI", true, false)
 	if peace_ui and peace_ui.has_method("force_close"):
 		peace_ui.force_close()
 	GameState.in_peace_process = false
-	
-	# 2. Load the save data in strict dependency order:
-	# A. Countries first (so they exist in managers)
-	CountryManager.initialize_countries(save_data.get("polities", []) as Array)
-	
-	# B. Map/Provinces/Troops next (they need the countries above)
-	MapData.LoadMapData(save_data)
-	
-	# C. Factions/Clock/etc last
-	FactionManager.Initialize(save_data.get("factions", []) as Array)
-	if save_data.has("clock") && clock:
-		clock.FromDict(save_data["clock"])
-	
-	WarManager.load_wars(save_data.get("wars", []))
-	WarManager.load_original_territories(save_data.get("original_territories", {}))
-	WarManager.check_for_new_battles()
-	
-	EventManager.load_events(save_data.get("scheduled_events", []))
-	
+
+	GameState.current_start = start_dir.get_file()
+	GameState.is_loading_game = true
+	MapData.LoadMapData(start_dir, [0.0], save_data)
 	GameState.is_loading_game = false
 	_refresh_map_visuals()
 
-	if troop_renderer:
-		troop_renderer.set_process(true)
+	if map_container:
+		map_container.set_process(true)
 
 	print("Game loaded successfully:", save_name)
 
@@ -248,9 +237,8 @@ func _exit_tree() -> void:
 
 
 func _clear_ghost_maps() -> void:
-	var container = get_node_or_null("../../MapContainer")
-	if container:
-		for child in container.get_children():
+	if map_container:
+		for child in map_container.get_children():
 			if child.has_meta("is_ghost"):
 				child.queue_free()
 
@@ -262,14 +250,4 @@ func _create_ghost_map(offset: Vector2, p_material: ShaderMaterial) -> void:
 	ghost.material = p_material
 	ghost.position = map_sprite.position + offset
 	ghost.set_meta("is_ghost", true)
-	$"../../MapContainer".add_child(ghost)
-
-
-func _input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		if event.pressed:
-			KeyboardManager.HandleClickDown(get_global_mouse_position(), map_sprite)
-		else:
-			KeyboardManager.HandleClick(get_global_mouse_position(), map_sprite)
-	if event is InputEventMouseMotion:
-		KeyboardManager.HandleHover(get_global_mouse_position(), map_sprite)
+	map_container.add_child(ghost)

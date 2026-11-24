@@ -17,6 +17,7 @@ const COLOR_DANGER = Color(0.7, 0.2, 0.2)
 func _ready() -> void:
 	#_setup_ui_elements()
 	self.hide()
+	CountryManager.playerEliminated.connect(OpenMenu)
 
 
 func _input(_event: InputEvent) -> void:

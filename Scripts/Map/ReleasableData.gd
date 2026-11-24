@@ -1,8 +1,8 @@
-extends Resource
+extends RefCounted
 class_name ReleasableData
 
-@export var data: Dictionary
-@export var claims: PackedInt32Array
+var data: Dictionary
+var claims: PackedInt32Array
 
 static func FromDict(a_data: Dictionary) -> ReleasableData:
 	var releasable: ReleasableData = ReleasableData.new()

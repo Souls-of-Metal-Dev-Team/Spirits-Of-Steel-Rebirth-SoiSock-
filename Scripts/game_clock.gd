@@ -3,6 +3,7 @@ class_name GameClock
 
 signal hour_passed
 signal day_passed
+signal clockUpdate
 
 @export var hours_per_tick := 1 # How many in-game hours pass per tick
 @export var seconds_per_tick := 1.0 # Real seconds per tick
@@ -74,7 +75,7 @@ func FromDict(data: Dictionary) -> void:
 
 func set_speed(scale: float) -> void:
 	time_scale = clamp(scale, MIN_SPEED, MAX_SPEED)
-	GameState.game_ui.updateProgressBar()
+	clockUpdate.emit()
 
 func decrease_speed():
 	set_speed(time_scale - 8)
@@ -84,14 +85,14 @@ func increase_speed():
 
 func pause() -> void:
 	paused = true
-	GameState.game_ui.updateProgressBar()
+	clockUpdate.emit()
 
 
 func resume() -> void:
 	if GameState.in_peace_process:
 		return
 	paused = false
-	GameState.game_ui.updateProgressBar()
+	clockUpdate.emit()
 
 
 func toggle_pause() -> void:
@@ -103,4 +104,3 @@ func toggle_pause() -> void:
 		resume()
 	else:
 		pause()
-	GameState.game_ui.updateProgressBar()

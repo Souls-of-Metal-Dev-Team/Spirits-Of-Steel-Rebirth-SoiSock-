@@ -41,7 +41,25 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="TreeCanvas" type="Node2D" parent="CanvasAnchor" unique_id=1189539722]
+[node name="TreeGraph" type="GraphEdit" parent="CanvasAnchor" unique_id=1189539722]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+minimap_enabled = false
+show_menu = false
+show_grid_buttons = false
+show_zoom_buttons = false
+show_arrange_button = false
+snapping_enabled = true
+snapping_distance = 50
+connection_lines_curvature = 0.0
+connection_lines_thickness = 4.0
+zoom_min = 0.2
+zoom_max = 3.0
+zoom_step = 1.1
 
 [node name="StaticUI" type="Control" parent="." unique_id=1099787569]
 material = ExtResource("2_qq7pm")
@@ -257,7 +275,6 @@ mouse_filter = 2
 bbcode_enabled = true
 fit_content = true
 
-[connection signal="draw" from="CanvasAnchor/TreeCanvas" to="." method="_on_draw_canvas"]
 [connection signal="pressed" from="StaticUI/Header/HBoxContainer/EditingButtons/ReloadDecisions" to="." method="_on_reload_decisions_pressed"]
 [connection signal="toggled" from="StaticUI/Header/HBoxContainer/EditingButtons/EditFunc" to="." method="_on_edit_func_toggled"]
 [connection signal="pressed" from="StaticUI/Header/HBoxContainer/EditingButtons/AddRequirement" to="." method="_on_add_req_pressed"]

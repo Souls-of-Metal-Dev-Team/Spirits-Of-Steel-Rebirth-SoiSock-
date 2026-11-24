@@ -1,0 +1,248 @@
+{
+  "main": {
+    "id": "a5c29e88744611bc",
+    "type": "split",
+    "children": [
+      {
+        "id": "75bf2e4f6b176084",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d94dbff6502c5a39",
+            "type": "leaf",
+            "state": {
+              "type": "kanban",
+              "state": {
+                "file": "Kanban.md",
+                "kanbanViewState": {
+                  "kanban-plugin": "board",
+                  "list-collapse": [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                  ]
+                }
+              },
+              "icon": "lucide-trello",
+              "title": "Kanban"
+            }
+          },
+          {
+            "id": "a2d4df98253d25ca",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Saves Storing Diffs.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Saves Storing Diffs"
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "a47c776b9afab33d",
+    "type": "split",
+    "children": [
+      {
+        "id": "8e5be081e9c50d5d",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "6a6d2af19a968c62",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "9037eb3e39145c3d",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "state",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "465988527b117806",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "4c559295d1b62314",
+    "type": "split",
+    "children": [
+      {
+        "id": "b29bb4ac939efbee",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "7e7a0cb490407cf3",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "animations.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "9fd51ff753fdfb1a",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "animations.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "ec8f7a6fc28bb5aa",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "b9e0849781b2efc5",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "96c421e4c9bf76e7",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "animations.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          }
+        ],
+        "currentTab": 4
+      }
+    ],
+    "direction": "horizontal",
+    "width": 615.6328125,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false,
+      "obsidian-kanban:Create new board": false
+    }
+  },
+  "active": "a2d4df98253d25ca",
+  "lastOpenFiles": [
+    "Kanban.md",
+    "Saves Storing Diffs.md",
+    "animations.md",
+    "AssetManager.md",
+    "civilWars.md",
+    "NodeDependencies.md",
+    "buildingTypes.md",
+    "interpreterManager.md",
+    "sigFigs.md",
+    "filipsFocus.md",
+    "Untitled Kanban.md",
+    "achievements.md",
+    "Docs/ImportantFigureSkillsReference.md",
+    "Docs/Functions.md",
+    "Docs/Decision Docs.md",
+    "resourcesMakeWorkGood.md",
+    "TODOs.md",
+    "multiplayer.md",
+    "makeCharactersDoStuff.md",
+    "promoteToYoutube.md",
+    "Untitled.base",
+    "todo.md",
+    "Docs",
+    "SOSR/TODOs.md",
+    "SOSR/Functions.md",
+    "SOSR/Decision Docs.md",
+    "Welcome.md",
+    "SOSR"
+  ]
+}

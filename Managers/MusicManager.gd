@@ -1,5 +1,8 @@
 extends Node
 
+# Emitted with the file name of the song that started playing.
+signal trackChanged(track_name: String)
+
 var current_track_type: int = -1
 
 var music_player: AudioStreamPlayer:
@@ -86,7 +89,12 @@ func _ready():
 				_load_music_folder(custom_music_path, radio, MUSIC.BATTLE_THEME)
 				if radio not in radios:
 					radios.append(radio)
-		
+	# warDeclared passes (attacker, defender); drop them before calling.
+	WarManager.warDeclared.connect(
+		func(_warer: CountryData, _waree: CountryData):
+			play_music(MUSIC.BATTLE_THEME)
+			play_sfx(SFX.DECLARE_WAR)
+	)
 	# Note: We don't setup audio here because the scene tree isn't ready for autoloads.
 	# Audio.gd will call setup_audio() when it's ready.
 
@@ -257,8 +265,7 @@ func play_music(track: int):
 			m_player.play()
 			print("MusicManager: Started m_player playback.")
 
-		if GameState.game_ui:
-			GameState.game_ui.now_playing.text = m_player.stream.resource_path.get_file()
+		trackChanged.emit(m_player.stream.resource_path.get_file())
 
 		var playback = m_player.get_stream_playback() as AudioStreamPlaybackInteractive
 		if playback:
@@ -276,14 +283,13 @@ func play_music(track: int):
 		if not songs.is_empty():
 			var song = songs.pick_random()
 			print("MusicManager: Manual Fallback - Playing song: ", song.resource_path.get_file())
-			if GameState.game_ui and GameState.game_ui.now_playing:
-				GameState.game_ui.now_playing.text = song.resource_path.get_file()
+			trackChanged.emit(song.resource_path.get_file())
 			m_player.stream = song
 			m_player.play()
 		else:
 			print("MusicManager: Manual Fallback - No songs found!")
 
-	var vol = music_volume_map.get(track, 1.0) * SettingsManager.settings["music_volume"]
+	var vol = music_volume_map.get(track, 1.0) * SettingsManager.settings.get_value("Sound", "music_volume")
 	m_player.volume_db = linear_to_db(vol)
 	print("MusicManager: Playing track ", track, " at volume linear: ", vol, " (db: ", m_player.volume_db, ")")
 
@@ -357,7 +363,7 @@ func play_sfx(sfx: int):
 	var filtered = players.filter(func(p): return not p.playing)
 	var player = filtered.front() if filtered else players[0]
 	player.stream = sfx_map[sfx]
-	player.volume_db = linear_to_db(1.0 * SettingsManager.settings["sfx_volume"])
+	player.volume_db = linear_to_db(1.0 * SettingsManager.settings.get_value("Sound", "sfx_volume"))
 	player.play()
 
 

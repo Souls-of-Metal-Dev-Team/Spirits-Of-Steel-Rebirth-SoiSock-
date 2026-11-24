@@ -55,13 +55,8 @@ func _load_decisions(base_path: String):
 	dir.list_dir_end()
 
 
-func _read_json(path: String):
-	if not FileAccess.file_exists(path):
-		return null
-	var text = FileAccess.get_file_as_string(path)
-	if text.is_empty():
-		return null
-	return JSON.parse_string(text)
+func _read_json(path: String) -> Variant:
+	return MapData.LoadJSON(path)
 
 
 func get_country_categories(country_name: String) -> Dictionary:
@@ -162,7 +157,7 @@ func can_take_decision(country: CountryData, cat: String, index: int) -> bool:
 	var reqs = data.get("reqs", "")
 	if reqs:
 		for req in reqs:
-			if !InterpreterManager.get_function(reqs):
+			if !reqs.all(func(r): InterpreterManager.get_function(r)):
 				return false
 	return true
 
@@ -249,12 +244,5 @@ func save_country_decisions(country_name: String):
 		return
 
 	var data: Dictionary = { "categories": cats }
-	var json_string: String = JSON.stringify(data, "\t")
-	
-	var file: FileAccess = FileAccess.open(path, FileAccess.WRITE)
-	if file:
-		file.store_string(json_string)
-		file.close()
+	if MapData.SaveJSON(path, data):
 		print("Saved decisions to ", path)
-	else:
-		print("Error: Could not open file for writing at ", path)

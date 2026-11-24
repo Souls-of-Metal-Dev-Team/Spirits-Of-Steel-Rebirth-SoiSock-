@@ -14,7 +14,6 @@ extends PanelContainer
 enum Category {MILITARY, ECONOMY, COUNTRY, RELEASABLES}
 var current_category: Category = Category.MILITARY
 var current_country: CountryData
-var _update_timer: float = 0.0
 
 @export var economic_status_val: Label
 @export var army_logistics_val: Label
@@ -24,6 +23,9 @@ func _ready() -> void:
 	visible = false
 	_populate_military()
 	_populate_economy()
+	TroopManager.troopsChanged.connect(_on_troops_changed)
+	if GameState.current_world and GameState.current_world.clock:
+		GameState.current_world.clock.day_passed.connect(_on_day_passed)
 
 func OpenMenu(country: CountryData, cat: Category = Category.MILITARY) -> void:
 	if current_country and current_country.ideology_changed.is_connected(_refresh_full_data):
@@ -42,12 +44,14 @@ func OpenMenu(country: CountryData, cat: Category = Category.MILITARY) -> void:
 func CloseMenu() -> void:
 	hide()
 
-func _process(delta: float) -> void:
-	if not visible or not current_country: return
-	
-	_update_timer += delta
-	if _update_timer > 1.0:
-		_update_timer = 0.0
+func _on_day_passed() -> void:
+	if visible and current_country:
+		_refresh_army_counts()
+
+func _on_troops_changed(country_name: String) -> void:
+	if not visible or not current_country:
+		return
+	if country_name == "" or country_name == current_country.country_name:
 		_refresh_army_counts()
 
 

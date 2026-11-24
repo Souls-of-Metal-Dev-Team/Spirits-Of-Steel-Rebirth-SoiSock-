@@ -7,6 +7,10 @@ signal province_ownership_changed(pid: int, old_owner: String, new_owner: String
 
 # Emitted when a click couldn't be processed (so likely sea or border)
 signal close_sidemenu
+# Emitted when the active map view changes (value is a MapView)
+signal mapViewChanged(view: int)
+# Emitted when a country is picked in SELECT_COUNTRY mode
+signal countrySelected(country_name: String)
 
 # The exact colors you provided
 const SEA_MAIN: Color = Color("#7e8e9e")
@@ -172,7 +176,12 @@ func Initialize(
 	var next_id: int = 2
 
 	var mapImage: Image = a_map.get_image()
+	if mapImage.get_format() != Image.FORMAT_RGB8:
+		mapImage.convert(Image.FORMAT_RGB8)
 	($"../Main/MapContainer/CultureSprite" as Sprite2D).texture = a_map
+
+	province_graph.neighbor_filter_enabled = true
+	province_graph.clear()
 
 	var inc: float = 0.1 / (MAP_WIDTH * MAP_HEIGHT)
 
@@ -182,7 +191,12 @@ func Initialize(
 	var last_pos: PackedInt32Array = PackedInt32Array([0, 0, 0, 0])
 	var pixel_count: PackedInt32Array = PackedInt32Array([0, 0])
 
-	var mapImageArray = mapImage.get_data()
+	# RGB8 raw bytes: 3 per pixel, row-major. Index = packed RGB, same as old to_rgba32() >> 8.
+	var mapData: PackedByteArray = mapImage.get_data()
+	# pid of every pixel scanned so far, indexed by i. Border pixels stay 0.
+	# Left / top / two-left / two-up neighbours have already been scanned when we read them.
+	var pid_buf: PackedInt32Array = PackedInt32Array()
+	pid_buf.resize(MAP_WIDTH * MAP_HEIGHT)
 
 	for i: int in range(MAP_WIDTH * MAP_HEIGHT):
 		#print("%d/%d -> %f" % [i, blink, a_progress[0]])
@@ -190,13 +204,13 @@ func Initialize(
 		var x: int = i % MAP_WIDTH
 		@warning_ignore("integer_division")
 		var y: int = i / MAP_WIDTH
-		var r_color: Color = mapImage.get_pixel(x, y)
-
-		var index := (r_color.to_rgba32() >> 8) # I hate alpha.
+		var byte_offset: int = i * 3
+		var index: int = (mapData[byte_offset] << 16) | (mapData[byte_offset + 1] << 8) | mapData[byte_offset + 2]
 
 
 		# Check for Borders/Grid (ID 1)
-		if r_color == Color.BLACK:
+		if index == 0:
+			# NOTE: int 1 converts to Color.hex(1), so this pixel reads back as pid 0.
 			id_map_image.set_pixel(x, y, 1)
 			continue
 
@@ -227,7 +241,30 @@ func Initialize(
 			Color.hex((pid << 8) | 0x000000FF),
 		)
 
-		var k: int = pid * 2
+		# NOTE(soi): its soiladin time 2
+		if !province_graph.has_point(pid):
+			province_graph.add_point(pid, Vector2i(x, y))
+
+		pid_buf[i] = pid
+
+		# Connect to the left / top pixel. If that pixel is a 1px border (0),
+		# look one pixel further across it, like _scan_across_border did.
+		if x:
+			var left_pid: int = pid_buf[i - 1]
+			if left_pid == 0 && x >= 2:
+				left_pid = pid_buf[i - 2]
+			if left_pid > 1 && left_pid != pid && !province_graph.are_points_connected(pid, left_pid):
+				province_graph.connect_points(pid, left_pid)
+
+		if y:
+			var top_pid: int = pid_buf[i - MAP_WIDTH]
+			if top_pid == 0 && y >= 2:
+				top_pid = pid_buf[i - 2 * MAP_WIDTH]
+			if top_pid > 1 && top_pid != pid && !province_graph.are_points_connected(pid, top_pid):
+				province_graph.connect_points(pid, top_pid)
+
+
+		var k: int = pid << 1
 		last_pos[k] = x
 		last_pos[k + 1] = y
 		pixel_count[pid] += 1
@@ -251,7 +288,7 @@ func Initialize(
 	a_progress[0] += 0.025
 	_build_country_to_provinces()
 	a_progress[0] += 0.025
-	_build_adjacency_list(a_progress)
+	# _build_adjacency_list(a_progress)
 	_BuildGlobalRegistry()
 	a_progress[0] += 0.025
 
@@ -531,6 +568,9 @@ func HoverCountry(a_pid: int, a_highlightColor: Color) -> void:
 		province_hovered.emit(-1, "")
 		return
 
+	if current_view != MapView.COUNTRIES:
+		return
+
 	HighlightCountry(a_pid, a_highlightColor)
 	last_hovered_pid = a_pid
 	Input.set_default_cursor_shape(Input.CURSOR_POINTING_HAND)
@@ -624,10 +664,7 @@ func ClickSea() -> void:
 		close_sidemenu.emit()
 
 func SelectCountryAt(pid: int) -> void:
-	GameState.game_ui.selected_country = CountryManager.countries[
-		province_objects[pid].GetFunctionalOwner()
-	]
-	GameState.game_ui.DoUpdateSidemenuVisuals()
+	countrySelected.emit(province_objects[pid].GetFunctionalOwner())
 	ShowCountriesMap()
 
 func DeployAt(pid: int) -> void:
@@ -747,6 +784,10 @@ func _calculate_province_centroids(
 		)
 
 		province_centers[pid] = center
+		# Graph point starts at the province's first scanned pixel. Move it to the center
+		# so SoiStar path costs use real province distances.
+		if province_graph.has_point(pid):
+			province_graph.set_point_position(pid, center)
 		if province_objects.has(pid):
 			province_objects[pid].center = center
 
@@ -844,15 +885,9 @@ func _scan_across_border(x: int, y: int, pid: int) -> int:
 func _get_pid_fast(x: int, y: int) -> int:
 	return id_map_image.get_pixel(x, y).to_rgba32() >> 8
 
-# --- Pathfinding section kinda. Should be in own file tbh.. ---#
-
-# TODO(pol): This lags when moving a lot of troops. Should be made faster with
-# built in AStar2D class.
-# NOTE(soi): ITS BEEN MONTHS
+# --- Pathfinding (delegated to SoiStar) ---#
 
 var path_cache: Dictionary = {}
-
-const HEURISTIC_SCALE: float = 1.0 # / 50.0
 
 func find_path(start_pid: int, end_pid: int, allowed_countries: Array[String] = []) -> PackedInt64Array:
 	if start_pid == end_pid:
@@ -874,174 +909,28 @@ func find_path(start_pid: int, end_pid: int, allowed_countries: Array[String] = 
 
 	return path
 
-func _find_path_astar(start_pid: int, end_pid: int, allowed_countries: Array[String]) -> Array[int]:
-	# 1. Optimize Allowed Check: O(1) Lookup
-	var allowed_dict: Dictionary = {}
-	var restricted_mode: bool = not allowed_countries.is_empty()
-	if restricted_mode:
-		for c in allowed_countries:
-			allowed_dict[c] = true
+var _population_gradient: Gradient
+var _gdp_gradient: Gradient
 
-	# 2. Setup
-	var open_set: Array[int] = [start_pid]
-	var came_from: Dictionary = {}
+func _get_population_gradient() -> Gradient:
+	if _population_gradient == null:
+		_population_gradient = Gradient.new()
+		_population_gradient.offsets = PackedFloat32Array([0.0, 0.5, 1.0])
+		_population_gradient.colors = PackedColorArray([Color.DARK_CYAN, Color.YELLOW, Color.RED])
+	return _population_gradient
 
-	var g_score: Dictionary = {start_pid: 0.0}
-	var f_score: Dictionary = {start_pid: heuristic(start_pid, end_pid)}
-	var open_set_hash: Dictionary = {start_pid: true}
-
-	# For fallback (closest reached node)
-	var closest_pid_so_far: int = start_pid
-	var closest_dist_so_far: float = f_score[start_pid]
-
-	while open_set.size() > 0:
-		# --- FIND LOWEST F-SCORE ---
-		var current: int = open_set[0]
-		var best_idx: int = 0
-		var best_f: float = f_score.get(current, INF)
-
-		for i: int in range(1, open_set.size()):
-			var pid: int = open_set[i]
-			var f: float = f_score.get(pid, INF)
-			if f < best_f:
-				best_f = f
-				current = pid
-				best_idx = i
-
-		# --- POP CURRENT ---
-		open_set[best_idx] = open_set[-1]
-		open_set.pop_back()
-		open_set_hash.erase(current)
-
-		# --- SUCCESS CHECK ---
-		if current == end_pid:
-			return _reconstruct_path(came_from, current)
-
-		# --- GET PROVINCE DATA ---
-		# We need the actual object to check Types and Ports
-		var current_prov: Province = province_objects[current]
-
-		# Fallback tracking
-		var dist_to_target: float = heuristic(current, end_pid)
-		if dist_to_target < closest_dist_so_far:
-			closest_dist_so_far = dist_to_target
-			closest_pid_so_far = current
-
-		# --- NEIGHBOR LOOP ---
-		# We assume adjacency_list is kept in sync with province_objects[pid].neighbors
-		var neighbors = province_graph.get_point_connections(current)
-
-		for neighbor in neighbors:
-			var neighbor_prov: Province = province_objects[neighbor]
-
-			# --- RULE 1: LAND -> SEA REQUIRES PORT ---
-			if current_prov.type == Province.LAND and neighbor_prov.type == Province.SEA:
-				if current_prov.buildings.find_custom(func(building): return building.type == "Port") == -1:
-					continue # BLOCKED: No port to launch ships
-
-			# --- RULE 2: POLITICAL RESTRICTIONS ---
-			if restricted_mode:
-				# Sea is always free
-				if neighbor_prov.type == Province.LAND:
-					# Strictly check if the country is in the allowed list
-					# If it's not there, we can't enter it—even if it's the end_pid
-					if not allowed_dict.has(neighbor_prov.GetFunctionalOwner()):
-						continue
-
-			# --- STANDARD A* CALCULATION ---
-			# Cost is 1.0 per hop
-			var tentative_g = g_score.get(current, INF) + 1.0
-
-			if tentative_g < g_score.get(neighbor, INF):
-				came_from[neighbor] = current
-				g_score[neighbor] = tentative_g
-				f_score[neighbor] = tentative_g + heuristic(neighbor, end_pid)
-
-				if not open_set_hash.has(neighbor):
-					open_set.append(neighbor)
-					open_set_hash[neighbor] = true
-
-	# Path not found - Return closest attempt
-	if restricted_mode and closest_pid_so_far != start_pid:
-		return _reconstruct_path(came_from, closest_pid_so_far)
-
-	return []
-
-func heuristic(a: int, b: int) -> float:
-	return province_centers[a].distance_to(province_centers[b]) * HEURISTIC_SCALE
-
-func _reconstruct_path(came_from: Dictionary, current: int) -> Array[int]:
-	var path: Array[int] = [current]
-	while came_from.has(current):
-		current = came_from[current]
-		path.append(current)
-	path.reverse()
-	return path
-
-func get_path_length(path: Array[int]) -> int:
-	return path.size() - 1 if path.size() > 1 else 0
-
-func is_path_possible(start_pid: int, end_pid: int) -> bool:
-	return not find_path(start_pid, end_pid).is_empty()
-
-func print_cache_stats() -> void:
-	print("Path Cache Stats: %d paths cached" % path_cache.size())
-
-func force_bidirectional_connections() -> void:
-	var fix_count: int = 0
-
-	# 1. Iterate through every province object
-	for pid_a: int in province_objects.keys():
-		var prov_a: Province = province_objects[pid_a]
-
-		var neighbors_of_a = prov_a.neighbors
-
-		for pid_b: int in neighbors_of_a:
-			# Safety check: Does the neighbor ID even exist in our world?
-			if not province_objects.has(pid_b):
-				push_warning(
-					(
-						"Graph Repair: Province %d lists neighbor %d, but %d doesn't exist!"
-						% [pid_a, pid_b, pid_b]
-					)
-				)
-				continue
-
-			var prov_b: Province = province_objects[pid_b]
-
-			# Check if B points back to A
-			if not pid_a in prov_b.neighbors:
-				prov_b.neighbors.append(pid_a)
-
-				# if adjacency_list.has(pid_b):
-				# 	if not pid_a in adjacency_list[pid_b]:
-				# 		adjacency_list[pid_b].append(pid_a)
-				# else:
-				# 	adjacency_list[pid_b] = [pid_a]
-
-				fix_count += 1
-
-	print("Graph Repair Complete: Fixed %d one-way connections in Province Resources." % fix_count)
+func _get_gdp_gradient() -> Gradient:
+	if _gdp_gradient == null:
+		_gdp_gradient = Gradient.new()
+		_gdp_gradient.offsets = PackedFloat32Array([0.0, 0.5, 1.0])
+		_gdp_gradient.colors = PackedColorArray([Color(0.6, 0.1, 0.1), Color.ALICE_BLUE, Color(0.0, 0.4, 1.0)])
+	return _gdp_gradient
 
 func _get_heatmap_color(pop: int, max_pop: float) -> Color:
-	# If population is 0, return a neutral "empty" color (dark slate/gray)
 	if pop <= 0:
 		return Color(0.1, 0.1, 0.15, 1.0)
-
-	# Calculate intensity based on the REAL maximum in your current data
-	var intensity: float = clamp(float(pop) / max_pop, 0.0, 1.0)
-
-	# We create a multi-stop gradient:
-	# Low: Cyan/Green -> Mid: Yellow -> High: Red
-	var col: Color
-	if intensity < 0.5:
-		# Blend from a "Low Density" Teal to Yellow
-		col = Color.DARK_CYAN.lerp(Color.YELLOW, intensity * 2.0)
-	else:
-		# Blend from Yellow to a "High Density" Deep Red
-		col = Color.YELLOW.lerp(Color.RED, (intensity - 0.5) * 2.0)
-
-	return col
+	var intensity: float = clampf(float(pop) / max_pop, 0.0, 1.0)
+	return _get_population_gradient().sample(intensity)
 
 # soilad aneurysm time
 func _ShowFactionMap() -> void:
@@ -1069,7 +958,7 @@ func _ShowFactionMap() -> void:
 
 	state_color_texture.update(state_color_image)
 	current_view = MapView.FACTION
-	GameState.game_ui.map_tabs.current_tab = current_view
+	mapViewChanged.emit(current_view)
 	print("MapManager: Faction View Updated")
 
 func _ShowPopulationMap() -> void:
@@ -1140,21 +1029,9 @@ func _ShowEthnicMap() -> void:
 
 func _get_gdp_heatmap_color(gdp: int, max_gdp: float) -> Color:
 	if gdp <= 0:
-		return Color(0.1, 0.1, 0.1) # Dark gray for no data
-
-	# Using Square Root scale to make lower GDP differences more visible
-	# Otherwise, the richest city makes everything else look the same color.
-	var intensity = clamp(sqrt(float(gdp)) / sqrt(max_gdp), 0.0, 1.0)
-
-	var col: Color
-	if intensity < 0.5:
-		# Low GDP: Dark Red/Purple -> Neutral White/Blue
-		col = Color(0.6, 0.1, 0.1).lerp(Color.ALICE_BLUE, intensity * 2.0)
-	else:
-		# High GDP: White/Blue -> Deep Electric Blue
-		col = Color.ALICE_BLUE.lerp(Color(0.0, 0.4, 1.0), (intensity - 0.5) * 2.0)
-
-	return col
+		return Color(0.1, 0.1, 0.1)
+	var intensity: float = clampf(sqrt(float(gdp)) / sqrt(max_gdp), 0.0, 1.0)
+	return _get_gdp_gradient().sample(intensity)
 
 func _ShowGDPMap() -> void:
 	if province_objects.is_empty():
@@ -1726,7 +1603,7 @@ func CycleMapMode(shift: bool) -> void:
 
 func SetMapMode(a_mapView: MapView):
 	current_view = a_mapView
-	GameState.game_ui.map_tabs.current_tab = current_view
+	mapViewChanged.emit(current_view)
 	match a_mapView:
 		MapView.COUNTRIES:
 			ShowCountriesMap()

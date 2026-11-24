@@ -10,9 +10,15 @@ var wars := {}
 var active_battles := []
 var original_territories := {}
 
+signal warDeclared(attacker, defender)
+signal peaceMade(attacker, defender)
+# Emitted when the player wins a capitulation and must split the loser's land.
+signal peaceConferenceRequested(winners: Array[CountryData], loser: CountryData)
 
 func reset_state() -> void:
 	wars.clear()
+	for battle in active_battles:
+		battle.cleanup()
 	active_battles.clear()
 	original_territories.clear()
 	#print("WarManager: State reset.")
@@ -99,7 +105,7 @@ class Battle:
 	var current_def_hp: float = 0.0
 	var total_starting_hp: float = 0.0
 
-	var timer := 0.0
+	var timer_node: Timer
 	var position: Vector2
 	var manager # Reference to WarManager
 
@@ -126,6 +132,13 @@ class Battle:
 		_update_hp_totals()
 		total_starting_hp = current_def_hp
 
+		timer_node = Timer.new()
+		timer_node.one_shot = false
+		timer_node.wait_time = manager.BATTLE_TICK
+		timer_node.timeout.connect(_resolve_round)
+		manager.add_child(timer_node)
+		timer_node.start()
+
 	func _update_hp_totals():
 		# This sums up the current HP of every division the defender has in the province
 		var total := 0.0
@@ -134,11 +147,11 @@ class Battle:
 				total += div.hp
 		current_def_hp = total
 
-	func tick(delta: float):
-		timer += delta
-		if timer >= manager.BATTLE_TICK:
-			timer -= manager.BATTLE_TICK
-			_resolve_round()
+	func cleanup() -> void:
+		if is_instance_valid(timer_node):
+			timer_node.stop()
+			timer_node.queue_free()
+			timer_node = null
 
 	func _resolve_round():
 		var att_troops = TroopManager.get_troops_in_province(attacker_pid).filter(
@@ -246,6 +259,7 @@ class Battle:
 				if t.stored_divisions.is_empty():
 					TroopManager.RemoveTroop(t)
 				else:
+					TroopManager.troopsChanged.emit(t.country_name)
 					TroopManager.teleport_troop_to_province(t, retreat_pid)
 
 		MapManager.OccupyProvince(defender_pid, attacker_country)
@@ -266,15 +280,19 @@ class Battle:
 		return float(TroopManager.get_province_strength(pid, country))
 
 
-func _process(delta: float):
-	if active_battles.is_empty() || GameState.current_world.clock.paused:
+func _process(_delta: float):
+	if active_battles.is_empty():
 		return
-	var current_intensity = delta * GameState.current_world.clock.time_scale
-	if current_intensity <= 0:
-		return
-
+	var clock: GameClock = GameState.current_world.clock if GameState.current_world else null
+	var paused := clock == null || clock.paused
+	var time_scale: float = maxf(clock.time_scale, 0.001) if clock else 1.0
 	for battle in active_battles:
-		battle.tick(current_intensity)
+		if !is_instance_valid(battle.timer_node):
+			continue
+		battle.timer_node.paused = paused
+		var target_wait := BATTLE_TICK / time_scale
+		if !is_equal_approx(battle.timer_node.wait_time, target_wait):
+			battle.timer_node.wait_time = target_wait
 
 
 func start_battle(attacker_pid: int, defender_pid: int):
@@ -303,6 +321,7 @@ func start_battle(attacker_pid: int, defender_pid: int):
 
 func end_battle(battle: Battle):
 	if active_battles.has(battle):
+		battle.cleanup()
 		active_battles.erase(battle)
 
 
@@ -325,6 +344,7 @@ func apply_casualties(pid: int, country: String, damage_amount: float):
 
 		# Distribute troop damage among all divisions in that stack
 		var damage_per_div: float = damage_per_troop / t.stored_divisions.size()
+		var lost_division: bool = false
 
 		for i in range(t.stored_divisions.size() - 1, -1, -1):
 			var div: DivisionData = t.stored_divisions[i]
@@ -340,10 +360,13 @@ func apply_casualties(pid: int, country: String, damage_amount: float):
 			# Remove division if it hits 0 HP
 			if div.hp <= 0:
 				t.stored_divisions.remove_at(i)
+				lost_division = true
 
 		# If the entire stack is gone, remove the troop icon from the map
 		if t.stored_divisions.is_empty():
 			TroopManager.RemoveTroop(t)
+		elif lost_division:
+			TroopManager.troopsChanged.emit(country)
 
 
 func resolve_province_arrival(pid: int, troop: TroopData):
@@ -373,7 +396,11 @@ func call_to_arms(caller: CountryData, target: CountryData) -> void:
 			declare_war(target, enemy_data)
 
 
-func declare_war(warer: CountryData, waree: CountryData, a_silent: bool = false) -> void:
+func declare_war(
+	warer: CountryData,
+	waree: CountryData,
+	a_silent: bool = false,
+) -> void:
 	if warer == waree || is_at_war(warer, waree) || FactionManager.in_faction(warer, waree):
 		return
 
@@ -394,15 +421,16 @@ func declare_war(warer: CountryData, waree: CountryData, a_silent: bool = false)
 		|| is_at_war(CountryManager.player_country, warer) 
 		|| is_at_war(CountryManager.player_country, waree)
 	):
-		EventManager.show_alert(
-			{
-				"event": "war",
-				"c1": warer,
-				"c2": waree
-			}
-		)
-		MusicManager.play_music(MusicManager.MUSIC.BATTLE_THEME)
-		MusicManager.play_sfx(MusicManager.SFX.DECLARE_WAR)
+		warDeclared.emit(warer, waree)
+		# EventManager.show_alert(
+		# 	{
+		# 		"event": "war",
+		# 		"c1": warer,
+		# 		"c2": waree
+		# 	}
+		# )
+		# MusicManager.play_music(MusicManager.MUSIC.BATTLE_THEME)
+		# MusicManager.play_sfx(MusicManager.SFX.DECLARE_WAR)
 
 
 func _snapshot_country_territory(c_name: String) -> void:
@@ -509,11 +537,13 @@ func _handle_total_collapse(fallen_name: String, victor_name: String) -> void:
 		TroopManager.RemoveTroop(t)
 
 	# --- 1. Clean up wars and permissions ---
+	var former_enemies: Array = []
 	if wars.has(loser):
+		former_enemies = wars[loser].keys()
 		wars.erase(loser)
 		if loser.allowedCountries.has(victor_name):
 			loser.allowedCountries.erase(victor_name)
-	
+
 	FactionManager.clear_faction(loser)
 
 	for c in wars:
@@ -522,7 +552,10 @@ func _handle_total_collapse(fallen_name: String, victor_name: String) -> void:
 
 		if c.allowedCountries.has(fallen_name):
 			c.allowedCountries.erase(fallen_name)
-	
+
+	for enemy in former_enemies:
+		peaceMade.emit(enemy, loser)
+
 	if loser.is_player || player_won:
 		MusicManager.play_music(MusicManager.MUSIC.MAIN_THEME)
 		MusicManager.play_sfx(MusicManager.SFX.POPUP)
@@ -558,11 +591,8 @@ func _handle_total_collapse(fallen_name: String, victor_name: String) -> void:
 			if w_data:
 				winners_data.append(w_data)
 
-		var peace_ui = get_tree().root.find_child("PeaceProcessUI", true, false)
-		if peace_ui:
-			# Pass all winners to the UI
-			peace_ui.open_menu(winners_data, loser)
-			original_territories.erase(fallen_name)
+		peaceConferenceRequested.emit(winners_data, loser)
+		original_territories.erase(fallen_name)
 	else: # --- 5. AI takes everything ---
 		for pid in MapManager.country_to_owned_provinces.get(fallen_name).duplicate():
 			if MapManager.province_objects[pid].occupier == "":
