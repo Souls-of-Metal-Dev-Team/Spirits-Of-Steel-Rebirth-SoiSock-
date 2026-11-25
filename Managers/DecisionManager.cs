@@ -6,6 +6,8 @@ namespace Sosr;
 
 public partial class DecisionManager : Node
 {
+	public static DecisionManager Instance => Autoload.Get<DecisionManager>("DecisionManager");
+
 	public const string ROOT_DEFAULT_PATH = "res://decisions/default.json";
 
 	public Godot.Collections.Dictionary default_categories = new();
@@ -14,7 +16,7 @@ public partial class DecisionManager : Node
 	public string current_base_path = ""; // Decisions folder of the loaded start
 
 	public Godot.Collections.Dictionary active_decisions = new(); // { "Germany": { "eco_1": 5 } }
-	public GodotObject ui_overlay = null;
+	public DecisionTreeUI ui_overlay = null;
 	public bool debug = false;
 
 	// Decisions are only loaded from a start's folder (see StartEntry / World).
@@ -75,7 +77,7 @@ public partial class DecisionManager : Node
 
 	public Variant _read_json(string path)
 	{
-		return GdBridge.MapDataLoadJson(path);
+		return MapData.Instance.LoadJSON(path);
 	}
 
 	public Godot.Collections.Dictionary get_country_categories(string country_name)
@@ -133,7 +135,7 @@ public partial class DecisionManager : Node
 		foreach (var keyValue in finished)
 		{
 			var key = keyValue.AsString();
-			if (IsSame(country, GdBridge.PlayerCountry()))
+			if (IsSame(country, CountryManager.Instance.player_country))
 			{
 				// 1. Find the decision data to get the title
 				var decision_title = "Unknown Decision";
@@ -154,7 +156,7 @@ public partial class DecisionManager : Node
 				}
 
 				// 2. Show the alert with the actual title
-				GdBridge.Call("EventManager", "show_alert", new Godot.Collections.Dictionary
+				EventManager.Instance.show_alert(new Godot.Collections.Dictionary
 				{
 					{ "event", "default" },
 					{ "c1", country },
@@ -165,8 +167,9 @@ public partial class DecisionManager : Node
 			tasks.Remove(key);
 		}
 
-		if (ui_overlay != null && ui_overlay.Get("visible").AsBool() && country.Get("is_player").AsBool())
-			ui_overlay.Call("refresh_status_only"); // Efficient refresh
+		// RefreshStatusOnly returns early while the menu is hidden.
+		if (IsInstanceValid(ui_overlay) && country.Get("is_player").AsBool())
+			ui_overlay.RefreshStatusOnly(); // Efficient refresh
 	}
 
 	// --- ACTIONS ---
@@ -216,7 +219,7 @@ public partial class DecisionManager : Node
 		{
 			foreach (var req in reqs.AsGodotArray())
 			{
-				if (!GdBridge.Call("InterpreterManager", "get_function", req).AsBool())
+				if (!InterpreterManager.Instance.get_function(req).AsBool())
 					return false;
 			}
 		}
@@ -243,8 +246,8 @@ public partial class DecisionManager : Node
 		if (debug)
 			process_country_day(country);
 
-		if (ui_overlay != null && country.Get("is_player").AsBool())
-			ui_overlay.Call("refresh_status_only");
+		if (IsInstanceValid(ui_overlay) && country.Get("is_player").AsBool())
+			ui_overlay.RefreshStatusOnly();
 	}
 
 	private void _finalize_decision(GodotObject country, string id)
@@ -272,7 +275,7 @@ public partial class DecisionManager : Node
 
 	private void _apply_reward(GodotObject country, Variant action)
 	{
-		GdBridge.Call("InterpreterManager", "get_function", action, country);
+		InterpreterManager.Instance.get_function(action, country);
 	}
 
 	// --- HELPERS ---
@@ -347,7 +350,7 @@ public partial class DecisionManager : Node
 		}
 
 		var data = new Godot.Collections.Dictionary { { "categories", cats } };
-		if (GdBridge.MapDataSaveJson(path, data))
+		if (MapData.Instance.SaveJSON(path, data))
 			GD.Print("Saved decisions to ", path);
 	}
 

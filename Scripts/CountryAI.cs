@@ -12,10 +12,53 @@ namespace Sosr;
 // NOTE(soi): Godot does not expose parameterized C# constructors to GDScript's
 // `.new()`, so call sites must be `var ai = CountryAI.new(); ai.init(country)`.
 //
-// Expected public API on the C# CountryData port (all used below):
-//   country_name, money, factories_amount, manpower, mobilized, is_puppet, owner,
-//   puppets, factions, ideology, ready_troops, get_relation_with(string),
-//   train_troops(int, string). ReadyTroop is a separate global class with division/count.
+// Dynamic view over the still-GDScript CountryData objects held by CountryManager.
+public sealed class CountryRef
+{
+    private readonly GodotObject _object;
+
+    public CountryRef(GodotObject obj) { _object = obj; }
+
+    public GodotObject Object => _object;
+
+    private Variant V(StringName name) => _object == null ? new Variant() : _object.Get(name);
+
+    public string country_name => V("country_name").AsString();
+    public double money => V("money").AsDouble();
+    public int factories_amount => V("factories_amount").AsInt32();
+    public int manpower => V("manpower").AsInt32();
+    public int mobilized => V("mobilized").AsInt32();
+    public bool is_puppet => V("is_puppet").AsBool();
+    public string owner => V("owner").AsString();
+    public Vector2 ideology => V("ideology").AsVector2();
+
+    public Godot.Collections.Array<string> factions => ToStringArray(V("factions"));
+    public Godot.Collections.Array<string> puppets => ToStringArray(V("puppets"));
+    public Godot.Collections.Array ready_troops => V("ready_troops").AsGodotArray();
+
+    public int get_relation_with(string other)
+        => _object.Call("get_relation_with", other).AsInt32();
+
+    public bool train_troops(int count, string type = "infantry")
+        => _object.Call("train_troops", count, type).AsBool();
+
+    private static Godot.Collections.Array<string> ToStringArray(Variant value)
+    {
+        var result = new Godot.Collections.Array<string>();
+        if (value.VariantType == Variant.Type.Nil)
+            return result;
+        if (value.VariantType == Variant.Type.PackedStringArray)
+        {
+            foreach (var s in value.AsStringArray())
+                result.Add(s);
+            return result;
+        }
+        foreach (var item in value.AsGodotArray())
+            result.Add(item.AsString());
+        return result;
+    }
+}
+
 [GlobalClass]
 public partial class CountryAI : RefCounted
 {
@@ -46,16 +89,16 @@ public partial class CountryAI : RefCounted
     private int _lastDeclareFrame = -999999;
     private List<string> _neighborCache = new();
     private bool _neighborsDirty = true;
-    private ProcessDay _country;
+    private CountryRef _country;
 
     public CountryAI() { }
 
     // GDScript: CountryAI.new(self) -> CountryAI.new(); ai.init(self)
     public void init(GodotObject country)
     {
-        _country = country as ProcessDay;
+        _country = country == null ? null : new CountryRef(country);
         if (_country == null)
-            GD.PushError($"CountryAI.init: expected a C# CountryData, got {country?.GetType().Name ?? "null"}");
+            return;
 
         var extremism = GetExtremism();
 
@@ -102,16 +145,18 @@ public partial class CountryAI : RefCounted
         probability["base"] = D(probability, "base") * (1.0 + extremism);
         probability["tension_factor"] = (2.0 + extremism * 5.0) * GD.Randf();
 
-        var mapManager = GdBridge.Autoload("MapManager");
+        var mapManager = MapManager.Instance;
         if (mapManager is Node mapNode && mapNode.IsInsideTree())
         {
-            mapManager.Connect("province_ownership_changed",
+            mapManager.Connect("ProvinceOwnershipChanged",
                 Callable.From<Variant, Variant, Variant>((_, _, _) => { _neighborsDirty = true; }));
         }
     }
 
-    public void think_hour()
+    public void ThinkHour()
     {
+        if (_country == null)
+            return;
         var tick = Enemies(_country.country_name).Count > 0 ? TICK_RATE_WAR : TICK_RATE_PEACE;
         if (Engine.GetFramesDrawn() % tick != 0)
             return;
@@ -189,11 +234,11 @@ public partial class CountryAI : RefCounted
 
     private bool ExecuteFactory()
     {
-        var provinces = GdBridge.Get("MapManager", "country_to_owned_provinces").AsGodotDictionary();
+        var provinces = MapManager.Instance.country_to_owned_provinces;
         if (!provinces.ContainsKey(_country.country_name))
             return false;
 
-        var queue = GdBridge.Get("EconomyManager", "construction_queue").AsGodotDictionary();
+        var queue = EconomyManager.Instance.construction_queue;
         var candidates = new List<int>();
         foreach (var pidVar in provinces[_country.country_name].AsGodotArray())
         {
@@ -208,7 +253,7 @@ public partial class CountryAI : RefCounted
             return false;
 
         var chosen = candidates[GD.RandRange(0, candidates.Count - 1)];
-        GdBridge.Call("MapManager", "_ProvinceBuildIndustry", chosen, _country.country_name, IndustryFactory);
+        MapManager.Instance._ProvinceBuildIndustry(chosen, _country.country_name, IndustryFactory);
         return true;
     }
 
@@ -294,9 +339,9 @@ public partial class CountryAI : RefCounted
             var targetData = Country(targetName);
             if (targetData == null)
                 continue;
-            if (factionManager != null && factionManager.in_faction(_country, targetData))
+            if (factionManager != null && factionManager.in_faction(_country.Object, targetData.Object))
                 continue;
-            if (GdBridge.Call("WarManager", "is_at_war_names", _country.country_name, targetName).AsBool())
+            if (WarManager.Instance.is_at_war_names(_country.country_name, targetName))
                 continue;
             if (puppeteers.Contains(targetName))
                 continue;
@@ -315,7 +360,7 @@ public partial class CountryAI : RefCounted
                 continue;
 
             // 5. DYNAMIC SCORING, capped city count for balance, plus a bit of randomness.
-            var cityCount = GdBridge.Call("MapManager", "GetCitiesProvinceCountry", targetName).AsGodotArray().Count;
+            var cityCount = MapManager.Instance.GetCitiesProvinceCountry(targetName).Count;
             var targetScore = (ratio - 1.0) * D(scoreSettings, "strength")
                 + targetData.money * D(scoreSettings, "money_factor")
                 + Math.Min(cityCount, (int)D(scoreSettings, "max_cities")) * D(scoreSettings, "cities")
@@ -332,9 +377,11 @@ public partial class CountryAI : RefCounted
         // 7. EXECUTION.
         if (bestTarget != "")
         {
-            GdBridge.Call("WarManager", "declare_war", _country, Country(bestTarget));
+            var targetRef = Country(bestTarget);
+            if (targetRef != null)
+                WarManager.Instance.declare_war(_country.Object, targetRef.Object);
             // Aggressive/extreme countries cause more tension.
-            GdBridge.Call("MapManager", "IncreaseWorldTension", 0.02 + extremism * 0.03 + aggression * 0.01);
+            MapManager.Instance.IncreaseWorldTension((float)(0.02 + extremism * 0.03 + aggression * 0.01));
             _lastDeclareFrame = frameNow;
         }
         return true;
@@ -349,7 +396,7 @@ public partial class CountryAI : RefCounted
         // Deploy ready troops to random cities so they spread out.
         if (_country.ready_troops.Count > 0)
         {
-            var ownedCities = GdBridge.Get("MapManager", "country_to_cities").AsGodotDictionary();
+            var ownedCities = MapManager.Instance.country_to_cities;
             var cities = ownedCities.ContainsKey(name) ? ownedCities[name].AsGodotArray() : new Godot.Collections.Array();
             if (cities.Count > 0)
             {
@@ -357,7 +404,7 @@ public partial class CountryAI : RefCounted
                 foreach (var troopData in _country.ready_troops.Duplicate())
                 {
                     var city = cities[GD.RandRange(0, cities.Count - 1)];
-                    GdBridge.Call("TroopManager", "DeployReady", name, troopData, city);
+                    TroopManager.Instance.DeployReady(name, troopData.As<ReadyTroop>(), city.AsInt32());
                     _country.ready_troops.Remove(troopData);
                 }
             }
@@ -378,7 +425,7 @@ public partial class CountryAI : RefCounted
 
         if (enemies.Count == 0)
         {
-            var hubsVar = GdBridge.Get("MapManager", "country_to_cities").AsGodotDictionary();
+            var hubsVar = MapManager.Instance.country_to_cities;
             var hubs = hubsVar.ContainsKey(name) ? hubsVar[name].AsGodotArray() : new Godot.Collections.Array();
             foreach (var troop in idleTroops)
             {
@@ -400,7 +447,7 @@ public partial class CountryAI : RefCounted
                 }
             }
             if (movePayload.Count > 0)
-                GdBridge.Call("TroopManager", "command_move_assigned", movePayload);
+                TroopManager.Instance.command_move_assigned(movePayload);
             return false;
         }
 
@@ -412,12 +459,12 @@ public partial class CountryAI : RefCounted
             enemySet.Add(enemy.AsString());
 
         var citySet = new HashSet<long>();
-        foreach (var cityVar in GdBridge.Get("MapManager", "all_cities").AsGodotArray())
-            citySet.Add(cityVar.AsGodotDictionary()["id"].AsInt64());
+        foreach (var cityVar in MapManager.Instance.all_cities)
+            citySet.Add(cityVar["id"].AsInt64());
 
         var combat = Section("war")["combat"].AsGodotDictionary();
         var provinces = ProvinceObjects;
-        foreach (var myPid in GdBridge.Call("MapManager", "GetProvincesBorderingEnemies", name, enemies).AsInt32Array())
+        foreach (var myPid in MapManager.Instance.GetProvincesBorderingEnemies(name, new Godot.Collections.Array<string>(enemies)))
         {
             foreach (var nId in graph.GetPointConnections(myPid))
             {
@@ -431,7 +478,7 @@ public partial class CountryAI : RefCounted
                     continue;
                 seen.Add(nId);
 
-                var enemyStrength = GdBridge.Call("TroopManager", "get_province_strength", nId, enemyName).AsInt32();
+                var enemyStrength = TroopManager.Instance.get_province_strength((int)nId, enemyName);
                 var score = 10.0;
                 if (citySet.Contains(nId))
                     score += D(combat, "city_bonus");
@@ -452,7 +499,7 @@ public partial class CountryAI : RefCounted
                         && !seen.Contains(dnId)
                         && citySet.Contains(dnId))
                     {
-                        var deepStrength = GdBridge.Call("TroopManager", "get_province_strength", dnId, enemyName).AsInt32();
+                        var deepStrength = TroopManager.Instance.get_province_strength((int)dnId, enemyName);
                         targets.Add(new Target((int)dnId, 0.0, deepStrength, D(combat, "city_bonus") * 0.8));
                     }
                 }
@@ -461,7 +508,7 @@ public partial class CountryAI : RefCounted
         if (targets.Count == 0)
             return false;
 
-        var centers = GdBridge.Get("MapManager", "province_centers").AsGodotDictionary();
+        var centers = MapManager.Instance.province_centers;
         foreach (var troop in idleTroops)
         {
             var troopPos = centers[troop.province_id].AsVector2();
@@ -505,7 +552,7 @@ public partial class CountryAI : RefCounted
         }
 
         if (movePayload.Count > 0)
-            GdBridge.Call("TroopManager", "command_move_assigned", movePayload);
+            TroopManager.Instance.command_move_assigned(movePayload);
         return false;
     }
 
@@ -554,7 +601,7 @@ public partial class CountryAI : RefCounted
                 if (memberCountry == null)
                     continue;
 
-                GdBridge.Call("WarManager", "call_to_arms", _country, memberCountry);
+                WarManager.Instance.call_to_arms(_country.Object, memberCountry.Object);
                 calledAny = true;
             }
         }
@@ -565,11 +612,11 @@ public partial class CountryAI : RefCounted
 
     private Godot.Collections.Array GetPeaceHubs()
     {
-        var cities = GdBridge.Call("MapManager", "GetCitiesProvinceCountry", _country.country_name).AsGodotArray();
+        var cities = MapManager.Instance.GetCitiesProvinceCountry(_country.country_name);
         if (cities.Count > 0)
             return cities;
 
-        var provinces = GdBridge.Get("MapManager", "country_to_provinces").AsGodotDictionary();
+        var provinces = MapManager.Instance.country_to_provinces;
         return provinces.ContainsKey(_country.country_name)
             ? provinces[_country.country_name].AsGodotArray()
             : new Godot.Collections.Array();
@@ -581,7 +628,7 @@ public partial class CountryAI : RefCounted
             return _neighborCache;
 
         var neighbors = new HashSet<string>();
-        var provinces = GdBridge.Get("MapManager", "country_to_provinces").AsGodotDictionary();
+        var provinces = MapManager.Instance.country_to_provinces;
         if (provinces.ContainsKey(_country.country_name))
         {
             foreach (var pid in provinces[_country.country_name].AsGodotArray())
@@ -691,15 +738,19 @@ public partial class CountryAI : RefCounted
 
     private Godot.Collections.Dictionary Section(string name) => _personality[name].AsGodotDictionary();
 
-    private static double WorldTension => GdBridge.Get("MapManager", "world_tension").AsDouble();
-    private static SoiStar Graph => GdBridge.Get("MapManager", "province_graph").AsGodotObject() as SoiStar;
-    private static Godot.Collections.Dictionary ProvinceObjects => GdBridge.Get("MapManager", "province_objects").AsGodotDictionary();
-    private static FactionManager FactionManagerSingleton => GdBridge.Autoload("FactionManager") as FactionManager;
-    private static ProcessDay Country(string name) => GdBridge.Country(name) as ProcessDay;
+    private static double WorldTension => MapManager.Instance.world_tension;
+    private static SoiStar Graph => MapManager.Instance.province_graph as SoiStar;
+    private static Godot.Collections.Dictionary ProvinceObjects => MapManager.Instance.province_objects;
+    private static FactionManager FactionManagerSingleton => FactionManager.Instance as FactionManager;
+    private static CountryRef Country(string name)
+    {
+        var obj = CountryManager.Instance.GetCountry(name);
+        return obj == null ? null : new CountryRef(obj);
+    }
     private static Godot.Collections.Array Enemies(string name) =>
-        GdBridge.Call("WarManager", "get_enemies_of", name).AsGodotArray();
+        WarManager.Instance.get_enemies_of(name);
     private static Godot.Collections.Array Troops(string name) =>
-        GdBridge.Call("TroopManager", "get_troops_for_country", name).AsGodotArray();
+        TroopManager.Instance.get_troops_for_country(name);
 
     private sealed class AiAction
     {

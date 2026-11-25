@@ -1,0 +1,16 @@
+title: Spirits of Steel Rebirth Docs
+description: Development documentation for the Godot 4.7 C# rewrite.
+baseurl: "/Spirits-Of-Steel-Rebirth-SoiSock-"
+url: "https://souls-of-metal-dev-team.github.io"
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
+exclude:
+  - Excalidraw
+  - .obsidian

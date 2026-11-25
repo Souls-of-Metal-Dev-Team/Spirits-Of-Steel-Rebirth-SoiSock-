@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://i3xg4d4cpxol"]
 
-[ext_resource type="Script" uid="uid://ddtx3bq7lir80" path="res://Scripts/UI/Settings.gd" id="1_aaqfp"]
+[ext_resource type="Script" uid="uid://ddtx3bq7lir80" path="res://Scripts/UI/Settings.cs" id="1_aaqfp"]
 [ext_resource type="FontFile" uid="uid://c1jnrhadjfe68" path="res://font/Google_Sans/static/GoogleSans-Regular.ttf" id="1_i44u3"]
 [ext_resource type="Material" uid="uid://btordm7082cxn" path="res://Materials/damaged.tres" id="1_lhmql"]
 [ext_resource type="Theme" uid="uid://c38ivksvf4is0" path="res://main_theme.tres" id="2_lhmql"]

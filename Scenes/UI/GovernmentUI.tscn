@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dth3mjxs6j41r"]
 
-[ext_resource type="Script" uid="uid://cr3ux1513g23n" path="res://Scripts/UI/GovernmentUI.gd" id="1_vxamq"]
+[ext_resource type="Script" uid="uid://cr3ux1513g23n" path="res://Scripts/UI/GovernmentUI.cs" id="1_vxamq"]
 [ext_resource type="Texture2D" uid="uid://crc1t7tm2wego" path="res://assets/ui/FluidDrip.svg" id="3_2gqru"]
 [ext_resource type="Theme" uid="uid://c38ivksvf4is0" path="res://main_theme.tres" id="5_6awr5"]
 [ext_resource type="FontFile" uid="uid://c1jnrhadjfe68" path="res://font/Google_Sans/static/GoogleSans-Regular.ttf" id="5_5053o"]

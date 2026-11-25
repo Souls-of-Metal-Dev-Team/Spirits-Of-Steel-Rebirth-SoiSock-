@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bc5t06lvfk52"]
 
-[ext_resource type="Script" uid="uid://bl37j3o36eynq" path="res://Scripts/UI/MapEditor/MapEditorUI.gd" id="1_mcl4l"]
+[ext_resource type="Script" uid="uid://bl37j3o36eynq" path="res://Scripts/UI/MapEditor/MapEditorUI.cs" id="1_mcl4l"]
 [ext_resource type="Theme" uid="uid://cu2peiqhvt7tx" path="res://UI/MapEditor/MapEditorTheme.tres" id="2_5xoin"]
 [ext_resource type="StyleBox" uid="uid://0mslv70mgr34" path="res://UI/CloseButton.tres" id="2_kkefn"]
 [ext_resource type="Texture2D" uid="uid://d12li82tjifxv" path="res://assets/icons/MapEditor/NoneTool.svg" id="4_kdxsy"]
@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://ctol3gcbufcx" path="res://assets/icons/political_power_icon (Copy).svg" id="5_eo7xe"]
 [ext_resource type="Texture2D" uid="uid://bwfmtjlbsxvny" path="res://assets/icons/monarchist_icon.svg" id="6_eo7xe"]
 [ext_resource type="Texture2D" uid="uid://rw8a20c8pmlr" path="res://assets/icons/infantry.svg" id="7_kdxsy"]
-[ext_resource type="Script" uid="uid://caw8lqkfir2dh" path="res://Scripts/UI/MapEditor/CreationPopupUI.gd" id="8_eo7xe"]
+[ext_resource type="Script" uid="uid://caw8lqkfir2dh" path="res://Scripts/UI/MapEditor/CreationPopupUI.cs" id="8_eo7xe"]
 [ext_resource type="Texture2D" uid="uid://cguw0kyb47w0m" path="res://assets/icons/star_icon.svg" id="8_id73f"]
 [ext_resource type="Texture2D" uid="uid://d3x7vlrqep2vc" path="res://assets/icons/tree_icon.svg" id="9_kdxsy"]
 

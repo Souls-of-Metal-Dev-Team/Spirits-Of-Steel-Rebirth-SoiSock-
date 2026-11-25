@@ -6,6 +6,8 @@ namespace Sosr;
 
 public partial class EconomyManager : Node
 {
+	public static EconomyManager Instance => Autoload.Get<EconomyManager>("EconomyManager");
+
 	// C# source generators expose these as ConstructionStarted / ConstructionFinished.
 	// GDScript call sites use those exact names.
 	[Signal]
@@ -25,7 +27,7 @@ public partial class EconomyManager : Node
 
 	public void initialize(string path)
 	{
-		var parsed = GdBridge.MapDataLoadJson(path);
+		var parsed = MapData.Instance.LoadJSON(path);
 		if (parsed.VariantType == Variant.Type.Dictionary)
 			building_functions = parsed.AsGodotDictionary();
 		else
@@ -66,7 +68,7 @@ public partial class EconomyManager : Node
 		foreach (var pid in finished_projects)
 			construction_queue.Remove(pid);
 
-		var building_counts = GdBridge.Get("MapManager", "buildingTypesToCountryCount").AsGodotDictionary();
+		var building_counts = MapManager.Instance.buildingTypesToCountryCount;
 		foreach (var keyValue in building_counts.Keys)
 		{
 			var parts = keyValue.AsString().Split(":");
@@ -75,9 +77,9 @@ public partial class EconomyManager : Node
 			var template = building_designs[owner_name][building].AsGodotObject() as BuildingTemplate;
 			foreach (var countryValue in building_counts[keyValue].AsGodotDictionary().Keys)
 			{
-				var country = GdBridge.Country(countryValue.AsString());
+				var country = CountryManager.Instance.GetCountry(countryValue.AsString());
 				var amount = building_counts[keyValue].AsGodotDictionary()[countryValue].AsDouble();
-				country.Set("money", country.Get("money").AsDouble() + template.produces * amount);
+				country.money += template.produces * amount;
 			}
 		}
 	}
@@ -98,8 +100,8 @@ public partial class EconomyManager : Node
 
 	public void StartInfrastructureConstruction(int a_provinceID, int a_totalDays, float a_dailyCost, GodotObject a_country)
 	{
-		if (IsSame(a_country, GdBridge.PlayerCountry()))
-			GdBridge.Call("MusicManager", "play_sfx", SfxBuild);
+		if (IsSame(a_country, CountryManager.Instance.player_country))
+			MusicManager.Instance.play_sfx(SfxBuild);
 
 		construction_queue[a_provinceID] = new Godot.Collections.Dictionary
 		{
@@ -111,7 +113,7 @@ public partial class EconomyManager : Node
 		};
 		EmitSignal(SignalName.ConstructionStarted, a_provinceID, a_country);
 
-		if (GdBridge.Instabuild())
+		if (GameState.Instance.instabuild)
 		{
 			_complete_construction(a_provinceID, construction_queue[a_provinceID].AsGodotDictionary());
 			construction_queue.Remove(a_provinceID);
@@ -122,11 +124,11 @@ public partial class EconomyManager : Node
 	{
 		// Set the province enum to BUILDING state immediately
 		var province = ProvinceObject(pid);
-		var buildings = province.Get("buildings").AsGodotArray();
+		var buildings = province.buildings;
 		buildings.Add(BuildingData.FromValues(type, BuildingData.BuildingState.CONSTRUCTION));
 
-		if (IsSame(country, GdBridge.PlayerCountry()))
-			GdBridge.Call("MusicManager", "play_sfx", SfxBuild);
+		if (IsSame(country, CountryManager.Instance.player_country))
+			MusicManager.Instance.play_sfx(SfxBuild);
 
 		construction_queue[pid] = new Godot.Collections.Dictionary
 		{
@@ -138,7 +140,7 @@ public partial class EconomyManager : Node
 		};
 		EmitSignal(SignalName.ConstructionStarted, pid, country);
 
-		if (GdBridge.Instabuild())
+		if (GameState.Instance.instabuild)
 		{
 			_complete_construction(pid, construction_queue[pid].AsGodotDictionary());
 			construction_queue.Remove(pid);
@@ -149,27 +151,20 @@ public partial class EconomyManager : Node
 	{
 		var province = ProvinceObject(pid);
 		var index = project["index"].AsInt32();
-		var buildings = province.Get("buildings").AsGodotArray();
+		var buildings = province.buildings;
 
 		// Update enum to BUILT state
 		if (index != -1 && buildings.Count > index)
 		{
-			var buildingObject = buildings[index].AsGodotObject();
-			if (buildingObject is BuildingData typedBuilding)
-				typedBuilding.state = BuildingData.BuildingState.FUNCTIONAL;
-			else
-				buildingObject.Set("state", (int)BuildingData.BuildingState.FUNCTIONAL);
-
-			var owner_name = province.Get("country").AsString();
-			var owner = GdBridge.Country(owner_name);
-			owner.Set("factories_amount", owner.Get("factories_amount").AsInt32() + 1);
+			buildings[index].state = BuildingData.BuildingState.FUNCTIONAL;
+			CountryManager.Instance.GetCountry(province.country).factories_amount += 1;
 		}
 		else
 		{
 			switch (project["type"].AsString())
 			{
 				case "Infrastructure":
-					province.Set("infrastructure", province.Get("infrastructure").AsInt32() + 1);
+					province.infrastructure += 1;
 					break;
 			}
 		}
@@ -178,9 +173,9 @@ public partial class EconomyManager : Node
 		if (project_country.Get("is_player").AsBool())
 		{
 			//#EventManager.show_alert("economy", country, null, "Construction of %s complete!" % type.capitalize())
-			if (GdBridge.IndustryBuilding())
-				GdBridge.Call("MusicManager", "play_sfx", SfxClapping);
-			GdBridge.Call("MapManager", "ProvinceUpdated");
+			if (GameState.Instance.industry_building != GameState.IndustryType.DEFAULT)
+				MusicManager.Instance.play_sfx(SfxClapping);
+			MapManager.Instance.ProvinceUpdated();
 		}
 
 		// Deferred so callers erase the project from construction_queue first.
@@ -197,16 +192,14 @@ public partial class EconomyManager : Node
 		if (construction_queue.ContainsKey(pid))
 		{
 			var p = construction_queue[pid].AsGodotDictionary();
-			var type = GdBridge.Capitalize(p["type"].AsString());
+			var type = p["type"].AsString().Capitalize();
 			return $"{type}: {p["days"].AsInt32()} days left ({p["daily_cost"].AsInt32()}/day)";
 		}
 		return "";
 	}
 
-	private static GodotObject ProvinceObject(int pid)
-	{
-		return GdBridge.Get("MapManager", "province_objects").AsGodotDictionary()[pid].AsGodotObject();
-	}
+	private static Province ProvinceObject(int pid)
+		=> MapManager.Instance.province_objects[pid].As<Province>();
 
 	private static bool IsSame(GodotObject a, GodotObject b)
 	{

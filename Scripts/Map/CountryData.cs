@@ -24,11 +24,16 @@ public abstract partial class ProcessDay : RefCounted
     public abstract bool train_troops(int count, string type = "infantry");
 }
 
+[GlobalClass]
 public partial class CountryData : ProcessDay
 {
     static CountryData SEA_COUNTRY_DATA = new();
 
-    double economy_law_penalty = 0.0; // 0.10 means 10% income loss
+    // Country name of any country object, or "" for null.
+    public static string NameOf(GodotObject a_country)
+        => a_country == null ? "" : a_country.Get("country_name").AsString();
+
+    [Export] public double economy_law_penalty = 0.0; // 0.10 means 10% income loss
 
     Godot.Collections.Dictionary army_composition_cache = new() {
         { "infantry", 0 },
@@ -51,7 +56,7 @@ public partial class CountryData : ProcessDay
     [Export] public bool is_exiled = false;
     CountryAI ai_controller = null;
 
-    Godot.Collections.Dictionary<string, int> relations = new();
+    [Export] public Godot.Collections.Dictionary<string, int> relations = new();
 
     double factory_port_daily_cost = 0.2; // The less the better. It's percentage based
 
@@ -60,7 +65,7 @@ public partial class CountryData : ProcessDay
     [Export] public double income = 0.0;
     [Export] public int factory_income = 100;
     [Export] public double hourly_money_income = 0.0;
-    double divCostMod = 1.0;
+    [Export] public double divCostMod = 1.0;
 
     [Signal] public delegate void TrainingFinishedEventHandler();
     [Signal] public delegate void IdeologyChangedEventHandler();
@@ -102,13 +107,13 @@ public partial class CountryData : ProcessDay
     [Export] public int army_level = 1;
     [Export] public double army_cost = 0.0;
     [Export] public double troop_speed_modifier = 1.0;
-    double troopSpeedExtra = 1.0;
-    double troopAttackAdd = 0.0;
-    double troopAttackMod = 1.0;
-    double troopDefendAdd = 0.0;
-    double troopDefendMod = 1.0;
-    double attacker_attack_mitigation = 1.0;
-    double defender_attack_mitigation = 1.0;
+    [Export] public double troopSpeedExtra = 1.0;
+    [Export] public double troopAttackAdd = 0.0;
+    [Export] public double troopAttackMod = 1.0;
+    [Export] public double troopDefendAdd = 0.0;
+    [Export] public double troopDefendMod = 1.0;
+    [Export] public double attacker_attack_mitigation = 1.0;
+    [Export] public double defender_attack_mitigation = 1.0;
 
     // Deployment & Training State
     [Export] public Godot.Collections.Array<string> allowedCountries = [];
@@ -132,17 +137,18 @@ public partial class CountryData : ProcessDay
     public Godot.Collections.Dictionary<string, Godot.Collections.Array<string>> government_positions = new() {
         { "Leader", new Godot.Collections.Array<string>() }
     };
+    // GDScript UI code still uses the old GDScript spelling.
+    [Export]
+    public Godot.Collections.Dictionary<string, Godot.Collections.Array<string>> governmentPositions
+    {
+        get => government_positions;
+        set => government_positions = value;
+    }
     [Export] public Godot.Collections.Array<Variant> cached_garrison_hubs = [];
     //endregion
 
     public CountryData()
     {
-        // GDScript connects to these exact names. C# snake-cases TrainingFinished.
-        if (!HasSignal("trainingFinished"))
-            AddUserSignal("trainingFinished");
-        if (!HasSignal("ideology_changed"))
-            AddUserSignal("ideology_changed");
-
         ai_controller = new CountryAI();
         ai_controller.init(this);
     }
@@ -191,7 +197,8 @@ public partial class CountryData : ProcessDay
         country.base_war_support = a_data.ContainsKey("war_support") ? a_data["war_support"].AsDouble() : 0.5;
         country.puppets = StringArray(a_data, "puppets");
         country.accepted_cultures = VariantArray(a_data, "accepted_cultures");
-        country.hostedGovernments = VariantArray(a_data, "hostedGovernments");
+        country.hostedGovernments = VariantArray(a_data,
+            a_data.ContainsKey("hostedGovernments") ? "hostedGovernments" : "hosted_governments");
         country.allowedCountries.Add(country.country_name);
         country.allowedCountries.Add("Sea");
         country.figures = StringArray(a_data, "figures");
@@ -299,10 +306,10 @@ public partial class CountryData : ProcessDay
 
     private static ImportantFigure GetFigure(string figureName)
     {
-        var figuresDict = GdBridge.Get("MapManager", "significantFigures").AsGodotDictionary();
+        var figuresDict = MapManager.Instance.significantFigures;
         if (!figuresDict.ContainsKey(figureName))
             return null;
-        return figuresDict[figureName].AsGodotObject() as ImportantFigure;
+        return figuresDict[figureName] as ImportantFigure;
     }
 
     private void ApplySkills(Godot.Collections.Dictionary skills, bool add)
@@ -361,7 +368,7 @@ public partial class CountryData : ProcessDay
         foreach (var country in allowedCountries)
             combined.Add(country);
 
-        var factionManager = (FactionManager)GdBridge.Autoload("FactionManager");
+        var factionManager = (FactionManager)FactionManager.Instance;
         foreach (var factionName in factions)
         {
             if (!factionManager.factions.ContainsKey(factionName))
@@ -399,7 +406,7 @@ public partial class CountryData : ProcessDay
             UpdateIsAtWar();
 
         if (!is_player)
-            ai_controller.think_hour();
+            ai_controller.ThinkHour();
     }
 
     public void process_hour() => ProcessHour();
@@ -416,7 +423,7 @@ public partial class CountryData : ProcessDay
 
         _RefreshEconomicStats();
         _ProcessTraining();
-        ((DecisionManager)GdBridge.Autoload("DecisionManager")).process_country_day(this);
+        ((DecisionManager)DecisionManager.Instance).process_country_day(this);
 
         if (!is_player)
             ai_controller.ThinkDay();
@@ -429,9 +436,9 @@ public partial class CountryData : ProcessDay
         if (!dirty)
             return;
 
-        total_population = GdBridge.Call("CountryManager", "get_country_population", country_name).AsInt32();
-        factories_amount = GdBridge.Call("CountryManager", "get_factories_amount", country_name).AsInt32();
-        gdp = (int)(GdBridge.Call("CountryManager", "get_country_gdp", country_name).AsDouble() * total_population * 0.000001);
+        total_population = CountryManager.Instance.get_country_population(country_name);
+        factories_amount = CountryManager.Instance.get_factories_amount(country_name);
+        gdp = (int)(CountryManager.Instance.get_country_gdp(country_name) * total_population * 0.000001);
 
         UpdateManpowerPool();
         dirty = false;
@@ -439,7 +446,15 @@ public partial class CountryData : ProcessDay
 
     public void RefreshIdeologyName()
     {
-        ideology_name = ((IdeologyManager)GdBridge.Autoload("IdeologyManager")).get_ideology_name(ideology);
+        // During autoload construction IdeologyManager may not exist yet; the
+        // GDScript version fell back to "neutral" in that case.
+        var manager = IdeologyManager.Instance as IdeologyManager;
+        if (manager == null)
+        {
+            ideology_name = "neutral";
+            return;
+        }
+        ideology_name = manager.get_ideology_name(ideology);
     }
 
     public void refresh_ideology_name() => RefreshIdeologyName();
@@ -498,7 +513,6 @@ public partial class CountryData : ProcessDay
             DivisionData.create_division(training.division_type),
             training.divisions_count));
         EmitSignal(SignalName.TrainingFinished);
-        EmitSignal("trainingFinished");
     }
 
     public void UpdateManpowerPool()
@@ -537,7 +551,7 @@ public partial class CountryData : ProcessDay
     private Godot.Collections.Array<TroopData> GetTroops(string country)
     {
         var result = new Godot.Collections.Array<TroopData>();
-        foreach (var troop in GdBridge.Call("TroopManager", "get_troops_for_country", country).AsGodotArray())
+        foreach (var troop in TroopManager.Instance.get_troops_for_country(country))
             if (troop.AsGodotObject() is TroopData troopData)
                 result.Add(troopData);
         return result;
@@ -568,7 +582,7 @@ public partial class CountryData : ProcessDay
 
     private void _DeployInitialForce(Godot.Collections.Array<DivisionData> divisions)
     {
-        var provincesDict = GdBridge.Get("MapManager", "country_to_provinces").AsGodotDictionary();
+        var provincesDict = MapManager.Instance.country_to_provinces;
         if (!provincesDict.ContainsKey(country_name))
             return;
 
@@ -576,7 +590,7 @@ public partial class CountryData : ProcessDay
         if (provinces.Count == 0)
             return;
 
-        var cities = GdBridge.Call("MapManager", "GetCitiesProvinceCountry", country_name).AsGodotArray();
+        var cities = MapManager.Instance.GetCitiesProvinceCountry(country_name);
         var targets = cities.Count > 0 ? cities : provinces;
 
         var currentBatch = new Godot.Collections.Array<DivisionData>();
@@ -590,7 +604,7 @@ public partial class CountryData : ProcessDay
             var payload = new Godot.Collections.Array();
             foreach (var division in currentBatch)
                 payload.Add(division);
-            GdBridge.Call("TroopManager", "deploy_specific_divisions", country_name, payload, targetPid);
+            TroopManager.Instance.deploy_specific_divisions(country_name, payload, targetPid);
             currentBatch = new Godot.Collections.Array<DivisionData>();
         }
     }
@@ -632,7 +646,7 @@ public partial class CountryData : ProcessDay
         var targetPid = specific_pid;
         if (targetPid == -1)
         {
-            var provincesDict = GdBridge.Get("MapManager", "country_to_provinces").AsGodotDictionary();
+            var provincesDict = MapManager.Instance.country_to_provinces;
             if (!provincesDict.ContainsKey(country_name))
                 return false;
 
@@ -642,7 +656,7 @@ public partial class CountryData : ProcessDay
             targetPid = provinces[GD.RandRange(0, provinces.Count - 1)].AsInt32();
         }
 
-        GdBridge.Call("TroopManager", "DeployReady", country_name, troop, targetPid);
+        TroopManager.Instance.DeployReady(country_name, troop, targetPid);
         ready_troops.RemoveAt(index);
         return true;
     }
@@ -691,7 +705,7 @@ public partial class CountryData : ProcessDay
 
     public void update_relations()
     {
-        var countries = GdBridge.Get("CountryManager", "countries").AsGodotDictionary();
+        var countries = CountryManager.Instance.countries;
         foreach (var key in new List<string>(relations.Keys))
         {
             if (!countries.ContainsKey(key))
@@ -708,7 +722,7 @@ public partial class CountryData : ProcessDay
 
     public override int get_relation_with(string other_country_name)
     {
-        var countries = GdBridge.Get("CountryManager", "countries").AsGodotDictionary();
+        var countries = CountryManager.Instance.countries;
         if (!countries.ContainsKey(other_country_name))
         {
             relations.Remove(other_country_name);
@@ -720,7 +734,7 @@ public partial class CountryData : ProcessDay
 
     public void UpdateIsAtWar()
     {
-        enemies = GdBridge.Call("WarManager", "get_enemies_of", country_name).AsGodotArray();
+        enemies = WarManager.Instance.get_enemies_of(country_name);
         is_at_war = enemies.Count > 0;
         war_dirty = false;
     }

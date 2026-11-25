@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="{{ page.description | default: site.description | escape }}">
+  <title>{% if page.title %}{{ page.title }} · {% endif %}{{ site.title }}</title>
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  {% if page.mermaid %}
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({ startOnLoad: false, theme: "dark" });
+    document.querySelectorAll("div.language-mermaid, pre.language-mermaid").forEach((block) => {
+      const source = block.querySelector("code")?.textContent || block.textContent;
+      const diagram = document.createElement("pre");
+      diagram.className = "mermaid";
+      diagram.textContent = source;
+      block.replaceWith(diagram);
+    });
+    mermaid.run({ querySelector: ".mermaid" });
+  </script>
+  {% endif %}
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <a class="brand" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+      {% include nav.html %}
+    </aside>
+
+    <main class="content">
+      {% if page.title %}<h1>{{ page.title }}</h1>{% endif %}
+      {{ content }}
+      <footer class="footer">
+        <span>Spirits of Steel Rebirth</span>
+        <a href="https://github.com/Souls-of-Metal-Dev-Team/Spirits-Of-Steel-Rebirth-SoiSock-">Repository</a>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

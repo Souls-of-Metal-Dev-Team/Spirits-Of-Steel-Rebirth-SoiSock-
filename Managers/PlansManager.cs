@@ -5,6 +5,8 @@ namespace Sosr;
 
 public partial class PlansManager : Node
 {
+	public static PlansManager Instance => Autoload.Get<PlansManager>("PlansManager");
+
 	public Godot.Collections.Dictionary plans = new Godot.Collections.Dictionary();
 	public string current_start_folder = "";
 
@@ -17,7 +19,7 @@ public partial class PlansManager : Node
 	{
 		current_start_folder = path.GetBaseDir() + "/";
 		plans.Clear();
-		var data = GdBridge.MapDataLoadJson(path);
+		var data = MapData.Instance.LoadJSON(path);
 		if (data.VariantType == Variant.Type.Dictionary)
 			plans = data.AsGodotDictionary();
 	}
@@ -38,7 +40,7 @@ public partial class PlansManager : Node
 			if (GetOrDefault(elementDict, "type", "").AsString() == "button")
 			{
 				var condition = GetOrDefault(elementDict, "condition", new Godot.Collections.Dictionary());
-				if (GdBridge.Call("InterpreterManager", "get_function", condition, country).AsBool())
+				if (InterpreterManager.Instance.get_function(condition, country).AsBool())
 				{
 					if (country.Get("is_player").AsBool())
 						return true;
@@ -52,7 +54,7 @@ public partial class PlansManager : Node
 		{
 			var choice = choices[(int)(GD.Randi() % (uint)choices.Count)];
 			if (choice.VariantType != Variant.Type.Nil && choice.AsBool())
-				GdBridge.Call("InterpreterManager", "get_function", choice, country);
+				InterpreterManager.Instance.get_function(choice, country);
 		}
 		return false;
 	}

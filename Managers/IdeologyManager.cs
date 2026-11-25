@@ -6,6 +6,8 @@ namespace Sosr;
 
 public partial class IdeologyManager : Node
 {
+	public static IdeologyManager Instance => Autoload.Get<IdeologyManager>("IdeologyManager");
+
 	public Godot.Collections.Dictionary ideologies = new Godot.Collections.Dictionary();
 	public Godot.Collections.Array ideology_names = new Godot.Collections.Array();
 

@@ -45,7 +45,7 @@ public partial class TroopData : RefCounted
 		province_id = p_province_id;
 		position = p_position;
 
-		var countries = GdBridge.Get("CountryManager", "countries").AsGodotDictionary();
+		var countries = CountryManager.Instance.countries;
 		country_obj = countries.ContainsKey(p_country)
 			? countries[p_country].AsGodotObject() as RefCounted
 			: null;

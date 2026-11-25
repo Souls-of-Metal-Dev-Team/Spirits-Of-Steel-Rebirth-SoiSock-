@@ -1,6 +1,0 @@
-- [ ] Sweden
-- [ ] India
-- [ ] Brazil
-- [ ] Turkey
-- [ ] Romania
-- [ ] Chinese

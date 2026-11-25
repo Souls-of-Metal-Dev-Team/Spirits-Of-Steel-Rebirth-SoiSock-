@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://do6xny8ouo78x"]
 
-[ext_resource type="Script" uid="uid://cdspipsa2vbk5" path="res://Scripts/UI/DecisionTreeUI.gd" id="1_x8y2v"]
+[ext_resource type="Script" uid="uid://cdspipsa2vbk5" path="res://Scripts/UI/DecisionTreeUI.cs" id="1_x8y2v"]
 [ext_resource type="Material" uid="uid://btordm7082cxn" path="res://Materials/damaged.tres" id="2_qq7pm"]
 
 [node name="DecisionTreeUI" type="CanvasLayer" unique_id=1860343269 node_paths=PackedStringArray("info_text", "info_tab", "edit_label", "edit_desc", "edit_days", "edit_ppcost", "close_button", "edit_button", "editing_buttons", "edit_function", "save_button", "add_decision", "add_req", "add_finished", "editor_tab", "reqs_block", "finished_block")]

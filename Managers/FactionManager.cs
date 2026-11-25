@@ -5,6 +5,8 @@ namespace Sosr;
 
 public partial class FactionManager : Node
 {
+	public static FactionManager Instance => Autoload.Get<FactionManager>("FactionManager");
+
 	public Godot.Collections.Dictionary<string, FactionData> factions = new Godot.Collections.Dictionary<string, FactionData>();
 
 	public void Initialize(Godot.Collections.Array a_factionData)
@@ -36,7 +38,7 @@ public partial class FactionManager : Node
 	{
 		var members = new Godot.Collections.Array<FactionMember> { FactionMember.FromValues(a_leader, "Leader") };
 		factions[a_name] = FactionData.FromValues(a_name, a_color, members);
-		GdBridge.Country(a_leader).Get("factions").AsGodotArray().Add(a_name);
+		CountryManager.Instance.GetCountry(a_leader).factions.Add(a_name);
 	}
 
 	public void clear_faction(GodotObject country)
@@ -62,8 +64,8 @@ public partial class FactionManager : Node
 
 	public void invite_faction(GodotObject inviter, GodotObject invitee)
 	{
-		GdBridge.Call("MapManager", "AllowPids", inviter, invitee);
-		GdBridge.Call("MapManager", "AllowPids", invitee, inviter);
+		MapManager.Instance.AllowPids(inviter, invitee);
+		MapManager.Instance.AllowPids(invitee, inviter);
 		// NOTE(soi): we should add an option to choose which faction to invite to
 		var inviterName = inviter.Get("country_name").AsString();
 		var inviteeName = invitee.Get("country_name").AsString();
@@ -100,7 +102,7 @@ public partial class FactionManager : Node
 
 	public void kick_faction(GodotObject kicker, GodotObject kickee)
 	{
-		GdBridge.Call("MapManager", "UnallowPids", kicker, kickee);
+		MapManager.Instance.UnallowPids(kicker, kickee);
 		var kickerName = kicker.Get("country_name").AsString();
 		var kickeeName = kickee.Get("country_name").AsString();
 		var kickeeFactions = kickee.Get("factions").AsGodotArray();
@@ -192,8 +194,7 @@ public partial class FactionManager : Node
 
 	private static GodotObject GetCountry(string countryName)
 	{
-		var countries = GdBridge.Countries();
-		return countries.TryGetValue(countryName, out var value) ? value.AsGodotObject() : null;
+		return CountryManager.Instance.GetCountry(countryName);
 	}
 
 	private static int FindMemberIndex(Godot.Collections.Array<FactionMember> members, string polity)

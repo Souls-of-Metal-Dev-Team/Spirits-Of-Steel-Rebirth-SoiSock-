@@ -28,7 +28,6 @@ public partial class GameClock : Node
 	public const float MAX_SPEED = 80.0f;
 
 	// GDScript cannot read C# static constants through an instance.
-	public float min_speed => MIN_SPEED;
 	public float max_speed => MAX_SPEED;
 
 	public int hour;
@@ -48,38 +47,6 @@ public partial class GameClock : Node
 		};
 	}
 
-	public override void _Ready()
-	{
-		// GDScript uses snake_case signals. C# source generators expose PascalCase names.
-		if (!HasSignal("hour_passed"))
-			AddUserSignal("hour_passed");
-		if (!HasSignal("day_passed"))
-			AddUserSignal("day_passed");
-		if (!HasSignal("clockUpdate"))
-			AddUserSignal("clockUpdate");
-	}
-
-	private void EmitHourPassed()
-	{
-		EmitSignal(SignalName.HourPassed);
-		if (HasSignal("hour_passed"))
-			EmitSignal("hour_passed");
-	}
-
-	private void EmitDayPassed()
-	{
-		EmitSignal(SignalName.DayPassed);
-		if (HasSignal("day_passed"))
-			EmitSignal("day_passed");
-	}
-
-	private void EmitClockUpdate()
-	{
-		EmitSignal(SignalName.ClockUpdate);
-		if (HasSignal("clockUpdate"))
-			EmitSignal("clockUpdate");
-	}
-
 	public override void _Process(double delta)
 	{
 		if (paused)
@@ -90,14 +57,14 @@ public partial class GameClock : Node
 		{
 			accumulated_time -= seconds_per_tick;
 			hour += hours_per_tick;
-			EmitHourPassed();
+			EmitSignal(SignalName.HourPassed);
 
 			var dateDictAsUnixTime = Time.GetUnixTimeFromDatetimeDict(date_dict);
 			while (hour >= 24)
 			{
 				hour -= 24;
 				dateDictAsUnixTime += 86400;
-				EmitDayPassed();
+				EmitSignal(SignalName.DayPassed);
 			}
 			date_dict = Time.GetDatetimeDictFromUnixTime(dateDictAsUnixTime);
 		}
@@ -155,7 +122,7 @@ public partial class GameClock : Node
 	public void set_speed(float scale)
 	{
 		time_scale = Mathf.Clamp(scale, MIN_SPEED, MAX_SPEED);
-		EmitClockUpdate();
+		EmitSignal(SignalName.ClockUpdate);
 	}
 
 	public void decrease_speed()
@@ -171,16 +138,16 @@ public partial class GameClock : Node
 	public void pause()
 	{
 		paused = true;
-		EmitClockUpdate();
+		EmitSignal(SignalName.ClockUpdate);
 	}
 
 	public void resume()
 	{
-		if (Sosr.GdBridge.InPeaceProcess())
+		if (Sosr.GameState.Instance.in_peace_process)
 			return;
 
 		paused = false;
-		EmitClockUpdate();
+		EmitSignal(SignalName.ClockUpdate);
 	}
 
 	public void toggle_pause()
@@ -190,7 +157,7 @@ public partial class GameClock : Node
 
 		if (paused)
 		{
-			if (Sosr.GdBridge.InPeaceProcess())
+			if (Sosr.GameState.Instance.in_peace_process)
 				return;
 			resume();
 		}

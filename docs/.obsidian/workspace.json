@@ -11,24 +11,12 @@
             "id": "d94dbff6502c5a39",
             "type": "leaf",
             "state": {
-              "type": "kanban",
+              "type": "excalidraw",
               "state": {
-                "file": "Kanban.md",
-                "kanbanViewState": {
-                  "kanban-plugin": "board",
-                  "list-collapse": [
-                    false,
-                    false,
-                    false,
-                    false,
-                    false,
-                    false,
-                    false
-                  ]
-                }
+                "file": "Excalidraw/Drawing 2026-11-25 18.49.57.excalidraw.md"
               },
-              "icon": "lucide-trello",
-              "title": "Kanban"
+              "icon": "excalidraw-icon",
+              "title": "Drawing 2026-11-25 18.49.57.excalidraw"
             }
           }
         ]
@@ -196,38 +184,48 @@
       "templates:Insert template": false,
       "command-palette:Open command palette": false,
       "bases:Create new base": false,
-      "obsidian-kanban:Create new board": false
+      "obsidian-kanban:Create new board": false,
+      "obsidian-excalidraw-plugin:New drawing": false
     }
   },
   "active": "d94dbff6502c5a39",
   "lastOpenFiles": [
-    "Saves Storing Diffs.md",
-    "Kanban.md",
-    "animations.md",
-    "AssetManager.md",
-    "civilWars.md",
-    "NodeDependencies.md",
-    "buildingTypes.md",
-    "interpreterManager.md",
-    "sigFigs.md",
-    "filipsFocus.md",
-    "Untitled Kanban.md",
-    "achievements.md",
-    "Docs/ImportantFigureSkillsReference.md",
-    "Docs/Functions.md",
-    "Docs/Decision Docs.md",
-    "resourcesMakeWorkGood.md",
-    "TODOs.md",
-    "multiplayer.md",
-    "makeCharactersDoStuff.md",
-    "promoteToYoutube.md",
-    "Untitled.base",
-    "todo.md",
-    "Docs",
-    "SOSR/TODOs.md",
-    "SOSR/Functions.md",
-    "SOSR/Decision Docs.md",
-    "Welcome.md",
-    "SOSR"
+    "planning/unify-events.md",
+    "planning/country-tags.md",
+    "development/docs-site.md",
+    "development/scenarios-and-saves.md",
+    "development/scripting.md",
+    "development/architecture.md",
+    "development/getting-started.md",
+    "index.md",
+    "assets/css/style.scss",
+    "_layouts/default.html",
+    "_includes/nav.html",
+    "_includes",
+    "_config.yml",
+    "features/significant-figures.md",
+    "features/resource-tags.md",
+    "features/promote-to-youtube.md",
+    "features/multiplayer.md",
+    "features/make-characters-do-stuff.md",
+    "features/interpreter-manager.md",
+    "features/filips-focus.md",
+    "features/civil-wars.md",
+    "features/building-types.md",
+    "features/asset-manager.md",
+    "features/animations.md",
+    "features/achievements.md",
+    "reference/important-figure-skills.md",
+    "reference/functions.md",
+    "reference/decision-editor.md",
+    "planning/kanban.md",
+    "architecture/state-diff.md",
+    "_layouts",
+    "assets/css",
+    "assets",
+    "reference",
+    "planning",
+    "architecture/node-dependencies.md",
+    "Untitled.canvas"
   ]
 }

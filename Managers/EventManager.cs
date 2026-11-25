@@ -6,6 +6,8 @@ namespace Sosr;
 
 public partial class EventManager : Node
 {
+	public static EventManager Instance => Autoload.Get<EventManager>("EventManager");
+
 	// MusicManager.SFX enum order (POPUP = 8). GDScript enum constants are not
 	// object properties, so use the numeric value as EconomyManager does.
 	private const int SfxPopup = 8;
@@ -25,13 +27,13 @@ public partial class EventManager : Node
 		if (vp != null)
 			vp.GuiEmbedSubwindows = true;
 
-		GdBridge.Autoload("WarManager").Connect("warDeclared", Callable.From<Variant, Variant>((warer, waree) =>
+		WarManager.Instance.WarDeclared += (warer, waree) =>
 			show_alert(new Godot.Collections.Dictionary
 			{
 				{ "event", "war" },
 				{ "c1", warer },
 				{ "c2", waree },
-			})));
+			});
 		load_super_events("res://superevents.json");
 	}
 
@@ -187,11 +189,11 @@ public partial class EventManager : Node
 		{
 			case "war":
 				if (IsTruthy(c1) && IsTruthy(c2))
-					return $"{GdBridge.Capitalize(c1.AsGodotObject().Get("country_name").AsString())} has declared war on {GdBridge.Capitalize(c2.AsGodotObject().Get("country_name").AsString())}!";
+					return $"{CountryLabel(c1)} has declared war on {CountryLabel(c2)}!";
 				break;
 			case "capitulated":
 				if (IsTruthy(c1))
-					return $"{GdBridge.Capitalize(c1.AsGodotObject().Get("country_name").AsString())} has capitulated.";
+					return $"{CountryLabel(c1)} has capitulated.";
 				break;
 			case "game_over":
 				return "Game Over";
@@ -225,7 +227,7 @@ public partial class EventManager : Node
 			foreach (var element in contents.AsGodotArray())
 			{
 				var count_before = content_list.GetChildCount();
-				GdBridge.Call("InterpreterManager", "get_element", element, GdBridge.PlayerCountry());
+				InterpreterManager.Instance.get_element(element, content_list, CountryManager.Instance.player_country);
 				var count_after = content_list.GetChildCount();
 				if (count_after > count_before)
 					_connect_buttons_to_close(content_list.GetChild(count_after - 1), dialog);
@@ -287,13 +289,13 @@ public partial class EventManager : Node
 		{
 			var base_path = "res://assets/music/superevents/" + music.AsString();
 			if (FileAccess.FileExists(base_path + ".mp3"))
-				GdBridge.Call("MusicManager", "play_custom_file", base_path + ".mp3");
+				MusicManager.Instance.play_custom_file(base_path + ".mp3");
 			else if (FileAccess.FileExists(base_path + ".ogg"))
-				GdBridge.Call("MusicManager", "play_custom_file", base_path + ".ogg");
+				MusicManager.Instance.play_custom_file(base_path + ".ogg");
 		}
 		else
 		{
-			GdBridge.Call("MusicManager", "play_sfx", SfxPopup);
+			MusicManager.Instance.play_sfx(SfxPopup);
 		}
 
 		return dialog;
@@ -314,7 +316,7 @@ public partial class EventManager : Node
 	public TextureRect _create_flag(string country, string ideology = "")
 	{
 		var tr = new TextureRect();
-		tr.Texture = GdBridge.Call("TroopManager", "get_flag", country, ideology).AsGodotObject() as Texture2D;
+		tr.Texture = TroopManager.Instance.get_flag(country, ideology);
 		tr.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
 		tr.StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered;
 		tr.CustomMinimumSize = new Vector2(50, 25);
@@ -325,7 +327,7 @@ public partial class EventManager : Node
 	public void load_super_events(string path)
 	{
 		super_events.Clear();
-		var json = GdBridge.MapDataLoadJson(path);
+		var json = MapData.Instance.LoadJSON(path);
 		if (json.VariantType == Variant.Type.Dictionary)
 		{
 			var root = json.AsGodotDictionary();
@@ -348,7 +350,7 @@ public partial class EventManager : Node
 		foreach (var superEvent in super_events)
 		{
 			var event_dict = superEvent.AsGodotDictionary();
-			if (GdBridge.Call("InterpreterManager", "get_function", GetOrDefault(event_dict, "cause", new Godot.Collections.Dictionary())).AsBool())
+			if (InterpreterManager.Instance.get_function(GetOrDefault(event_dict, "cause", new Godot.Collections.Dictionary())).AsBool())
 			{
 				_add_dialog(_create_super_event_dialog(event_dict));
 				remove.Add(index_cur);
@@ -362,13 +364,10 @@ public partial class EventManager : Node
 
 	public void schedule_event(int days, Godot.Collections.Dictionary data)
 	{
-		var world = GdBridge.CurrentWorld();
-		if (world == null || !GodotObject.IsInstanceValid(world))
+		var clock = CurrentClock();
+		if (clock == null)
 			return;
-		var clock = world.Get("clock").AsGodotObject();
-		if (clock == null || !GodotObject.IsInstanceValid(clock))
-			return;
-		var target_time = clock.Call("get_absolute_days").AsInt32() + days;
+		var target_time = (int)clock.get_absolute_days() + days;
 		scheduled_events.Add(new Godot.Collections.Dictionary
 		{
 			{ "trigger_time", target_time },
@@ -378,13 +377,10 @@ public partial class EventManager : Node
 
 	public void _on_day_passed()
 	{
-		var world = GdBridge.CurrentWorld();
-		if (world == null || !GodotObject.IsInstanceValid(world))
+		var clock = CurrentClock();
+		if (clock == null)
 			return;
-		var clock = world.Get("clock").AsGodotObject();
-		if (clock == null || !GodotObject.IsInstanceValid(clock))
-			return;
-		var current = clock.Call("get_absolute_days").AsInt32();
+		var current = (int)clock.get_absolute_days();
 		var to_trigger = new Godot.Collections.Array();
 
 		for (var i = scheduled_events.Count - 1; i >= 0; i--)
@@ -449,6 +445,18 @@ public partial class EventManager : Node
 				return true;
 		}
 	}
+
+	private static string CountryLabel(Variant country)
+		=> country.AsGodotObject().Get("country_name").AsString().Capitalize();
+
+	private static GameClock CurrentClock()
+	{
+		var world = GameState.Instance.current_world;
+		if (world == null || !GodotObject.IsInstanceValid(world))
+			return null;
+		var clock = world.clock;
+		return clock != null && GodotObject.IsInstanceValid(clock) ? clock : null;
+	}
 }
 
 public partial class EventDialog : Window
@@ -463,6 +471,6 @@ public partial class EventDialog : Window
 	public override void _Process(double delta)
 	{
 		if (content_root != null && GodotObject.IsInstanceValid(content_root))
-			GdBridge.Call("InterpreterManager", "refresh_buttons", content_root);
+			InterpreterManager.Instance.refresh_buttons(content_root);
 	}
 }

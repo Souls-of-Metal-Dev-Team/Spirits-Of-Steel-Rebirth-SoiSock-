@@ -1,0 +1,18 @@
+{% assign nav_groups = "Start,Development,Architecture,Reference,Features,Planning" | split: "," %}
+<nav aria-label="Documentation">
+  {% for group in nav_groups %}
+    {% assign items = site.pages | where: "nav_group", group | sort: "nav_order" %}
+    {% if items.size > 0 %}
+      <section class="nav-group">
+        <h2>{{ group }}</h2>
+        <ul>
+          {% for item in items %}
+            <li>
+              <a href="{{ item.url | relative_url }}"{% if item.url == page.url %} class="active" aria-current="page"{% endif %}>{{ item.title }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+    {% endif %}
+  {% endfor %}
+</nav>

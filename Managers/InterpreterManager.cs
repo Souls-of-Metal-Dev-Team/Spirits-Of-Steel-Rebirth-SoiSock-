@@ -7,6 +7,8 @@ namespace Sosr;
 
 public partial class InterpreterManager : Node
 {
+	public static InterpreterManager Instance => Autoload.Get<InterpreterManager>("InterpreterManager");
+
 	public enum ExpressionTypes {
 		Variable,
 		List,
@@ -173,9 +175,9 @@ public partial class InterpreterManager : Node
 		switch (variable.AsString())
 		{
 			case "player":
-				return GdBridge.PlayerCountry().Get("country_name");
+				return CountryManager.Instance.player_country.Get("country_name");
 			case "current_date":
-				return GdBridge.CurrentWorld().Get("clock").AsGodotObject().Call("get_date_string");
+				return GameState.Instance.current_world.Get("clock").AsGodotObject().Call("get_date_string");
 			case "null":
 				return new Variant();
 			default:
@@ -210,7 +212,7 @@ public partial class InterpreterManager : Node
 				entry.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
 
 				var tr1 = new TextureRect();
-				tr1.Texture = GdBridge.Call("TroopManager", "get_flag", elementDict["country1"]).AsGodotObject() as Texture2D;
+				tr1.Texture = TroopManager.Instance.get_flag(elementDict["country1"].AsString());
 				tr1.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
 				tr1.StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered;
 				tr1.CustomMinimumSize = new Vector2(80, 50);
@@ -221,7 +223,7 @@ public partial class InterpreterManager : Node
 				entry.AddChild(spacer);
 
 				var tr2 = new TextureRect();
-				tr2.Texture = GdBridge.Call("TroopManager", "get_flag", elementDict["country2"]).AsGodotObject() as Texture2D;
+				tr2.Texture = TroopManager.Instance.get_flag(elementDict["country2"].AsString());
 				tr2.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
 				tr2.StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered;
 				tr2.CustomMinimumSize = new Vector2(80, 50);
@@ -262,7 +264,7 @@ public partial class InterpreterManager : Node
 			case "image":
 			{
 				var entry = new TextureRect();
-				var startFolder = GdBridge.Get("PlansManager", "current_start_folder").AsString();
+				var startFolder = PlansManager.Instance.current_start_folder;
 				entry.Texture = GD.Load<Texture2D>(startFolder + "assets/plans/" + elementDict["path"].AsString());
 				entry.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
 				entry.StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered;
@@ -293,7 +295,7 @@ public partial class InterpreterManager : Node
 			return new Variant();
 
 		if (country == null)
-			country = GdBridge.PlayerCountry();
+			country = CountryManager.Instance.player_country;
 
 		// Handle multiple functions (Recusive Array Support)
 		if (block.VariantType == Variant.Type.Array)
@@ -408,7 +410,7 @@ public partial class InterpreterManager : Node
 			case "get":
 				if (evaledArgs.Count >= 2)
 				{
-					var countries = GdBridge.Countries();
+					var countries = CountryManager.Instance.countries;
 					if (countries.ContainsKey(evaledArgs[0]) && countries[evaledArgs[0]].VariantType != Variant.Type.Nil)
 						result = countries[evaledArgs[0]].AsGodotObject().Get((StringName)evaledArgs[1].AsString());
 					else
@@ -432,8 +434,10 @@ public partial class InterpreterManager : Node
 			case "set_fig_attr":
 				if (evaledArgs.Count >= 3)
 				{
-					var significantFigures = GdBridge.Autoload("MapManager").Get("significantFigures").AsGodotDictionary();
-					significantFigures[evaledArgs[0]].AsGodotDictionary()[evaledArgs[1]] = evaledArgs[2];
+					// Figures are ImportantFigure objects; set the named property on one.
+					var figures = MapManager.Instance.significantFigures;
+					if (figures.TryGetValue(evaledArgs[0].AsString(), out var figure))
+						figure.Set(evaledArgs[1].AsString(), evaledArgs[2]);
 				}
 				break;
 			// Math stuff**
@@ -444,7 +448,7 @@ public partial class InterpreterManager : Node
 			// Country stuff
 			case "is_at_war":
 				if (evaledArgs.Count >= 2)
-					result = GdBridge.Call("WarManager", "is_at_war_names", evaledArgs[0], evaledArgs[1]);
+					result = WarManager.Instance.is_at_war_names(evaledArgs[0].AsString(), evaledArgs[1].AsString());
 				break;
 			case "army_level_up":
 				country.Set("army_level", country.Get("army_level").AsInt64() + 1);
@@ -457,12 +461,12 @@ public partial class InterpreterManager : Node
 			case "declare_war":
 				if (evaledArgs.Count >= 2)
 				{
-					var countries = GdBridge.Countries();
+					var countries = CountryManager.Instance.countries;
 					var attacker = countries.ContainsKey(evaledArgs[0]) ? countries[evaledArgs[0]].AsGodotObject() : null;
 					var defender = countries.ContainsKey(evaledArgs[1]) ? countries[evaledArgs[1]].AsGodotObject() : null;
 					if (attacker != null && defender != null)
 					{
-						GdBridge.Call("WarManager", "declare_war", attacker, defender);
+						WarManager.Instance.declare_war(attacker, defender);
 						result = true;
 					}
 					else
@@ -472,7 +476,7 @@ public partial class InterpreterManager : Node
 			case "release":
 				if (evaledArgs.Count >= 1)
 				{
-					GdBridge.Call("MapManager", "ReleaseCountry", evaledArgs[0]);
+					MapManager.Instance.ReleaseCountry(evaledArgs[0].AsString());
 					result = true;
 				}
 				break;
@@ -480,10 +484,10 @@ public partial class InterpreterManager : Node
 				if (evaledArgs.Count >= 1)
 				{
 					var countryName = args.Count > 0 ? args[0].AsString() : "";
-					if (GdBridge.Countries().ContainsKey(countryName))
+					if (CountryManager.Instance.countries.ContainsKey(countryName))
 					{
 						GD.Print("player country now " + countryName);
-						GdBridge.Call("CountryManager", "set_player_country", countryName);
+						CountryManager.Instance.set_player_country(countryName);
 					}
 					GD.Print("Unknown country: " + countryName);
 					result = true;
@@ -492,13 +496,13 @@ public partial class InterpreterManager : Node
 			case "annex":
 				if (evaledArgs.Count >= 2)
 				{
-					GdBridge.Call("MapManager", "AnnexCountry", evaledArgs[0], evaledArgs[1]);
+					MapManager.Instance.AnnexCountry(evaledArgs[0].AsString(), evaledArgs[1].AsString());
 					result = true;
 				}
 				break;
 			case "add_ideology_drift":
 			{
-				var countryObj = GdBridge.Countries()[evaledArgs[0]].AsGodotObject();
+				var countryObj = CountryManager.Instance.countries[evaledArgs[0]].AsGodotObject();
 				var driftTargets = countryObj.Get("driftTargets").AsGodotDictionary();
 				driftTargets[args[1]] = IdeologyDriftTarget.FromDict(args[2].AsGodotDictionary());
 				result = driftTargets;
@@ -507,16 +511,16 @@ public partial class InterpreterManager : Node
 			case "make_puppet":
 				if (evaledArgs.Count >= 2)
 				{
-					var countries = GdBridge.Countries();
-					GdBridge.Call("CountryManager", "make_puppet", countries[evaledArgs[0]], countries[evaledArgs[1]]);
+					var countries = CountryManager.Instance.countries;
+					CountryManager.Instance.make_puppet(countries[evaledArgs[0]].AsGodotObject(), countries[evaledArgs[1]].AsGodotObject());
 					result = true;
 				}
 				break;
 			case "release_puppet":
 				if (evaledArgs.Count >= 2)
 				{
-					var countries = GdBridge.Countries();
-					GdBridge.Call("CountryManager", "release_puppet", countries[evaledArgs[0]], countries[evaledArgs[1]]);
+					var countries = CountryManager.Instance.countries;
+					CountryManager.Instance.release_puppet(countries[evaledArgs[0]].AsGodotObject(), countries[evaledArgs[1]].AsGodotObject());
 					result = true;
 				}
 				break;
@@ -526,7 +530,7 @@ public partial class InterpreterManager : Node
 					var i = 1;
 					var provinceOwner = evaledArgs[0];
 					var allOwned = true;
-					var provinceObjects = GdBridge.Autoload("MapManager").Get("province_objects").AsGodotDictionary();
+					var provinceObjects = MapManager.Instance.province_objects;
 					while (i < evaledArgs.Count)
 					{
 						var province = provinceObjects[evaledArgs[i].AsInt64()].AsGodotObject();
@@ -542,7 +546,7 @@ public partial class InterpreterManager : Node
 				break;
 			case "add_plans":
 			{
-				var plans = GdBridge.Get("PlansManager", "plans").AsGodotDictionary();
+				var plans = PlansManager.Instance.plans;
 				var countryName = country.Get("country_name").AsString();
 				if (!plans.ContainsKey(countryName))
 					plans[countryName] = new Godot.Collections.Array();
@@ -551,7 +555,7 @@ public partial class InterpreterManager : Node
 			}
 			case "remove_plan":
 			{
-				var plans = GdBridge.Get("PlansManager", "plans").AsGodotDictionary();
+				var plans = PlansManager.Instance.plans;
 				var countryName = country.Get("country_name").AsString();
 				var countryPlans = plans[countryName].AsGodotArray();
 				var index = -1;
@@ -570,38 +574,38 @@ public partial class InterpreterManager : Node
 			case "event":
 				if (evaledArgs.Count > 0 && evaledArgs[0].VariantType == Variant.Type.Dictionary)
 				{
-					GdBridge.Call("EventManager", "show_alert", evaledArgs[0]);
+					EventManager.Instance.show_alert(evaledArgs[0].AsGodotDictionary());
 					result = true;
 				}
 				break;
 			case "schedule_event":
 				if (evaledArgs.Count >= 2 && evaledArgs[1].VariantType == Variant.Type.Dictionary)
 				{
-					GdBridge.Call("EventManager", "schedule_event", evaledArgs[0].AsInt64(), evaledArgs[1]);
+					EventManager.Instance.schedule_event(evaledArgs[0].AsInt32(), evaledArgs[1].AsGodotDictionary());
 					result = true;
 				}
 				break;
 			case "invite":
 				if (evaledArgs.Count >= 2)
 				{
-					var countries = GdBridge.Countries();
+					var countries = CountryManager.Instance.countries;
 					var inviter = countries.ContainsKey(evaledArgs[0]) ? countries[evaledArgs[0]].AsGodotObject() : null;
 					var invitee = countries.ContainsKey(evaledArgs[1]) ? countries[evaledArgs[1]].AsGodotObject() : null;
 					if (inviter != null && invitee != null)
-						GdBridge.Call("FactionManager", "invite_faction", inviter, invitee);
+						FactionManager.Instance.invite_faction(inviter, invitee);
 				}
 				break;
 			case "change_province_types":
 				if (evaledArgs.Count >= 3)
 				{
 					var pids = evaledArgs[0];
-					var pidsTyped = new Godot.Collections.Array<int>();
+					var pidsTyped = new Godot.Collections.Array();
 					if (pids.VariantType == Variant.Type.Float || pids.VariantType == Variant.Type.Int)
 						pidsTyped.Add(pids.AsInt32());
 					else if (pids.VariantType == Variant.Type.Array)
 						foreach (var p in pids.AsGodotArray())
 							pidsTyped.Add(p.AsInt32());
-					GdBridge.Call("MapManager", "ChangeProvinceTypes", pidsTyped, evaledArgs[1].AsInt64(), evaledArgs[2].AsString());
+					MapManager.Instance.ChangeProvinceTypes(pidsTyped, evaledArgs[1].AsInt32(), evaledArgs[2].AsString());
 				}
 				break;
 		}
@@ -648,7 +652,7 @@ public partial class InterpreterManager : Node
 			// Handle 'for' loop
 			if (function.ContainsKey("for"))
 			{
-				formatted += indent + (no_bullet ? "" : "• ") + "For each " + GdBridge.Capitalize(Str(function["for"]));
+				formatted += indent + (no_bullet ? "" : "• ") + "For each " + (Str(function["for"])).Capitalize();
 				formatted += " in " + Str(GetOrDefault(function, "in", new Godot.Collections.Array())) + ":\n";
 				formatted += format_functions(GetOrDefault(function, "do", new Godot.Collections.Dictionary()), indent + "  ") + "\n";
 				continue;
@@ -663,7 +667,7 @@ public partial class InterpreterManager : Node
 				{
 					if (key.VariantType == Variant.Type.String && (key.AsString() == "match" || key.AsString() == "func" || key.AsString() == "args" || key.AsString() == "store"))
 						continue;
-					formatted += indent + "  - " + GdBridge.Capitalize(Str(key)) + ":\n";
+					formatted += indent + "  - " + (Str(key)).Capitalize() + ":\n";
 					formatted += format_functions(function[key], indent + "    ") + "\n";
 				}
 				continue;
@@ -679,7 +683,7 @@ public partial class InterpreterManager : Node
 				else
 					args = new Godot.Collections.Array { argsVariant };
 
-				formatted += indent + (no_bullet ? "" : "• ") + GdBridge.Capitalize(funcName);
+				formatted += indent + (no_bullet ? "" : "• ") + funcName.Capitalize();
 
 				// Check if args contain nested functions (like in 'and', 'or', 'all', 'any')
 				var nestedFound = false;
@@ -707,7 +711,7 @@ public partial class InterpreterManager : Node
 						var shouldLookupProv = funcName == "has_pids" || funcName == "annex" || funcName == "release";
 						if (shouldLookupProv && isNumber)
 						{
-							var provinceObjects = GdBridge.Autoload("MapManager").Get("province_objects").AsGodotDictionary();
+							var provinceObjects = MapManager.Instance.province_objects;
 							var pid = arg.AsInt64();
 							if (provinceObjects.ContainsKey(pid))
 							{

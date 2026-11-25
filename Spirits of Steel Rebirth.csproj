@@ -4,5 +4,7 @@
     <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'android' ">net9.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <RootNamespace>SpiritsofSteelRebirth</RootNamespace>
+    <!-- UI text uses string interpolation; keep number formatting locale-independent like GDScript. -->
+    <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
 </Project>

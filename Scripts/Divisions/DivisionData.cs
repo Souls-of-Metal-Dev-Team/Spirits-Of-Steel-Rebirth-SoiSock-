@@ -128,7 +128,7 @@ public partial class DivisionData : RefCounted
 		div.max_manpower = stats["manpower"].AsInt32();
 		div.manpowerPerHP = (int)(div.max_manpower / div.max_hp);
 
-		div.name = GdBridge.Capitalize(p_type);
+		div.name = p_type.Capitalize();
 
 		return div;
 	}

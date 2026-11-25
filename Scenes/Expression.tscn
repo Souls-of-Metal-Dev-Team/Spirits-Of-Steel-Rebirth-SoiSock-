@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://ds2kpp3eexf1e"]
 
 [ext_resource type="Material" uid="uid://btordm7082cxn" path="res://Materials/damaged.tres" id="1_jleyo"]
-[ext_resource type="Script" uid="uid://b5d3cvioc35k5" path="res://Scripts/UI/Elements/ExpressionBox.gd" id="1_lrnd6"]
+[ext_resource type="Script" uid="uid://b5d3cvioc35k5" path="res://Scripts/UI/Elements/ExpressionBox.cs" id="1_lrnd6"]
 [ext_resource type="Texture2D" uid="uid://bnqi6wm426p45" path="res://assets/icons/DecisionEditor/variable_icon.svg" id="3_is7lw"]
 [ext_resource type="Texture2D" uid="uid://cke87s6xb1x1g" path="res://assets/icons/DecisionEditor/array_icon.svg" id="4_q0juj"]
 [ext_resource type="Texture2D" uid="uid://bin66qrsdnisy" path="res://assets/icons/DecisionEditor/function_icon.svg" id="5_dq07d"]

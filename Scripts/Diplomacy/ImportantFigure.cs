@@ -47,7 +47,7 @@ public partial class ImportantFigure : RefCounted
 
 		figure.name = "";
 		for (var i = 0; i < GD.RandRange(2, 3); i++)
-			figure.name += Sosr.GdBridge.Capitalize(NameGenerator.GenerateName(GD.Randi() % 2 == 0, GD.RandRange(3, 10)));
+			figure.name += (NameGenerator.GenerateName(GD.Randi() % 2 == 0, GD.RandRange(3, 10))).Capitalize();
 		figure.skills = new Godot.Collections.Dictionary(); // TODO
 		var skillsToPick = GD.RandRange(1, 5);
 		var pickableSkills = new Godot.Collections.Array<string>();
@@ -100,7 +100,7 @@ public partial class ImportantFigure : RefCounted
 		figure.allegiance = aAllegiance;
 		figure.occupation = "";
 		figure.portrait_path = "";
-		var randomPortraitsDir = "res://starts/" + Sosr.GdBridge.CurrentStart() + "/assets/portraits/random/";
+		var randomPortraitsDir = "res://starts/" + Sosr.GameState.Instance.current_start + "/assets/portraits/random/";
 		var dir = DirAccess.Open(randomPortraitsDir);
 		if (dir != null)
 		{
@@ -188,7 +188,7 @@ public partial class ImportantFigure : RefCounted
 		if (aFigure.portrait_path != "" && (FileAccess.FileExists(aFigure.portrait_path) || ResourceLoader.Exists(aFigure.portrait_path)))
 			return ResourceLoader.Load<Texture>(aFigure.portrait_path);
 
-		var start = Sosr.GdBridge.CurrentStart();
+		var start = Sosr.GameState.Instance.current_start;
 		var path = "res://starts/" + start + "/assets/portraits/" + aFigure.allegiance + "/" + aFigure.name + ".png";
 		if (FileAccess.FileExists(path) || ResourceLoader.Exists(path))
 		{
@@ -210,7 +210,7 @@ public partial class ImportantFigure : RefCounted
 
 	public string GetDisplayString()
 	{
-		var toReturn = Sosr.GdBridge.Capitalize(name) + "\nSkills:";
+		var toReturn = name.Capitalize() + "\nSkills:";
 		foreach (var skill in SkillKeys(skills))
 		{
 			toReturn += "\n";
@@ -263,14 +263,14 @@ public partial class ImportantFigure : RefCounted
 		switch (skillData["type"].AsString())
 		{
 			case "add":
-				formatted = Signed(value, Mathf.Min(precision, Sosr.GdBridge.StepDecimals(value))) + " ";
+				formatted = Signed(value, Mathf.Min(precision, Mathf.StepDecimals(value))) + " ";
 				break;
 			case "mul":
 				var percent = (value - skillData["base"].AsDouble()) * 100f;
-				formatted = Signed(percent, Mathf.Min(precision, Sosr.GdBridge.StepDecimals(percent))) + "% ";
+				formatted = Signed(percent, Mathf.Min(precision, Mathf.StepDecimals(percent))) + "% ";
 				break;
 		}
-		return formatted + Sosr.GdBridge.Capitalize(skill);
+		return formatted + skill.Capitalize();
 	}
 
 	// GDScript "%+.*f".

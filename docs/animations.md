@@ -1,3 +1,0 @@
-- [ ] sidemenu sliding fix
-- [x] start menu slides in
-- [x] button outlines

@@ -3,7 +3,7 @@ using Godot;
 namespace Sosr;
 
 [GlobalClass]
-public partial class Province : RefCounted
+public partial class Province : Resource
 {
 	public const int SEA = 0;
 	public const int LAND = 1;

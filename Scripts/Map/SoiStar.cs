@@ -25,7 +25,7 @@ public partial class SoiStar : AStar2D
 		long to_id
 	)
 	{
-		var provinceObjects = GdBridge.Get("MapManager", "province_objects").AsGodotDictionary();
+		var provinceObjects = MapManager.Instance.province_objects;
 		var fromProv = provinceObjects.ContainsKey(from_id) ? provinceObjects[from_id].AsGodotObject() : null;
 		var toProv = provinceObjects.ContainsKey(to_id) ? provinceObjects[to_id].AsGodotObject() : null;
 
