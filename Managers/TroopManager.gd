@@ -64,7 +64,7 @@ func _process(_delta: float) -> void:
 				pause_troop(enemy)
 			continue
 
-		var tw := troop.move_tween
+		var tw: Tween = troop.move_tween
 		if tw == null or !tw.is_valid():
 			if !paused:
 				_start_leg_tween(troop)
@@ -100,7 +100,7 @@ func _start_leg_tween(troop: TroopData) -> void:
 		_arrive_at_leg_end(troop)
 		return
 
-	var speed_mod := troop.country_obj.troop_speed_modifier if troop.country_obj else 1.0
+	var speed_mod: float = troop.country_obj.troop_speed_modifier if troop.country_obj else 1.0
 	var duration: float = maxf(total_dist / maxf(1.0 * speed_mod, 0.001), 0.001)
 
 	var tw := create_tween()

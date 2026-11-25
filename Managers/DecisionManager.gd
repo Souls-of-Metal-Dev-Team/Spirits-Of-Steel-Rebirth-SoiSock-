@@ -117,7 +117,7 @@ func process_country_day(country: CountryData):
 		tasks.erase(key)
 
 	if ui_overlay and ui_overlay.visible and country.is_player:
-		ui_overlay.refresh_status_only() # Efficient refresh
+		ui_overlay.RefreshStatusOnly() # Efficient refresh
 
 
 # --- ACTIONS ---
@@ -178,7 +178,7 @@ func start_decision(country: CountryData, cat: String, index: int):
 		process_country_day(country)
 
 	if ui_overlay and country.is_player:
-		ui_overlay.refresh_status_only()
+		ui_overlay.RefreshStatusOnly()
 
 
 func _finalize_decision(country: CountryData, id: String):
