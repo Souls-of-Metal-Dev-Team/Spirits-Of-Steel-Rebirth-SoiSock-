@@ -20,12 +20,12 @@ public partial class TroopManager : Node
 
 	public Godot.Collections.Array to_remove = new();
 	public Godot.Collections.Array troops = new();
-	public Godot.Collections.Array moving_troops = new();
-	public Godot.Collections.Dictionary troops_by_province = new(); // { province_id: [TroopData, ...] }
-	public Godot.Collections.Dictionary troops_by_country = new(); // { country_name: [TroopData, ...] }
+	public List<TroopData> moving_troops = new();
+	public Dictionary<int, List<TroopData>> troops_by_province = new(); // { province_id: [TroopData, ...] }
+	public Dictionary<string, List<TroopData>> troops_by_country = new(); // { country_name: [TroopData, ...] }
 
-	public Godot.Collections.Dictionary path_cache = new(); // { start_id: { target_id: path_array } }
-	public Godot.Collections.Dictionary flag_cache = new(); // { country_name: texture }
+	public Dictionary<string, Godot.Collections.Array> path_cache = new(); // { cache_key: path_array }
+	public Dictionary<string, Texture2D> flag_cache = new(); // { cache_key: texture }
 
 	// TroopSelection is still a GDScript node; accessed dynamically.
 	public TroopSelection troop_selection;
@@ -61,12 +61,11 @@ public partial class TroopManager : Node
 		var paused = clock == null || clock.paused;
 		var timeScale = clock != null ? Mathf.Max(clock.time_scale, 0.001f) : 1.0f;
 
-		foreach (var troopValue in moving_troops.Duplicate())
+		foreach (var troop in moving_troops.ToArray())
 		{
-			var troop = AsTroop(troopValue);
-			if (troop == null || !GodotObject.IsInstanceValid(troop))
+			if (!GodotObject.IsInstanceValid(troop))
 			{
-				moving_troops.Remove(troopValue);
+				moving_troops.Remove(troop);
 				continue;
 			}
 
@@ -208,7 +207,7 @@ public partial class TroopManager : Node
 		}
 
 		var centers = MapManager.Instance.province_centers;
-		troop.target_position = centers.ContainsKey(nextPid) ? centers[nextPid].AsVector2() : troop.position;
+		troop.target_position = centers.TryGetValue(nextPid, out var center) ? center : troop.position;
 		troop.is_moving = true;
 		if (!moving_troops.Contains(troop))
 			moving_troops.Add(troop);
@@ -368,8 +367,8 @@ public partial class TroopManager : Node
 		var allowedHash = string.Join(",", sortedAllowed).GetHashCode();
 		var key = $"{startId}_{targetId}_{allowedHash}";
 
-		if (path_cache.ContainsKey(key))
-			return CopyArray(path_cache[key].AsGodotArray());
+		if (path_cache.TryGetValue(key, out var cachedPath))
+			return CopyArray(cachedPath);
 
 		var pathResult = MapManager.Instance.find_path(startId, targetId, (Godot.Collections.Array)allowedCountries);
 		var path = new Godot.Collections.Array();
@@ -512,7 +511,7 @@ public partial class TroopManager : Node
 
 		var countryData = CountryObject(country);
 		var centers = MapManager.Instance.province_centers;
-		var pos = centers.ContainsKey(provId) ? centers[provId].AsVector2() : Vector2.Zero;
+		var pos = centers.TryGetValue(provId, out var center) ? center : Vector2.Zero;
 		var ideology = countryData != null ? countryData.Get("ideology_name").AsString() : "";
 
 		var troop = TroopData.Create(
@@ -614,16 +613,15 @@ public partial class TroopManager : Node
 		var countryName = troop.country_name;
 		var country = CountryObject(countryName);
 
-		if (troops_by_province.ContainsKey(pid))
+		if (troops_by_province.TryGetValue(pid, out var provinceTroops))
 		{
-			var provinceTroops = troops_by_province[pid].AsGodotArray();
 			provinceTroops.Remove(troop);
 			if (provinceTroops.Count == 0)
 				troops_by_province.Remove(pid);
 		}
 
-		if (troops_by_country.ContainsKey(countryName))
-			troops_by_country[countryName].AsGodotArray().Remove(troop);
+		if (troops_by_country.TryGetValue(countryName, out var countryTroops))
+			countryTroops.Remove(troop);
 
 		if (country != null)
 		{
@@ -641,7 +639,7 @@ public partial class TroopManager : Node
 	public void move_to_garrison(TroopData troop)
 	{
 		var centers = MapManager.Instance.province_centers;
-		var center = centers.ContainsKey(troop.province_id) ? centers[troop.province_id].AsVector2() : troop.position;
+		var center = centers.TryGetValue(troop.province_id, out var c) ? c : troop.position;
 		troop.position = center;
 		troop.target_position = center;
 		_stop_troop(troop); // Stops any ongoing movement
@@ -654,16 +652,14 @@ public partial class TroopManager : Node
 		var country = troop.country_name;
 
 		// Province Index
-		if (!troops_by_province.ContainsKey(pid))
-			troops_by_province[pid] = new Godot.Collections.Array { troop };
-		else
-			troops_by_province[pid].AsGodotArray().Add(troop);
+		if (!troops_by_province.TryGetValue(pid, out var provinceTroops))
+			troops_by_province[pid] = provinceTroops = new List<TroopData>();
+		provinceTroops.Add(troop);
 
 		// Country Index
-		if (!troops_by_country.ContainsKey(country))
-			troops_by_country[country] = new Godot.Collections.Array { troop };
-		else
-			troops_by_country[country].AsGodotArray().Add(troop);
+		if (!troops_by_country.TryGetValue(country, out var countryTroops))
+			troops_by_country[country] = countryTroops = new List<TroopData>();
+		countryTroops.Add(troop);
 
 		EmitSignal(SignalName.TroopsChanged, country);
 	}
@@ -676,9 +672,8 @@ public partial class TroopManager : Node
 			return;
 
 		// Remove from old province list
-		if (troops_by_province.ContainsKey(oldPid))
+		if (troops_by_province.TryGetValue(oldPid, out var oldList))
 		{
-			var oldList = troops_by_province[oldPid].AsGodotArray();
 			oldList.Remove(troop);
 			if (oldList.Count == 0)
 				troops_by_province.Remove(oldPid);
@@ -686,10 +681,9 @@ public partial class TroopManager : Node
 
 		// Add to new province list and update troop object
 		troop.province_id = newPid;
-		if (!troops_by_province.ContainsKey(newPid))
-			troops_by_province[newPid] = new Godot.Collections.Array { troop };
-		else
-			troops_by_province[newPid].AsGodotArray().Add(troop);
+		if (!troops_by_province.TryGetValue(newPid, out var newList))
+			troops_by_province[newPid] = newList = new List<TroopData>();
+		newList.Add(troop);
 	}
 
 	// Careful using this
@@ -699,9 +693,8 @@ public partial class TroopManager : Node
 		moving_troops.Remove(troop);
 		// Remove from old province index
 		var oldPid = troop.province_id;
-		if (troops_by_province.ContainsKey(oldPid))
+		if (troops_by_province.TryGetValue(oldPid, out var oldList))
 		{
-			var oldList = troops_by_province[oldPid].AsGodotArray();
 			oldList.Remove(troop);
 			if (oldList.Count == 0)
 				troops_by_province.Remove(oldPid);
@@ -712,16 +705,15 @@ public partial class TroopManager : Node
 
 		// Update troop position immediately to center of target province
 		var centers = MapManager.Instance.province_centers;
-		troop.position = centers.ContainsKey(targetPid) ? centers[targetPid].AsVector2() : Vector2.Zero;
+		troop.position = centers.TryGetValue(targetPid, out var center) ? center : Vector2.Zero;
 		troop.target_position = troop.position;
 		troop.path.Clear();
 		troop.is_moving = false;
 
 		// Add to new province index
-		if (!troops_by_province.ContainsKey(targetPid))
-			troops_by_province[targetPid] = new Godot.Collections.Array { troop };
-		else
-			troops_by_province[targetPid].AsGodotArray().Add(troop);
+		if (!troops_by_province.TryGetValue(targetPid, out var targetList))
+			troops_by_province[targetPid] = targetList = new List<TroopData>();
+		targetList.Add(troop);
 	}
 
 	public Godot.Collections.Array get_serialized_troops_for_province(int pid)
@@ -740,14 +732,10 @@ public partial class TroopManager : Node
 	{
 		// Clear existing troops in this province if any (might not be needed if loading fresh)
 		// But generally we should probably clear first
-		if (troops_by_province.ContainsKey(pid))
+		if (troops_by_province.TryGetValue(pid, out var existingTroops))
 		{
-			foreach (var troopValue in troops_by_province[pid].AsGodotArray().Duplicate())
-			{
-				var troop = AsTroop(troopValue);
-				if (troop != null)
-					RemoveTroop(troop);
-			}
+			foreach (var troop in existingTroops.ToArray())
+				RemoveTroop(troop);
 		}
 
 		var centers = MapManager.Instance.province_centers;
@@ -756,7 +744,7 @@ public partial class TroopManager : Node
 			var data = dataValue.AsGodotDictionary();
 			var troop = TroopData.FromDict(data);
 			troop.province_id = pid;
-			troop.position = centers.ContainsKey(pid) ? centers[pid].AsVector2() : Vector2.Zero;
+			troop.position = centers.TryGetValue(pid, out var center) ? center : Vector2.Zero;
 			if (troop.is_moving)
 			{
 				var target = data["target_position"].AsGodotArray();
@@ -839,7 +827,7 @@ public partial class TroopManager : Node
 	{
 		var countryData = CountryObject(country);
 		var centers = MapManager.Instance.province_centers;
-		var pos = centers.ContainsKey(provId) ? centers[provId].AsVector2() : Vector2.Zero;
+		var pos = centers.TryGetValue(provId, out var center) ? center : Vector2.Zero;
 		var ideology = countryData != null ? countryData.Get("ideology_name").AsString() : "";
 
 		// 1. Create the container (TroopData) with 0 divisions initially
@@ -871,7 +859,7 @@ public partial class TroopManager : Node
 
 		var countryData = CountryObject(country);
 		var centers = MapManager.Instance.province_centers;
-		var pos = centers.ContainsKey(provId) ? centers[provId].AsVector2() : Vector2.Zero;
+		var pos = centers.TryGetValue(provId, out var center) ? center : Vector2.Zero;
 		var ideology = countryData != null ? countryData.Get("ideology_name").AsString() : "";
 
 		// 1. Create the container (TroopData) with 0 divisions initially
@@ -935,8 +923,8 @@ public partial class TroopManager : Node
 		var cacheKey = ideology != "" ? $"{country}_{ideology}" : country;
 
 		// If already cached -> return it
-		if (flag_cache.ContainsKey(cacheKey))
-			return flag_cache[cacheKey].AsGodotObject() as Texture2D;
+		if (flag_cache.TryGetValue(cacheKey, out var cachedFlag))
+			return cachedFlag;
 
 		// 0. Check Redirects
 		if (flag_redirects.ContainsKey(country))
@@ -1058,10 +1046,22 @@ public partial class TroopManager : Node
 	private static TroopData AsTroop(Variant value) => value.AsGodotObject() as TroopData;
 
 	private Godot.Collections.Array ProvinceList(int pid)
-		=> troops_by_province.ContainsKey(pid) ? troops_by_province[pid].AsGodotArray() : new Godot.Collections.Array();
+	{
+		var result = new Godot.Collections.Array();
+		if (troops_by_province.TryGetValue(pid, out var troops))
+			foreach (var troop in troops)
+				result.Add(troop);
+		return result;
+	}
 
 	private Godot.Collections.Array CountryList(string country)
-		=> troops_by_country.ContainsKey(country) ? troops_by_country[country].AsGodotArray() : new Godot.Collections.Array();
+	{
+		var result = new Godot.Collections.Array();
+		if (troops_by_country.TryGetValue(country, out var troops))
+			foreach (var troop in troops)
+				result.Add(troop);
+		return result;
+	}
 
 	private static RefCounted CountryObject(string name)
 	{

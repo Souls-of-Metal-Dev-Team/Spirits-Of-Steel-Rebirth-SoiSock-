@@ -102,10 +102,10 @@ public partial class MapEditorUI : CanvasLayer
 	private static CountryManager Countries => CountryManager.Instance;
 	private static Godot.Collections.Dictionary<string, FactionData> Factions => FactionManager.Instance.factions;
 
-	private static Province Prov(int pid) => Map.province_objects[pid].As<Province>();
+	private static Province Prov(int pid) => Map.province_objects[pid];
 
 	private static Province ProvOrNull(int pid)
-		=> Map.province_objects.TryGetValue(pid, out var p) ? p.As<Province>() : null;
+		=> Map.province_objects.TryGetValue(pid, out var p) ? p : null;
 
 	private static bool HasProv(int pid) => Map.province_objects.ContainsKey(pid);
 
@@ -172,9 +172,9 @@ public partial class MapEditorUI : CanvasLayer
 		if (@event is InputEventKey { CtrlPressed: true, Keycode: Key.A, Pressed: true }
 			&& currentTool == Tool.MULTI_SELECT && multiSelectPID.Count == 1)
 		{
-			var owned = Map.country_to_owned_provinces[Prov(multiSelectPID[0]).country].AsGodotArray();
-			foreach (var pidVariant in owned)
-				AddToMultiSelect(pidVariant.AsInt32(), false);
+			var owned = Map.country_to_owned_provinces[Prov(multiSelectPID[0]).country];
+			foreach (var pid in owned)
+				AddToMultiSelect(pid, false);
 			update_multi_select_ui();
 		}
 	}
@@ -703,9 +703,8 @@ public partial class MapEditorUI : CanvasLayer
 		biomes.Remove(selectedBiome);
 		foreach (var province in Map.province_objects.Values)
 		{
-			var p = province.As<Province>();
-			if (p.biome == selectedBiome)
-				p.biome = new_text;
+			if (province.biome == selectedBiome)
+				province.biome = new_text;
 		}
 		selectedBiome = new_text;
 	}
@@ -737,7 +736,7 @@ public partial class MapEditorUI : CanvasLayer
 		resources.Remove(selectedResource);
 		foreach (var province in Map.province_objects.Values)
 		{
-			foreach (var node in province.As<Province>().resources)
+			foreach (var node in province.resources)
 			{
 				if (node.type == selectedResource)
 					node.type = new_text;

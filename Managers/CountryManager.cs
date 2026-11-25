@@ -224,15 +224,15 @@ public partial class CountryManager : Node
 	public int get_country_population(string country_name)
 	{
 		var countryToProvinces = MapManager.Instance.country_to_provinces;
-		if (!countryToProvinces.ContainsKey(country_name))
+		if (!countryToProvinces.TryGetValue(country_name, out var pids))
 			return 0;
 
 		var provinceObjects = MapManager.Instance.province_objects;
 		var totalPop = 0;
-		foreach (var pid in countryToProvinces[country_name].AsGodotArray())
+		foreach (var pid in pids)
 		{
-			if (provinceObjects.ContainsKey(pid))
-				totalPop += provinceObjects[pid].AsGodotObject().Call("GetPopulation").AsInt32();
+			if (provinceObjects.TryGetValue(pid, out var province))
+				totalPop += province.GetPopulation();
 		}
 		return totalPop;
 	}
@@ -240,15 +240,15 @@ public partial class CountryManager : Node
 	public int get_country_gdp(string country_name)
 	{
 		var countryToProvinces = MapManager.Instance.country_to_provinces;
-		if (!countryToProvinces.ContainsKey(country_name))
+		if (!countryToProvinces.TryGetValue(country_name, out var pids))
 			return 0;
 
 		var provinceObjects = MapManager.Instance.province_objects;
 		var totalGdp = 0;
-		foreach (var pid in countryToProvinces[country_name].AsGodotArray())
+		foreach (var pid in pids)
 		{
-			if (provinceObjects.ContainsKey(pid))
-				totalGdp += provinceObjects[pid].AsGodotObject().Get("gdp").AsInt32();
+			if (provinceObjects.TryGetValue(pid, out var province))
+				totalGdp += province.gdp;
 		}
 		return totalGdp;
 	}
@@ -256,21 +256,19 @@ public partial class CountryManager : Node
 	public int get_factories_amount(string country_name)
 	{
 		var countryToProvinces = MapManager.Instance.country_to_provinces;
-		if (!countryToProvinces.ContainsKey(country_name))
+		if (!countryToProvinces.TryGetValue(country_name, out var pids))
 			return 0;
 
 		var provinceObjects = MapManager.Instance.province_objects;
 		var factoryCount = 0;
-		foreach (var provinceVariant in countryToProvinces[country_name].AsGodotArray())
+		foreach (var pid in pids)
 		{
-			if (!provinceObjects.ContainsKey(provinceVariant))
+			if (!provinceObjects.TryGetValue(pid, out var province))
 				continue;
 
-			var province = provinceObjects[provinceVariant].AsGodotObject();
-			foreach (var buildingVariant in province.Get("buildings").AsGodotArray())
+			foreach (var building in province.buildings)
 			{
-				var building = buildingVariant.AsGodotObject();
-				if (building.Get("type").AsString() == "Factory" && building.Get("state").AsInt32() == 1)
+				if (building.type == "Factory" && building.state == BuildingData.BuildingState.FUNCTIONAL)
 					factoryCount++;
 			}
 		}
@@ -322,8 +320,8 @@ public partial class CountryManager : Node
 	{
 		var templates = DivisionData.TEMPLATES;
 		var template = templates.ContainsKey(type)
-			? templates[type].AsGodotDictionary()
-			: templates["infantry"].AsGodotDictionary();
+			? templates[type]
+			: templates["infantry"];
 		return template["manpower"].AsInt32();
 	}
 
@@ -334,7 +332,7 @@ public partial class CountryManager : Node
 		foreach (var cName in countryNames)
 		{
 			var countryToProvinces = MapManager.Instance.country_to_provinces;
-			var noProvinces = !countryToProvinces.ContainsKey(cName) || countryToProvinces[cName].AsGodotArray().Count == 0;
+			var noProvinces = !countryToProvinces.TryGetValue(cName, out var pids) || pids.Count == 0;
 			if (noProvinces && !countries[cName].AsGodotObject().Get("is_exiled").AsBool())
 				toRemove.Add(cName);
 		}

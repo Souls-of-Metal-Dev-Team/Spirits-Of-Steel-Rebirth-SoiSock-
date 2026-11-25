@@ -241,9 +241,8 @@ public partial class TroopSelection : Node2D
 
 		// Check for military access.
 		var provinceObjects = MapManager.Instance.province_objects;
-		if (!provinceObjects.ContainsKey(pid))
+		if (!provinceObjects.TryGetValue(pid, out var prov))
 			return;
-		var prov = provinceObjects[pid].AsGodotObject() as Province;
 		var player = CountryManager.Instance.player_country;
 		if (prov == null || player == null)
 			return;
@@ -265,10 +264,7 @@ public partial class TroopSelection : Node2D
 		}
 
 		var centers = MapManager.Instance.province_centers;
-		if (!centers.ContainsKey(pid))
-			return;
-		var centerTex = centers[pid];
-		if (centerTex.VariantType == Variant.Type.Nil)
+		if (!centers.TryGetValue(pid, out var centerTex) || centerTex == Vector2.Zero)
 			return;
 
 		right_path.Add(new Godot.Collections.Dictionary

@@ -63,7 +63,7 @@ public partial class Tooltip : PanelContainer
 				tabs.CurrentTab = 0;
 				foreach (var resource in resourcesList.GetChildren())
 					resource.QueueFree();
-				var prov = map.province_objects[map.current_hovered_pid].As<Province>();
+				var prov = map.province_objects[map.current_hovered_pid];
 				foreach (var resource in prov.resources)
 				{
 					var resourceBop = (HBoxContainer)resourceTemplate.Duplicate();
@@ -79,7 +79,7 @@ public partial class Tooltip : PanelContainer
 			case 1:
 			{
 				tabs.CurrentTab = 1;
-				var prov = map.province_objects[map.current_hovered_pid].As<Province>();
+				var prov = map.province_objects[map.current_hovered_pid];
 				provinceName.Text = prov.name;
 				provinceDescription.Text = prov.city;
 				provinceInfrastructure.Text = $"{prov.infrastructure}/{prov.maxInfrastructure}";

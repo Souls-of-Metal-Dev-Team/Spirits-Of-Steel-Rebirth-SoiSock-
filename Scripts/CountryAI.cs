@@ -157,13 +157,15 @@ public partial class CountryAI : RefCounted
     {
         if (_country == null)
             return;
-        var tick = Enemies(_country.country_name).Count > 0 ? TICK_RATE_WAR : TICK_RATE_PEACE;
+        var atWar = WarManager.Instance.is_country_at_war(_country.country_name);
+        var tick = atWar ? TICK_RATE_WAR : TICK_RATE_PEACE;
         if (Engine.GetFramesDrawn() % tick != 0)
             return;
 
+        var enemies = Enemies(_country.country_name);
         ExecuteBest(new List<AiAction>
         {
-            new(ScoreFrontline(), ExecuteFrontline),
+            new(ScoreFrontline(enemies), () => ExecuteFrontline(enemies)),
         });
     }
 
@@ -215,14 +217,13 @@ public partial class CountryAI : RefCounted
         return _country.is_puppet ? 0 : WorldTension * D(_personality, "aggression");
     }
 
-    private double ScoreFrontline()
+    private double ScoreFrontline(Godot.Collections.Array<string> enemies)
     {
-        if (Enemies(_country.country_name).Count > 0)
+        if (enemies.Count > 0)
         {
             var deployed = 0;
-            foreach (var troopVar in Troops(_country.country_name))
+            foreach (var troop in Troops(_country.country_name))
             {
-                var troop = troopVar.AsGodotObject() as TroopData;
                 if (troop != null)
                     deployed += troop.divisions_count;
             }
@@ -240,12 +241,11 @@ public partial class CountryAI : RefCounted
 
         var queue = EconomyManager.Instance.construction_queue;
         var candidates = new List<int>();
-        foreach (var pidVar in provinces[_country.country_name].AsGodotArray())
+        foreach (var pid in provinces[_country.country_name])
         {
-            var pid = pidVar.AsInt32();
-            if (queue.ContainsKey(pidVar))
+            if (queue.ContainsKey(pid))
                 continue;
-            if (ProvinceObjects[pid].AsGodotObject() is not Province province || province.buildings.Count >= 4)
+            if (!ProvinceObjects.TryGetValue(pid, out var province) || province == null || province.buildings.Count >= 4)
                 continue;
             candidates.Add(pid);
         }
@@ -260,7 +260,7 @@ public partial class CountryAI : RefCounted
     // Improved: recruit based on current needs (more if at war).
     private bool ExecuteTrain()
     {
-        var template = DivisionData.TEMPLATES["infantry"].AsGodotDictionary();
+        var template = DivisionData.TEMPLATES["infantry"];
         var maxAffordable = Math.Min(
             (int)(_country.money / template["cost"].AsDouble()),
             (int)(_country.manpower / template["manpower"].AsDouble()));
@@ -389,7 +389,7 @@ public partial class CountryAI : RefCounted
 
     // Returns false because the GDScript version is void (null is falsy in
     // _execute_best), so it never short-circuits the other daily actions.
-    private bool ExecuteFrontline()
+    private bool ExecuteFrontline(Godot.Collections.Array<string> enemies)
     {
         var name = _country.country_name;
 
@@ -397,36 +397,35 @@ public partial class CountryAI : RefCounted
         if (_country.ready_troops.Count > 0)
         {
             var ownedCities = MapManager.Instance.country_to_cities;
-            var cities = ownedCities.ContainsKey(name) ? ownedCities[name].AsGodotArray() : new Godot.Collections.Array();
+            var cities = ownedCities.ContainsKey(name) ? ownedCities[name] : new List<int>();
             if (cities.Count > 0)
             {
                 // Duplicate to safely erase during iteration.
                 foreach (var troopData in _country.ready_troops.Duplicate())
                 {
                     var city = cities[GD.RandRange(0, cities.Count - 1)];
-                    TroopManager.Instance.DeployReady(name, troopData.As<ReadyTroop>(), city.AsInt32());
+                    TroopManager.Instance.DeployReady(name, troopData.As<ReadyTroop>(), city);
                     _country.ready_troops.Remove(troopData);
                 }
             }
         }
 
         var idleTroops = new List<TroopData>();
-        foreach (var troopVar in Troops(name))
+        foreach (var troop in Troops(name))
         {
-            if (troopVar.AsGodotObject() is TroopData troop && !troop.is_moving)
+            if (troop != null && !troop.is_moving)
                 idleTroops.Add(troop);
         }
         if (idleTroops.Count == 0)
             return false;
 
-        var enemies = Enemies(name);
         var movePayload = new Godot.Collections.Array();
         var graph = Graph;
 
         if (enemies.Count == 0)
         {
             var hubsVar = MapManager.Instance.country_to_cities;
-            var hubs = hubsVar.ContainsKey(name) ? hubsVar[name].AsGodotArray() : new Godot.Collections.Array();
+            var hubs = hubsVar.ContainsKey(name) ? hubsVar[name] : new List<int>();
             foreach (var troop in idleTroops)
             {
                 if (hubs.Contains(troop.province_id))
@@ -434,15 +433,23 @@ public partial class CountryAI : RefCounted
 
                 // Choose the closest hub to avoid unnecessary long moves.
                 var troopPos = graph.GetPointPosition(troop.province_id);
-                var sortedHubs = hubs
-                    .OrderBy(h => troopPos.DistanceSquaredTo(graph.GetPointPosition(h.AsInt64())))
-                    .ToList();
-                if (sortedHubs.Count > 0)
+                var bestHub = -1L;
+                var bestDistance = float.MaxValue;
+                foreach (var hub in hubs)
+                {
+                    var distance = troopPos.DistanceSquaredTo(graph.GetPointPosition(hub));
+                    if (distance < bestDistance)
+                    {
+                        bestDistance = distance;
+                        bestHub = hub;
+                    }
+                }
+                if (bestHub >= 0)
                 {
                     movePayload.Add(new Godot.Collections.Dictionary
                     {
                         ["troop"] = troop,
-                        ["province_id"] = sortedHubs[0].AsInt64(),
+                        ["province_id"] = bestHub,
                     });
                 }
             }
@@ -456,7 +463,7 @@ public partial class CountryAI : RefCounted
         var seen = new HashSet<long>();
         var enemySet = new HashSet<string>();
         foreach (var enemy in enemies)
-            enemySet.Add(enemy.AsString());
+            enemySet.Add(enemy);
 
         var citySet = new HashSet<long>();
         foreach (var cityVar in MapManager.Instance.all_cities)
@@ -464,13 +471,11 @@ public partial class CountryAI : RefCounted
 
         var combat = Section("war")["combat"].AsGodotDictionary();
         var provinces = ProvinceObjects;
-        foreach (var myPid in MapManager.Instance.GetProvincesBorderingEnemies(name, new Godot.Collections.Array<string>(enemies)))
+        foreach (var myPid in MapManager.Instance.GetProvincesBorderingEnemies(name, enemies))
         {
             foreach (var nId in graph.GetPointConnections(myPid))
             {
-                if (!provinces.ContainsKey(nId))
-                    continue;
-                if (provinces[nId].AsGodotObject() is not Province province)
+                if (!provinces.TryGetValue((int)nId, out var province) || province == null)
                     continue;
 
                 var enemyName = province.GetFunctionalOwner();
@@ -491,9 +496,7 @@ public partial class CountryAI : RefCounted
                 // --- BLITZKRIEG LOGIC --- an enemy city just behind the front line.
                 foreach (var dnId in graph.GetPointConnections(nId))
                 {
-                    if (!provinces.ContainsKey(dnId))
-                        continue;
-                    if (provinces[dnId].AsGodotObject() is not Province deepProvince)
+                    if (!provinces.TryGetValue((int)dnId, out var deepProvince) || deepProvince == null)
                         continue;
                     if (deepProvince.GetFunctionalOwner() == enemyName
                         && !seen.Contains(dnId)
@@ -511,16 +514,17 @@ public partial class CountryAI : RefCounted
         var centers = MapManager.Instance.province_centers;
         foreach (var troop in idleTroops)
         {
-            var troopPos = centers[troop.province_id].AsVector2();
+            var troopPos = centers[troop.province_id];
 
             // Sort targets by score / (distance * 0.01 + 1), descending.
             double WeightedScore(Target t) =>
-                t.Score / (troopPos.DistanceTo(centers[t.Id].AsVector2()) * 0.01 + 1.0);
+                t.Score / (troopPos.DistanceTo(centers[t.Id]) * 0.01 + 1.0);
             targets.Sort((a, b) => WeightedScore(b).CompareTo(WeightedScore(a)));
 
             var divisionsLeft = troop.divisions_count;
-            foreach (var target in targets)
+            for (var i = 0; i < targets.Count; i++)
             {
+                var target = targets[i];
                 if (divisionsLeft <= 0)
                     break;
                 if (target.VirtualStrength >= SATURATION_MAX)
@@ -547,6 +551,7 @@ public partial class CountryAI : RefCounted
                 });
 
                 target.VirtualStrength += amount;
+                targets[i] = target;
                 divisionsLeft -= amount;
             }
         }
@@ -617,9 +622,11 @@ public partial class CountryAI : RefCounted
             return cities;
 
         var provinces = MapManager.Instance.country_to_provinces;
-        return provinces.ContainsKey(_country.country_name)
-            ? provinces[_country.country_name].AsGodotArray()
-            : new Godot.Collections.Array();
+        var hubs = new Godot.Collections.Array();
+        if (provinces.TryGetValue(_country.country_name, out var pids))
+            foreach (var pid in pids)
+                hubs.Add(pid);
+        return hubs;
     }
 
     private List<string> GetNeighborCountries()
@@ -629,15 +636,13 @@ public partial class CountryAI : RefCounted
 
         var neighbors = new HashSet<string>();
         var provinces = MapManager.Instance.country_to_provinces;
-        if (provinces.ContainsKey(_country.country_name))
+        if (provinces.TryGetValue(_country.country_name, out var pids))
         {
-            foreach (var pid in provinces[_country.country_name].AsGodotArray())
+            foreach (var pid in pids)
             {
-                foreach (var nid in Graph.GetPointConnections(pid.AsInt64()))
+                foreach (var nid in Graph.GetPointConnections(pid))
                 {
-                    if (!ProvinceObjects.ContainsKey(nid))
-                        continue;
-                    if (ProvinceObjects[nid].AsGodotObject() is not Province province)
+                    if (!ProvinceObjects.TryGetValue((int)nid, out var province) || province == null)
                         continue;
 
                     var owner = !string.IsNullOrEmpty(province.occupier) ? province.occupier : province.country;
@@ -740,31 +745,33 @@ public partial class CountryAI : RefCounted
 
     private static double WorldTension => MapManager.Instance.world_tension;
     private static SoiStar Graph => MapManager.Instance.province_graph as SoiStar;
-    private static Godot.Collections.Dictionary ProvinceObjects => MapManager.Instance.province_objects;
+    private static Dictionary<int, Province> ProvinceObjects => MapManager.Instance.province_objects;
     private static FactionManager FactionManagerSingleton => FactionManager.Instance as FactionManager;
     private static CountryRef Country(string name)
     {
         var obj = CountryManager.Instance.GetCountry(name);
         return obj == null ? null : new CountryRef(obj);
     }
-    private static Godot.Collections.Array Enemies(string name) =>
-        WarManager.Instance.get_enemies_of(name);
-    private static Godot.Collections.Array Troops(string name) =>
-        TroopManager.Instance.get_troops_for_country(name);
-
-    private sealed class AiAction
+    private static Godot.Collections.Array<string> Enemies(string name)
     {
-        public double Score { get; }
-        public Func<bool> Action { get; }
-
-        public AiAction(double score, Func<bool> action)
-        {
-            Score = score;
-            Action = action;
-        }
+        var result = new Godot.Collections.Array<string>();
+        foreach (var enemy in WarManager.Instance.get_enemies_of(name))
+            result.Add(enemy.AsString());
+        return result;
     }
 
-    private sealed class Target
+    private static Godot.Collections.Array<TroopData> Troops(string name)
+    {
+        var result = new Godot.Collections.Array<TroopData>();
+        foreach (var troop in TroopManager.Instance.get_troops_for_country(name))
+            if (troop.AsGodotObject() is TroopData data)
+                result.Add(data);
+        return result;
+    }
+
+    private readonly record struct AiAction(double Score, Func<bool> Action);
+
+    private record struct Target
     {
         public int Id { get; }
         public double VirtualStrength { get; set; }

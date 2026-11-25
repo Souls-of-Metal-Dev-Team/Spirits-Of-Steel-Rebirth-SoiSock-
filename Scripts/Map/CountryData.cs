@@ -469,7 +469,7 @@ public partial class CountryData : ProcessDay
             return false;
         }
 
-        var template = DivisionData.TEMPLATES[type].AsGodotDictionary();
+        var template = DivisionData.TEMPLATES[type];
         var totalManpowerNeeded = count * template["manpower"].AsInt32();
 
         if (manpower < totalManpowerNeeded || money < count * template["cost"].AsDouble() * divCostMod)
@@ -548,14 +548,10 @@ public partial class CountryData : ProcessDay
 
     public double calculate_army_upkeep() => CalculateArmyUpkeep();
 
-    private Godot.Collections.Array<TroopData> GetTroops(string country)
-    {
-        var result = new Godot.Collections.Array<TroopData>();
-        foreach (var troop in TroopManager.Instance.get_troops_for_country(country))
-            if (troop.AsGodotObject() is TroopData troopData)
-                result.Add(troopData);
-        return result;
-    }
+    private IReadOnlyList<TroopData> GetTroops(string country)
+        => TroopManager.Instance.troops_by_country.TryGetValue(country, out var troops)
+            ? troops
+            : Array.Empty<TroopData>();
 
     private void _SetupStartingArmy()
     {
@@ -563,7 +559,7 @@ public partial class CountryData : ProcessDay
         var upkeep = Math.Max(1.0, army_level * BASE_ARMY_COST);
         var finalCount = Math.Clamp((int)(projectedIncome / upkeep), 1, 6);
 
-        var template = DivisionData.TEMPLATES["infantry"].AsGodotDictionary();
+        var template = DivisionData.TEMPLATES["infantry"];
         var manpowerPerDivision = template["manpower"].AsInt32();
 
         if (manpower < finalCount * manpowerPerDivision)
@@ -583,15 +579,13 @@ public partial class CountryData : ProcessDay
     private void _DeployInitialForce(Godot.Collections.Array<DivisionData> divisions)
     {
         var provincesDict = MapManager.Instance.country_to_provinces;
-        if (!provincesDict.ContainsKey(country_name))
+        if (!provincesDict.TryGetValue(country_name, out var provinces))
             return;
 
-        var provinces = provincesDict[country_name].AsGodotArray();
         if (provinces.Count == 0)
             return;
 
         var cities = MapManager.Instance.GetCitiesProvinceCountry(country_name);
-        var targets = cities.Count > 0 ? cities : provinces;
 
         var currentBatch = new Godot.Collections.Array<DivisionData>();
         for (var i = 0; i < divisions.Count; i++)
@@ -600,7 +594,9 @@ public partial class CountryData : ProcessDay
             if (currentBatch.Count < 5 && i != divisions.Count - 1)
                 continue;
 
-            var targetPid = targets[GD.RandRange(0, targets.Count - 1)].AsInt32();
+            var targetPid = cities.Count > 0
+                ? cities[GD.RandRange(0, cities.Count - 1)].AsInt32()
+                : provinces[GD.RandRange(0, provinces.Count - 1)];
             var payload = new Godot.Collections.Array();
             foreach (var division in currentBatch)
                 payload.Add(division);
@@ -622,7 +618,7 @@ public partial class CountryData : ProcessDay
                     continue;
 
                 var percentage = Math.Min(0.05, (division.max_hp - division.hp) / division.max_hp);
-                var template = DivisionData.TEMPLATES[division.type].AsGodotDictionary();
+                var template = DivisionData.TEMPLATES[division.type];
                 var menNeeded = (int)(template["manpower"].AsInt32() * percentage);
                 var moneyNeeded = (int)(template["cost"].AsDouble() * percentage * divCostMod);
 
@@ -647,13 +643,12 @@ public partial class CountryData : ProcessDay
         if (targetPid == -1)
         {
             var provincesDict = MapManager.Instance.country_to_provinces;
-            if (!provincesDict.ContainsKey(country_name))
+            if (!provincesDict.TryGetValue(country_name, out var provinces))
                 return false;
 
-            var provinces = provincesDict[country_name].AsGodotArray();
             if (provinces.Count == 0)
                 return false;
-            targetPid = provinces[GD.RandRange(0, provinces.Count - 1)].AsInt32();
+            targetPid = provinces[GD.RandRange(0, provinces.Count - 1)];
         }
 
         TroopManager.Instance.DeployReady(country_name, troop, targetPid);

@@ -273,10 +273,10 @@ public partial class MapContainer : Node2D
 					: null;
 				if (selected == null || selected.Count == 0)
 				{
-					GodotObject province = map.province_objects.ContainsKey(pid)
-						? map.province_objects[pid].AsGodotObject()
+					Province province = map.province_objects.TryGetValue(pid, out var clickedProvince)
+						? clickedProvince
 						: null;
-					var owner = province != null ? province.Call("GetFunctionalOwner").AsString() : "";
+					var owner = province != null ? province.GetFunctionalOwner() : "";
 					MapManager.Instance.EmitSignal("CountryClicked", owner);
 				}
 				break;
@@ -479,8 +479,8 @@ public partial class MapContainer : Node2D
 		foreach (var cityData in map.all_cities)
 		{
 			var pid = cityData["id"].AsInt32();
-			var pos = map.province_centers.ContainsKey(pid)
-				? map.province_centers[pid].AsVector2()
+			var pos = map.province_centers.TryGetValue(pid, out var center)
+				? center
 				: Vector2.Zero;
 			if (pos == Vector2.Zero)
 				continue;
@@ -525,8 +525,8 @@ public partial class MapContainer : Node2D
 		var countryManager = CountryManager.Instance;
 		for (var i = 0; i < _cityPids.Length; i++)
 		{
-			GodotObject province = map.province_objects.ContainsKey(_cityPids[i])
-				? map.province_objects[_cityPids[i]].AsGodotObject()
+			Province province = map.province_objects.TryGetValue(_cityPids[i], out var cityProvince)
+				? cityProvince
 				: null;
 			GodotObject country = null;
 			if (province != null && countryManager != null)
@@ -741,10 +741,8 @@ public partial class MapContainer : Node2D
 		var battles = Wars?.active_battles;
 		if (battles != null)
 		{
-			foreach (var battleVariant in battles)
+			foreach (var battle in battles)
 			{
-				if (battleVariant.AsGodotObject() is not Battle battle)
-					continue;
 				alive.Add(battle);
 				if (!_battleItems.TryGetValue(battle, out var entry))
 				{

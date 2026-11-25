@@ -55,7 +55,7 @@ public partial class PeaceProcessUI : CanvasLayer
 			open_menu(p_winners.Select(w => w.As<CountryData>()).ToList(), (CountryData)p_loser);
 	}
 
-	private static Province Prov(int pid) => MapManager.Instance.province_objects[pid].As<Province>();
+	private static Province Prov(int pid) => MapManager.Instance.province_objects[pid];
 
 	private static Color CountryColor(string country) => CountryManager.Instance.GetCountryColor(country);
 
@@ -112,7 +112,7 @@ public partial class PeaceProcessUI : CanvasLayer
 		if (hovered_pid > 1)
 		{
 			var objects = MapManager.Instance.province_objects;
-			var province = objects.TryGetValue(hovered_pid, out var p) ? p.As<Province>() : null;
+			var province = objects.TryGetValue(hovered_pid, out var p) ? p : null;
 			if (province != null && province.country == current_loser.country_name)
 			{
 				_update_map_visual(hovered_pid, new Color(1.5f, 1.5f, 1.5f), CountryColor(province.country));
@@ -406,8 +406,7 @@ public partial class PeaceProcessUI : CanvasLayer
 		winners.AddRange(p_winners);
 		current_loser = p_loser;
 		provinces_to_take.Clear();
-		provinces_discussing = MapManager.Instance.country_to_owned_provinces[p_loser.country_name]
-			.AsGodotArray().Select(v => v.AsInt32()).ToList();
+		provinces_discussing = MapManager.Instance.country_to_owned_provinces[p_loser.country_name].ToList();
 		puppeting.Clear();
 		creating.Clear();
 		creatingProvinces.Clear();
@@ -466,7 +465,7 @@ public partial class PeaceProcessUI : CanvasLayer
 		var total_loser_provinces = 0;
 		foreach (var p in MapManager.Instance.province_objects.Values)
 		{
-			if (p.As<Province>().country == current_loser.country_name)
+			if (p.country == current_loser.country_name)
 				total_loser_provinces++;
 		}
 
@@ -552,7 +551,7 @@ public partial class PeaceProcessUI : CanvasLayer
 		{
 			// Otherwise, revert to the original country color (legal owner)
 			var objects = MapManager.Instance.province_objects;
-			var province = objects.TryGetValue(pid, out var p) ? p.As<Province>() : null;
+			var province = objects.TryGetValue(pid, out var p) ? p : null;
 			if (province != null && province.country != "Sea")
 				_update_map_visual(pid, CountryColor(province.GetFunctionalOwner()), CountryColor(province.country));
 		}

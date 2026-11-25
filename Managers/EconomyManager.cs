@@ -199,7 +199,7 @@ public partial class EconomyManager : Node
 	}
 
 	private static Province ProvinceObject(int pid)
-		=> MapManager.Instance.province_objects[pid].As<Province>();
+		=> MapManager.Instance.province_objects[pid];
 
 	private static bool IsSame(GodotObject a, GodotObject b)
 	{

@@ -1,5 +1,6 @@
 using Godot;
 using Sosr;
+using System.Collections.Generic;
 
 namespace Sosr;
 
@@ -22,7 +23,7 @@ public partial class MapDebugOverlay : Node2D
 	[Export] public Color selected_color = new Color(1, 1, 0, 1);
 
 	public Sprite2D map_sprite;
-	public Godot.Collections.Dictionary province_centers = new();
+	public Dictionary<int, Vector2> province_centers = new();
 	public int selected_pid = -1;
 	public int hovered_pid = -1;
 
@@ -69,9 +70,8 @@ public partial class MapDebugOverlay : Node2D
 		if (!enabled || map_sprite == null || province_centers.Count == 0)
 			return;
 
-		foreach (var pid in province_centers.Keys)
+		foreach (var center in province_centers.Values)
 		{
-			var center = province_centers[pid].AsVector2();
 			var world_pos = center + map_sprite.Position;
 			DrawCircle(world_pos, dot_size * 0.5f, Colors.Green);
 		}
@@ -88,11 +88,11 @@ public partial class MapDebugOverlay : Node2D
 	}
 
 	private Vector2 CenterOrZero(int pid)
-		=> province_centers.ContainsKey(pid) ? province_centers[pid].AsVector2() : Vector2.Zero;
+		=> province_centers.TryGetValue(pid, out var center) ? center : Vector2.Zero;
 
-	public void set_centers(Godot.Collections.Dictionary centers)
+	public void set_centers(Dictionary<int, Vector2> centers)
 	{
-		province_centers = (Godot.Collections.Dictionary)centers.Duplicate();
+		province_centers = new Dictionary<int, Vector2>(centers);
 		QueueRedraw();
 	}
 

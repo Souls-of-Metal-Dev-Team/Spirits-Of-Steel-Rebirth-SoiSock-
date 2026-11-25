@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 using Sosr;
 
@@ -6,7 +7,7 @@ namespace Sosr;
 [GlobalClass]
 public partial class NameGenerator : RefCounted
 {
-	public static readonly Godot.Collections.Dictionary<string, float> SHARED_CONSONANTS = new()
+	public static readonly Dictionary<string, float> SHARED_CONSONANTS = new()
 	{
 		{ "b", 10.00f }, { "bl",  1.00f },
 		{ "c", 10.00f }, { "ch",  1.00f },
@@ -31,7 +32,7 @@ public partial class NameGenerator : RefCounted
 		{ "z",  2.00f },
 	};
 
-	public static readonly Godot.Collections.Dictionary<string, float> START_CONSONANTS = new()
+	public static readonly Dictionary<string, float> START_CONSONANTS = new()
 	{
 		{ "br",  1.00f },
 		{ "dr",  1.00f },
@@ -45,7 +46,7 @@ public partial class NameGenerator : RefCounted
 		{ "wh",  1.00f }, { "wr",  1.00f },
 	};
 
-	public static readonly Godot.Collections.Dictionary<string, float> MIDDLE_CONSONANTS = new()
+	public static readonly Dictionary<string, float> MIDDLE_CONSONANTS = new()
 	{
 		{ "bb",  1.00f }, { "br",  1.00f },
 		{ "cc",  1.00f }, { "ck",  1.00f },
@@ -66,7 +67,7 @@ public partial class NameGenerator : RefCounted
 		{ "zz",  1.00f },
 	};
 
-	public static readonly Godot.Collections.Dictionary<string, float> END_CONSONANTS = new()
+	public static readonly Dictionary<string, float> END_CONSONANTS = new()
 	{
 		{ "cc",  1.00f }, { "ck",  1.00f },
 		{ "dd",  1.00f },
@@ -85,7 +86,7 @@ public partial class NameGenerator : RefCounted
 		{ "zz",  1.00f },
 	};
 
-	public static readonly Godot.Collections.Dictionary<string, float> ALL_CONSONANTS = new()
+	public static readonly Dictionary<string, float> ALL_CONSONANTS = new()
 	{
 		{ "b",  1.00f }, { "bb",  1.00f }, { "bl",  1.00f }, { "br",  1.00f },
 		{ "c",  1.00f }, { "cc",  1.00f }, { "ch",  1.00f }, { "ck",  1.00f },
@@ -110,7 +111,7 @@ public partial class NameGenerator : RefCounted
 		{ "z",  1.00f }, { "zz",  1.00f },
 	};
 
-	public static readonly Godot.Collections.Dictionary<string, float> VOWELS = new()
+	public static readonly Dictionary<string, float> VOWELS = new()
 	{
 		{ "a", 35.00f },              { "ae",  7.50f }, { "ai",  1.00f }, { "ao",  1.00f }, { "au", 12.50f }, { "ay",  1.00f },
 		{ "e", 55.00f }, { "ea",  1.00f }, { "ee", 10.00f }, { "ei",  1.00f }, { "eo",  1.00f }, { "eu",  1.00f }, { "ey",  1.00f }, { "eau",  1.00f },
@@ -120,21 +121,24 @@ public partial class NameGenerator : RefCounted
 		{ "y", 25.00f },
 	};
 
+	private static readonly Dictionary<string, float> START_MERGED = Merge(START_CONSONANTS, SHARED_CONSONANTS);
+	private static readonly Dictionary<string, float> MIDDLE_MERGED = Merge(MIDDLE_CONSONANTS, SHARED_CONSONANTS);
+	private static readonly Dictionary<string, float> END_MERGED = Merge(END_CONSONANTS, SHARED_CONSONANTS);
+
 	public static string GenerateName(bool aConsonant, int aSize)
 	{
-		var usedMiddleConsonants = Merge(MIDDLE_CONSONANTS, SHARED_CONSONANTS);
-		var toReturn = WeightedRandoms(aConsonant ? Merge(START_CONSONANTS, SHARED_CONSONANTS) : VOWELS);
+		var toReturn = WeightedRandoms(aConsonant ? START_MERGED : VOWELS);
 		aConsonant = !aConsonant;
 		for (var i = 0; i < aSize - 2; i++)
 		{
-			toReturn += WeightedRandoms(aConsonant ? usedMiddleConsonants : VOWELS);
+			toReturn += WeightedRandoms(aConsonant ? MIDDLE_MERGED : VOWELS);
 			aConsonant = !aConsonant;
 		}
-		toReturn += WeightedRandoms(aConsonant ? Merge(END_CONSONANTS, SHARED_CONSONANTS) : VOWELS);
+		toReturn += WeightedRandoms(aConsonant ? END_MERGED : VOWELS);
 		return toReturn;
 	}
 
-	public static string WeightedRandoms(Godot.Collections.Dictionary<string, float> aOptions)
+	public static string WeightedRandoms(IReadOnlyDictionary<string, float> aOptions)
 	{
 		var total = 0f;
 		foreach (var weight in aOptions.Values)
@@ -149,12 +153,12 @@ public partial class NameGenerator : RefCounted
 		return "";
 	}
 
-	// GDScript Dictionary.merged() with its default overwrite = false.
-	private static Godot.Collections.Dictionary<string, float> Merge(
-		Godot.Collections.Dictionary<string, float> aFirst,
-		Godot.Collections.Dictionary<string, float> aSecond)
+	// Merge static tables once at startup instead of on every generated name.
+	private static Dictionary<string, float> Merge(
+		Dictionary<string, float> aFirst,
+		Dictionary<string, float> aSecond)
 	{
-		var result = new Godot.Collections.Dictionary<string, float>();
+		var result = new Dictionary<string, float>();
 		foreach (var entry in aFirst)
 			result[entry.Key] = entry.Value;
 		foreach (var entry in aSecond)

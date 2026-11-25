@@ -1,6 +1,7 @@
 using Godot;
 using Sosr;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace Sosr;
@@ -574,19 +575,26 @@ public partial class ConsoleManager : Node
 
 	private static GodotObject CountryRequired(string name) => CountryManager.Instance.GetCountry(name);
 
-	private static Godot.Collections.Dictionary MapDict(string property)
-		=> MapManager.Instance.Get(property).AsGodotDictionary();
-
 	private static Godot.Collections.Array MapArray(string property, string key)
 	{
-		var dict = MapDict(property);
-		return dict.ContainsKey(key) ? dict[key].AsGodotArray() : new Godot.Collections.Array();
+		var map = MapManager.Instance;
+		List<int> ids = property switch
+		{
+			"country_to_cities" when map.country_to_cities.TryGetValue(key, out var cities) => cities,
+			"country_to_provinces" when map.country_to_provinces.TryGetValue(key, out var provinces) => provinces,
+			_ => null
+		};
+		var result = new Godot.Collections.Array();
+		if (ids != null)
+			foreach (var id in ids)
+				result.Add(id);
+		return result;
 	}
 
 	private static Province ProvinceAt(int pid)
 	{
-		var provinces = MapDict("province_objects");
-		return provinces.ContainsKey(pid) ? provinces[pid].AsGodotObject() as Province : null;
+		var provinces = MapManager.Instance.province_objects;
+		return provinces.TryGetValue(pid, out var province) ? province : null;
 	}
 
 	private static Godot.Collections.Array<int> Neighbors(int pid)

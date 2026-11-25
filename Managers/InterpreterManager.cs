@@ -533,8 +533,8 @@ public partial class InterpreterManager : Node
 					var provinceObjects = MapManager.Instance.province_objects;
 					while (i < evaledArgs.Count)
 					{
-						var province = provinceObjects[evaledArgs[i].AsInt64()].AsGodotObject();
-						if (!VariantEquals(provinceOwner, province.Call("GetFunctionalOwner")))
+						var province = provinceObjects[(int)evaledArgs[i].AsInt64()];
+						if (!VariantEquals(provinceOwner, province.GetFunctionalOwner()))
 						{
 							allOwned = false;
 							break;
@@ -712,12 +712,11 @@ public partial class InterpreterManager : Node
 						if (shouldLookupProv && isNumber)
 						{
 							var provinceObjects = MapManager.Instance.province_objects;
-							var pid = arg.AsInt64();
-							if (provinceObjects.ContainsKey(pid))
+							var pid = (int)arg.AsInt64();
+							if (provinceObjects.TryGetValue(pid, out var prov))
 							{
-								var prov = provinceObjects[pid].AsGodotObject();
-								var city = prov.Get("city").AsString();
-								var name = prov.Get("name").AsString();
+								var city = prov.city;
+								var name = prov.name;
 								formattedArgs.Add(city != "" ? city : name);
 							}
 							else

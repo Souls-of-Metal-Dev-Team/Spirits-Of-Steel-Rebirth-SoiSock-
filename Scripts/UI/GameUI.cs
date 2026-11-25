@@ -966,12 +966,12 @@ public partial class GameUI : CanvasLayer
 		var player = Player;
 		if (player != null)
 		{
-			var playerProvinces = MapManager.Instance.country_to_owned_provinces[player.country_name].AsGodotArray();
+			var playerProvinces = MapManager.Instance.country_to_owned_provinces[player.country_name];
 			foreach (var child in sidemenu_buildings.GetChildren())
 				child.QueueFree();
 			foreach (var (pid, construction) in EconomyManager.Instance.construction_queue)
 			{
-				if (!playerProvinces.Contains(pid))
+				if (!playerProvinces.Contains(pid.AsInt32()))
 					continue;
 				var data = construction.AsGodotDictionary();
 				var entry = new ProgressBar

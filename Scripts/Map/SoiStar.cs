@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 using Sosr;
 
@@ -8,7 +9,7 @@ public partial class SoiStar : AStar2D
 {
 	// NOTE(soi): I AM A SUPERSTAR
 
-	public Godot.Collections.Array<string> context_allowed_countries = new Godot.Collections.Array<string>();
+	public HashSet<string> context_allowed_countries = new();
 
 	public override float _ComputeCost(long from_id, long to_id)
 	{
@@ -26,14 +27,15 @@ public partial class SoiStar : AStar2D
 	)
 	{
 		var provinceObjects = MapManager.Instance.province_objects;
-		var fromProv = provinceObjects.ContainsKey(from_id) ? provinceObjects[from_id].AsGodotObject() : null;
-		var toProv = provinceObjects.ContainsKey(to_id) ? provinceObjects[to_id].AsGodotObject() : null;
+		if (!provinceObjects.TryGetValue((int)from_id, out var fromProv)
+			|| !provinceObjects.TryGetValue((int)to_id, out var toProv))
+			return true;
 
 		if (fromProv == null || toProv == null)
 			return true;
 
-		var fromOwner = fromProv.Call("GetFunctionalOwner").AsString();
-		var toOwner = toProv.Call("GetFunctionalOwner").AsString();
+		var fromOwner = fromProv.GetFunctionalOwner();
+		var toOwner = toProv.GetFunctionalOwner();
 
 		// --- 1. Naval Restrictions (Hard requirement) ---
 		// if from_prov.type == Province.LAND and to_prov.type == Province.SEA:

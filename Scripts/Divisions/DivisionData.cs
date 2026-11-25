@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 using Sosr;
 
@@ -10,7 +11,7 @@ public partial class DivisionData : RefCounted
 
 	// NOTE(soi):ideally the player should make their own division templates ala hoi4 style but for now its enum time
 
-	public static Godot.Collections.Dictionary TEMPLATES { get; } = new Godot.Collections.Dictionary
+	public static Dictionary<string, Godot.Collections.Dictionary> TEMPLATES { get; } = new()
 	{
 		{
 			"infantry", new Godot.Collections.Dictionary
@@ -99,8 +100,8 @@ public partial class DivisionData : RefCounted
 	private Godot.Collections.Dictionary GetStats(string p_type)
 	{
 		return TEMPLATES.ContainsKey(p_type)
-			? TEMPLATES[p_type].AsGodotDictionary()
-			: TEMPLATES["infantry"].AsGodotDictionary();
+			? TEMPLATES[p_type]
+			: TEMPLATES["infantry"];
 	}
 
 	public float get_attack_power()
@@ -120,8 +121,8 @@ public partial class DivisionData : RefCounted
 
 		// Load stats from template
 		var stats = TEMPLATES.ContainsKey(p_type)
-			? TEMPLATES[p_type].AsGodotDictionary()
-			: TEMPLATES["infantry"].AsGodotDictionary();
+			? TEMPLATES[p_type]
+			: TEMPLATES["infantry"];
 
 		div.hp = stats["hp"].AsSingle(); // Set starting HP
 		div.max_hp = stats["hp"].AsSingle(); // Set Max HP
