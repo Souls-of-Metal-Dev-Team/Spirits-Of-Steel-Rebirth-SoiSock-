@@ -2,11 +2,10 @@ extends Node2D
 class_name World
 
 @onready var map_sprite: Sprite2D = $"../../MapContainer/CultureSprite" as Sprite2D
-@onready var camera: Camera2D = $"../../Camera2D" as Camera2D
 @onready var map_container: MapContainer = $"../../MapContainer" as MapContainer
 
 @export var map_shader: Shader
-var clock: GameClock
+var clock
 
 var water_offset: Vector2 = Vector2.ZERO
 
@@ -16,11 +15,6 @@ var mat: ShaderMaterial
 
 func _process(_delta: float) -> void:
 	if !map_sprite or !MapManager.id_map_image: return
-	var map_width := MapManager.id_map_image.get_width()
-	if camera.position.x > map_sprite.position.x + map_width:
-		camera.position.x -= map_width
-	elif camera.position.x < map_sprite.position.x - map_width:
-		camera.position.x += map_width
 	if map_sprite.material and clock and !clock.paused:
 		var move_amount = clock.time_scale * 0.001 * _delta
 		water_offset.x += move_amount
@@ -120,10 +114,6 @@ func DoSetup(a_progress: Array) -> void:
 
 	map_sprite.material = mat
 	a_progress[0] = 0.9
-	_clear_ghost_maps()
-	for i in [-2, -1, 1, 2]:
-		_create_ghost_map(Vector2(i * map_width, 0), mat)
-		a_progress[0] += 0.015
 
 	if map_container:
 		map_container.map_width = map_width
@@ -134,9 +124,9 @@ func DoSetup(a_progress: Array) -> void:
 
 	a_progress[0] = 1.0
 	
-	clock.hour_passed.connect(CountryManager._on_hour_passed)
-	clock.day_passed.connect(CountryManager._on_day_passed)
-	clock.day_passed.connect(EventManager._on_day_passed)
+	clock.HourPassed.connect(CountryManager._on_hour_passed)
+	clock.DayPassed.connect(CountryManager._on_day_passed)
+	clock.DayPassed.connect(EventManager._on_day_passed)
 	
 	_refresh_map_visuals()
 
@@ -230,24 +220,3 @@ func load_game(save_name: String):
 		map_container.set_process(true)
 
 	print("Game loaded successfully:", save_name)
-
-
-func _exit_tree() -> void:
-	_clear_ghost_maps()
-
-
-func _clear_ghost_maps() -> void:
-	if map_container:
-		for child in map_container.get_children():
-			if child.has_meta("is_ghost"):
-				child.queue_free()
-
-
-func _create_ghost_map(offset: Vector2, p_material: ShaderMaterial) -> void:
-	var ghost := Sprite2D.new()
-	ghost.texture = map_sprite.texture
-	ghost.centered = map_sprite.centered
-	ghost.material = p_material
-	ghost.position = map_sprite.position + offset
-	ghost.set_meta("is_ghost", true)
-	map_container.add_child(ghost)

@@ -510,7 +510,7 @@ func _on_apply_pressed() -> void:
 	# 2. Update Province Object
 
 	var raw_claims = input_claims.text.split(",")
-	var final_claims = []
+	var final_claims := PackedStringArray()
 	for c in raw_claims:
 		var clean = c.strip_edges()
 		if clean != "":
@@ -692,7 +692,7 @@ func m_OnProvinceClaimsSubmitted() -> void:
 		return
 
 	var raw_claims = input_claims.text.split(",")
-	var final_claims: Array[String] = []
+	var final_claims := PackedStringArray()
 	for c in raw_claims:
 		final_claims.append(c.strip_edges())
 	

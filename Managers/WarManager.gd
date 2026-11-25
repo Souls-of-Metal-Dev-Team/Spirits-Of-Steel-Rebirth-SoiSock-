@@ -4,6 +4,7 @@ extends Node
 const BATTLE_TICK := 1.0
 const MORALE_DECAY_RATE := 0.02 # Adjusted for better flow
 const MORALE_BOOST_DEFENDER := 10.0
+const DivisionTemplates = preload("res://Scripts/Divisions/DivisionTemplates.gd")
 
 # --- State ---
 var wars := {}
@@ -170,14 +171,14 @@ class Battle:
 		var att_supply_cost = 0.0
 		for t in att_troops:
 			for div in t.stored_divisions:
-				var template = div.TEMPLATES.get(div.type, div.TEMPLATES["infantry"])
+				var template = DivisionTemplates.TEMPLATES.get(div.type, DivisionTemplates.TEMPLATES["infantry"])
 				att_supply_cost += template["cost"] * 0.5
 		attacker_stats.money -= att_supply_cost
 
 		var def_supply_cost = 0.0
 		for t in def_troops:
 			for div in t.stored_divisions:
-				var template = div.TEMPLATES.get(div.type, div.TEMPLATES["infantry"])
+				var template = DivisionTemplates.TEMPLATES.get(div.type, DivisionTemplates.TEMPLATES["infantry"])
 				def_supply_cost += template["cost"] * 0.1
 
 		defender_stats.money -= def_supply_cost
@@ -283,8 +284,8 @@ class Battle:
 func _process(_delta: float):
 	if active_battles.is_empty():
 		return
-	var clock: GameClock = GameState.current_world.clock if GameState.current_world else null
-	var paused := clock == null || clock.paused
+	var clock = GameState.current_world.clock if GameState.current_world else null
+	var paused: bool = clock == null || clock.paused
 	var time_scale: float = maxf(clock.time_scale, 0.001) if clock else 1.0
 	for battle in active_battles:
 		if !is_instance_valid(battle.timer_node):

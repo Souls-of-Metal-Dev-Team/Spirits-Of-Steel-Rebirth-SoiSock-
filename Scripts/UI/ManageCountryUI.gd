@@ -25,7 +25,7 @@ func _ready() -> void:
 	_populate_economy()
 	TroopManager.troopsChanged.connect(_on_troops_changed)
 	if GameState.current_world and GameState.current_world.clock:
-		GameState.current_world.clock.day_passed.connect(_on_day_passed)
+		GameState.current_world.clock.DayPassed.connect(_on_day_passed)
 
 func OpenMenu(country: CountryData, cat: Category = Category.MILITARY) -> void:
 	if current_country and current_country.ideology_changed.is_connected(_refresh_full_data):

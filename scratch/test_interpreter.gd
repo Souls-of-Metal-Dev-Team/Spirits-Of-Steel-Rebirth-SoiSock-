@@ -2,7 +2,7 @@
 extends SceneTree
 
 func _init():
-	var interpreter = load("res://Managers/InterpreterManager.gd").new()
+	var interpreter = load("res://Managers/InterpreterManager.cs").new()
 	var data = {"event": "custom", "contents": []}
 	var block = {"func": "event", "args": [data]}
 	

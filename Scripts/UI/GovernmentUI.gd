@@ -10,7 +10,9 @@ class GovernmentPosition:
 	var sigOpt: OptionButton
 	var sigDesc: RichTextLabel
 	
-@export var country: CountryData
+const STATUS_WOUNDED := 1
+
+var country: CountryData
 @export var template: PanelContainer
 @export var listOfPositions: HBoxContainer
 var positions: Dictionary[String, GovernmentPosition] = {}
@@ -57,7 +59,7 @@ func OpenMenu(a_country: CountryData):
 				var figure: ImportantFigure = MapManager.significantFigures[I_figure]
 				govPos.sigName.text = figure.name
 				govPos.sigPortrait.texture = ImportantFigure.GetPortrait(figure)
-				govPos.sigBlood.visible = figure.status == ImportantFigure.Status.WOUNDED
+				govPos.sigBlood.visible = figure.status == STATUS_WOUNDED
 				govPos.sigDesc.text = "[center][font_size=24]Traits[/font_size][/center][code][ul bullet=]\n[/ul][/code][hr]\n[center][font_size=24]Skills[/font_size][/center][code][ul bullet=]%s\n[/ul][/code]" % figure.GetDisplaySkills()
 				for i in range(govPos.sigOpt.item_count):
 					if govPos.sigOpt.get_item_text(i) == figure.name:
@@ -67,7 +69,7 @@ func OpenMenu(a_country: CountryData):
 				var figure: ImportantFigure = MapManager.significantFigures[figureName]
 				govPos.sigName.text = figure.name
 				govPos.sigPortrait.texture = ImportantFigure.GetPortrait(figure)
-				govPos.sigBlood.visible = figure.status == ImportantFigure.Status.WOUNDED
+				govPos.sigBlood.visible = figure.status == STATUS_WOUNDED
 				govPos.sigDesc.text = "[center][font_size=24]Traits[/font_size][/center][code][ul bullet=]\n[/ul][/code][hr]\n[center][font_size=24]Skills[/font_size][/center][code][ul bullet=]%s\n[/ul][/code]" % figure.GetDisplaySkills()
 				country.SetGovernmentPosition(govPos.position, figure)
 			)

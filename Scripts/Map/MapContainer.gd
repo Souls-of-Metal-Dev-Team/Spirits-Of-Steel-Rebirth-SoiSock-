@@ -40,6 +40,11 @@ const COLORS = {
 const LAYOUT = {"flag_width": 24.0, "flag_height": 20.0, "min_text_width": 16.0, "font_size": 16}
 
 const ZOOM_LIMITS = {"min_scale": 0.05, "max_scale": 0.5}
+
+# Extra map copies drawn to either side of the sprite so horizontal scrolling
+# never runs off the edge of the world.
+const WRAP_MULTIPLIERS := [-2, -1, 1, 2]
+
 const STACKING_OFFSET_Y := 20.0
 const TROOP_BORDER := 2.0
 
@@ -67,6 +72,8 @@ var map_width: float = 0.0:
 	set(value):
 		map_width = value
 		_rebuild_cities()
+
+var _wrap_sprites: Array[Sprite2D] = []
 
 var _current_inv_zoom := 1.0
 var _cam_x := 0.0
@@ -192,6 +199,9 @@ func _process(_delta: float) -> void:
 	if !cam:
 		return
 
+	_sync_wrap_sprites()
+	_loop_camera_x(cam)
+
 	_connect_signals()
 	_cam_x = cam.global_position.x
 	_cam_zoom = cam.zoom.x
@@ -281,7 +291,7 @@ func _connect_signals() -> void:
 	MapManager.province_ownership_changed.connect(_on_province_ownership_changed)
 	CountryManager.player_country_changed.connect(_on_player_country_changed)
 	if GameState.current_world and GameState.current_world.clock:
-		GameState.current_world.clock.day_passed.connect(_on_day_passed)
+		GameState.current_world.clock.DayPassed.connect(_on_day_passed)
 
 
 func _on_province_ownership_changed(_pid: int, _old_owner: String, _new_owner: String) -> void:
@@ -644,6 +654,34 @@ func _record_active_movements() -> void:
 
 
 # --- Helpers ---
+## Keeps the camera inside one map width. Wrap sprites cover the seam, so the
+## jump from the right edge back to the left edge is invisible.
+func _loop_camera_x(cam: Camera2D) -> void:
+	var origin_x := map_sprite.position.x
+	cam.position.x = origin_x + fposmod(cam.position.x - origin_x, map_width)
+
+
+## Mirrors the map sprite at +/- one and two map widths. Sync runs every frame
+## so a changed texture or material (scenario reload) updates every copy.
+func _sync_wrap_sprites() -> void:
+	if !map_sprite or map_width <= 0:
+		return
+	if _wrap_sprites.is_empty():
+		for i in WRAP_MULTIPLIERS.size():
+			var ghost := Sprite2D.new()
+			ghost.centered = map_sprite.centered
+			add_child(ghost)
+			_wrap_sprites.append(ghost)
+	for i in _wrap_sprites.size():
+		var ghost := _wrap_sprites[i]
+		if ghost.texture != map_sprite.texture:
+			ghost.texture = map_sprite.texture
+		if ghost.material != map_sprite.material:
+			ghost.material = map_sprite.material
+		ghost.visible = map_sprite.visible
+		ghost.position = map_sprite.position + Vector2(map_width * WRAP_MULTIPLIERS[i], 0.0)
+
+
 ## Picks the world-wrap copy of a position closest to the camera.
 ## Correct while the visible area is narrower than one map width.
 func _wrap_nearest(p: Vector2) -> Vector2:

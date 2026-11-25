@@ -1,5 +1,7 @@
 class_name CountryData extends RefCounted
 
+const DivisionTemplates = preload("res://Scripts/Divisions/DivisionTemplates.gd")
+
 static var SEA_COUNTRY_DATA: CountryData = CountryData.new()
 
 var economy_law_penalty: float = 0.0 # 0.10 means 10% income loss
@@ -326,7 +328,7 @@ func refresh_ideology_name() -> void:
 
 #region --- Military Management ---
 func train_troops(count: int, type: String = "infantry") -> bool:
-	var template = DivisionData.TEMPLATES.get(type)
+	var template = DivisionTemplates.TEMPLATES.get(type)
 	if not template:
 		push_error("Unknown division type: %s" % type)
 		return false
@@ -540,7 +542,7 @@ func _setup_starting_army() -> void:
 	var final_count = clampi(int((((gdp* 0.0000228310502) + factories_amount * factory_income) * 0.25) / max(1.0, (army_level * BASE_ARMY_COST))), 1, 6) # Start very small (1-6 divs)
 
 	# 3. Manpower Check
-	var template = DivisionData.TEMPLATES.get("infantry")
+	var template = DivisionTemplates.TEMPLATES.get("infantry")
 
 	if manpower < final_count * template["manpower"]:
 		final_count = int(manpower / max(1, template["manpower"]))
@@ -593,7 +595,7 @@ func _process_reinforcements():
 		for div in troop.stored_divisions:
 			if div.hp < div.max_hp:
 				var percentage: float = min(0.05, float(div.max_hp - div.hp) / float(div.max_hp))
-				var template = DivisionData.TEMPLATES[div.type]
+				var template = DivisionTemplates.TEMPLATES[div.type]
 				var men_needed = int(template["manpower"] * percentage) # 5% reinforcement
 				var moneyNeeded = int(template["cost"] * percentage * divCostMod) # 5% reinforcement
 

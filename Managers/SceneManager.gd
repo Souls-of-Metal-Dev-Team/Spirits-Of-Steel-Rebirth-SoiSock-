@@ -65,8 +65,10 @@ func switch_to(scene_type: Type, init_callback: Callable = Callable()) -> void:
 				ResourceLoader.THREAD_LOAD_LOADED:
 					break
 				ResourceLoader.THREAD_LOAD_IN_PROGRESS:
-					if _loading_screen:
-						_loading_screen.set_progress(progress[0])
+					if _loading_screen and progress.size() > 0:
+						var load_value = progress[0]
+						if typeof(load_value) == TYPE_INT or typeof(load_value) == TYPE_FLOAT:
+							_loading_screen.set_progress(float(load_value))
 				_:
 					push_error("Failed to load scene: " + path)
 					break
@@ -106,7 +108,9 @@ func switch_to(scene_type: Type, init_callback: Callable = Callable()) -> void:
 			while bingo.is_alive():
 				if progress.size() <= 0:
 					progress = [0]
-				_loading_screen.set_progress(progress[0])
+				var value = progress[0]
+				if typeof(value) == TYPE_INT or typeof(value) == TYPE_FLOAT:
+					_loading_screen.set_progress(float(value))
 				await get_tree().process_frame
 
 			bingo.wait_to_finish()

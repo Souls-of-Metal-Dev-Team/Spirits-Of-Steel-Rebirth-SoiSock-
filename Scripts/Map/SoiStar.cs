@@ -1,0 +1,74 @@
+using Godot;
+using Sosr;
+
+namespace Sosr;
+
+[GlobalClass]
+public partial class SoiStar : AStar2D
+{
+	// NOTE(soi): I AM A SUPERSTAR
+
+	public Godot.Collections.Array<string> context_allowed_countries = new Godot.Collections.Array<string>();
+
+	public override float _ComputeCost(long from_id, long to_id)
+	{
+		return GetPointPosition(from_id).DistanceTo(GetPointPosition(to_id));
+	}
+
+	public override float _EstimateCost(long from_id, long to_id)
+	{
+		return GetPointPosition(from_id).DistanceTo(GetPointPosition(to_id));
+	}
+
+	public override bool _FilterNeighbor(
+		long from_id,
+		long to_id
+	)
+	{
+		var provinceObjects = GdBridge.Get("MapManager", "province_objects").AsGodotDictionary();
+		var fromProv = provinceObjects.ContainsKey(from_id) ? provinceObjects[from_id].AsGodotObject() : null;
+		var toProv = provinceObjects.ContainsKey(to_id) ? provinceObjects[to_id].AsGodotObject() : null;
+
+		if (fromProv == null || toProv == null)
+			return true;
+
+		var fromOwner = fromProv.Call("GetFunctionalOwner").AsString();
+		var toOwner = toProv.Call("GetFunctionalOwner").AsString();
+
+		// --- 1. Naval Restrictions (Hard requirement) ---
+		// if from_prov.type == Province.LAND and to_prov.type == Province.SEA:
+		// 	var has_port = false
+		// 	for b in from_prov.buildings:
+		// 		if b.type == "Port":
+		// 			has_port = true
+		// 			break
+		// 	if !has_port: return true
+		//
+		// if from_prov.type == Province.SEA and to_prov.type == Province.LAND:
+		// 	var has_port = false
+		// 	for b in to_prov.buildings:
+		// 		if b.type == "Port":
+		// 			has_port = true
+		// 			break
+		// 	if !has_port: return true
+
+		// --- 2. Political Access Context-aware ---
+		if (context_allowed_countries.Count > 0)
+		{
+			// Destination is allowed -> Go ahead
+			// ESCAPE RULE: Starting province is disallowed?
+			// Allow one-step movement to find a way out.
+			if (context_allowed_countries.Contains(toOwner)
+				|| !context_allowed_countries.Contains(fromOwner))
+			{
+				return false;
+			}
+
+			// Restricted: Path tries to enter territory we don't have access to
+			return true;
+		}
+
+		// Default: Allow if no context (used during graph initialization)
+		return false;
+	}
+}

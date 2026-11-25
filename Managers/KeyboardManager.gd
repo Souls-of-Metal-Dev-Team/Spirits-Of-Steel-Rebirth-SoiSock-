@@ -22,7 +22,7 @@ func _unhandled_input(
 	if Console.is_visible():
 		return
 	if a_event is InputEventKey:
-		var clock := GameState.current_world.clock
+		var clock = GameState.current_world.clock
 
 		if a_event.is_action_pressed("deselect_troops"):
 			settings.visible = !settings.visible

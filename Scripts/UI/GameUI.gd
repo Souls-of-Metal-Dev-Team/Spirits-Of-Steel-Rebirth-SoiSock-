@@ -1,6 +1,8 @@
 extends CanvasLayer
 class_name GameUI
 
+const DivisionTemplates = preload("res://Scripts/Divisions/DivisionTemplates.gd")
+
 # Emitted when a click couldn't be processed (so likely sea or border)
 signal close_sidemenu
 
@@ -240,7 +242,7 @@ func _ready() -> void:
 	set_tooltips_of_tabcontainers()
 	
 	sidemenu_context.current_tab = Context.SELECT
-	for template in DivisionData.TEMPLATES:
+	for template in DivisionTemplates.TEMPLATES:
 		division_type.add_icon_item(
 			load("res://starts/%s/assets/division_icons/%s.svg" % [GameState.current_start, template]),
 			template.capitalize()
@@ -268,16 +270,16 @@ func _ready() -> void:
 	KeyboardManager.sidemenuCloseRequested.connect(_on_sidemenu_close_requested)
 	KeyboardManager.sidemenuToggleRequested.connect(_on_sidemenu_toggle_requested)
 	MusicManager.trackChanged.connect(_on_track_changed)
-	EconomyManager.constructionStarted.connect(_on_construction_changed)
-	EconomyManager.constructionFinished.connect(_on_construction_changed)
+	EconomyManager.ConstructionStarted.connect(_on_construction_changed)
+	EconomyManager.ConstructionFinished.connect(_on_construction_changed)
 	if TroopManager.troop_selection:
 		TroopManager.troop_selection.selectionChanged.connect(_on_troop_selection_changed)
 
 	var world: World = GameState.current_world
 	if world and world.clock:
-		world.clock.hour_passed.connect(_on_hour_passed)
-		world.clock.day_passed.connect(_on_day_passed)
-		world.clock.clockUpdate.connect(updateProgressBar)
+		world.clock.HourPassed.connect(_on_hour_passed)
+		world.clock.DayPassed.connect(_on_day_passed)
+		world.clock.ClockUpdate.connect(updateProgressBar)
 	
 	CountryManager.player_country_changed.connect(_on_player_change)
 	if CountryManager.player_country:
@@ -291,8 +293,8 @@ func _ready() -> void:
 	update_division_menu()
 	
 	if world and world.clock:
-		var clock := world.clock
-		clock.hour_passed.connect(_on_time_passed)
+		var clock = world.clock
+		clock.HourPassed.connect(_on_time_passed)
 		plus.pressed.connect(clock.increase_speed)
 		minus.pressed.connect(clock.decrease_speed)
 		label_date.text = clock.get_datetime_string()
@@ -793,7 +795,7 @@ func _on_time_passed() -> void:
 
 func updateProgressBar():
 	var clock = GameState.current_world.clock
-	progress_bar.value = (clock.time_scale / clock.MAX_SPEED) * 100.0
+	progress_bar.value = (clock.time_scale / clock.max_speed) * 100.0
 	var bg_style = progress_bar.get_theme_stylebox("background")
 	if clock.paused:
 		bg_style.border_color = Color.DARK_RED
@@ -1058,7 +1060,7 @@ func close_troop_container() -> void:
 
 # --- Main Update Logic ---
 func update_division_menu():
-	var stats = DivisionData.TEMPLATES.get(division_type_selected)
+	var stats = DivisionTemplates.TEMPLATES.get(division_type_selected)
 	if !stats:
 		return # Safety check
 
@@ -1100,8 +1102,8 @@ func _on_division_type_button(type: String) -> void:
 
 func _on_division_type_selected(index: int) -> void:
 	print(division_type_selected)
-	print(DivisionData.TEMPLATES)
-	division_type_selected = DivisionData.TEMPLATES.keys()[index]
+	print(DivisionTemplates.TEMPLATES)
+	division_type_selected = DivisionTemplates.TEMPLATES.keys()[index]
 	print(division_type_selected)
 	update_division_menu()
 

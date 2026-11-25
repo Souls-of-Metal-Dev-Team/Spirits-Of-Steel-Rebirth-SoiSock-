@@ -1,5 +1,7 @@
 extends Node
 
+const DivisionTemplates = preload("res://Scripts/Divisions/DivisionTemplates.gd")
+
 signal player_country_changed
 # Emitted when the player's country has no provinces left.
 signal playerEliminated(country: CountryData)
@@ -75,7 +77,7 @@ func initialize_countries(a_countriesData: Array) -> void:
 
 func _ensure_country_has_leader(country: CountryData) -> void:
 	if country.governmentPositions["Leader"].size() <= 0:
-		var new_figure = ImportantFigure.FromRandom(country.country_name)
+		var new_figure = ImportantFigure.FromRandom(country.country_name, 0.0)
 		new_figure.occupation = "Leader"
 		MapManager.significantFigures[new_figure.name] = new_figure
 		country.figures.append(new_figure.name)
@@ -186,14 +188,14 @@ func get_factories_amount(country_name: String) -> int:
 	for province: int in MapManager.country_to_provinces[country_name]:
 		for building: BuildingData in MapManager.province_objects[province].buildings:
 			#print("Checking %d, it is a %s in the %s state." % [province, building.type, building.state])
-			if building.type == "Factory" && building.state == BuildingData.BuildingState.FUNCTIONAL:
+			if building.type == "Factory" && building.state == 1:
 				factoryCount += 1
 	return factoryCount
 	#return MapManager.country_to_provinces.get(country_name, []).reduce(
 	#	func(pid: int, accum: int):
 	#		return (accum + MapManager.province_objects[pid].buildings.reduce(
 	#			func(building: BuildingData, b_accum: int): 
-	#				return (b_accum + 1) if (building.type == "Factory" && building.state == BuildingData.BuildingState.FUNCTIONAL) else b_accum,\
+	#				return (b_accum + 1) if (building.type == "Factory" && building.state == 1) else b_accum,\
 	#			0
 	#		) if (MapManager.province_objects.has(pid)) else 0),
 	#	0
@@ -226,7 +228,7 @@ static func get_country_used_manpower(country_obj: CountryData) -> int:
 
 # Helper to keep the code DRY (Don't Repeat Yourself)
 static func _get_manpower_from_template(type: String) -> int:
-	return DivisionData.TEMPLATES.get(type, DivisionData.TEMPLATES["infantry"])["manpower"]
+	return DivisionTemplates.TEMPLATES.get(type, DivisionTemplates.TEMPLATES["infantry"])["manpower"]
 
 var cleanupLock: bool = false
 

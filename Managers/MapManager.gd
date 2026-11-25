@@ -310,7 +310,7 @@ func SaveProvinces() -> Dictionary:
 		var next_id: int = unique_regions[index]
 		var province: Province = province_objects[next_id]
 		var troops: Array = TroopManager.get_serialized_troops_for_province(next_id)
-		provinces[str(index)] = province.ToDict(troops)
+		provinces[str(index)] = province.ToDictWithTroops(troops)
 	return provinces
 
 func SaveResourcesData() -> Array:

@@ -1,5 +1,7 @@
 class_name ExpressionBox extends PanelContainer
 
+const ExpressionTypes = preload("res://Scripts/UI/Elements/ExpressionTypes.gd")
+
 enum ElementTypes {Paragraph, Button, Image, Header}
 signal changed
 
@@ -7,7 +9,7 @@ signal changed
 const EXPRESSION_SCENE_PATH = "res://Scenes/Expression.tscn"
 const CASE_SCENE_PATH = "res://Scenes/Case.tscn"
 
-var expression_type: InterpreterManager.ExpressionTypes
+var expression_type: int = 0
 var is_child: bool = false
 
 @export var expression_tabs: TabContainer
@@ -60,7 +62,7 @@ var value_expression = Expression.new()
 
 func ToDict():
 	match expression_tabs.current_tab:
-		InterpreterManager.ExpressionTypes.Variable:
+		ExpressionTypes.Variable:
 			if value_edit.text.is_valid_float():
 				return float(value_edit.text)
 			else:
@@ -73,28 +75,28 @@ func ToDict():
 			# if value_expression.has_execute_failed():
 			# 	return value_edit.text
 
-		InterpreterManager.ExpressionTypes.List:
+		ExpressionTypes.List:
 			return items_box.get_children().map(func(x): return x.ToDict())
 
-		InterpreterManager.ExpressionTypes.Event:
+		ExpressionTypes.Event:
 			var fish = {}
 			for pair in pairs.get_children():
 				fish.merge(pair.ToDict())
 			return fish
 
-		InterpreterManager.ExpressionTypes.Function:
+		ExpressionTypes.Function:
 			return {
 				"func": func_options.text,
 				"args": args_box.get_children().map(func(x): return x.ToDict())
 				}
 
-		InterpreterManager.ExpressionTypes.Loop:
+		ExpressionTypes.Loop:
 			var in_val = iter_element_box.get_children().map(func(x): return x.ToDict())
 			if iter_element_box.get_child_count() == 1:
 				var first = iter_element_box.get_child(0)
-				if first.expression_type == InterpreterManager.ExpressionTypes.List:
+				if first.expression_type == ExpressionTypes.List:
 					in_val = first.ToDict()
-				elif first.expression_type == InterpreterManager.ExpressionTypes.Variable:
+				elif first.expression_type == ExpressionTypes.Variable:
 					var txt = str(first.ToDict())
 					if txt.begins_with("[") and txt.ends_with("]"):
 						var parsed = JSON.parse_string(txt)
@@ -111,7 +113,7 @@ func ToDict():
 				"do": do_box.get_children().map(func(x): return x.ToDict()),
 				}
 
-		InterpreterManager.ExpressionTypes.Match:
+		ExpressionTypes.Match:
 			var fish = {}
 			if match_expression.get_child_count() > 0:
 				fish["match"] = match_expression.get_child(0).ToDict()
@@ -120,7 +122,7 @@ func ToDict():
 				fish.merge(case.ToDict())
 			return fish
 
-		InterpreterManager.ExpressionTypes.Element:
+		ExpressionTypes.Element:
 			match element_tabs.current_tab:
 				ElementTypes.Paragraph:
 					return {
@@ -149,7 +151,7 @@ func ToDict():
 						"country2": country2_name.get_child(0).ToDict(),
 						}
 
-		InterpreterManager.ExpressionTypes.IdeologyDrift:
+		ExpressionTypes.IdeologyDrift:
 			return {
 				"drift_amount": drift_amount.value,
 				"final_position": [final_x.value, final_y.value]
@@ -163,7 +165,7 @@ static func FromDict(data, _is_child: bool = false) -> ExpressionBox:
 	box.setup_ui()
 
 	if typeof(data) == TYPE_ARRAY:
-		box.expression_tabs.current_tab = InterpreterManager.ExpressionTypes.List
+		box.expression_tabs.current_tab = ExpressionTypes.List
 		for item in data:
 			var child = FromDict(item, true)
 			box.items_box.add_child(child)
@@ -171,12 +173,12 @@ static func FromDict(data, _is_child: bool = false) -> ExpressionBox:
 		return box
 
 	if typeof(data) != TYPE_DICTIONARY:
-		box.expression_tabs.current_tab = InterpreterManager.ExpressionTypes.Variable
+		box.expression_tabs.current_tab = ExpressionTypes.Variable
 		if box.value_edit: box.value_edit.text = str(data)
 		return box
 
 	if data.has("func"):
-		box.expression_tabs.current_tab = InterpreterManager.ExpressionTypes.Function
+		box.expression_tabs.current_tab = ExpressionTypes.Function
 		var idx = -1
 		for i in box.func_options.item_count:
 			if box.func_options.get_item_text(i) == data["func"]:
@@ -194,7 +196,7 @@ static func FromDict(data, _is_child: bool = false) -> ExpressionBox:
 		box._update_arg_placeholders()
 
 	elif data.has("for"):
-		box.expression_tabs.current_tab = InterpreterManager.ExpressionTypes.Loop
+		box.expression_tabs.current_tab = ExpressionTypes.Loop
 		if box.for_edit: box.for_edit.text = data["for"]
 		var child = FromDict(data["in"], true)
 		if child:
@@ -207,7 +209,7 @@ static func FromDict(data, _is_child: bool = false) -> ExpressionBox:
 			_child.changed.connect(func(): box.changed.emit())
 
 	elif data.has("match"):
-		box.expression_tabs.current_tab = InterpreterManager.ExpressionTypes.Match
+		box.expression_tabs.current_tab = ExpressionTypes.Match
 		var match_expr = FromDict(data["match"], true)
 		box.match_expression.add_child(match_expr)
 		match_expr.changed.connect(func(): box.changed.emit())
@@ -218,14 +220,14 @@ static func FromDict(data, _is_child: bool = false) -> ExpressionBox:
 			case.FromDict({key: data[key]})
 
 	elif data.has("event"):
-		box.expression_tabs.current_tab = InterpreterManager.ExpressionTypes.Event
+		box.expression_tabs.current_tab = ExpressionTypes.Event
 		for key in data.keys():
 			var pair = box._on_add_pair_pressed()
 			pair.FromDict({key: data[key]})
 
 	elif data.has("type"):
-		box.expression_tabs.current_tab = InterpreterManager.ExpressionTypes.Element
-		box._on_expression_type_tab_selected(InterpreterManager.ExpressionTypes.Element)
+		box.expression_tabs.current_tab = ExpressionTypes.Element
+		box._on_expression_type_tab_selected(ExpressionTypes.Element)
 		match data["type"]:
 			"paragraph":
 				box.element_tabs.current_tab = box.ElementTypes.Paragraph
@@ -247,8 +249,8 @@ static func FromDict(data, _is_child: bool = false) -> ExpressionBox:
 				FromDictInPlace(box.country2_name.get_child(0), data["country2"])
 
 	elif data.has("drift_amount"):
-		box.expression_tabs.current_tab = InterpreterManager.ExpressionTypes.IdeologyDrift
-		box._on_expression_type_tab_selected(InterpreterManager.ExpressionTypes.IdeologyDrift)
+		box.expression_tabs.current_tab = ExpressionTypes.IdeologyDrift
+		box._on_expression_type_tab_selected(ExpressionTypes.IdeologyDrift)
 		box.drift_amount.value = data["drift_amount"]
 		box.final_x.value = data["final_position"][0]
 		box.final_y.value = data["final_position"][1]
@@ -261,7 +263,7 @@ static func FromDictInPlace(box: ExpressionBox, data):
 	box.setup_ui()
 	
 	if typeof(data) == TYPE_ARRAY:
-		box.expression_tabs.current_tab = InterpreterManager.ExpressionTypes.List
+		box.expression_tabs.current_tab = ExpressionTypes.List
 		for item in data:
 			var child = FromDict(item, true)
 			box.items_box.add_child(child)
@@ -269,12 +271,12 @@ static func FromDictInPlace(box: ExpressionBox, data):
 		return
 
 	if typeof(data) != TYPE_DICTIONARY:
-		box.expression_tabs.current_tab = InterpreterManager.ExpressionTypes.Variable
+		box.expression_tabs.current_tab = ExpressionTypes.Variable
 		if box.value_edit: box.value_edit.text = str(data)
 		return
 
 	if data.has("func"):
-		box.expression_tabs.current_tab = InterpreterManager.ExpressionTypes.Function
+		box.expression_tabs.current_tab = ExpressionTypes.Function
 		var idx = -1
 		for i in box.func_options.item_count:
 			if box.func_options.get_item_text(i) == data["func"]:
@@ -292,7 +294,7 @@ static func FromDictInPlace(box: ExpressionBox, data):
 		box._update_arg_placeholders()
 
 	elif data.has("for"):
-		box.expression_tabs.current_tab = InterpreterManager.ExpressionTypes.Loop
+		box.expression_tabs.current_tab = ExpressionTypes.Loop
 		if box.for_edit: box.for_edit.text = data["for"]
 		var child = FromDict(data["in"], true)
 		if child:
@@ -305,7 +307,7 @@ static func FromDictInPlace(box: ExpressionBox, data):
 			_child.changed.connect(func(): box.changed.emit())
 
 	elif data.has("match"):
-		box.expression_tabs.current_tab = InterpreterManager.ExpressionTypes.Match
+		box.expression_tabs.current_tab = ExpressionTypes.Match
 		var match_expr = FromDict(data["match"], true)
 		box.match_expression.add_child(match_expr)
 		match_expr.changed.connect(func(): box.changed.emit())
@@ -315,14 +317,14 @@ static func FromDictInPlace(box: ExpressionBox, data):
 			case.FromDict({key: data[key]})
 
 	elif data.has("event"):
-		box.expression_tabs.current_tab = InterpreterManager.ExpressionTypes.Event
+		box.expression_tabs.current_tab = ExpressionTypes.Event
 		for key in data.keys():
 			var pair = box._on_add_pair_pressed()
 			pair.FromDict({key: data[key]})
 
 	elif data.has("type"):
-		box.expression_tabs.current_tab = InterpreterManager.ExpressionTypes.Element
-		box._on_expression_type_tab_selected(InterpreterManager.ExpressionTypes.Element)
+		box.expression_tabs.current_tab = ExpressionTypes.Element
+		box._on_expression_type_tab_selected(ExpressionTypes.Element)
 		match data["type"]:
 			"paragraph":
 				box.element_tabs.current_tab = box.ElementTypes.Paragraph
@@ -344,8 +346,8 @@ static func FromDictInPlace(box: ExpressionBox, data):
 				FromDictInPlace(box.country2_name.get_child(0), data["country2"])
 
 	elif data.has("drift_amount"):
-		box.expression_tabs.current_tab = InterpreterManager.ExpressionTypes.IdeologyDrift
-		box._on_expression_type_tab_selected(InterpreterManager.ExpressionTypes.IdeologyDrift)
+		box.expression_tabs.current_tab = ExpressionTypes.IdeologyDrift
+		box._on_expression_type_tab_selected(ExpressionTypes.IdeologyDrift)
 		box.drift_amount.value = data["drift_amount"]
 		box.final_x.value = data["final_position"][0]
 		box.final_y.value = data["final_position"][1]
@@ -356,7 +358,7 @@ func setup_ui():
 		for function in InterpreterManager.functions.keys():
 			func_options.add_item(function)
 	
-	expression_tabs.set_tab_hidden(InterpreterManager.ExpressionTypes.Close, !is_child)
+	expression_tabs.set_tab_hidden(ExpressionTypes.Close, !is_child)
 
 
 func _ready() -> void:
@@ -402,7 +404,7 @@ func _add_inital_expression(box: Container):
 	if !box.get_children():
 		var scene = load(EXPRESSION_SCENE_PATH)
 		var expr: ExpressionBox = scene.instantiate()
-		expr.expression_tabs.current_tab = InterpreterManager.ExpressionTypes.Variable
+		expr.expression_tabs.current_tab = ExpressionTypes.Variable
 		expr.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		expr.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		box.add_child(expr)
@@ -410,14 +412,14 @@ func _add_inital_expression(box: Container):
 
 func _on_expression_type_tab_selected(tab: int) -> void:
 	match tab:
-		InterpreterManager.ExpressionTypes.Close:
+		ExpressionTypes.Close:
 			queue_free()
 		# ExpressionTypes.Loop:
 		# 	_add_inital_expression(iter_element_box)
 		# 	_add_inital_expression(do_box)
-		InterpreterManager.ExpressionTypes.Match:
+		ExpressionTypes.Match:
 			_add_inital_expression(match_expression)
-		InterpreterManager.ExpressionTypes.Element:
+		ExpressionTypes.Element:
 			_add_inital_expression(paragraph_text)
 			_add_inital_expression(button_text)
 			_add_inital_expression(button_condition)
@@ -426,7 +428,7 @@ func _on_expression_type_tab_selected(tab: int) -> void:
 			_add_inital_expression(country2_name)
 			_add_inital_expression(image_path)
 		_:
-			expression_type = tab as InterpreterManager.ExpressionTypes
+			expression_type = tab as int
 	changed.emit()
 	
 

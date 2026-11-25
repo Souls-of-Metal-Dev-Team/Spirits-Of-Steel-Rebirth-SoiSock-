@@ -1,5 +1,7 @@
 class_name CountryAI
 
+const DivisionTemplates = preload("res://Scripts/Divisions/DivisionTemplates.gd")
+
 # --- TUNING ---
 const TICK_RATE_PEACE := 12  # Slower thinking in peace time
 const TICK_RATE_WAR := 2  # Think fast during war
@@ -174,7 +176,7 @@ func _execute_factory() -> bool:
 
 func _execute_train() -> bool:
 	# Improved: Recruit based on current needs (e.g., more if at war)
-	var template: Dictionary = DivisionData.TEMPLATES["infantry"]  # Could vary templates based on tech/manpower
+	var template: Dictionary = DivisionTemplates.TEMPLATES["infantry"]  # Could vary templates based on tech/manpower
 	var max_affordable: int = mini(int(country.money / template["cost"]), int(country.manpower / template["manpower"]))
 	if max_affordable < 1:
 		return false

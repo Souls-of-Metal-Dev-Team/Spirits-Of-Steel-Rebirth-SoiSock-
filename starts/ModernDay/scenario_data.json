@@ -570,6 +570,216 @@
 				}
 			],
 			"name": "ASEAN"
+		},
+		{
+			"color": "#058715",
+			"members": [
+				{
+					"polity": "Egypt",
+					"status": "Leader"
+				},
+				{
+					"polity": "Mali",
+					"status": "Member"
+				},
+				{
+					"polity": "Niger",
+					"status": "Member"
+				},
+				{
+					"polity": "Chad",
+					"status": "Member"
+				},
+				{
+					"polity": "Libya",
+					"status": "Member"
+				},
+				{
+					"polity": "Sudan",
+					"status": "Member"
+				},
+				{
+					"polity": "Tunisia",
+					"status": "Member"
+				},
+				{
+					"polity": "Suriname",
+					"status": "Member"
+				},
+				{
+					"polity": "Liberia",
+					"status": "Member"
+				},
+				{
+					"polity": "Algeria",
+					"status": "Member"
+				},
+				{
+					"polity": "Nigeria",
+					"status": "Member"
+				},
+				{
+					"polity": "South_africa",
+					"status": "Member"
+				},
+				{
+					"polity": "Botswana",
+					"status": "Member"
+				},
+				{
+					"polity": "Dr_congo",
+					"status": "Member"
+				},
+				{
+					"polity": "Congo",
+					"status": "Member"
+				},
+				{
+					"polity": "Morocco",
+					"status": "Member"
+				},
+				{
+					"polity": "Mauritania",
+					"status": "Member"
+				},
+				{
+					"polity": "Zimbabwe",
+					"status": "Member"
+				},
+				{
+					"polity": "Angola",
+					"status": "Member"
+				},
+				{
+					"polity": "Central_african_republic",
+					"status": "Member"
+				},
+				{
+					"polity": "Cameroon",
+					"status": "Member"
+				},
+				{
+					"polity": "Gambia",
+					"status": "Member"
+				},
+				{
+					"polity": "South_sudan",
+					"status": "Member"
+				},
+				{
+					"polity": "Namibia",
+					"status": "Member"
+				},
+				{
+					"polity": "Ethiopia",
+					"status": "Member"
+				},
+				{
+					"polity": "Uganda",
+					"status": "Member"
+				},
+				{
+					"polity": "Tanzania",
+					"status": "Member"
+				},
+				{
+					"polity": "Somalia",
+					"status": "Member"
+				},
+				{
+					"polity": "Kenya",
+					"status": "Member"
+				},
+				{
+					"polity": "Eritrea",
+					"status": "Member"
+				},
+				{
+					"polity": "Gabon",
+					"status": "Member"
+				},
+				{
+					"polity": "Mozambique",
+					"status": "Member"
+				},
+				{
+					"polity": "Zambia",
+					"status": "Member"
+				},
+				{
+					"polity": "Lesotho",
+					"status": "Member"
+				},
+				{
+					"polity": "Eswatini",
+					"status": "Member"
+				},
+				{
+					"polity": "Ivory_coast",
+					"status": "Member"
+				},
+				{
+					"polity": "Ghana",
+					"status": "Member"
+				},
+				{
+					"polity": "Burkina_faso",
+					"status": "Member"
+				},
+				{
+					"polity": "Guinea_bissau",
+					"status": "Member"
+				},
+				{
+					"polity": "Sierra_leone",
+					"status": "Member"
+				},
+				{
+					"polity": "Rwanda",
+					"status": "Member"
+				},
+				{
+					"polity": "Madagascar",
+					"status": "Member"
+				},
+				{
+					"polity": "Djibouti",
+					"status": "Member"
+				},
+				{
+					"polity": "Benin",
+					"status": "Member"
+				},
+				{
+					"polity": "Togo",
+					"status": "Member"
+				},
+				{
+					"polity": "Guinea",
+					"status": "Member"
+				},
+				{
+					"polity": "Senegal",
+					"status": "Member"
+				},
+				{
+					"polity": "Equatorial_guinea",
+					"status": "Member"
+				},
+				{
+					"polity": "Burundi",
+					"status": "Member"
+				},
+				{
+					"polity": "Malawi",
+					"status": "Member"
+				},
+				{
+					"polity": "Western_sahara",
+					"status": "Member"
+				}
+			],
+			"name": "African Union"
 		}
 	],
 	"polities": [
@@ -587,7 +797,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "MarkJosephCarney"
+				"Leader": [
+					"MarkJosephCarney"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -615,7 +827,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "MetteFrederiksen"
+				"Leader": [
+					"MetteFrederiksen"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -662,7 +876,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "VladimirPutin"
+				"Leader": [
+					"VladimirPutin"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -695,7 +911,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "JonasGahrStore"
+				"Leader": [
+					"JonasGahrStore"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -722,7 +940,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "DonaldJohnTrump"
+				"Leader": [
+					"DonaldJohnTrump"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -780,7 +1000,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "UlfHjalmarKristersson"
+				"Leader": [
+					"UlfHjalmarKristersson"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -807,7 +1029,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "KristrunMjollFrostadottir"
+				"Leader": [
+					"KristrunMjollFrostadottir"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -834,7 +1058,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "AlarKaris"
+				"Leader": [
+					"AlarKaris"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -867,7 +1093,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "KeirStarmer"
+				"Leader": [
+					"KeirStarmer"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -895,7 +1123,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "EvikaSilina"
+				"Leader": [
+					"EvikaSilina"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -923,7 +1153,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "GintautasPaluckas"
+				"Leader": [
+					"GintautasPaluckas"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -951,7 +1183,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "AlexanderLukashenko"
+				"Leader": [
+					"AlexanderLukashenko"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -978,7 +1212,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "CatherineMartinaAnnConnolly"
+				"Leader": [
+					"CatherineMartinaAnnConnolly"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1006,7 +1242,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "KassymJomartKemelulyTokayev"
+				"Leader": [
+					"KassymJomartKemelulyTokayev"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1034,7 +1272,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "FriedrichMerz"
+				"Leader": [
+					"FriedrichMerz"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1061,7 +1301,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "KarolTadeuszNawrocki"
+				"Leader": [
+					"KarolTadeuszNawrocki"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1088,7 +1330,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "RobArnoldusAdrianusJetten"
+				"Leader": [
+					"RobArnoldusAdrianusJetten"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1123,7 +1367,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "XiJinping"
+				"Leader": [
+					"XiJinping"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1153,7 +1399,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "VolodymyrZelenskyy"
+				"Leader": [
+					"VolodymyrZelenskyy"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1180,7 +1428,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "UkhnaagiinKhurelsukh"
+				"Leader": [
+					"UkhnaagiinKhurelsukh"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1208,7 +1458,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "BartAlbertLilianeDeWever"
+				"Leader": [
+					"BartAlbertLilianeDeWever"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1243,7 +1495,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "EmmanuelMacron"
+				"Leader": [
+					"EmmanuelMacron"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1270,7 +1524,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "AndrejBabis"
+				"Leader": [
+					"AndrejBabis"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1297,7 +1553,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "XavierBettel"
+				"Leader": [
+					"XavierBettel"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1324,7 +1582,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "PeterPellegrini"
+				"Leader": [
+					"PeterPellegrini"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1351,7 +1611,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "ChristianStocker"
+				"Leader": [
+					"ChristianStocker"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1378,7 +1640,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "VictorOrban"
+				"Leader": [
+					"VictorOrban"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1406,7 +1670,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "MaiaSandu"
+				"Leader": [
+					"MaiaSandu"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1434,7 +1700,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "NicusorDanielDan"
+				"Leader": [
+					"NicusorDanielDan"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1462,7 +1730,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "VadimNikolayevichKrasnoselsky"
+				"Leader": [
+					"VadimNikolayevichKrasnoselsky"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1492,7 +1762,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "KarinMariaKellerSutter"
+				"Leader": [
+					"KarinMariaKellerSutter"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1519,7 +1791,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "EbbylaorkoeghtourlEikkeytruyglaipoislylm"
+				"Leader": [
+					"EbbylaorkoeghtourlEikkeytruyglaipoislylm"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1548,7 +1822,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "GiorgiaMeloni"
+				"Leader": [
+					"GiorgiaMeloni"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1575,7 +1851,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "NatasaPircMusar"
+				"Leader": [
+					"NatasaPircMusar"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1602,7 +1880,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "ZoranMilanovic"
+				"Leader": [
+					"ZoranMilanovic"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1630,7 +1910,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "AleksandarVucic"
+				"Leader": [
+					"AleksandarVucic"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1691,7 +1973,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "ShavkatMiromonovichMirziyoyev"
+				"Leader": [
+					"ShavkatMiromonovichMirziyoyev"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1718,7 +2002,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "SanaeTakaichi"
+				"Leader": [
+					"SanaeTakaichi"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1745,7 +2031,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "RumenGeorgievRadev"
+				"Leader": [
+					"RumenGeorgievRadev"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1776,7 +2064,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "PedroSanchez"
+				"Leader": [
+					"PedroSanchez"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1834,7 +2124,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "AlbertAlexandreLouisPierreGrimaldi"
+				"Leader": [
+					"AlbertAlexandreLouisPierreGrimaldi"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1861,7 +2153,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "BadraZurabovichGunba"
+				"Leader": [
+					"BadraZurabovichGunba"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1888,7 +2182,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "JakovMilatovic"
+				"Leader": [
+					"JakovMilatovic"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1915,7 +2211,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "VjosaOsmaniSadriu"
+				"Leader": [
+					"VjosaOsmaniSadriu"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1942,7 +2240,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "MikheilKavelashvili"
+				"Leader": [
+					"MikheilKavelashvili"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1969,7 +2269,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "SadyrNurgojoUuluJaparov"
+				"Leader": [
+					"SadyrNurgojoUuluJaparov"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -1996,7 +2298,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "XavierEspotZamora"
+				"Leader": [
+					"XavierEspotZamora"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2023,7 +2327,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "AlanEduardovichGagloyev"
+				"Leader": [
+					"AlanEduardovichGagloyev"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2051,7 +2357,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "SerdarGurbangulyyewicBerdimuhamedow"
+				"Leader": [
+					"SerdarGurbangulyyewicBerdimuhamedow"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2078,7 +2386,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "KimJongUn"
+				"Leader": [
+					"KimJongUn"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2105,7 +2415,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "BajramBegaj"
+				"Leader": [
+					"BajramBegaj"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2133,7 +2445,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "GordanaSiljanovskaDavkova"
+				"Leader": [
+					"GordanaSiljanovskaDavkova"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2160,7 +2474,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "IlhamHeydarOghluAliyev"
+				"Leader": [
+					"IlhamHeydarOghluAliyev"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2187,7 +2503,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "MarceloNunoDuarteRebeloDeSousa"
+				"Leader": [
+					"MarceloNunoDuarteRebeloDeSousa"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2216,7 +2534,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "RecepTayyipErdogan"
+				"Leader": [
+					"RecepTayyipErdogan"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2243,7 +2563,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "PopeLeoXIV"
+				"Leader": [
+					"PopeLeoXIV"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2270,7 +2592,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "KonstantinosTasoulas"
+				"Leader": [
+					"KonstantinosTasoulas"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2297,7 +2621,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "NikolVovayiPashinyan"
+				"Leader": [
+					"NikolVovayiPashinyan"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2324,7 +2650,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "EmomaliRahmon"
+				"Leader": [
+					"EmomaliRahmon"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2357,7 +2685,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "MasoudPezeshkian"
+				"Leader": [
+					"MasoudPezeshkian"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2387,7 +2717,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "OirlaibriourraeblThaeghiYydwoybraptuadrou"
+				"Leader": [
+					"OirlaibriourraeblThaeghiYydwoybraptuadrou"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2414,7 +2746,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "LeeJaeMyung"
+				"Leader": [
+					"LeeJaeMyung"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2441,7 +2775,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "QaysSuAyyid"
+				"Leader": [
+					"QaysSuAyyid"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2470,7 +2806,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "AliFalihKadhimAlZaidi"
+				"Leader": [
+					"AliFalihKadhimAlZaidi"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2498,7 +2836,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "AhmedHusseinAlSharaa"
+				"Leader": [
+					"AhmedHusseinAlSharaa"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2532,7 +2872,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "AasifAliZardari"
+				"Leader": [
+					"AasifAliZardari"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2560,7 +2902,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "AbdelmadjidTebboune"
+				"Leader": [
+					"AbdelmadjidTebboune"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2589,7 +2933,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "MohammedBenElHassan"
+				"Leader": [
+					"MohammedBenElHassan"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2616,7 +2962,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "RobertAbela"
+				"Leader": [
+					"RobertAbela"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2643,7 +2991,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "TufanErhurman"
+				"Leader": [
+					"TufanErhurman"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2701,7 +3051,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "NarendraModi"
+				"Leader": [
+					"NarendraModi"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2728,7 +3080,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "NikosChristodoulides"
+				"Leader": [
+					"NikosChristodoulides"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2755,7 +3109,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "JosephKhalilAoun"
+				"Leader": [
+					"JosephKhalilAoun"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2783,7 +3139,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "KhalifaHaftar"
+				"Leader": [
+					"KhalifaHaftar"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2811,7 +3169,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "Netanyahu"
+				"Leader": [
+					"Netanyahu"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2838,7 +3198,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "AbdullahBinHussein"
+				"Leader": [
+					"AbdullahBinHussein"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2865,7 +3227,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "ClaudiaSheinbaumPardo"
+				"Leader": [
+					"ClaudiaSheinbaumPardo"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2892,7 +3256,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "MohammedBinSalman"
+				"Leader": [
+					"MohammedBinSalman"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2919,7 +3285,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "MahmoudRidaAbbas"
+				"Leader": [
+					"MahmoudRidaAbbas"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2946,7 +3314,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "AbdelFattahSaeedHusseinKhalilElSisi"
+				"Leader": [
+					"AbdelFattahSaeedHusseinKhalilElSisi"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -2973,7 +3343,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "SushilaKarki"
+				"Leader": [
+					"SushilaKarki"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3000,7 +3372,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "MishalAlAhmadAlJaberAlSabah"
+				"Leader": [
+					"MishalAlAhmadAlJaberAlSabah"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3027,7 +3401,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "TsheringTobgay"
+				"Leader": [
+					"TsheringTobgay"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3054,7 +3430,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "MinAungHlaing"
+				"Leader": [
+					"MinAungHlaing"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3081,7 +3459,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "BrahimGhali"
+				"Leader": [
+					"BrahimGhali"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3108,7 +3488,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "OusproolkaugeolduagheirkAsmuiltuysployreirmei"
+				"Leader": [
+					"OusproolkaugeolduagheirkAsmuiltuysployreirmei"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3135,7 +3517,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "HamadBinIsaBinSalmanAlKhalifa"
+				"Leader": [
+					"HamadBinIsaBinSalmanAlKhalifa"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3162,7 +3546,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "TariqueRahman"
+				"Leader": [
+					"TariqueRahman"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3189,7 +3575,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "TamimBinHamadBinKhalifaAlThani"
+				"Leader": [
+					"TamimBinHamadBinKhalifaAlThani"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3216,7 +3604,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "HaithamBinTariqAlSaid"
+				"Leader": [
+					"HaithamBinTariqAlSaid"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3243,7 +3633,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "LaiChingTe"
+				"Leader": [
+					"LaiChingTe"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3274,7 +3666,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "TchoungonnIuhuespreinealpoirkOofleilmueskaunkeuffuytuy"
+				"Leader": [
+					"TchoungonnIuhuespreinealpoirkOofleilmueskaunkeuffuytuy"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3301,7 +3695,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "MohamedBinZayedAlNahyan"
+				"Leader": [
+					"MohamedBinZayedAlNahyan"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3331,7 +3727,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "YrloelmaidweoqEaskiadwauckiouldou"
+				"Leader": [
+					"YrloelmaidweoqEaskiadwauckiouldou"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3358,7 +3756,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "MiguelDiazCanelBermudez"
+				"Leader": [
+					"MiguelDiazCanelBermudez"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3386,7 +3786,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "TufrustuodrioyaulmuolpeeflEtelkioddeaurkLpeauteypteyd"
+				"Leader": [
+					"TufrustuodrioyaulmuolpeeflEtelkioddeaurkLpeauteypteyd"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3418,7 +3820,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "FaerruoultoldyrySliurtuylvixeyrrioccou"
+				"Leader": [
+					"FaerruoultoldyrySliurtuylvixeyrrioccou"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3445,7 +3849,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "ToLam"
+				"Leader": [
+					"ToLam"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3472,7 +3878,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "ThonglounSisoulith"
+				"Leader": [
+					"ThonglounSisoulith"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3503,7 +3911,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "AnutinCharnvirakul"
+				"Leader": [
+					"AnutinCharnvirakul"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3530,7 +3940,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "LaurentSaintCyr"
+				"Leader": [
+					"LaurentSaintCyr"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3557,7 +3969,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "LuisRodolfoAbinaderCorona"
+				"Leader": [
+					"LuisRodolfoAbinaderCorona"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3584,7 +3998,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "JohnAntonioBriceno"
+				"Leader": [
+					"JohnAntonioBriceno"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3611,7 +4027,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "RashadMuhammadAlAlimi"
+				"Leader": [
+					"RashadMuhammadAlAlimi"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3638,7 +4056,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "AndrewMichaelHolness"
+				"Leader": [
+					"AndrewMichaelHolness"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3665,7 +4085,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "FerdinandBongbongRomualdezMarcosJr"
+				"Leader": [
+					"FerdinandBongbongRomualdezMarcosJr"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3692,7 +4114,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "CesarBernardoArevaloDeLeon"
+				"Leader": [
+					"CesarBernardoArevaloDeLeon"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3719,7 +4143,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "EobrayquuazzoirlorgAospiothruirkuywuoufriorka"
+				"Leader": [
+					"EobrayquuazzoirlorgAospiothruirkuywuoufriorka"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3746,7 +4172,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "KkeelpoiflixiouAojynkeysouFadhuik"
+				"Leader": [
+					"KkeelpoiflixiouAojynkeysouFadhuik"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3773,7 +4201,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "TerranceMichaelDrew"
+				"Leader": [
+					"TerranceMichaelDrew"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3803,7 +4233,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "EdroampoibloentiettualdobbeUerlieskiaschaeshufeasch"
+				"Leader": [
+					"EdroampoibloentiettualdobbeUerlieskiaschaeshufeasch"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3830,7 +4262,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "IrisXiomaraCastroSarmiento"
+				"Leader": [
+					"IrisXiomaraCastroSarmiento"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3860,7 +4294,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "IbrahimTraore"
+				"Leader": [
+					"IbrahimTraore"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3887,7 +4323,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "NayibArmandoBukeleOrtez"
+				"Leader": [
+					"NayibArmandoBukeleOrtez"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3950,7 +4388,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "SweorruppaghiertoalliTweawassuasniolkoyguakriaSchoozziuziu"
+				"Leader": [
+					"SweorruppaghiertoalliTweawassuasniolkoyguakriaSchoozziuziu"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -3977,7 +4417,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "HunSen"
+				"Leader": [
+					"HunSen"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4004,7 +4446,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "SylvanieBurton"
+				"Leader": [
+					"SylvanieBurton"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4033,7 +4477,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "UourleyduegholdoozzuountMmuigreyIushiugoa"
+				"Leader": [
+					"UourleyduegholdoozzuountMmuigreyIushiugoa"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4060,7 +4506,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "EaproasprouldolkDeeh"
+				"Leader": [
+					"EaproasprouldolkDeeh"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4087,7 +4535,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "MiaAmorMottley"
+				"Leader": [
+					"MiaAmorMottley"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4114,7 +4564,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "PhilipJosephPierre"
+				"Leader": [
+					"PhilipJosephPierre"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4141,7 +4593,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "OipseexaypleauzexAlliungeyrraonaormFiemmau"
+				"Leader": [
+					"OipseexaypleauzexAlliungeyrraonaormFiemmau"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4171,7 +4625,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "UoucheauskikkoukkarmippoyrlYauvuef"
+				"Leader": [
+					"UoucheauskikkoukkarmippoyrlYauvuef"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4199,7 +4655,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "GustavoFranciscoPetroUrrego"
+				"Leader": [
+					"GustavoFranciscoPetroUrrego"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4226,7 +4684,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "NicolasMaduroMoros"
+				"Leader": [
+					"NicolasMaduroMoros"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4253,7 +4713,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "DickonAmissThomasMitchell"
+				"Leader": [
+					"DickonAmissThomasMitchell"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4280,7 +4742,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "AossoirgXeidhoalvippaeghteiriorkieltMuockiubbeyffioussayxitr"
+				"Leader": [
+					"AossoirgXeidhoalvippaeghteiriorkieltMuockiubbeyffioussayxitr"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4307,7 +4771,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "AybieEocinkuout"
+				"Leader": [
+					"AybieEocinkuout"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4336,7 +4802,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "IablaequiophaythouciolvoiqAocheesseaukeiquuedai"
+				"Leader": [
+					"IablaequiophaythouciolvoiqAocheesseaukeiquuedai"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4369,7 +4837,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "XtuextuolmQiejoypezzodduoudwoy"
+				"Leader": [
+					"XtuextuolmQiejoypezzodduoudwoy"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4396,7 +4866,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "VeadruoustoyfoiyiurgoeRguydraquaesw"
+				"Leader": [
+					"VeadruoustoyfoiyiurgoeRguydraquaesw"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4423,7 +4895,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "PluapruolmKnoyldiurpadduyLteausplauvastrao"
+				"Leader": [
+					"PluapruolmKnoyldiurpadduyLteausplauvastrao"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4450,7 +4924,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "LauraVirginiaFernandezDelgado"
+				"Leader": [
+					"LauraVirginiaFernandezDelgado"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4478,7 +4954,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "AotchuiyetchykkuompoaccScioultiebliezee"
+				"Leader": [
+					"AotchuiyetchykkuompoaccScioultiebliezee"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4505,7 +4983,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "MohamedMuizzu"
+				"Leader": [
+					"MohamedMuizzu"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4532,7 +5012,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "UotwaknoiApseolteuccoipl"
+				"Leader": [
+					"UotwaknoiApseolteuccoipl"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4562,7 +5044,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "PreentIennuayeauwievoe"
+				"Leader": [
+					"PreentIennuayeauwievoe"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4589,7 +5073,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "KamlaSusheilaPersadBissessar"
+				"Leader": [
+					"KamlaSusheilaPersadBissessar"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4619,7 +5105,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "AnosniormuohuyBbiawhooffeantuascheeld"
+				"Leader": [
+					"AnosniormuohuyBbiawhooffeantuascheeld"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4647,7 +5135,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "PysmioussNkaerm"
+				"Leader": [
+					"PysmioussNkaerm"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4674,7 +5164,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "JoseRaulMulinoQuintero"
+				"Leader": [
+					"JoseRaulMulinoQuintero"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4701,7 +5193,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "AnuraKumaraDissanayake"
+				"Leader": [
+					"AnuraKumaraDissanayake"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4728,7 +5222,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "RoirgauwhiafruildoawhaAoneilluyleylgounn"
+				"Leader": [
+					"RoirgauwhiafruildoawhaAoneilluyleylgounn"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4755,7 +5251,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "MohamedIrfaanAli"
+				"Leader": [
+					"MohamedIrfaanAli"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4782,7 +5280,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "SurangleSamuelWhippsJr"
+				"Leader": [
+					"SurangleSamuelWhippsJr"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4810,7 +5310,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "DavidRanibokWaiauAdeang"
+				"Leader": [
+					"DavidRanibokWaiauAdeang"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4837,7 +5339,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "AnwarBinIbrahim"
+				"Leader": [
+					"AnwarBinIbrahim"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4864,7 +5368,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "JenniferGeerlingsSimons"
+				"Leader": [
+					"JenniferGeerlingsSimons"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4909,7 +5415,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "PrabowoSubiantoDjojohadikusumo"
+				"Leader": [
+					"PrabowoSubiantoDjojohadikusumo"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4939,7 +5447,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "LuizInacioLulaDaSilva"
+				"Leader": [
+					"LuizInacioLulaDaSilva"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -4974,7 +5484,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "IusythofEathraetruynneammebbay"
+				"Leader": [
+					"IusythofEathraetruynneammebbay"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5005,7 +5517,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "AifrieriourRtuouwuoptoaptioSplaytuounnuyshafroirtoo"
+				"Leader": [
+					"AifrieriourRtuouwuoptoaptioSplaytuounnuyshafroirtoo"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5032,7 +5546,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "HassanalBolkiahMuizZaddinWadDaulah"
+				"Leader": [
+					"HassanalBolkiahMuizZaddinWadDaulah"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5061,7 +5577,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "PriupeeIouptyhaeskeadLmousmeimpoirdau"
+				"Leader": [
+					"PriupeeIouptyhaeskeadLmousmeimpoirdau"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5088,7 +5606,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "KkiuwayngoeffeEpluidweermoeslilpockaij"
+				"Leader": [
+					"KkiuwayngoeffeEpluidweermoeslilpockaij"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5118,7 +5638,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "WibraezeudwuiknElvuoustroomp"
+				"Leader": [
+					"WibraezeudwuiknElvuoustroomp"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5149,7 +5671,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "OinkeybluyrrougroatwOigrairmaemmoaffoejaennaetteuOiwriustioroy"
+				"Leader": [
+					"OinkeybluyrrougroatwOigrairmaemmoaffoejaennaetteuOiwriustioroy"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5176,7 +5700,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "DanielRoyGilchristNoboaAzin"
+				"Leader": [
+					"DanielRoyGilchristNoboaAzin"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5203,7 +5729,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "EaulpeathiuwhouswoangoutriEystuaRpuopleurgoysmyslio"
+				"Leader": [
+					"EaulpeathiuwhouswoangoutriEystuaRpuopleurgoysmyslio"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5230,7 +5758,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "DinaErciliaBoluarteZegarra"
+				"Leader": [
+					"DinaErciliaBoluarteZegarra"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5257,7 +5787,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "LlueltoadweiptLairtoyccayyeu"
+				"Leader": [
+					"LlueltoadweiptLairtoyccayyeu"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5291,7 +5823,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "IarmeIoknuequosme"
+				"Leader": [
+					"IarmeIoknuequosme"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5318,7 +5852,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "NkaulmeorgormethrathackEauflioumetruykkaerIowearliuvoafr"
+				"Leader": [
+					"NkaulmeorgormethrathackEauflioumetruykkaerIowearliuvoafr"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5347,7 +5883,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "JamesMarape"
+				"Leader": [
+					"JamesMarape"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5376,7 +5914,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "RmeaswybbeEilaeraytraubboasprieddioqGlauptodheipreilp"
+				"Leader": [
+					"RmeaswybbeEilaeraytraubboasprieddioqGlauptodheipreilp"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5403,7 +5943,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "PatrickHerminie"
+				"Leader": [
+					"PatrickHerminie"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5430,7 +5972,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "MatthewCooperWale"
+				"Leader": [
+					"MatthewCooperWale"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5459,7 +6003,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "EaubriompaybloazzeaurmoickUlvailpMaelvooquifeegucialtiou"
+				"Leader": [
+					"EaubriompaybloazzeaurmoickUlvailpMaelvooquifeegucialtiou"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5486,7 +6032,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "JoseManuelRamosHorta"
+				"Leader": [
+					"JoseManuelRamosHorta"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5514,7 +6062,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "AughoestryrpeoEdwykrioudeauldeyponiurrou"
+				"Leader": [
+					"AughoestryrpeoEdwykrioudeauldeyponiurrou"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5543,7 +6093,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "ExodiaTheForbiddenOne"
+				"Leader": [
+					"ExodiaTheForbiddenOne"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5574,7 +6126,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "RruobouqeithriutuylpeuscheauReexteeccautroeshaoknayswOepaeccoiboeffauscheiv"
+				"Leader": [
+					"RruobouqeithriutuylpeuscheauReexteeccautroeshaoknayswOepaeccoiboeffauscheiv"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5601,7 +6155,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "AnthonyNormanAlbanese"
+				"Leader": [
+					"AnthonyNormanAlbanese"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5629,7 +6185,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "EegloeschiaZzuesluybbyrluousw"
+				"Leader": [
+					"EegloeschiaZzuesluybbyrluousw"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5656,7 +6214,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "JothamNapat"
+				"Leader": [
+					"JothamNapat"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5686,7 +6246,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "GavGrub"
+				"Leader": [
+					"GavGrub"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5716,7 +6278,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "EurmueskischyflioshStriudreopsilmophOwoirmostreu"
+				"Leader": [
+					"EurmueskischyflioshStriudreopsilmophOwoirmostreu"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5743,7 +6307,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "GabrielBoricFont"
+				"Leader": [
+					"GabrielBoricFont"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5772,7 +6338,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "DumaGideonBoko"
+				"Leader": [
+					"DumaGideonBoko"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5799,7 +6367,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "SantiagoPenaPalacios"
+				"Leader": [
+					"SantiagoPenaPalacios"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5826,7 +6396,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "DharambeerGokhool"
+				"Leader": [
+					"DharambeerGokhool"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5853,7 +6425,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "JavierGerardoMilei"
+				"Leader": [
+					"JavierGerardoMilei"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5886,7 +6460,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "NgoirgoyrtouckiougleiknaEyptaynnuep"
+				"Leader": [
+					"NgoirgoyrtouckiougleiknaEyptaynnuep"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5914,7 +6490,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "DaleyJohnOttersbach"
+				"Leader": [
+					"DaleyJohnOttersbach"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5942,7 +6520,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "JaneAustenCassandra"
+				"Leader": [
+					"JaneAustenCassandra"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5969,7 +6549,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "YamanduRamonAntonioOrsiMartinez"
+				"Leader": [
+					"YamanduRamonAntonioOrsiMartinez"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -5996,7 +6578,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "ChristopherMarkLuxon"
+				"Leader": [
+					"ChristopherMarkLuxon"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -6021,7 +6605,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "AlbertLluberasBonaba"
+				"Leader": [
+					"AlbertLluberasBonaba"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -6046,7 +6632,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "DenisVladimirovichPushilin"
+				"Leader": [
+					"DenisVladimirovichPushilin"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -6071,7 +6659,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "LeonidIvanovichPasechnik"
+				"Leader": [
+					"LeonidIvanovichPasechnik"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -6098,7 +6688,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "KroyskayfuoLpioffaogaumm"
+				"Leader": [
+					"KroyskayfuoLpioffaogaumm"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -6126,7 +6718,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "TrofimLysenko"
+				"Leader": [
+					"TrofimLysenko"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -6153,7 +6747,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "LdiouxyknaorkyOalpaibboibuinkuepluadweent"
+				"Leader": [
+					"LdiouxyknaorkyOalpaibboibuinkuepluadweent"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -6180,7 +6776,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "AirkoaproutwuiveaAurtacathimauschoosseimmuyNuogloeslooxtoilgoeggeaull"
+				"Leader": [
+					"AirkoaproutwuiveaAurtacathimauschoosseimmuyNuogloeslooxtoilgoeggeaull"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [
@@ -6208,7 +6806,9 @@
 			],
 			"finished_decisions": [],
 			"government_positions": {
-				"Leader": "ChevalierDEon"
+				"Leader": [
+					"ChevalierDEon"
+				]
 			},
 			"hostedGovernments": [],
 			"ideology": [

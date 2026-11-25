@@ -36,8 +36,8 @@ func clear_all_troops() -> void:
 func _process(_delta: float) -> void:
 	if moving_troops.is_empty():
 		return
-	var clock: GameClock = GameState.current_world.clock if GameState.current_world else null
-	var paused := clock == null || clock.paused
+	var clock = GameState.current_world.clock if GameState.current_world else null
+	var paused: bool = clock == null || clock.paused
 	var time_scale: float = maxf(clock.time_scale, 0.001) if clock else 1.0
 
 	for troop in moving_troops.duplicate():
@@ -64,26 +64,30 @@ func _process(_delta: float) -> void:
 				pause_troop(enemy)
 			continue
 
-		var tw := troop.move_tween
-		if tw == null or !tw.is_valid():
-			if !paused:
-				_start_leg_tween(troop)
-				tw = troop.move_tween
-			else:
+		var tw: Tween = troop.move_tween
+		# A Tween that just finished still reports is_valid() == true while its
+		# finished signal is being processed, but is_running() is already false.
+		# Treat that as unusable or play() would be called on a finished Tween.
+		if tw == null or !tw.is_valid() or !tw.is_running():
+			if paused:
 				continue
+			_start_leg_tween(troop)
+			tw = troop.move_tween
 
 		if tw and tw.is_valid():
-			tw.set_speed_scale(time_scale)
-			if paused:
-				tw.pause()
-			elif !tw.is_running():
-				tw.play()
+			# Pause via speed_scale rather than pause()/play(): a Tween at speed
+			# 0 still counts as running, so resuming never calls play() on one
+			# that may have finished in the meantime.
+			tw.set_speed_scale(0.0 if paused else time_scale)
 
 
 func _kill_move_tween(troop: TroopData) -> void:
-	if troop.move_tween and troop.move_tween.is_valid():
-		troop.move_tween.kill()
+	var tw: Tween = troop.move_tween
+	# Clear the reference first, so a finished callback from this Tween can no
+	# longer be mistaken for the current leg.
 	troop.move_tween = null
+	if tw and tw.is_valid():
+		tw.kill()
 
 
 func _start_leg_tween(troop: TroopData) -> void:
@@ -92,39 +96,35 @@ func _start_leg_tween(troop: TroopData) -> void:
 		_stop_troop(troop)
 		return
 
-	var start := troop.position
-	var end := troop.target_position
-	var total_dist := start.distance_to(end)
+	var start: Vector2 = troop.position
+	var end: Vector2 = troop.target_position
+	var total_dist: float = start.distance_to(end)
 	if total_dist < 0.5:
 		troop.position = end
 		_arrive_at_leg_end(troop)
 		return
 
-	var speed_mod := troop.country_obj.troop_speed_modifier if troop.country_obj else 1.0
+	var speed_mod: float = troop.country_obj.troop_speed_modifier if troop.country_obj else 1.0
 	var duration: float = maxf(total_dist / maxf(1.0 * speed_mod, 0.001), 0.001)
 
 	var tw := create_tween()
 	tw.set_process_mode(Tween.TWEEN_PROCESS_IDLE)
 	tw.tween_property(troop, "position", end, duration)
-	tw.finished.connect(func(): _on_leg_tween_finished(troop))
+	tw.finished.connect(func(): _on_leg_tween_finished(troop, tw))
 	troop.move_tween = tw
 
-	var clock: GameClock = GameState.current_world.clock if GameState.current_world else null
+	var clock = GameState.current_world.clock if GameState.current_world else null
 	if clock:
-		tw.set_speed_scale(maxf(clock.time_scale, 0.001))
-		if clock.paused:
-			tw.pause()
+		tw.set_speed_scale(0.0 if clock.paused else maxf(clock.time_scale, 0.001))
 
 
-func _on_leg_tween_finished(troop: TroopData) -> void:
+func _on_leg_tween_finished(troop: TroopData, source_tween: Tween) -> void:
 	if !is_instance_valid(troop):
 		return
-	# Ignore stale callbacks from killed/replaced tweens.
-	if troop.move_tween != null and troop.move_tween.is_valid() and troop.move_tween.is_running():
-		return
-	# If another tween was installed, this callback is stale.
-	# Finished tween may report invalid; only trust when no active tween owns the troop.
-	if troop.move_tween != null and troop.move_tween.is_valid():
+	# While the finished signal is being emitted the Tween still reports
+	# is_valid() == true, so is_valid() cannot be used to tell a genuine finish
+	# from a stale callback. Identity is the reliable check here.
+	if troop.move_tween != source_tween:
 		return
 	troop.move_tween = null
 	if !troop.is_moving:
@@ -366,7 +366,7 @@ func _split_and_send_troop(troop: TroopData, target_pids: Array, paths: Dictiona
 func _create_new_split_troop(original: TroopData, specific_divisions: Array) -> TroopData:
 	var pos: Vector2 = original.position
 
-	var new_troop: TroopData = TroopData.new(
+	var new_troop: TroopData = TroopData.Create(
 		original.country_name, original.province_id, 0, pos, TroopManager.get_flag(original.country_name)
 	)
 
@@ -394,7 +394,7 @@ func create_troop(country: String, divs: int, prov_id: int) -> TroopData:
 	var country_data: CountryData = CountryManager.countries.get(country)
 	var pos: Vector2 = MapManager.province_centers.get(prov_id, Vector2.ZERO)
 
-	var troop: TroopData = TroopData.new(
+	var troop: TroopData = TroopData.Create(
 		country, prov_id, divs, pos, get_flag(country, country_data.ideology_name if country_data else "")
 	)
 
@@ -655,7 +655,7 @@ func DeployReady(
 	var pos = MapManager.province_centers.get(prov_id, Vector2.ZERO)
 
 	# 1. Create the container (TroopData) with 0 divisions initially
-	var troop = TroopData.new(
+	var troop = TroopData.Create(
 		country, prov_id, 0, pos, get_flag(country, country_data.ideology_name if country_data else "")
 	)
 
@@ -688,7 +688,7 @@ func deploy_specific_divisions(
 	var pos = MapManager.province_centers.get(prov_id, Vector2.ZERO)
 
 	# 1. Create the container (TroopData) with 0 divisions initially
-	var troop = TroopData.new(
+	var troop = TroopData.Create(
 		country, prov_id, 0, pos, get_flag(country, country_data.ideology_name if country_data else "")
 	)
 
