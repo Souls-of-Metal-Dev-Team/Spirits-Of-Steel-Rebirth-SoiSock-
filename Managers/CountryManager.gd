@@ -209,11 +209,11 @@ static func get_country_used_manpower(country_obj: CountryData) -> int:
 
 
 	# 2. Ongoing Training (Already using templates, but cleaned up)
-	for training: CountryData.TroopTraining in country_obj.ongoing_training:
+	for training: TroopTraining in country_obj.ongoing_training:
 		toUse[training.division_type] = toUse.get(training.division_type, 0) + training.divisions_count
 
 	# 3. Troops in the "Ready" queue (deployment pool)
-	for batch: CountryData.ReadyTroop in country_obj.ready_troops:
+	for batch: ReadyTroop in country_obj.ready_troops:
 		toUse[batch.division.type] = toUse.get(batch.division.type, 0) + batch.count
 	
 	for entry: String in toUse:

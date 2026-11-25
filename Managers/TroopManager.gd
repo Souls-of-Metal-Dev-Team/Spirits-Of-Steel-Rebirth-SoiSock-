@@ -649,7 +649,7 @@ func get_province_strength(pid: int, country: String) -> int:
 	return total
 
 func DeployReady(
-	country: String, a_readyTroops: CountryData.ReadyTroop, prov_id: int
+	country: String, a_readyTroops: ReadyTroop, prov_id: int
 ) -> TroopData:
 	var country_data = CountryManager.countries.get(country)
 	var pos = MapManager.province_centers.get(prov_id, Vector2.ZERO)

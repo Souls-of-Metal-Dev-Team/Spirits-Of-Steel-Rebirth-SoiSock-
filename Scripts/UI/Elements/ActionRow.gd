@@ -42,7 +42,7 @@ func setup_training(training_obj) -> void:
 
 
 # 3. Ready Setup
-func setup_ready(ready_troop_obj: CountryData.ReadyTroop, on_click: Callable) -> void:
+func setup_ready(ready_troop_obj: ReadyTroop, on_click: Callable) -> void:
 	data = {"is_deploy": true}
 	_callback = on_click
 

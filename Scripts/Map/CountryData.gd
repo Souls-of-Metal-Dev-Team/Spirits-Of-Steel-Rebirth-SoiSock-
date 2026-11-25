@@ -37,9 +37,10 @@ var hourly_money_income: float = 0.0 # Calculated value
 
 var divCostMod: float = 1.0
 
-signal ideology_changed
 # Emitted when a training batch graduates into ready_troops.
 signal trainingFinished
+
+signal ideology_changed
 
 # Politics
 var driftTargets: Dictionary[String, IdeologyDriftTarget]
@@ -50,7 +51,10 @@ var base_stability: float = 0.5
 var stability: float = 0.5
 var base_war_support: float = 0.5
 var war_support: float = 0.5
-var ideology: Vector2 = Vector2(randi_range(-100, 100), randi_range(-100, 100)):
+var ideology: Vector2 = Vector2(
+    randi_range(-100, 100),
+    randi_range(-100, 100),
+):
 	set(value):
 		ideology = value
 		refresh_ideology_name()
@@ -109,10 +113,10 @@ func get_all_allowed_countries() -> Array[String]:
 
 # for optimization
 var is_at_war: bool = false
-var war_dirty: bool = true
+var warDirty: bool = true
 var _is_loading: bool = false
 var dirty: bool = true
-var dirty_manpower: bool = true
+var dirtyManpower: bool = true
 var enemies: Array = []
 
 var figures: PackedStringArray = []
@@ -120,30 +124,7 @@ var governmentPositions: Dictionary[String, PackedStringArray] = {
 	"Leader": []
 }
 
-#region --- Inner Classes ---
-class TroopTraining:
-	var divisions_count: int
-	var division_type: String
-	var days_left: int
-	var daily_cost: float
-
-	func _init(_count: int, _type: String, _days: int, _cost: float):
-		divisions_count = _count
-		division_type = _type
-		days_left = _days
-		daily_cost = _cost
-
-
-class ReadyTroop:
-	var division: DivisionData
-	var count: int
-
-	func _init(a_division: DivisionData, a_count: int):
-		self.division = a_division
-		self.count    = a_count
-
-
-#endregion
+# TroopTraining and ReadyTroop are now C# global classes in Scripts/Map/.
 
 #func setup_ai():
 #	if not is_player:
@@ -167,7 +148,9 @@ func _init() -> void:
 #	manpower = int((total_population * military_size_ratio) - manpower_used)
 #	_setup_starting_army()
 	#setup_ai()
-	ai_controller = CountryAI.new(self)
+	# NOTE(soi): C# constructors with arguments are not exposed to GDScript .new().
+	ai_controller = CountryAI.new()
+	ai_controller.init(self)
 
 
 func ToDict() -> Dictionary:
@@ -276,14 +259,14 @@ func process_hour() -> void:
 
 	troop_speed_modifier = 1.0 + (army_level * 0.1) + troopSpeedExtra
 
-	update_manpower_pool()
-	_process_reinforcements()
+	UpdateManpowerPool()
+	_ProcessReinforcements()
 
-	if dirty_manpower and !dirty:  # Because if dirty. refresh_economic_stats will do it anyways
-		update_manpower_pool()
+	if dirtyManpower and !dirty:  # Because if dirty. refresh_economic_stats will do it anyways
+		UpdateManpowerPool()
 
-	if war_dirty:  # For the AI
-		update_is_at_war()
+	if warDirty:  # For the AI
+		UpdateIsAtWar()
 
 	if !is_player:
 		#print("Thinking %s" % country_name)
@@ -318,7 +301,7 @@ func _refresh_economic_stats() -> void:
 	factories_amount = CountryManager.get_factories_amount(country_name)
 	# GDP calculation based on population (Simplified for performance)
 	gdp = int(CountryManager.get_country_gdp(country_name) * total_population * 0.000001)
-	update_manpower_pool()
+	UpdateManpowerPool()
 	self.dirty = false
 
 #endregion
@@ -341,10 +324,10 @@ func train_troops(count: int, type: String = "infantry") -> bool:
 
 	manpower -= total_manpower_needed
 	mobilized += total_manpower_needed
-	#dirty_manpower = true
+	#dirtyManpower = true
 
 	# Add to training queue
-	ongoing_training.append(TroopTraining.new(count, type, template["days"], template["cost"]))
+	ongoing_training.append(TroopTraining.FromValues(count, type, template["days"], template["cost"]))
 	return true
 
 
@@ -364,16 +347,16 @@ func _process_training() -> void:
 
 
 func _graduate_troops(training: TroopTraining) -> void:
-	ready_troops.append(ReadyTroop.new(DivisionData.create_division(training.division_type), training.divisions_count))
+	ready_troops.append(ReadyTroop.FromValues(DivisionData.create_division(training.division_type), training.divisions_count))
 	trainingFinished.emit()
-	#dirty_manpower = true
+	#dirtyManpower = true
 
 
 #endregion
 
 
 #region --- Stats & Manpower ---
-func update_manpower_pool() -> void:
+func UpdateManpowerPool() -> void:
 	var max_allowed_manpower = int(total_population * military_size_ratio)
 	var total_mobilized = manpower + mobilized
 
@@ -386,7 +369,7 @@ func update_manpower_pool() -> void:
 
 	# HARD SAFETY: Never let the variable itself be negative
 	manpower = max(0, manpower)
-	dirty_manpower = false
+	dirtyManpower = false
 
 
 func get_army_pressure() -> float:
@@ -516,9 +499,9 @@ var cached_garrison_hubs: Array = []
 #		# No need to remove from map, just update the existing object.
 #
 #	if not divs_to_reserve.is_empty():
-#		var reserve = ReadyTroop.new(divs_to_reserve)
+#		var reserve = ReadyTroop.FromValues(divs_to_reserve)
 #		ready_troops.append(reserve)
-#	#dirty_manpower = true
+#	#dirtyManpower = true
 
 
 ## Enhanced upkeep: Reserves cost 25% of active troops
@@ -587,7 +570,7 @@ func _deploy_initial_force(divisions: Array[DivisionData]) -> void:
 			current_batch = [] # Reset for next stack
 
 
-func _process_reinforcements():
+func _ProcessReinforcements():
 	for troop in TroopManager.get_troops_for_country(country_name):
 		if troop.is_moving:
 			continue
@@ -628,7 +611,7 @@ func get_relation_with(other_country_name: String) -> int:
 		return 0
 
 
-func update_is_at_war():
+func UpdateIsAtWar():
 	enemies = WarManager.get_enemies_of(self.country_name)
 	is_at_war = !enemies.is_empty()
-	war_dirty = false
+	warDirty = false

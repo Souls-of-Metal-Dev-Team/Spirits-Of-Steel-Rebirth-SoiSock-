@@ -7,7 +7,17 @@ namespace Sosr;
 
 public partial class InterpreterManager : Node
 {
-	public enum ExpressionTypes { Variable, List, Event, Function, Loop, Match, Element, IdeologyDrift, Close }
+	public enum ExpressionTypes {
+		Variable,
+		List,
+		Event,
+		Function,
+		Loop,
+		Match,
+		Element,
+		IdeologyDrift,
+		Close,
+	}
 
 	public Godot.Collections.Dictionary functions = new()
 	{
