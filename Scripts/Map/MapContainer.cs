@@ -59,13 +59,6 @@ public partial class MapContainer : Node2D
 		{ "max_scale", 0.5f },
 	};
 
-	// GDScript cannot read C# static fields through a global class name. These
-	// lowercase instance aliases are the readable equivalent (see report).
-	public Godot.Collections.Dictionary colors => COLORS;
-	public Godot.Collections.Dictionary layout => LAYOUT;
-	public Godot.Collections.Dictionary zoomLimits => ZOOM_LIMITS;
-	public Godot.Collections.Dictionary battle => BATTLE;
-
 	// Extra map copies drawn to either side of the sprite so horizontal scrolling
 	// never runs off the edge of the world.
 	public static readonly int[] WRAP_MULTIPLIERS = { -2, -1, 1, 2 };
@@ -418,10 +411,10 @@ public partial class MapContainer : Node2D
 			map.ProvinceOwnershipChanged += _OnProvinceOwnershipChanged;
 		var countryManager = CountryManager.Instance;
 		if (countryManager != null)
+		{
 			countryManager.PlayerCountryChanged += _OnPlayerCountryChanged;
-		var clock = GameState.Instance.currentWorld?.clock;
-		if (clock != null)
-			clock.Connect("DayPassed", Callable.From(_OnDayPassed));
+			countryManager.DayProcessed += _OnDayPassed;
+		}
 	}
 
 	private void _OnProvinceOwnershipChanged(int aPid, string aOldOwner, string aNewOwner)

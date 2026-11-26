@@ -6,59 +6,6 @@ using Sosr;
 
 namespace Sosr;
 
-// Port of Scripts/CountryAI.gd. Keep [GlobalClass] so GDScript's `CountryAI` global
-// identifier keeps resolving now that the .gd file is gone.
-//
-// NOTE(soi): Godot does not expose parameterized C# constructors to GDScript's
-// `.new()`, so call sites must be `var ai = CountryAI.new(); ai.init(country)`.
-//
-// Dynamic view over the still-GDScript CountryData objects held by CountryManager.
-public sealed class CountryRef
-{
-    private readonly GodotObject _object;
-
-    public CountryRef(GodotObject obj) { _object = obj; }
-
-    public GodotObject Object => _object;
-
-    private Variant V(StringName name) => _object == null ? new Variant() : _object.Get(name);
-
-    public string countryName => V("country_name").AsString();
-    public double money => V("money").AsDouble();
-    public int factoriesAmount => V("factories_amount").AsInt32();
-    public int manpower => V("manpower").AsInt32();
-    public int mobilized => V("mobilized").AsInt32();
-    public bool isPuppet => V("is_puppet").AsBool();
-    public string owner => V("owner").AsString();
-    public Vector2 ideology => V("ideology").AsVector2();
-
-    public Godot.Collections.Array<string> factions => ToStringArray(V("factions"));
-    public Godot.Collections.Array<string> puppets => ToStringArray(V("puppets"));
-    public List<ReadyTroop> readyTroops => ((CountryData)_object).readyTroops;
-
-    public int GetRelationWith(string other)
-        => _object.Call("GetRelationWith", other).AsInt32();
-
-    public bool TrainTroops(int count, string type = "infantry")
-        => _object.Call("TrainTroops", count, type).AsBool();
-
-    private static Godot.Collections.Array<string> ToStringArray(Variant value)
-    {
-        var result = new Godot.Collections.Array<string>();
-        if (value.VariantType == Variant.Type.Nil)
-            return result;
-        if (value.VariantType == Variant.Type.PackedStringArray)
-        {
-            foreach (var s in value.AsStringArray())
-                result.Add(s);
-            return result;
-        }
-        foreach (var item in value.AsGodotArray())
-            result.Add(item.AsString());
-        return result;
-    }
-}
-
 [GlobalClass]
 public partial class CountryAI : RefCounted, IGameController
 {
@@ -71,17 +18,14 @@ public partial class CountryAI : RefCounted, IGameController
     private const int TICK_RATE_WAR = 2; // Think fast during war
     private const double SATURATION_IDEAL = 1.0; // Target: at least 1 division equivalent per province
     private const double SATURATION_MAX = 4.0; // Avoid overstacking; redistribute if exceeding
-    private const double DISTANCE_PENALTY = 0.1; // Reduce score per unit distance to discourage far moves
     // NOTE(soi): why tf was this 1?!?!??
     private const int MIN_DIVISIONS_PER_SPLIT = 10; // Smallest split size
     private const int MIN_TOTAL_POWER_FOR_WAR = 5000; // Minimum power/divisions to even think about war
-    private const int MAX_SPLITS_PER_TROOP = 5; // Limit splits to prevent micro-management overhead
 
     // --- AI DIPLOMACY/WAR LOGIC ---
     private const int DECLARE_WAR_COOLDOWN_FRAMES = 600;
     private const int MAX_PARALLEL_WARS = 2;
     private const double WAR_SCORE_THRESHOLD = 0.6;
-    private const int MAX_WAR_DECLARATIONS_PER_TICK = 1;
     private const double AI_CHAOS = 0.9;
     private const int MAX_COMBINED_WAR_MEMBERS = 8; // Prevent world-war scale escalations
     private const int EMERGENCY_DEPLOYMENT_THRESHOLD = 5; // If at war and fewer than this, panic deploy
@@ -89,18 +33,25 @@ public partial class CountryAI : RefCounted, IGameController
     // GameState.IndustryType.FACTORY (GDScript enum is not visible from C#).
     private const int IndustryFactory = 1;
 
-    private Godot.Collections.Dictionary<string, Variant> _personality = new();
+    private Godot.Collections.Dictionary _personality = new();
     private int _lastDeclareFrame = -999999;
     private List<string> _neighborCache = new();
     private bool _neighborsDirty = true;
-    private CountryRef _country;
+    private CountryData _country;
+
+    // Day planning runs on workers. This state is set per call, never shared.
+    private Dictionary<string, double> _traits = new();
+    private AiSnapshot _snap;
+    private AiCountrySnapshot _self;
+    private RandomStream _rng;
+    private AiPlan _plan;
 
     public CountryAI() { }
 
     // GDScript: CountryAI.new(self) -> CountryAI.new(); ai.init(self)
-    public void init(GodotObject country)
+    public void init(CountryData country)
     {
-        _country = country == null ? null : new CountryRef(country);
+        _country = country;
         if (_country == null)
             return;
 
@@ -148,6 +99,7 @@ public partial class CountryAI : RefCounted, IGameController
         // Adjust war probability based on extremism.
         probability["base"] = D(probability, "base") * (1.0 + extremism);
         probability["tension_factor"] = (2.0 + extremism * 5.0) * SimRandom.Shared.NextDouble();
+        Flatten("", _personality, _traits);
 
         var mapManager = MapManager.Instance;
         if (mapManager is Node mapNode && mapNode.IsInsideTree())
@@ -173,8 +125,15 @@ public partial class CountryAI : RefCounted, IGameController
         });
     }
 
-    public void ThinkDay()
+    // Called on a worker. Produces commands only; never touches Godot objects.
+    public AiPlan PlanDay(AiSnapshot snapshot, int index)
     {
+        _snap = snapshot;
+        _self = snapshot.countries[index];
+        _rng = new RandomStream();
+        _rng.Reset(snapshot.seedBase + (ulong)(index + 1) * 0x9E3779B97F4A7C15UL);
+        _plan = new AiPlan();
+
         ExecuteBest(new List<AiAction>
         {
             new(ScoreFactory(), ExecuteFactory),
@@ -182,6 +141,12 @@ public partial class CountryAI : RefCounted, IGameController
             new(ScoreWar(), ExecuteWar),
             new(ScoreCallToArms(), ExecuteCallToArms),
         });
+
+        var result = _plan;
+        _snap = null;
+        _self = null;
+        _plan = null;
+        return result;
     }
 
     // Sorts by score descending, then runs actions until one refuses (returns true)
@@ -201,24 +166,24 @@ public partial class CountryAI : RefCounted, IGameController
 
     private double ScoreFactory()
     {
-        if (_country.money < 1000)
+        if (_self.money < 1000)
             return 0;
 
-        return Math.Max(0.1, 1.0 - _country.factoriesAmount * D(Section("economy"), "industry_amount_factor"))
-            * D(Section("economy"), "industry");
+        return Math.Max(0.1, 1.0 - _self.factories * T("economy.industry_amount_factor"))
+            * T("economy.industry");
     }
 
     private double ScoreTrain()
     {
-        if (_country.money < 500 || _country.manpower < 10000)
+        if (_self.money < 500 || _self.manpower < 10000)
             return 0;
 
-        return D(Section("military"), "training_factor");
+        return T("military.training_factor");
     }
 
     private double ScoreWar()
     {
-        return _country.isPuppet ? 0 : WorldTension * D(_personality, "aggression");
+        return _self.isPuppet ? 0 : _snap.worldTension * T("aggression");
     }
 
     private double ScoreFrontline(Godot.Collections.Array<string> enemies)
@@ -239,29 +204,31 @@ public partial class CountryAI : RefCounted, IGameController
 
     private bool ExecuteFactory()
     {
-        var provinces = MapManager.Instance.countryToOwnedProvinces;
-        if (!provinces.ContainsKey(_country.countryName))
+        // Dispatcher validates against the functional-controller list; owned provinces
+        // occupied by an enemy are rejected there, so never offer them as candidates.
+        var name = _self.name;
+        if (!_snap.provincesByCountry.TryGetValue(name, out var pids))
             return false;
 
-        var queue = EconomyManager.Instance.constructionQueue;
+        var queue = _snap.constructionQueue;
         var candidates = new List<int>();
-        foreach (var pid in provinces[_country.countryName])
+        foreach (var pid in pids)
         {
-            if (queue.ContainsKey(pid))
+            if (queue.Contains(pid))
                 continue;
-            if (!ProvinceObjects.TryGetValue(pid, out var province) || province == null || province.buildings.Count >= 4)
+            if (!_snap.provinces.TryGetValue(pid, out var province) || province == null || province.buildings.Count >= 4)
                 continue;
             candidates.Add(pid);
         }
         if (candidates.Count == 0)
             return false;
 
-        var chosen = candidates[SimRandom.Shared.RandRange(0, candidates.Count - 1)];
-        Issue(new BuildIndustryAction
+        var chosen = candidates[_rng.RandRange(0, candidates.Count - 1)];
+        _plan.Actions.Add(new BuildIndustryAction
         {
-            Issuer = _country.countryName,
+            Issuer = name,
             ProvinceId = chosen,
-            Country = _country.countryName,
+            Country = name,
             Type = IndustryFactory,
         });
         return true;
@@ -272,48 +239,53 @@ public partial class CountryAI : RefCounted, IGameController
     {
         var template = DivisionData.TEMPLATES["infantry"];
         var maxAffordable = Math.Min(
-            (int)(_country.money / template.Get("cost").Double()),
-            (int)(_country.manpower / template.Get("manpower").Double()));
+            (int)(_self.money / template.Get("cost").Double()),
+            (int)(_self.manpower / template.Get("manpower").Double()));
         if (maxAffordable < 1)
             return false;
 
-        var limit = Enemies(_country.countryName).Count > 0 ? 20 : 10;
-        _country.TrainTroops(Math.Clamp(maxAffordable, 1, limit), "infantry");
+        var limit = _self.enemies.Count > 0 ? 20 : 10;
+        _plan.Actions.Add(new QueueTrainingAction
+        {
+            Issuer = _self.name,
+            Country = _self.name,
+            Count = Math.Clamp(maxAffordable, 1, limit),
+            Type = "infantry",
+        });
         return true;
     }
 
     private bool ExecuteWar()
     {
-        var extremism = GetExtremism();
-        var war = Section("war");
-        var probability = war["probability"].AsGodotDictionary();
-        var aggression = D(_personality, "aggression");
-        var tension = WorldTension;
+        var c = _self;
+        var extremism = c.extremism;
+        var aggression = T("aggression");
+        var tension = _snap.worldTension;
 
         // 1. THE STOCHASTIC GATE (randomness + world tension).
         if (tension < 0.15 - extremism * 0.1 && aggression < 2.5)
             return false;
-        if (SimRandom.Shared.NextDouble() > D(probability, "base") + tension * D(probability, "tension_factor"))
+        if (_rng.NextDouble() > T("war.probability.base") + tension * T("war.probability.tension_factor"))
             return false;
 
         // 2. COOLDOWNS & OVEREXTENSION.
-        var frameNow = Engine.GetFramesDrawn();
+        var frameNow = _snap.frame;
         if (frameNow - _lastDeclareFrame < DECLARE_WAR_COOLDOWN_FRAMES
-            || Enemies(_country.countryName).Count >= MAX_PARALLEL_WARS
-            || _country.money < D(war, "min_economy"))
+            || c.enemies.Count >= MAX_PARALLEL_WARS
+            || c.money < T("war.min_economy"))
             return false;
 
         // Pre-calculate our faction set for O(1) intersection checks in the filter.
-        var ourFactions = new HashSet<string>(_country.factions);
+        var ourFactions = new HashSet<string>(c.factions);
         var candidates = new List<string>();
-        foreach (var enemy in GetNeighborCountries())
+        foreach (var enemy in PlanNeighborCountries())
         {
-            var enemyData = Country(enemy);
+            var enemyData = PlanCountry(enemy);
             if (enemyData == null)
                 continue;
 
             // Cheapest check first: relation/aggression.
-            if (!(_country.GetRelationWith(enemy) < 20 || aggression > 2.0))
+            if (!(PlanRelation(c.name, enemy) < 20 || aggression > 2.0))
                 continue;
 
             // Faction check: skip if we share any faction.
@@ -324,7 +296,7 @@ public partial class CountryAI : RefCounted, IGameController
         }
 
         // Safety: don't declare war with very few troops.
-        if (EstimateCountryStrength(_country.countryName, true) < MIN_TOTAL_POWER_FOR_WAR)
+        if (PlanStrength(c.name, true) < MIN_TOTAL_POWER_FOR_WAR)
             return false;
         if (candidates.Count == 0)
             return false;
@@ -332,49 +304,47 @@ public partial class CountryAI : RefCounted, IGameController
         var bestScore = double.NegativeInfinity;
         var bestTarget = "";
 
-        var puppeteers = new HashSet<string>(_country.puppets);
-        if (_country.isPuppet)
+        var puppeteers = new HashSet<string>(c.puppets);
+        if (c.isPuppet)
         {
-            puppeteers.Add(_country.owner);
-            var ownerData = Country(_country.owner);
+            puppeteers.Add(c.owner);
+            var ownerData = PlanCountry(c.owner);
             if (ownerData != null)
                 foreach (var puppet in ownerData.puppets)
                     puppeteers.Add(puppet);
         }
 
-        var factionManager = FactionManagerSingleton;
-        var scoreSettings = war["score"].AsGodotDictionary();
         foreach (var targetName in candidates)
         {
-            var targetData = Country(targetName);
+            var targetData = PlanCountry(targetName);
             if (targetData == null)
                 continue;
-            if (factionManager != null && factionManager.InFaction(_country.Object, targetData.Object))
+            if (PlanSharesFaction(c, targetData))
                 continue;
-            if (WarManager.Instance.IsAtWarNames(_country.countryName, targetName))
+            if (_snap.wars.Contains((c.name, targetName)))
                 continue;
             if (puppeteers.Contains(targetName))
                 continue;
 
             // 3. SCALE ANALYSIS (prevent massive world wars).
-            var ownMembers = GetSideMembers(_country.countryName);
-            var targetMembers = GetSideMembers(targetName);
+            var ownMembers = PlanSideMembers(c.name);
+            var targetMembers = PlanSideMembers(targetName);
             if (ownMembers.Count + targetMembers.Count > MAX_COMBINED_WAR_MEMBERS && aggression < 2.5)
                 continue;
 
             // 4. STRENGTH & DISTANCE ANALYSIS (collective security).
-            var ownSideStrength = EstimateSideStrength(_country.countryName);
-            var targetSideStrength = EstimateSideStrength(targetName);
+            var ownSideStrength = PlanSideStrength(c.name);
+            var targetSideStrength = PlanSideStrength(targetName);
             var ratio = ownSideStrength / Math.Max(1.0, targetSideStrength);
-            if (ratio < D(war, "min_strength_ratio"))
+            if (ratio < T("war.min_strength_ratio"))
                 continue;
 
             // 5. DYNAMIC SCORING, capped city count for balance, plus a bit of randomness.
-            var cityCount = MapManager.Instance.GetCitiesProvinceCountry(targetName).Count;
-            var targetScore = (ratio - 1.0) * D(scoreSettings, "strength")
-                + targetData.money * D(scoreSettings, "money_factor")
-                + Math.Min(cityCount, (int)D(scoreSettings, "max_cities")) * D(scoreSettings, "cities")
-                + SimRandom.Shared.RandRange(-0.5, 0.5);
+            var cityCount = _snap.citiesByCountry.TryGetValue(targetName, out var cities) ? cities.Length : 0;
+            var targetScore = (ratio - 1.0) * T("war.score.strength")
+                + targetData.money * T("war.score.money_factor")
+                + Math.Min(cityCount, (int)T("war.score.max_cities")) * T("war.score.cities")
+                + _rng.RandRange(-0.5, 0.5);
 
             // 6. FINAL THRESHOLD.
             if (targetScore > bestScore && targetScore > WAR_SCORE_THRESHOLD)
@@ -387,16 +357,16 @@ public partial class CountryAI : RefCounted, IGameController
         // 7. EXECUTION.
         if (bestTarget != "")
         {
-            var targetRef = Country(bestTarget);
+            var targetRef = PlanCountry(bestTarget);
             if (targetRef != null)
-                Issue(new DeclareWarAction
+                _plan.Actions.Add(new DeclareWarAction
                 {
-                    Issuer = _country.countryName,
-                    Warer = _country.countryName,
+                    Issuer = c.name,
+                    Warer = c.name,
                     Waree = bestTarget,
                 });
             // Aggressive/extreme countries cause more tension.
-            MapManager.Instance.IncreaseWorldTension((float)(0.02 + extremism * 0.03 + aggression * 0.01));
+            _plan.TensionDelta += (float)(0.02 + extremism * 0.03 + aggression * 0.01);
             _lastDeclareFrame = frameNow;
         }
         return true;
@@ -584,9 +554,9 @@ public partial class CountryAI : RefCounted, IGameController
 
     private double ScoreCallToArms()
     {
-        if (Enemies(_country.countryName).Count == 0)
+        if (_self.enemies.Count == 0)
             return 0.0;
-        if (_country.factions.Count == 0)
+        if (_self.factions.Length == 0)
             return 0.0;
         return 1.5;
     }
@@ -594,22 +564,18 @@ public partial class CountryAI : RefCounted, IGameController
     private bool ExecuteCallToArms()
     {
         var calledAny = false;
-        var enemies = Enemies(_country.countryName);
-        var factions = FactionManagerSingleton?.factions;
-        if (factions == null)
-            return false;
+        var name = _self.name;
 
-        foreach (var factionName in _country.factions)
+        foreach (var factionName in _self.factions)
         {
-            if (!factions.ContainsKey(factionName))
+            if (!_snap.factionMembers.TryGetValue(factionName, out var members))
                 continue;
-            var factionData = factions[factionName];
 
             // CIVIL WAR CHECK: don't call allies if the enemy is in the same faction.
             var isInternalConflict = false;
-            foreach (var member in factionData.members)
+            foreach (var member in members)
             {
-                if (enemies.Contains(member.polity))
+                if (_self.enemies.Contains(member))
                 {
                     isInternalConflict = true;
                     break;
@@ -618,20 +584,16 @@ public partial class CountryAI : RefCounted, IGameController
             if (isInternalConflict)
                 continue;
 
-            foreach (var member in factionData.members)
+            foreach (var member in members)
             {
-                if (member.polity == _country.countryName)
+                if (member == name || PlanCountry(member) == null)
                     continue;
 
-                var memberCountry = Country(member.polity);
-                if (memberCountry == null)
-                    continue;
-
-                Issue(new CallToArmsAction
+                _plan.Actions.Add(new CallToArmsAction
                 {
-                    Issuer = _country.countryName,
-                    Caller = _country.countryName,
-                    Target = member.polity,
+                    Issuer = name,
+                    Caller = name,
+                    Target = member,
                 });
                 calledAny = true;
             }
@@ -640,20 +602,6 @@ public partial class CountryAI : RefCounted, IGameController
     }
 
     // --- UTILITIES ---
-
-    private Godot.Collections.Array GetPeaceHubs()
-    {
-        var cities = MapManager.Instance.GetCitiesProvinceCountry(_country.countryName);
-        if (cities.Count > 0)
-            return cities;
-
-        var provinces = MapManager.Instance.countryToProvinces;
-        var hubs = new Godot.Collections.Array();
-        if (provinces.TryGetValue(_country.countryName, out var pids))
-            foreach (var pid in pids)
-                hubs.Add(pid);
-        return hubs;
-    }
 
     private List<string> GetNeighborCountries()
     {
@@ -756,12 +704,27 @@ public partial class CountryAI : RefCounted, IGameController
 
     // --- BRIDGE / CONTAINER HELPERS ---
 
-    private static Godot.Collections.Dictionary<string, Variant> P(params (string Key, Variant Value)[] entries)
+    private static Godot.Collections.Dictionary P(params (string Key, Variant Value)[] entries)
     {
-        var dict = new Godot.Collections.Dictionary<string, Variant>();
+        var dict = new Godot.Collections.Dictionary();
         foreach (var (key, value) in entries)
             dict[key] = value;
         return dict;
+    }
+
+    private double T(string key) => _traits.TryGetValue(key, out var value) ? value : 0;
+
+    private static void Flatten(string prefix, Godot.Collections.Dictionary dict, Dictionary<string, double> output)
+    {
+        foreach (var keyVariant in dict.Keys)
+        {
+            var key = prefix == "" ? keyVariant.AsString() : prefix + "." + keyVariant.AsString();
+            var value = dict[keyVariant];
+            if (value.VariantType == Variant.Type.Dictionary)
+                Flatten(key, value.AsGodotDictionary(), output);
+            else if (value.VariantType == Variant.Type.Int || value.VariantType == Variant.Type.Float)
+                output[key] = value.AsDouble();
+        }
     }
 
     private static double D(Godot.Collections.Dictionary<string, Variant> dict, string key) => dict[key].AsDouble();
@@ -773,11 +736,7 @@ public partial class CountryAI : RefCounted, IGameController
     private static SoiStar Graph => MapManager.Instance.provinceGraph as SoiStar;
     private static Dictionary<int, Province> ProvinceObjects => MapManager.Instance.provinceObjects;
     private static FactionManager FactionManagerSingleton => FactionManager.Instance as FactionManager;
-    private static CountryRef Country(string name)
-    {
-        var obj = CountryManager.Instance.GetCountry(name);
-        return obj == null ? null : new CountryRef(obj);
-    }
+    private static CountryData Country(string name) => CountryManager.Instance.GetCountry(name);
     private static Godot.Collections.Array<string> Enemies(string name)
     {
         var result = new Godot.Collections.Array<string>();
@@ -793,6 +752,77 @@ public partial class CountryAI : RefCounted, IGameController
             if (troop is TroopData data)
                 result.Add(data);
         return result;
+    }
+
+    // --- READ-ONLY SNAPSHOT HELPERS (day planning only) ---
+
+    private AiCountrySnapshot PlanCountry(string name) =>
+        _snap.index.TryGetValue(name, out var i) ? _snap.countries[i] : null;
+
+    private int PlanRelation(string from, string to)
+    {
+        if (!_snap.index.ContainsKey(to))
+            return 0;
+        var country = PlanCountry(from);
+        return country != null && country.relations.TryGetValue(to, out var value) ? value : 50;
+    }
+
+    private bool PlanSharesFaction(AiCountrySnapshot a, AiCountrySnapshot b)
+    {
+        var own = new HashSet<string>(a.factions);
+        return b.factions.Any(own.Contains);
+    }
+
+    private string[] PlanNeighborCountries() =>
+        _snap.neighborCountries.TryGetValue(_self.name, out var list) ? list : Array.Empty<string>();
+
+    private double PlanStrength(string name, bool onlyDeployed)
+    {
+        var country = PlanCountry(name);
+        if (country == null)
+            return 0.1;
+        double total = 0;
+        if (!onlyDeployed)
+        {
+            total += country.manpower * 0.05;
+            total += country.money * 0.01;
+        }
+        total += country.mobilized;
+        return Math.Max(0.1, total);
+    }
+
+    private double PlanSideStrength(string name)
+    {
+        var total = 0.0;
+        foreach (var member in PlanSideMembers(name))
+            total += PlanStrength(member, false);
+        return total;
+    }
+
+    private List<string> PlanSideMembers(string name)
+    {
+        var side = new List<string> { name };
+        var country = PlanCountry(name);
+        if (country == null)
+            return side;
+
+        foreach (var faction in country.factions)
+            if (_snap.factionMembers.TryGetValue(faction, out var members))
+                foreach (var member in members)
+                    if (!side.Contains(member))
+                        side.Add(member);
+
+        var all = new List<string>(side);
+        foreach (var member in side)
+        {
+            var data = PlanCountry(member);
+            if (data == null)
+                continue;
+            foreach (var puppet in data.puppets)
+                if (!all.Contains(puppet))
+                    all.Add(puppet);
+        }
+        return all;
     }
 
     private readonly record struct AiAction(double Score, Func<bool> Action);
@@ -812,4 +842,11 @@ public partial class CountryAI : RefCounted, IGameController
             Score = score;
         }
     }
+}
+
+// Output of one AI plan. Applied on the main thread after all plans finish.
+public sealed class AiPlan
+{
+    public List<GameAction> Actions = new();
+    public float TensionDelta;
 }

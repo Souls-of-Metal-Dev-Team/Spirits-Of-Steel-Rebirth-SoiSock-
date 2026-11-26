@@ -32,17 +32,13 @@ public partial class ManageCountryUI : PanelContainer
 		_populate_military();
 		_populate_economy();
 		TroopManager.Instance.TroopsChanged += _on_troops_changed;
-		var clock = GameState.Instance.currentWorld?.clock;
-		if (clock != null)
-			clock.DayPassed += _on_day_passed;
+		CountryManager.Instance.DayProcessed += _on_day_passed;
 	}
 
 	public override void _ExitTree()
 	{
 		TroopManager.Instance.TroopsChanged -= _on_troops_changed;
-		var clock = GameState.Instance.currentWorld?.clock;
-		if (clock != null && GodotObject.IsInstanceValid(clock))
-			clock.DayPassed -= _on_day_passed;
+		CountryManager.Instance.DayProcessed -= _on_day_passed;
 		if (currentCountry != null)
 			currentCountry.IdeologyChanged -= _refresh_full_data;
 	}

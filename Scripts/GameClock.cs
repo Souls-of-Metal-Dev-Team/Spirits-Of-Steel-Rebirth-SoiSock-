@@ -10,8 +10,6 @@ public partial class GameClock : Node
 	[Signal]
 	public delegate void DayPassedEventHandler();
 
-	// NOTE: Godot derives C# signal names from the delegate name and snake_cases them,
-	// so this is exposed to the engine as "clock_update" (GDScript call sites use "clockUpdate").
 	[Signal]
 	public delegate void ClockUpdateEventHandler();
 
@@ -78,11 +76,6 @@ public partial class GameClock : Node
 		var tickProgress = accumulatedTime / secondsPerTick;
 		var hoursToday = hour + (tickProgress * hoursPerTick);
 		return ((float)dateUnix / 86400.0f) + (hoursToday / 24.0f);
-	}
-
-	public string GetTimeString()
-	{
-		return hour.ToString("D2", CultureInfo.InvariantCulture) + ":00";
 	}
 
 	public string GetDateString()

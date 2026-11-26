@@ -18,7 +18,7 @@ public partial class CountryData : RefCounted
     [Export] public string owner = "";
     [Export] public Godot.Collections.Array<string> puppets = [];
     [Export] public Godot.Collections.Array<string> factions = [];
-    public List<ReadyTroop> readyTroops = new();
+    public List<ReadyTroop> readyTroops => TroopManager.ReadyFor(countryName);
 
     // Country name of any country object, or "" for null.
     public static string NameOf(GodotObject aCountry)
@@ -46,6 +46,8 @@ public partial class CountryData : RefCounted
     [Export] public bool isPlayer = false;
     [Export] public bool isExiled = false;
     CountryAI aiController = null;
+
+    public CountryAI AiController => aiController;
 
     [Export] public Godot.Collections.Dictionary<string, int> relations = new();
 
@@ -110,7 +112,7 @@ public partial class CountryData : RefCounted
     [Export] public Godot.Collections.Array<Variant> hostedGovernments = [];
     [Export] public string host = "";
     [Export] public Godot.Collections.Array<string> finishedDecisions = [];
-    public List<TroopTraining> ongoingTraining = new();
+    public List<TroopTraining> ongoingTraining => TroopManager.TrainingFor(countryName);
     [Export] public int deployPid = -1;
     [Export] public Godot.Collections.Array<Variant> preWarProvinces = [];
 
@@ -275,16 +277,6 @@ public partial class CountryData : RefCounted
             governmentPositions[aPosition].Remove(figure.name);
     }
 
-    public void RemoveGovernmentPositions(string aPosition)
-    {
-        if (!governmentPositions.ContainsKey(aPosition))
-            return;
-
-        var names = new List<string>(governmentPositions[aPosition]);
-        foreach (var figureName in names)
-            RemoveGovernmentPositionFigure(aPosition, figureName);
-    }
-
     public void SetGovernmentPosition(string aPosition, ImportantFigure aFigure)
     {
         RemoveGovernmentPositionFigure(aFigure.occupation, aFigure.name);
@@ -295,13 +287,7 @@ public partial class CountryData : RefCounted
         aFigure.occupation = aPosition;
     }
 
-    private static ImportantFigure GetFigure(string figureName)
-    {
-        var figuresDict = MapManager.Instance.significantFigures;
-        if (!figuresDict.ContainsKey(figureName))
-            return null;
-        return figuresDict[figureName] as ImportantFigure;
-    }
+    private static ImportantFigure GetFigure(string figureName) => FigureManager.Instance.Get(figureName);
 
     private void ApplySkills(Dictionary<string, object?> skills, bool add)
     {
@@ -410,9 +396,6 @@ public void ProcessHour()
         _RefreshEconomicStats();
         _ProcessTraining();
         ((DecisionManager)DecisionManager.Instance).ProcessCountryDay(this);
-
-        if (!isPlayer)
-            aiController.ThinkDay();
     }
 
     private void _RefreshEconomicStats()
@@ -443,59 +426,10 @@ public void ProcessHour()
 //endregion
 
     //region --- Military Management ---
-    public bool TrainTroops(int count, string type = "infantry")
-    {
-        if (!DivisionData.TEMPLATES.ContainsKey(type))
-        {
-            GD.PushError($"Unknown division type: {type}");
-            return false;
-        }
+    public bool TrainTroops(int count, string type = "infantry") =>
+        TroopManager.Instance.QueueTraining(this, count, type);
 
-        var template = DivisionData.TEMPLATES[type];
-        var totalManpowerNeeded = count * template.Get("manpower").Int();
-
-        if (manpower < totalManpowerNeeded || money < count * template.Get("cost").Double() * divCostMod)
-            return false;
-
-        manpower -= totalManpowerNeeded;
-        mobilized += totalManpowerNeeded;
-
-        ongoingTraining.Add(TroopTraining.FromValues(
-            count,
-            type,
-            template.Get("days").Int(),
-            template.Get("cost").Double()));
-        return true;
-    }
-
-    private void _ProcessTraining()
-    {
-        for (var i = ongoingTraining.Count - 1; i >= 0; i--)
-        {
-            var training = ongoingTraining[i];
-            var batchDailyCost = training.divisionsCount * training.dailyCost * divCostMod;
-
-            if (money >= batchDailyCost)
-            {
-                money -= batchDailyCost;
-                training.daysLeft -= 1;
-            }
-
-            if (training.daysLeft <= 0)
-            {
-                _GraduateTroops(training);
-                ongoingTraining.RemoveAt(i);
-            }
-        }
-    }
-
-    private void _GraduateTroops(TroopTraining training)
-    {
-        readyTroops.Add(ReadyTroop.FromValues(
-            DivisionData.CreateDivision(training.divisionType),
-            training.divisionsCount));
-        EmitSignal(SignalName.TrainingFinished);
-    }
+    private void _ProcessTraining() => TroopManager.Instance.ProcessTrainingDay(this);
 
     public void UpdateManpowerPool()
     {
@@ -531,55 +465,6 @@ private IReadOnlyList<TroopData> GetTroops(string country)
         => TroopManager.Instance.troopsByCountry.TryGetValue(country, out var troops)
             ? troops
             : Array.Empty<TroopData>();
-
-    private void _SetupStartingArmy()
-    {
-        var projectedIncome = ((gdp * 0.0000228310502) + factoriesAmount * factoryIncome) * 0.25;
-        var upkeep = Math.Max(1.0, armyLevel * BASE_ARMY_COST);
-        var finalCount = Math.Clamp((int)(projectedIncome / upkeep), 1, 6);
-
-        var template = DivisionData.TEMPLATES["infantry"];
-        var manpowerPerDivision = template.Get("manpower").Int();
-
-        if (manpower < finalCount * manpowerPerDivision)
-            finalCount = (int)(manpower / Math.Max(1, manpowerPerDivision));
-
-        if (finalCount <= 0)
-            return;
-
-        var startingDivisions = new List<DivisionData>();
-        for (var i = 0; i < finalCount; i++)
-            startingDivisions.Add(DivisionData.CreateDivision("infantry"));
-
-        manpower -= finalCount * manpowerPerDivision;
-        _DeployInitialForce(startingDivisions);
-    }
-
-    private void _DeployInitialForce(List<DivisionData> divisions)
-    {
-        var provincesDict = MapManager.Instance.countryToProvinces;
-        if (!provincesDict.TryGetValue(countryName, out var provinces))
-            return;
-
-        if (provinces.Count == 0)
-            return;
-
-        var cities = MapManager.Instance.GetCitiesProvinceCountry(countryName);
-
-        var currentBatch = new List<DivisionData>();
-        for (var i = 0; i < divisions.Count; i++)
-        {
-            currentBatch.Add(divisions[i]);
-            if (currentBatch.Count < 5 && i != divisions.Count - 1)
-                continue;
-
-            var targetPid = cities.Count > 0
-                ? cities[SimRandom.Shared.RandRange(0, cities.Count - 1)].AsInt32()
-                : provinces[SimRandom.Shared.RandRange(0, provinces.Count - 1)];
-            TroopManager.Instance.DeploySpecificDivisions(countryName, currentBatch, targetPid);
-            currentBatch = new List<DivisionData>();
-        }
-    }
 
     private void _ProcessReinforcements()
     {
@@ -627,22 +512,13 @@ private IReadOnlyList<TroopData> GetTroops(string country)
             targetPid = provinces[SimRandom.Shared.RandRange(0, provinces.Count - 1)];
         }
 
-        TroopManager.Instance.DeployReady(countryName, troop, targetPid);
+        TroopManager.Instance.PlaceTroop(this, troop, targetPid);
         readyTroops.RemoveAt(index);
         return true;
     }
     //endregion
 
     //region --- Stats & Manpower ---
-    public double GetArmyPressure()
-    {
-        var armySize = 0;
-        foreach (var troop in GetTroops(countryName))
-            armySize += troop.divisionsCount;
-
-        var capacity = Math.Max(1.0, (gdp * 0.03) + factoriesAmount * 5);
-        return armySize / capacity;
-    }
 public double GetMaxMorale()
     {
         return (60.0 + (stability * 40.0) + (armyLevel * 5.0)) * (money < 0 ? 0.5 : 1.0);
@@ -658,11 +534,6 @@ public double GetDefenseEfficiency()
 //endregion
 
     //region --- Relations & War ---
-    public void SetRelationWith(string otherCountryName, int value)
-    {
-        relations[otherCountryName] = Math.Clamp(value, 0, 100);
-    }
-
     public void UpdateRelations()
     {
         var countries = CountryManager.Instance.countries;

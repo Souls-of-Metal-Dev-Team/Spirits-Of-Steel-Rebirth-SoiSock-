@@ -39,7 +39,7 @@ public partial class Settings : Control
 	[Export] public CheckButton mapEffectsBtn;
 	[Export] public CheckButton debugModeBtn;
 
-	private static ConfigFile Config => SettingsManager.Instance.settings;
+	private static ConfigFile Config => GameState.Instance.settings;
 
 	private void _initialize_ui_values()
 	{
@@ -66,7 +66,7 @@ public partial class Settings : Control
 	// Set a value in the ConfigFile, optionally apply it, then persist.
 	private static void _set_setting(string section, string key, Variant value, bool apply = true)
 	{
-		var manager = SettingsManager.Instance;
+		var manager = GameState.Instance;
 		manager.settings.SetValue(section, key, value);
 		if (apply)
 			manager.ApplySettings(manager.settings);
@@ -91,7 +91,7 @@ public partial class Settings : Control
 
 	public void _on_save_settings_pressed()
 	{
-		Config.Save(SettingsManager.Instance.SETTINGS_FILE);
+		Config.Save(GameState.Instance.SETTINGS_FILE);
 	}
 
 	private void _refresh_saves()

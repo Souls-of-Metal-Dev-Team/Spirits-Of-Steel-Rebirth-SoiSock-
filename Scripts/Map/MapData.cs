@@ -7,7 +7,7 @@ namespace Sosr;
 // Inherits Node because Godot autoloads must be nodes.
 public partial class MapData : Node
 {
-	public static MapData Instance => Autoload.Get<MapData>("MapData");
+	public static MapData Instance => GameState.Instance.mapData;
 
 	// NOTE(soi): 0 clue what we could even need these for
 	public Image idMapImage;
@@ -157,9 +157,7 @@ public partial class MapData : Node
 
 	public void SaveMapData(string path)
 	{
-		var figDicts = new Godot.Collections.Array<Godot.Collections.Dictionary>();
-		foreach (var figure in MapManager.Instance.significantFigures.Values)
-			figDicts.Add(VariantState.ToVariant(figure.ToDict()));
+		var figDicts = FigureManager.Instance.Serialize();
 
 		var exportMapData = new Godot.Collections.Dictionary
 		{
@@ -190,15 +188,6 @@ public partial class MapData : Node
 		return GodotObject.IsInstanceValid(clock)
 			? clock.ToDict()
 			: new Godot.Collections.Dictionary();
-	}
-
-	private static void MergeInto(Godot.Collections.Dictionary target, Godot.Collections.Dictionary source, bool overwrite)
-	{
-		foreach (var key in source.Keys)
-		{
-			if (overwrite || !target.ContainsKey(key))
-				target[key] = source[key];
-		}
 	}
 
 	public void LoadMapData(string aStartPath, Godot.Collections.Array aPercent = null, Godot.Collections.Dictionary aStateOverride = null)
@@ -245,7 +234,7 @@ public partial class MapData : Node
 
 		// GameState.current_start = a_text
 		aPercent[0] = 0.01;
-		EconomyManager.Instance.initialize(aStartPath + "/building_functions.json");
+		BuildingManager.Instance.initialize(aStartPath + "/building_functions.json");
 		aPercent[0] = 0.02;
 		PlansManager.Instance.LoadPlansFromPath(aStartPath + "/plans.json");
 		aPercent[0] = 0.06;
@@ -267,7 +256,7 @@ public partial class MapData : Node
 			buildingData = mapData["buildings"];
 		if (buildingData.VariantType != Variant.Type.Dictionary)
 			buildingData = new Godot.Collections.Dictionary();
-		EconomyManager.Instance.LoadBuildings(buildingData.AsGodotDictionary());
+		BuildingManager.Instance.LoadBuildings(buildingData.AsGodotDictionary());
 
 		Variant ideologyData = new Godot.Collections.Dictionary();
 		if (mapData.ContainsKey("ideologies"))
@@ -329,13 +318,7 @@ public partial class MapData : Node
 		if (scenarioData.ContainsKey("significant_figures"))
 			significantFigureData = scenarioData["significant_figures"];
 
-		var significantFigures = MapManager.Instance.significantFigures;
-		significantFigures.Clear();
-		foreach (var figVariant in AsArray(significantFigureData))
-		{
-			var fig = figVariant.AsGodotDictionary();
-			significantFigures[fig["name"].AsString()] = ImportantFigure.FromDict(fig.AsState());
-		}
+		FigureManager.Instance.Load(AsArray(significantFigureData));
 		CountryManager.Instance.GenerateMissingLeaders();
 		CountryManager.Instance.CleanupEmptyCountries();
 

@@ -68,6 +68,23 @@ public sealed class DeployAction : GameAction
 	public override string Kind => "deploy";
 }
 
+// shortcut: ReadyTroop is a live object; replace with stable ids for network play.
+public sealed class PlaceTroopAction : GameAction
+{
+	public string Country = "";
+	public int ProvinceId;
+	public ReadyTroop Batch;
+	public override string Kind => "place_troop";
+}
+
+public sealed class QueueTrainingAction : GameAction
+{
+	public string Country = "";
+	public int Count;
+	public string Type = "infantry";
+	public override string Kind => "queue_training";
+}
+
 public sealed class SelectCountryAction : GameAction
 {
 	public int ProvinceId;

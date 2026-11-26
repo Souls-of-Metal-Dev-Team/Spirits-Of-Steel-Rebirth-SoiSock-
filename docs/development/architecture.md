@@ -24,7 +24,7 @@ Name mismatches worth remembering:
 
 `Managers/MapManager.cs` is the core map state. It owns the province ID image, province/country lookups (`country_to_provinces`, owned, occupied, rightful), province objects, the `SoiStar` pathfinding graph, and the state-color texture consumed by `shaders/map_shader.gdshader`.
 
-`Scripts/GameClock.cs` emits `HourPassed` and `DayPassed`. `Scripts/Map/World.cs` connects those signals to `CountryManager` and `EventManager`; UI scripts connect to the clock on their own. `CountryManager` then processes countries, runs `EconomyManager.process_economy_day()`, and checks super events.
+`Scripts/GameClock.cs` emits `HourPassed` and `DayPassed`. `Scripts/Map/World.cs` connects those signals to `CountryManager` and `EventManager`; UI scripts connect to the clock on their own. `CountryManager` then processes countries, runs `EconomyManager.ProcessEconomyDay()`, and checks super events.
 
 ## UI and data classes
 

@@ -14,7 +14,6 @@ There is no linter. Unit tests cover only the engine-free `Core/` library.
 - Run the game: `godot-mono --path .` (the main scene is set in `project.godot`)
 - Build the C# assembly: `dotnet build` (the Godot editor also does this)
 - Run unit tests: `dotnet test Tests/Sosr.Tests.csproj` (xUnit, no Godot needed)
-- Run a standalone script headless: `godot-mono --headless --path . --script res://scratch/test_interpreter.gd` (the script must `extends SceneTree`). Autoloads aren't available in this mode, so most manager code can't be tested this way.
 - Smoke-test the game headless: `godot-mono --headless --path . --quit-after 300` (a non-zero exit, e.g. 139, is a crash).
 - Export targets are in `export_presets.cfg`.
 
@@ -30,7 +29,7 @@ Global state lives in autoloads registered in `project.godot` (`MapManager`, `Co
 `MapManager.cs` is the core. It holds the province ID map image, the province → country lookups (`country_to_provinces`, owned, occupied, rightful), the `Province` objects, the province graph (`SoiStar`, used for pathfinding), and the state-color texture that the map shader reads.
 
 ### Game loop
-`Scripts/GameClock.cs` (`$/root/Main/Clock`) emits `HourPassed` and `DayPassed`. `World.DoSetup` (`Scripts/Map/World.cs`) connects these to `CountryManager._on_hour_passed` and `_on_day_passed`, and to `EventManager._on_day_passed`. CountryManager then calls `process_hour()` / `process_day()` on each `CountryData`, runs `EconomyManager.process_economy_day()`, and checks for super events. UI scripts connect to the clock on their own.
+`Scripts/GameClock.cs` (`$/root/Main/Clock`) emits `HourPassed` and `DayPassed`. `World.DoSetup` (`Scripts/Map/World.cs`) connects these to `CountryManager._on_hour_passed` and `_on_day_passed`, and to `EventManager._on_day_passed`. CountryManager then calls `ProcessHour()` / `ProcessDay()` on each `CountryData`, runs `EconomyManager.ProcessEconomyDay()`, and checks for super events. UI scripts connect to the clock on their own.
 
 ### Scenarios ("starts") and saves
 Each folder in `starts/<Name>/` is a playable scenario:

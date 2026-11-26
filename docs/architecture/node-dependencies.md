@@ -78,7 +78,7 @@ flowchart LR
     ConsoleManager -- "declare_war, call_to_arms, _handle_total_collapse" --> WarManager
     ConsoleManager -- "current_start, instabuild" --> GameState
 
-    CountryManager -- "process_economy_day" --> EconomyManager
+    CountryManager -- "ProcessEconomyDay" --> EconomyManager
     CountryManager -- "check_super_events" --> EventManager
     CountryManager -- "invite_faction, clear_faction" --> FactionManager
     CountryManager -- "get_ideology_name" --> IdeologyManager

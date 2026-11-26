@@ -125,6 +125,7 @@ public partial class GameUI : CanvasLayer
 	public bool isOpen = false;
 	private Vector2 posOpen = Vector2.Zero;
 	private Vector2 posClosed = Vector2.Zero;
+	private Tween sidemenuTween;
 
 	private bool economyUpdate = false;
 
@@ -151,7 +152,7 @@ public partial class GameUI : CanvasLayer
 	private static CountryData Player => CountryManager.Instance.Player;
 
 	private static bool DebugMode
-		=> SettingsManager.Instance.settings.GetValue("Developer Options", "debug_mode").AsBool();
+		=> GameState.Instance.settings.GetValue("Developer Options", "debug_mode").AsBool();
 
 	public GameUI()
 	{
@@ -217,8 +218,8 @@ public partial class GameUI : CanvasLayer
 		KeyboardManager.Instance.SidemenuCloseRequested += _on_sidemenu_close_requested;
 		KeyboardManager.Instance.SidemenuToggleRequested += _on_sidemenu_toggle_requested;
 		MusicManager.Instance.TrackChanged += _on_track_changed;
-		EconomyManager.Instance.ConstructionStarted += _on_construction_changed;
-		EconomyManager.Instance.ConstructionFinished += _on_construction_changed;
+		BuildingManager.Instance.ConstructionStarted += _on_construction_changed;
+		BuildingManager.Instance.ConstructionFinished += _on_construction_changed;
 		if (TroopManager.Instance.troopSelection is TroopSelection selection)
 			selection.SelectionChanged += _on_troop_selection_changed;
 
@@ -226,11 +227,11 @@ public partial class GameUI : CanvasLayer
 		if (clock != null)
 		{
 			clock.HourPassed += _on_hour_passed;
-			clock.DayPassed += _on_day_passed;
 			clock.ClockUpdate += updateProgressBar;
 		}
 
 		CountryManager.Instance.PlayerCountryChanged += _on_player_change;
+		CountryManager.Instance.DayProcessed += _on_day_passed;
 		ConnectPlayerIdeology();
 		_connect_player_training();
 
@@ -269,8 +270,8 @@ public partial class GameUI : CanvasLayer
 		KeyboardManager.Instance.SidemenuCloseRequested -= _on_sidemenu_close_requested;
 		KeyboardManager.Instance.SidemenuToggleRequested -= _on_sidemenu_toggle_requested;
 		MusicManager.Instance.TrackChanged -= _on_track_changed;
-		EconomyManager.Instance.ConstructionStarted -= _on_construction_changed;
-		EconomyManager.Instance.ConstructionFinished -= _on_construction_changed;
+		BuildingManager.Instance.ConstructionStarted -= _on_construction_changed;
+		BuildingManager.Instance.ConstructionFinished -= _on_construction_changed;
 		CountryManager.Instance.PlayerCountryChanged -= _on_player_change;
 	}
 
@@ -435,7 +436,7 @@ public partial class GameUI : CanvasLayer
 
 		if (selectedCountry.governmentPositions.TryGetValue("Leader", out var leaders) && leaders.Count > 0)
 		{
-			var figures = MapManager.Instance.significantFigures;
+			var figures = FigureManager.Instance.figures;
 			sidemenuLeaderPortrait.ussr.Clear();
 			foreach (var iLeader in leaders)
 				sidemenuLeaderPortrait.ussr.Add(ImportantFigureHost.GetPortrait(figures.TryGetValue(iLeader, out var f) ? f : null));
@@ -496,7 +497,7 @@ public partial class GameUI : CanvasLayer
 		var allowed = player.GetAllAllowedCountries();
 		relationsHbox.TooltipText = "Military Access: " + (allowed.Contains(selectedCountry.countryName) ? "Yes" : "No");
 
-		sidemenuContext.CurrentTab = (int)newContext;
+		ChangeContextCategory(newContext, Category.GENERAL);
 		OpenSideMenu();
 		_update_context_actions_visuals();
 	}
@@ -660,7 +661,7 @@ public partial class GameUI : CanvasLayer
 		if (_menu_index == (int)Category.ECONOMY)
 		{
 			map.ShowIndustryCountry(player.countryName);
-			var designs = EconomyManager.Instance.buildingDesigns;
+			var designs = BuildingManager.Instance.buildingDesigns;
 			if (!designs.ContainsKey(player.countryName))
 				designs[player.countryName] = new Godot.Collections.Dictionary();
 			buildingDropdown.Clear();
@@ -874,7 +875,9 @@ public partial class GameUI : CanvasLayer
 		if (isOpen)
 			return;
 		isOpen = true;
-		CreateTween().SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out)
+		sidemenuTween?.Kill();
+		sidemenuTween = CreateTween();
+		sidemenuTween.SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out)
 			.TweenProperty(sidemenu, "position", posOpen, slideDuration);
 	}
 
@@ -883,7 +886,9 @@ public partial class GameUI : CanvasLayer
 		if (!isOpen)
 			return;
 		isOpen = false;
-		CreateTween().SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.In)
+		sidemenuTween?.Kill();
+		sidemenuTween = CreateTween();
+		sidemenuTween.SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.In)
 			.TweenProperty(sidemenu, "position", posClosed, slideDuration);
 	}
 
@@ -924,7 +929,10 @@ public partial class GameUI : CanvasLayer
 
 	public void _conscript(Godot.Collections.Dictionary _data)
 	{
-		Player.TrainTroops(1, "infantry");
+		ActionDispatcher.Instance.Submit(new QueueTrainingAction
+		{
+			Issuer = Player.countryName, Country = Player.countryName, Count = 1, Type = "infantry",
+		});
 		UpdateTopbarStats();
 	}
 
@@ -932,15 +940,6 @@ public partial class GameUI : CanvasLayer
 	{
 		Player.DeployReadyTroop(troop, Player.deployPid);
 		_build_trooplist();
-	}
-
-	public void ImproveStability()
-	{
-		if (!TryPay("improve_stability"))
-			return;
-		Player.stability += 0.02;
-		UpdateTopbarStats();
-		_update_context_actions_visuals();
 	}
 
 	public void _on_building_selected(int index)
@@ -972,7 +971,7 @@ public partial class GameUI : CanvasLayer
 			var playerProvinces = MapManager.Instance.countryToOwnedProvinces[player.countryName];
 			foreach (var child in sidemenuBuildings.GetChildren())
 				child.QueueFree();
-			foreach (var (pid, construction) in EconomyManager.Instance.constructionQueue)
+			foreach (var (pid, construction) in BuildingManager.Instance.constructionQueue)
 			{
 				if (!playerProvinces.Contains(pid.AsInt32()))
 					continue;
@@ -1158,7 +1157,13 @@ public partial class GameUI : CanvasLayer
 
 	public void _on_button_train_troops()
 	{
-		if (Player.TrainTroops(Math.Max(1, (int)Math.Ceiling(inputDivision.Value)), divisionTypeSelected))
+		if (ActionDispatcher.Instance.Submit(new QueueTrainingAction
+		{
+			Issuer = Player.countryName,
+			Country = Player.countryName,
+			Count = Math.Max(1, (int)Math.Ceiling(inputDivision.Value)),
+			Type = divisionTypeSelected,
+		}))
 			_build_trooplist();
 		UpdateDivisionMenu();
 	}
@@ -1183,7 +1188,7 @@ public partial class GameUI : CanvasLayer
 	public void _on_music_pressed()
 	{
 		radiosPanel.Visible = !radiosPanel.Visible;
-		SettingsManager.Instance.settings.Save(SettingsManager.Instance.SETTINGS_FILE);
+		GameState.Instance.settings.Save(GameState.Instance.SETTINGS_FILE);
 	}
 
 	public void _on_create_faction_pressed()
@@ -1263,6 +1268,11 @@ public partial class GameUI : CanvasLayer
 	public void _on_pause_pressed()
 	{
 		MusicManager.Instance._toggle_pause();
+	}
+
+	public void _on_game_pause_pressed()
+	{
+		GameState.Instance.currentWorld?.clock?.TogglePause();
 	}
 
 	public void AddNotif(string type, string tooltip)

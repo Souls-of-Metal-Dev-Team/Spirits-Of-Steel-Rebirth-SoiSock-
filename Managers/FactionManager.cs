@@ -6,7 +6,7 @@ namespace Sosr;
 
 public partial class FactionManager : Node
 {
-	public static FactionManager Instance => Autoload.Get<FactionManager>("FactionManager");
+	public static FactionManager Instance => GameState.Instance.factionManager;
 
 	public Dictionary<string, FactionData> factions = new();
 
@@ -134,27 +134,6 @@ public partial class FactionManager : Node
 					kickeeFactions.Remove(factionName);
 				}
 			}
-		}
-	}
-
-	public void DissolveFaction(GodotObject dissolver, string factionName)
-	{
-		if (!factions.ContainsKey(factionName))
-			return;
-
-		var factionData = factions[factionName];
-		var dissolverName = dissolver.Get("countryName").AsString();
-		var dissolverIndex = FindMemberIndex(factionData.members, dissolverName);
-
-		if (dissolverIndex != -1 && factionData.members[dissolverIndex].status == "Leader")
-		{
-			foreach (var member in factionData.members)
-			{
-				var memberCountry = GetCountry(member.polity);
-				if (memberCountry != null)
-					memberCountry.Get("factions").AsGodotArray().Remove(factionName);
-			}
-			factions.Remove(factionName);
 		}
 	}
 

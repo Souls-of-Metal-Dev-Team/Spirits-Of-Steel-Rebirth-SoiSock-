@@ -7,7 +7,7 @@ namespace Sosr;
 
 public partial class TroopManager : Node
 {
-	public static TroopManager Instance => Autoload.Get<TroopManager>("TroopManager");
+	public static TroopManager Instance => GameState.Instance.troopManager;
 
 	// Emitted when a country's troops or division counts change.
 	// countryName is "" when every troop was cleared.
@@ -27,13 +27,75 @@ public partial class TroopManager : Node
 	public Dictionary<string, List<object?>> pathCache = new(); // { cache_key: path_array }
 	public Dictionary<string, Texture2D> flagCache = new(); // { cache_key: texture }
 
-	// TroopSelection is still a GDScript node; accessed dynamically.
 	public TroopSelection troopSelection;
 
 	// Used by popup for now
 	public Godot.Collections.Dictionary flagRedirects = new();
 
 	public string customFlagPath = "";
+
+	// Training and ready-division queues. Static so CountryData can forward to them
+	// before autoloads finish initializing.
+	public static readonly Dictionary<string, List<TroopTraining>> TrainingByCountry = new();
+	public static readonly Dictionary<string, List<ReadyTroop>> ReadyByCountry = new();
+
+	public static List<TroopTraining> TrainingFor(string country)
+	{
+		if (!TrainingByCountry.TryGetValue(country, out var list))
+			TrainingByCountry[country] = list = new List<TroopTraining>();
+		return list;
+	}
+
+	public static List<ReadyTroop> ReadyFor(string country)
+	{
+		if (!ReadyByCountry.TryGetValue(country, out var list))
+			ReadyByCountry[country] = list = new List<ReadyTroop>();
+		return list;
+	}
+
+	// Controller requests. Movement and battle ticking stay internal to this manager.
+	public bool QueueTraining(CountryData country, int count, string type)
+	{
+		if (!DivisionData.TEMPLATES.TryGetValue(type, out var template))
+		{
+			GD.PushError($"Unknown division type: {type}");
+			return false;
+		}
+		var needed = count * template.Get("manpower").Int();
+		if (country.manpower < needed || country.money < count * template.Get("cost").Double() * country.divCostMod)
+			return false;
+
+		country.manpower -= needed;
+		country.mobilized += needed;
+		TrainingFor(country.countryName).Add(TroopTraining.FromValues(
+			count, type, template.Get("days").Int(), template.Get("cost").Double()));
+		return true;
+	}
+
+	public void ProcessTrainingDay(CountryData country)
+	{
+		var queue = TrainingFor(country.countryName);
+		for (var i = queue.Count - 1; i >= 0; i--)
+		{
+			var training = queue[i];
+			var dailyCost = training.divisionsCount * training.dailyCost * country.divCostMod;
+			if (country.money >= dailyCost)
+			{
+				country.money -= dailyCost;
+				training.daysLeft -= 1;
+			}
+			if (training.daysLeft <= 0)
+			{
+				ReadyFor(country.countryName).Add(ReadyTroop.FromValues(
+					DivisionData.CreateDivision(training.divisionType), training.divisionsCount));
+				country.EmitSignal(CountryData.SignalName.TrainingFinished);
+				queue.RemoveAt(i);
+			}
+		}
+	}
+
+	public bool PlaceTroop(CountryData country, ReadyTroop batch, int provinceId) =>
+		DeployReady(country.countryName, batch, provinceId) != null;
 
 	public void ClearAllTroops()
 	{
@@ -343,96 +405,6 @@ public partial class TroopManager : Node
 		return path;
 	}
 
-	public void _split_and_send_troop(TroopData troop, Godot.Collections.Array targetPids, Godot.Collections.Dictionary paths)
-	{
-		var numTargets = targetPids.Count;
-		var totalDivs = troop.divisionsCount;
-
-		if (numTargets == 0 || totalDivs < numTargets)
-			return;
-
-		// 1. Sort targets by distance to move the "heaviest" part of the stack the shortest distance
-		var targetDistances = new List<(int pid, float dist)>();
-		var graph = MapManager.Instance.provinceGraph;
-		var troopPos = graph.GetPointPosition(troop.provinceId);
-		foreach (var pidValue in targetPids)
-		{
-			var pid = pidValue.AsInt32();
-			var dist = troopPos.DistanceTo(graph.GetPointPosition(pid));
-			targetDistances.Add((pid, dist));
-		}
-		targetDistances.Sort((a, b) => a.dist.CompareTo(b.dist));
-
-		// 2. Calculate distribution
-		var baseCount = totalDivs / numTargets;
-		var remainder = totalDivs % numTargets;
-
-		var originalUsed = false;
-		var currentDivIndex = 0;
-
-		// We duplicate the array reference so we can slice it safely
-		var allDivisions = new List<DivisionData>();
-		foreach (var div in troop.storedDivisions)
-			allDivisions.Add(div);
-
-		for (var i = 0; i < numTargets; i++)
-		{
-			var pid = targetDistances[i].pid;
-
-			// Determine how many divisions go to this specific target
-			var countForThisLeg = baseCount;
-			if (i < remainder)
-				countForThisLeg += 1;
-
-			// SLICE: Take the specific objects for this batch
-			var divisionsForThisLeg = new List<DivisionData>();
-			for (var d = 0; d < countForThisLeg && currentDivIndex < allDivisions.Count; d++, currentDivIndex++)
-				divisionsForThisLeg.Add(allDivisions[currentDivIndex]);
-
-			TroopData troopToMove;
-			if (!originalUsed)
-			{
-				// The original troop instance stays alive and takes the first batch
-				troopToMove = troop;
-				troopToMove.storedDivisions = divisionsForThisLeg;
-				originalUsed = true;
-			}
-			else
-			{
-				// Create a brand new TroopData for the other batches
-				// This function must handle country_obj assignment!
-				troopToMove = _create_new_split_troop(troop, divisionsForThisLeg);
-			}
-
-			// 3. Assign movement
-			if (pid == troopToMove.provinceId)
-			{
-				// This part of the split is staying in the current province
-				troopToMove.path.Clear();
-				_stop_troop(troopToMove);
-				if (AUTO_MERGE)
-					_auto_merge_in_province(pid, troopToMove.countryName);
-			}
-			else
-			{
-				// This part of the split is moving to a new target
-				var path = paths[pid].AsState().List();
-				if (path.Count > 0)
-				{
-					var newPath = CopyArray(path);
-					// If the path starts with current province, remove it
-					if (newPath[0].Int() == troopToMove.provinceId)
-						newPath.RemoveAt(0);
-
-					troopToMove.path = newPath;
-					_start_next_leg(troopToMove);
-				}
-				else
-					_stop_troop(troopToMove);
-			}
-		}
-	}
-
 	public TroopData _create_new_split_troop(TroopData original, List<DivisionData> specificDivisions)
 	{
 		var pos = original.position;
@@ -455,35 +427,6 @@ public partial class TroopManager : Node
 		_add_troop_to_indexes(newTroop);
 
 		return newTroop;
-	}
-
-	public TroopData CreateTroop(string country, int divs, int provId)
-	{
-		if (divs <= 0)
-			return null;
-
-		var countryData = CountryObject(country);
-		var centers = MapManager.Instance.provinceCenters;
-		var pos = centers.TryGetValue(provId, out var center) ? center.ToCore() : Vec2.Zero;
-		var ideology = countryData != null ? countryData.Get("ideologyName").AsString() : "";
-
-		var troop = TroopData.Create(country, provId, divs, pos);
-
-		// FIX: Assign the country object reference
-		troop.countryObj = countryData;
-
-		// Initialize runtime metadata
-		troop.isMoving = false;
-		troop.path = new List<object?>();
-		troop.provinceId = provId;
-
-		troops.Add(troop);
-		_add_troop_to_indexes(troop);
-
-		if (AUTO_MERGE)
-			_auto_merge_in_province(provId, country);
-
-		return troop;
 	}
 
 	public void _auto_merge_in_province(int provinceId, string country)
@@ -582,16 +525,6 @@ public partial class TroopManager : Node
 		}
 
 		EmitSignal(SignalName.TroopsChanged, countryName);
-	}
-
-	// Public hook for the WarManager to force a troop to its home province center.
-	public void MoveToGarrison(TroopData troop)
-	{
-		var centers = MapManager.Instance.provinceCenters;
-		var center = centers.TryGetValue(troop.provinceId, out var c) ? c.ToCore() : troop.position;
-		troop.position = center;
-		troop.targetPosition = center;
-		_stop_troop(troop); // Stops any ongoing movement
 	}
 
 	// Adds a troop reference to the spatial and country dictionaries.
@@ -718,39 +651,6 @@ public partial class TroopManager : Node
 			if (troop.isMoving && !movingTroops.Contains(troop))
 				movingTroops.Add(troop);
 		}
-	}
-
-	public int GetProvinceDivisionCount(int pid)
-	{
-		var total = 0;
-		foreach (var troopValue in ProvinceList(pid))
-		{
-			var troop = AsTroop(troopValue);
-			if (troop != null)
-				total += troop.divisionsCount;
-		}
-		return total;
-	}
-
-	public bool HaveTroopsInBothProvinces(int provinceIdA, int provinceIdB)
-		=> troopsByProvince.ContainsKey(provinceIdA) && troopsByProvince.ContainsKey(provinceIdB);
-
-	public void ClearPathCache()
-	{
-		pathCache.Clear();
-	}
-
-	// Remove leading waypoints that are equal to the troop's current province.
-	public List<object?> _sanitize_path_for_troop(Godot.Collections.Array path, int startPid)
-	{
-		if (path == null || path.Count == 0)
-			return new List<object?>();
-		// Duplicate to avoid mutating caller arrays
-		var p = CopyArray(path);
-		// Pop front while first entry equals start_pid
-		while (p.Count > 0 && p[0].Int() == startPid)
-			p.RemoveAt(0);
-		return p;
 	}
 
 	// extra helper functions. Not made by AI
@@ -989,8 +889,6 @@ public partial class TroopManager : Node
 		}
 		return null;
 	}
-
-	// --- Small helpers for the dynamic GDScript objects used by this manager ---
 
 	private static TroopData? AsTroop(object? value) => value as TroopData;
 

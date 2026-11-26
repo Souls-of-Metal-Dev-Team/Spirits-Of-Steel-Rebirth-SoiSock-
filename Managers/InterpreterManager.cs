@@ -7,7 +7,7 @@ namespace Sosr;
 
 public partial class InterpreterManager : Node
 {
-	public static InterpreterManager Instance => Autoload.Get<InterpreterManager>("InterpreterManager");
+	public static InterpreterManager Instance => GameState.Instance.interpreterManager;
 
 	public enum ExpressionTypes {
 		Variable,
@@ -435,7 +435,7 @@ public partial class InterpreterManager : Node
 				if (evaledArgs.Count >= 3)
 				{
 					// Figures are ImportantFigure objects; set the named property on one.
-					var figures = MapManager.Instance.significantFigures;
+					var figures = FigureManager.Instance.figures;
 					if (figures.TryGetValue(evaledArgs[0].AsString(), out var figure))
 						SetFigureAttr(figure, evaledArgs[1].AsString(), evaledArgs[2]);
 				}
@@ -733,43 +733,6 @@ public partial class InterpreterManager : Node
 		}
 
 		return indent == "" ? formatted.Trim() : formatted;
-	}
-
-	// NOTE(soi): kept for backward compat; loop bodies now evaluate with heap-bound locals.
-	public Variant _substitute(Variant expression, Godot.Collections.Dictionary _heap, Godot.Collections.Array visited = null)
-	{
-		visited ??= new Godot.Collections.Array();
-		if (expression.VariantType == Variant.Type.Dictionary)
-		{
-			var dict = expression.AsGodotDictionary();
-			foreach (var key in dict.Keys)
-				dict[key] = _substitute(dict[key], _heap, visited);
-			return dict;
-		}
-		if (expression.VariantType == Variant.Type.Array)
-		{
-			var array = expression.AsGodotArray();
-			for (var i = 0; i < array.Count; i++)
-				array[i] = _substitute(array[i], _heap, visited);
-			return array;
-		}
-		if (expression.VariantType == Variant.Type.String)
-		{
-			var value = expression.AsString();
-			if (_heap.ContainsKey(value))
-			{
-				if (visited.Contains(value))
-				{
-					GD.PushError($"Interpreter: Circular reference detected for variable '{value}'");
-					return expression;
-				}
-				var newVisited = visited.Duplicate();
-				newVisited.Add(value);
-				return _substitute(_heap[value], _heap, newVisited);
-			}
-			return expression;
-		}
-		return expression;
 	}
 
 	private static void SetFigureAttr(ImportantFigure figure, string key, Variant value)

@@ -5,7 +5,7 @@ namespace Sosr;
 
 public partial class SceneManager : Node
 {
-	public static SceneManager Instance => Autoload.Get<SceneManager>("SceneSwitcher");
+	public static SceneManager Instance => GameState.Instance.sceneManager;
 
 	public const int TypeMenu = 0;
 	public const int TypeWorld = 1;
@@ -35,9 +35,16 @@ public partial class SceneManager : Node
 		}
 	}
 
-	public bool HasActiveWorld() => GodotObject.IsInstanceValid(_world_cache);
-
 	public bool IsWorldActive() => _current_type == TypeWorld;
+
+	private static string SceneName(int sceneType) => sceneType switch
+	{
+		TypeMenu => "Main Menu",
+		TypeWorld => "World",
+		TypeEditor => "Map Editor",
+		TypeSelectCountry => "Country Selection",
+		_ => "Scene",
+	};
 
 	public void SwitchTo(int sceneType) => SwitchTo(sceneType, new Callable());
 
@@ -50,6 +57,7 @@ public partial class SceneManager : Node
 		{
 			_loading_screen.Call("ShowScreen");
 			_loading_screen.Call("SetProgress", 0.0f);
+			_loading_screen.Call("SetStatus", "Loading " + SceneName(sceneType) + "...");
 		}
 
 		// Small delay to ensure loading screen is visible
@@ -77,7 +85,10 @@ public partial class SceneManager : Node
 		{
 			nextScene = _world_cache;
 			if (_loading_screen != null)
+			{
+				_loading_screen.Call("SetStatus", "Restoring World...");
 				_loading_screen.Call("SetProgress", 1.0f);
+			}
 		}
 		else
 		{
@@ -122,6 +133,8 @@ public partial class SceneManager : Node
 		// 2.5 Execute initialization callback if provided
 		if (initCallback.Target != null && initCallback.Method.ToString() != "")
 		{
+			if (_loading_screen != null)
+				_loading_screen.Call("SetStatus", "Initializing " + SceneName(sceneType) + "...");
 			lock (progressLock)
 			{
 				progress.Clear();
@@ -172,13 +185,5 @@ public partial class SceneManager : Node
 			await ToSignal(GetTree().CreateTimer(0.2), SceneTreeTimer.SignalName.Timeout); // Stay at 100% briefly
 			_loading_screen.Call("HideScreen");
 		}
-	}
-
-	public Node _instantiate_by_type(int type)
-	{
-		if (!SCENE_MAP.ContainsKey(type))
-			return null;
-		var packedScene = GD.Load<PackedScene>(SCENE_MAP[type].AsString());
-		return packedScene?.Instantiate();
 	}
 }

@@ -6,7 +6,7 @@ namespace Sosr;
 
 public partial class EventManager : Node
 {
-	public static EventManager Instance => Autoload.Get<EventManager>("EventManager");
+	public static EventManager Instance => GameState.Instance.eventManager;
 
 	// MusicManager.SFX enum order (POPUP = 8). GDScript enum constants are not
 	// object properties, so use the numeric value as EconomyManager does.

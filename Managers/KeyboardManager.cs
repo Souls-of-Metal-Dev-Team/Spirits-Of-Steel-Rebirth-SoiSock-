@@ -5,7 +5,7 @@ namespace Sosr;
 
 public partial class KeyboardManager : Node
 {
-	public static KeyboardManager Instance => Autoload.Get<KeyboardManager>("KeyboardManager");
+	public static KeyboardManager Instance => GameState.Instance.keyboardManager;
 
 	// Escape pressed with no troops selected. GameUI closes the side menu if open.
 	[Signal]
@@ -25,9 +25,6 @@ public partial class KeyboardManager : Node
 	{
 		settings = GetNodeOrNull<CanvasLayer>("/root/Main/SettingsLayer");
 	}
-
-	// Original GDScript method name, kept as an alias of the engine callback.
-	public void _ready() => _Ready();
 
 	public override void _UnhandledInput(InputEvent aEvent)
 	{
@@ -80,9 +77,6 @@ public partial class KeyboardManager : Node
 			}
 		}
 	}
-
-	// Original GDScript method name, kept as an alias of the engine callback.
-	public void _unhandled_input(InputEvent aEvent) => _UnhandledInput(aEvent);
 
 	public void _cycle_map_mode(bool shift)
 	{

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Godot;
 using Sosr;
 
@@ -14,7 +15,11 @@ public partial class CountryManager : Node
 	[Signal]
 	public delegate void PlayerEliminatedEventHandler(GodotObject country);
 
-	public static CountryManager Instance => Autoload.Get<CountryManager>("CountryManager");
+	// Emitted after every daily phase finishes. UI waits on this instead of GameClock.
+	[Signal]
+	public delegate void DayProcessedEventHandler();
+
+	public static CountryManager Instance => GameState.Instance.countryManager;
 
 	public Godot.Collections.Dictionary countries = new();
 	public string[] countryNames = [];
@@ -34,6 +39,13 @@ public partial class CountryManager : Node
 
 	public bool cleanupLock = false;
 
+	private const int CountriesPerFrame = 25;
+	private readonly Queue<string[]> _pendingDays = new();
+	private string[] _activeDay = Array.Empty<string>();
+	private int _dayCursor;
+
+	public override void _Ready() => SetProcess(true);
+
 	public void _on_hour_passed()
 	{
 		foreach (var cName in countryNames)
@@ -43,17 +55,101 @@ public partial class CountryManager : Node
 		}
 	}
 
-	public void _on_day_passed()
-	{
-		EconomyManager.Instance.ProcessEconomyDay();
+	// Clock signal only enqueues work. Order stays fixed: economy, countries, events.
+	public void _on_day_passed() => _pendingDays.Enqueue((string[])countryNames.Clone());
 
-		foreach (var cName in countryNames)
+	public override void _Process(double delta)
+	{
+		if (_activeDay.Length == 0)
 		{
-			if (countries.TryGetValue(cName, out var value))
+			if (_pendingDays.Count == 0)
+				return;
+			_activeDay = _pendingDays.Dequeue();
+			_dayCursor = 0;
+			BuildingManager.Instance.ProcessConstructionDay();
+			ApplyBuildingIncome();
+		}
+
+		var end = Math.Min(_dayCursor + CountriesPerFrame, _activeDay.Length);
+		for (; _dayCursor < end; _dayCursor++)
+		{
+			if (countries.TryGetValue(_activeDay[_dayCursor], out var value))
 				value.As<CountryData>().ProcessDay();
 		}
 
+		if (_dayCursor < _activeDay.Length)
+			return;
+
+		RunAiDay(_activeDay);
+		_activeDay = Array.Empty<string>();
 		EventManager.Instance.CheckSuperEvents();
+		EventManager.Instance._on_day_passed();
+		EmitSignal(SignalName.DayProcessed);
+	}
+
+	private void RunAiDay(string[] names)
+	{
+		var controllers = new List<CountryAI>();
+		foreach (var name in names)
+		{
+			if (!countries.TryGetValue(name, out var value) || value.As<CountryData>().isPlayer)
+				continue;
+			var controller = value.As<CountryData>().AiController;
+			if (controller != null)
+				controllers.Add(controller);
+		}
+		if (controllers.Count == 0)
+			return;
+
+		var snapshot = AiSnapshot.Capture();
+		var indices = new int[controllers.Count];
+		for (var i = 0; i < controllers.Count; i++)
+		{
+			if (!snapshot.index.TryGetValue(controllers[i].CountryName, out indices[i]))
+			{
+				GD.PushError("AI plan skipped: country missing from snapshot: " + controllers[i].CountryName);
+				indices[i] = -1;
+			}
+		}
+		var plans = new AiPlan[controllers.Count];
+		Parallel.For(0, controllers.Count,
+			new ParallelOptions { MaxDegreeOfParallelism = Math.Min(System.Environment.ProcessorCount, 4) },
+			i => { if (indices[i] >= 0) plans[i] = controllers[i].PlanDay(snapshot, indices[i]); });
+
+		for (var i = 0; i < plans.Length; i++)
+		{
+			var plan = plans[i];
+			if (plan == null)
+				continue;
+			if (plan.TensionDelta != 0)
+				MapManager.Instance.IncreaseWorldTension(plan.TensionDelta);
+			foreach (var action in plan.Actions)
+				ActionDispatcher.Instance.Submit(action);
+		}
+	}
+
+	// Save must never capture a half-processed day.
+	public void FlushDayQueue()
+	{
+		while (_activeDay.Length > 0 || _pendingDays.Count > 0)
+			_Process(0);
+	}
+
+	private void ApplyBuildingIncome()
+	{
+		var buildingCounts = MapManager.Instance.buildingTypesToCountryCount;
+		foreach (var keyValue in buildingCounts.Keys)
+		{
+			var parts = keyValue.AsString().Split(":");
+			var template = BuildingTemplate.FromDict(
+				BuildingManager.Instance.buildingDesigns[parts[0]][parts[1]].AsGodotDictionary().AsState());
+			foreach (var countryValue in buildingCounts[keyValue].AsGodotDictionary().Keys)
+			{
+				var country = GetCountry(countryValue.AsString());
+				var amount = buildingCounts[keyValue].AsGodotDictionary()[countryValue].AsDouble();
+				country.money += template.produces * amount;
+			}
+		}
 	}
 
 	public void InitializeCountries(Godot.Collections.Array aCountriesData)
@@ -115,9 +211,8 @@ public partial class CountryManager : Node
 		if (leaders.Count > 0)
 			return;
 
-		var newFigure = ImportantFigureHost.FromRandom(countryName);
+		var newFigure = FigureManager.Instance.Generate(countryName);
 		newFigure.occupation = "Leader";
-		MapManager.Instance.significantFigures[newFigure.name] = newFigure;
 
 		var figures = AsStringArray(country.Get("figures"));
 		figures.Add(newFigure.name);
@@ -279,55 +374,6 @@ public partial class CountryManager : Node
 		return factoryCount;
 	}
 
-	// NOTE(pol): We should keep track of the manpower used instead of recalculating.
-	public static int GetCountryUsedManpower(GodotObject countryObj)
-	{
-		var totalUsed = 0;
-		var toUse = new Dictionary<string, double>();
-
-		// 2. Ongoing Training (Already using templates, but cleaned up)
-		foreach (var trainingVariant in countryObj.Get("ongoingTraining").AsGodotArray())
-		{
-			var training = trainingVariant.AsGodotObject();
-			var type = training.Get("divisionType").AsString();
-			toUse[type] = toUse.GetValueOrDefault(type) + training.Get("divisionsCount").AsInt32();
-		}
-
-		// 3. Troops in the "Ready" queue (deployment pool)
-		foreach (var batchVariant in countryObj.Get("readyTroops").AsGodotArray())
-		{
-			var batch = batchVariant.AsGodotObject();
-			var type = batch.Get("division").AsGodotObject().Get("type").AsString();
-			toUse[type] = toUse.GetValueOrDefault(type) + batch.Get("count").AsInt32();
-		}
-
-		foreach (var entry in toUse)
-			totalUsed += (int)(entry.Value * _get_manpower_from_template(entry.Key));
-
-		// 1. Active Troops on the field
-		var troops = TroopManager.Instance.GetTroopsForCountry(countryObj.Get("countryName").AsString());
-		foreach (var troopVariant in troops)
-		{
-			var troop = troopVariant;
-			foreach (var div in troop.storedDivisions)
-			{
-				totalUsed += (int)(div.hp * div.manpowerPerHP);
-			}
-		}
-
-		return totalUsed;
-	}
-
-	// Helper to keep the code DRY (Don't Repeat Yourself)
-	public static int _get_manpower_from_template(string type)
-	{
-		var templates = DivisionData.TEMPLATES;
-		var template = templates.ContainsKey(type)
-			? templates[type]
-			: templates["infantry"];
-		return template.Get("manpower").Int();
-	}
-
 	public void CleanupEmptyCountries()
 	{
 		var toRemove = new List<string>();
@@ -440,18 +486,6 @@ public partial class CountryManager : Node
 		aHosted.Get("allowedCountries").AsGodotArray().Add(hostName);
 		aHosted.Set("isExiled", true);
 		aHosted.Set("host", hostName);
-		MapManager.Instance.ShowCountriesMap();
-	}
-
-	public void FreeHost(GodotObject aHost, GodotObject aHosted)
-	{
-		var hostName = aHost.Get("countryName").AsString();
-		var hostedName = aHosted.Get("countryName").AsString();
-		aHost.Get("puppets").AsGodotArray().Remove(hostedName);
-		aHost.Get("allowedCountries").AsGodotArray().Remove(hostedName);
-		aHosted.Get("allowedCountries").AsGodotArray().Remove(hostName);
-		aHosted.Set("isExiled", false);
-		aHosted.Set("host", "");
 		MapManager.Instance.ShowCountriesMap();
 	}
 

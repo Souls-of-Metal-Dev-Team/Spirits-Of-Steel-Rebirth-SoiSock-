@@ -3,7 +3,6 @@ using Xunit;
 
 namespace Sosr.Tests;
 
-// Ported from scratch/test_settings_manager_diff.gd.
 public class StateDiffTests
 {
 	internal static Dictionary<string, object?> D(params (string Key, object? Value)[] entries)

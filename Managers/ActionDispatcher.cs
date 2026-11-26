@@ -7,7 +7,7 @@ namespace Sosr;
 // this validates them and calls the existing manager methods. Network join-in can hook here.
 public partial class ActionDispatcher : Node
 {
-	public static ActionDispatcher Instance => Autoload.Get<ActionDispatcher>("ActionDispatcher");
+	public static ActionDispatcher Instance => GameState.Instance.actionDispatcher;
 
 	// Result of the last action for callers that need the created object.
 	public object LastResult { get; private set; }
@@ -67,7 +67,7 @@ public partial class ActionDispatcher : Node
 				if (!HasProvince(a.ProvinceId) || !HasCountry(a.Country) || a.Country != action.Issuer ||
 					!HasProvinceInCountry(a.Country, a.ProvinceId))
 					return Reject(a, "cannot build in foreign territory");
-				MapManager.Instance._ProvinceBuildIndustry(a.ProvinceId, a.Country, a.Type);
+				BuildingManager.Instance.PlaceBuilding(a.ProvinceId, a.Country, a.Type);
 				return true;
 
 			case DeployAction a:
@@ -75,6 +75,19 @@ public partial class ActionDispatcher : Node
 					return Reject(a, "cannot deploy in foreign territory");
 				MapManager.Instance.DeployAt(a.ProvinceId);
 				return true;
+
+			case PlaceTroopAction a:
+				if (!HasProvince(a.ProvinceId) || !HasCountry(a.Country) || a.Country != action.Issuer ||
+					a.Batch == null || !OwnsProvince(a.Country, a.ProvinceId))
+					return Reject(a, "cannot place troop there");
+				return TroopManager.Instance.PlaceTroop(CountryManager.Instance.GetCountry(a.Country),
+					a.Batch, a.ProvinceId);
+
+			case QueueTrainingAction a:
+				if (!HasCountry(a.Country) || a.Country != action.Issuer)
+					return Reject(a, "unknown country");
+				return TroopManager.Instance.QueueTraining(CountryManager.Instance.GetCountry(a.Country),
+					a.Count, a.Type);
 
 			case SelectCountryAction a:
 				if (!HasProvince(a.ProvinceId))

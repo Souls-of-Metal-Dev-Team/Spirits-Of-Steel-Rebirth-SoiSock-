@@ -435,6 +435,16 @@ icon = ExtResource("14_pvldk")
 icon_alignment = 1
 expand_icon = true
 
+[node name="Pause" type="Button" parent="Control/Topbar/HBoxContainer/PanelContainer/HBoxContainer2/HBoxContainer/GameSpeedControl" unique_id=2109854424]
+use_parent_material = true
+layout_mode = 2
+size_flags_vertical = 3
+tooltip_text = "Pause or resume game"
+focus_mode = 0
+icon = ExtResource("16_1nbba")
+icon_alignment = 1
+expand_icon = true
+
 [node name="Music" type="Button" parent="Control/Topbar/HBoxContainer/PanelContainer/HBoxContainer2/HBoxContainer" unique_id=283872825]
 use_parent_material = true
 custom_minimum_size = Vector2(28, 0)
@@ -626,7 +636,8 @@ scale = Vector2(0.038297877, 0.038297873)
 texture = ExtResource("21_lpwmk")
 
 [node name="Leader" type="TextureRect" parent="Control/SIDEBAR/SidemenuBG/Content/PanelContainer/HBoxContainer" unique_id=569434129 node_paths=PackedStringArray("avatarImage")]
-use_parent_materiPackedStringArray("avatarImage")Vector2(120, 90)
+use_parent_material = true
+custom_minimum_size = Vector2(120, 90)
 layout_mode = 2
 size_flags_vertical = 3
 tooltip_text = "test"
@@ -2299,6 +2310,7 @@ expand = true
 [connection signal="pressed" from="Control/Topbar/HBoxContainer/PanelContainer/HBoxContainer2/HBoxContainer/Music" to="." method="_on_music_pressed"]
 [connection signal="pressed" from="Control/Topbar/HBoxContainer/PanelContainer/HBoxContainer2/HBoxContainer/GameSpeedControl2/Next" to="." method="_on_next_song_pressed"]
 [connection signal="pressed" from="Control/Topbar/HBoxContainer/PanelContainer/HBoxContainer2/HBoxContainer/GameSpeedControl2/Pause" to="." method="_on_pause_pressed"]
+[connection signal="pressed" from="Control/Topbar/HBoxContainer/PanelContainer/HBoxContainer2/HBoxContainer/GameSpeedControl/Pause" to="." method="_on_game_pause_pressed"]
 [connection signal="timeout" from="Control/SIDEBAR/SidemenuBG/Content/PanelContainer/HBoxContainer/Leader/Timer" to="Control/SIDEBAR/SidemenuBG/Content/PanelContainer/HBoxContainer/Leader" method="OnTimerTimeout"]
 [connection signal="tab_selected" from="Control/SIDEBAR/SidemenuBG/Content/ContextAndButtons/PlayerTabs" to="." method="_on_menu_button_button_up"]
 [connection signal="pressed" from="Control/SIDEBAR/SidemenuBG/Content/ContextAndButtons/PlayerTabs/Diplomacy/ScrollContainer/ActionsList/HBoxContainer/Button" to="." method="open_manage_country"]

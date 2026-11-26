@@ -13,7 +13,7 @@ public interface IGameController
 // Local human controller. Holds the session state that used to live in GameState.
 public partial class PlayerController : Node, IGameController
 {
-	public static PlayerController Instance => Autoload.Get<PlayerController>("PlayerController");
+	public static PlayerController Instance => GameState.Instance.playerController;
 
 	public GodotObject Country = CountryData.FromDict(new Godot.Collections.Dictionary { { "name", "Sea" } });
 

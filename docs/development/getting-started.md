@@ -14,7 +14,6 @@ Spirits of Steel Rebirth is a Godot **4.7.2 mono/.NET** game using the GL Compat
 | Run game | `godot-mono --path .` |
 | Build C# assembly | `dotnet build` |
 | Headless smoke test | `godot-mono --headless --path . --quit-after 300` |
-| C# round-trip checks | `godot-mono --headless --path . --script res://scratch/test_port_parity.gd` |
 | Save-diff flow checks | `godot-mono --headless --path . res://scratch/test_save_diff_flow.tscn` |
 | Unit tests (engine-free `Core/`) | `dotnet test Tests/Sosr.Tests.csproj` |
 

@@ -58,7 +58,7 @@ public partial class GovernmentUI : CanvasLayer
 	{
 		Show();
 		country = aCountry;
-		var figures = MapManager.Instance.significantFigures;
+		var figures = FigureManager.Instance.figures;
 
 		foreach (var (position, holders) in aCountry.governmentPositions)
 		{

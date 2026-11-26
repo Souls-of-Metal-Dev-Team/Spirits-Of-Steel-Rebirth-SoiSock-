@@ -5,7 +5,7 @@ namespace Sosr;
 
 public partial class PlansManager : Node
 {
-	public static PlansManager Instance => Autoload.Get<PlansManager>("PlansManager");
+	public static PlansManager Instance => GameState.Instance.plansManager;
 
 	public Godot.Collections.Dictionary plans = new Godot.Collections.Dictionary();
 	public string currentStartFolder = "";

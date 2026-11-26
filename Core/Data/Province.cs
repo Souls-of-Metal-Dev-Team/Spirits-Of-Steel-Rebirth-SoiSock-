@@ -144,19 +144,4 @@ public sealed class Province
 
 	public string GetFunctionalOwner() => occupier == "" ? country : occupier;
 
-	public string GetResources()
-	{
-		var counts = new Dictionary<string, int>();
-		foreach (var resource in resources)
-			counts[resource.type] = counts.TryGetValue(resource.type, out var count) ? count + resource.amount : resource.amount;
-
-		var list = "";
-		foreach (var (resourceType, count) in counts)
-		{
-			if (list != "")
-				list += "\n";
-			list += $"{resourceType}: {count}";
-		}
-		return list;
-	}
 }

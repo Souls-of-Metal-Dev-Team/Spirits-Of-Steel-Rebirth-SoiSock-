@@ -4,22 +4,22 @@ debug_mode=false
 
 [Sound]
 
-radios=["default", "Lead poisoning", "Terraria", "Ultrakill"]
-sfx_volume=0.1
-music_volume=0.5
+radios=Array[String](["default", "Lead poisoning", "Terraria", "Ultrakill"])
+sfx_volume=0.0
+music_volume=0.0
 
 [Graphics]
 
-scanlines=0.05
-vignette_lower=0.59
-vignette_upper=0.46
-map_effects=1.0
+scanlines=0.0
+vignette_lower=0.0
+vignette_upper=0.0
+map_effects=0.0
 provinceBorderThickness=0.5
-province_borders=0.14
-ui_upper=0.75
-ui_lower=0.19
-ui_dirt=0.25
+province_borders=0.0
+ui_upper=0.63
+ui_lower=0.0
+ui_dirt=0.0
 daynight_contrast=0.01
 daynight_smoothness=0.01
-clouds=0.22
+clouds=0.0
 clouds_edgeness=0.0

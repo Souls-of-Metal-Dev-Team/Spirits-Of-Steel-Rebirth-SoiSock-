@@ -37,23 +37,6 @@ public partial class SoiStar : AStar2D
 		var fromOwner = fromProv.GetFunctionalOwner();
 		var toOwner = toProv.GetFunctionalOwner();
 
-		// --- 1. Naval Restrictions (Hard requirement) ---
-		// if from_prov.type == Province.LAND and to_prov.type == Province.SEA:
-		// 	var has_port = false
-		// 	for b in from_prov.buildings:
-		// 		if b.type == "Port":
-		// 			has_port = true
-		// 			break
-		// 	if !has_port: return true
-		//
-		// if from_prov.type == Province.SEA and to_prov.type == Province.LAND:
-		// 	var has_port = false
-		// 	for b in to_prov.buildings:
-		// 		if b.type == "Port":
-		// 			has_port = true
-		// 			break
-		// 	if !has_port: return true
-
 		// --- 2. Political Access Context-aware ---
 		if (contextAllowedCountries.Count > 0)
 		{

@@ -83,7 +83,7 @@ public partial class Tooltip : PanelContainer
 				provinceName.Text = prov.name;
 				provinceDescription.Text = prov.city;
 				provinceInfrastructure.Text = $"{prov.infrastructure}/{prov.maxInfrastructure}";
-				provinceConstructionIcon.Visible = EconomyManager.Instance.constructionQueue.ContainsKey(map.currentHoveredPid);
+				provinceConstructionIcon.Visible = BuildingManager.Instance.constructionQueue.ContainsKey(map.currentHoveredPid);
 				provinceOccupiedIcon.Visible = !string.IsNullOrEmpty(prov.occupier);
 				provinceDestroyedIcon.Visible = false;
 				var fmtClaims = "";

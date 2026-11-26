@@ -7,7 +7,7 @@ namespace Sosr;
 // not a preloaded RefCounted script, so it deliberately has no [GlobalClass].
 public partial class DivisionTemplates : Node
 {
-	public static DivisionTemplates Instance => Autoload.Get<DivisionTemplates>("DivisionTemplates");
+	public static DivisionTemplates Instance => GameState.Instance.divisionTemplates;
 
 	public Godot.Collections.Dictionary TEMPLATES = new Godot.Collections.Dictionary
 	{

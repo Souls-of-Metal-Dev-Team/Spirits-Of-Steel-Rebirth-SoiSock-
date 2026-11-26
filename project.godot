@@ -27,28 +27,7 @@ buses/default_bus_layout="uid://c7rfusvsmxw0h"
 
 [autoload]
 
-MapManager="*res://Managers/MapManager.cs"
-ProvinceManager="*res://Managers/ProvinceManager.cs"
 GameState="*res://Managers/GameState.cs"
-PlayerController="*res://Scripts/Controllers/PlayerController.cs"
-CountryManager="*res://Managers/CountryManager.cs"
-ActionDispatcher="*res://Managers/ActionDispatcher.cs"
-TroopManager="*res://Managers/TroopManager.cs"
-MusicManager="*res://Managers/MusicManager.cs"
-SettingsManager="*res://Managers/SettingsManager.cs"
-WarManager="*res://Managers/WarManager.cs"
-KeyboardManager="*res://Managers/KeyboardManager.cs"
-ConsoleManager="*res://Managers/ConsoleManager.cs"
-MapData="*res://Scripts/Map/MapData.cs"
-DivisionTemplates="*res://Scripts/Divisions/DivisionTemplates.cs"
-DecisionManager="*res://Managers/DecisionManager.cs"
-EconomyManager="*res://Managers/EconomyManager.cs"
-InterpreterManager="*res://Managers/InterpreterManager.cs"
-FactionManager="*uid://dk4jr4fcfs7dl"
-IdeologyManager="*uid://yqhi3i86rxuf"
-SceneSwitcher="*res://Managers/SceneManager.cs"
-PlansManager="*uid://2omlok4o48ss"
-EventManager="*res://Managers/EventManager.cs"
 Console="*uid://ouiu5xh1cs8n"
 
 [debug]

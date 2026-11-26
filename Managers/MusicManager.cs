@@ -6,7 +6,7 @@ namespace Sosr;
 
 public partial class MusicManager : Node
 {
-	public static MusicManager Instance => Autoload.Get<MusicManager>("MusicManager");
+	public static MusicManager Instance => GameState.Instance.musicManager;
 
 	// GDScript cannot see C# nested enums. Keep the numeric values identical so
 	// GDScript call sites (and the other C# managers) can pass plain ints.
@@ -96,7 +96,7 @@ public partial class MusicManager : Node
 
 	private static float SettingVolume(string key)
 	{
-		var settings = SettingsManager.Instance?.settings;
+		var settings = GameState.Instance?.settings;
 		if (settings == null)
 			return 1.0f;
 		return settings.GetValue("Sound", key).AsSingle();
@@ -215,26 +215,6 @@ public partial class MusicManager : Node
 		else
 			GD.Print("Music Player Node NOT FOUND at path '/root/Main/Audio/Music'");
 		GD.Print("-----------------------");
-	}
-
-	public void DebugPlayDirect()
-	{
-		GD.Print("MusicManager: Attempting direct playback test...");
-		var mPlayer = musicPlayer;
-		if (mPlayer == null)
-			return;
-		var testPath = "res://assets/music/default/gameMusic/Miyasan_Miyasan.mp3";
-		var stream = ResourceLoader.Load(testPath) as AudioStream;
-		if (stream != null)
-		{
-			GD.Print("MusicManager: Loaded test stream: ", testPath);
-			mPlayer.Stream = stream;
-			mPlayer.VolumeDb = 0; // Full volume
-			mPlayer.Play();
-			GD.Print("MusicManager: Called play() on test stream.");
-		}
-		else
-			GD.Print("MusicManager: FAILED to load test stream: ", testPath);
 	}
 
 	public void UpdateInteractivePlaylists()
@@ -506,12 +486,6 @@ public partial class MusicManager : Node
 		player.Stream = sfxMap[sfx].AsGodotObject() as AudioStream;
 		player.VolumeDb = Mathf.LinearToDb(1.0f * SettingVolume("sfx_volume"));
 		player.Play();
-	}
-
-	public void StopAllSfx()
-	{
-		foreach (var p in sfxPlayers)
-			p.Stop();
 	}
 
 	public void SetMusicVolume(float volumeLinear)

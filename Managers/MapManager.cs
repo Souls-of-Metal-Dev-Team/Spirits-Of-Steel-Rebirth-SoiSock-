@@ -10,7 +10,7 @@ namespace Sosr;
 // with the global class name.
 public partial class MapManager : Node
 {
-	public static MapManager Instance => Autoload.Get<MapManager>("MapManager");
+	public static MapManager Instance => GameState.Instance.mapManager;
 
 	public bool DEBUG_MODE = false;
 
@@ -121,8 +121,6 @@ public partial class MapManager : Node
 
 	public Godot.Collections.Array<Godot.Collections.Dictionary> allCities = new();
 
-	public Dictionary<string, ImportantFigure> significantFigures = new();
-
 	public Label gay = new Label();
 	// soiladin time
 	public Dictionary<string, List<int>> allowedPids
@@ -231,8 +229,7 @@ public partial class MapManager : Node
 		provinceCenters.Clear();
 		// Clear graph and global registry
 		globalClaimsRegistry.Clear();
-		// Re-init significant figures if needed, but for now just clear
-		significantFigures.Clear();
+		FigureManager.Instance.Clear();
 		// Reset state variables
 		maxProvinceId = 0;
 		currentHoveredPid = -1;
@@ -258,7 +255,7 @@ public partial class MapManager : Node
 		if (mapImage.GetFormat() != Image.Format.Rgb8)
 			mapImage.Convert(Image.Format.Rgb8);
 
-		var cultureSprite = GetNodeOrNull<Sprite2D>("../Main/MapContainer/CultureSprite");
+		var cultureSprite = GetNodeOrNull<Sprite2D>("/root/Main/MapContainer/CultureSprite");
 		if (cultureSprite != null)
 			cultureSprite.Texture = aMap;
 
@@ -327,7 +324,7 @@ public partial class MapManager : Node
 			pidBuf[i] = pid;
 
 			// Connect to the left / top pixel. If that pixel is a 1px border (0),
-			// look one pixel further across it, like _scan_across_border did.
+			// look one pixel further across it.
 			if (x != 0)
 			{
 				var leftPid = pidBuf[i - 1];
@@ -375,7 +372,6 @@ public partial class MapManager : Node
 		aProgress[0] = aProgress[0].AsDouble() + 0.025;
 		_build_country_to_provinces();
 		aProgress[0] = aProgress[0].AsDouble() + 0.025;
-		// _build_adjacency_list(a_progress)
 		_BuildGlobalRegistry();
 		aProgress[0] = aProgress[0].AsDouble() + 0.025;
 	}
@@ -427,7 +423,7 @@ public partial class MapManager : Node
 	public Godot.Collections.Dictionary SaveBuildingData()
 	{
 		var returnBuildings = new Godot.Collections.Dictionary();
-		var designs = EconomyManager.Instance.buildingDesigns;
+		var designs = BuildingManager.Instance.buildingDesigns;
 		foreach (var iCountry in designs.Keys)
 		{
 			var country = iCountry;
@@ -440,29 +436,6 @@ public partial class MapManager : Node
 			returnBuildings[country] = countryBuildings;
 		}
 		return returnBuildings;
-	}
-
-	// NOTE(soi): where was this even used for???
-	public void DrawProvinceCentroids(Image image, Color color = default)
-	{
-		if (color == default)
-			color = new Color(0, 1, 0, 1);
-
-		if (image == null)
-		{
-			GD.PushWarning("No Image provided for drawing centroids!");
-			return;
-		}
-
-		foreach (var center in provinceCenters.Values)
-		{
-			var x = Mathf.RoundToInt(center.X);
-			var y = Mathf.RoundToInt(center.Y);
-
-			// stay inside bounds
-			if (x >= 0 && x < image.GetWidth() && y >= 0 && y < image.GetHeight())
-				image.SetPixel(x, y, color);
-		}
 	}
 
 	public void _build_country_to_provinces()
@@ -547,33 +520,6 @@ public partial class MapManager : Node
 		}
 
 		stateColorTexture = ImageTexture.CreateFromImage(stateColorImage);
-	}
-
-	private bool _is_sea(Color c)
-	{
-		return _dist_sq(c, SEA_RASTER) < 0.001f || _dist_sq(c, SEA_MAIN) < 0.001f;
-	}
-
-	private float _dist_sq(Color c1, Color c2)
-	{
-		return Mathf.Pow(c1.R - c2.R, 2) + Mathf.Pow(c1.G - c2.G, 2) + Mathf.Pow(c1.B - c2.B, 2);
-	}
-
-	public void UpdateProvinceColor(int pid, string countryName)
-	{
-		if (pid <= 1 || pid > maxProvinceId)
-			return;
-
-		var newColor = CountryColor(countryName, Colors.Gray);
-		UpdateLookup(pid, newColor, newColor);
-
-		if (pid == lastHoveredPid)
-		{
-			originalColor = newColor;
-			UpdateLookup(pid,
-				newColor + new Color(0.15f, 0.15f, 0.15f, 0),
-				newColor + new Color(0.15f, 0.15f, 0.15f, 0));
-		}
 	}
 
 	public void SetProvinceColor(int pid, Color primaryColor)
@@ -904,7 +850,7 @@ public partial class MapManager : Node
 
 	public void BuildAt(int pid)
 	{
-		if (EconomyManager.Instance.IsProvinceBuilding(pid))
+		if (BuildingManager.Instance.IsProvinceBuilding(pid))
 			return;
 
 		var province = Provinces[pid];
@@ -946,51 +892,8 @@ public partial class MapManager : Node
 		}
 	}
 
-	public bool _ProvinceBuildIndustry(int pid, string aCountryName, int type)
-	{
-		var province = Provinces[pid];
-		var country = CountryManager.Instance.GetCountry(aCountryName);
-
-		// 1. Safety Check: Is there already something there or currently building?
-		// Using your Enums: 0 = NO, 1 = BUILDING, 2 = BUILT
-		switch (type)
-		{
-			case 1: // FACTORY
-				if (province.buildings.Count >= 4)
-					return false;
-				EconomyManager.Instance.StartConstruction(pid, "Factory", 10, 150.0f, country);
-				break;
-			case 2: // PORT
-				var allPorts = true;
-				foreach (var building in province.buildings)
-				{
-					if (building.type != "Port")
-					{
-						allPorts = false;
-						break;
-					}
-				}
-				if (province.buildings.Count >= 4 && allPorts)
-					return false;
-
-				// 3. Sea check for Ports
-				if (Array.IndexOf(GetProvincesNearSea(aCountryName), pid) >= 0)
-					EconomyManager.Instance.StartConstruction(pid, "Port", 10, 150.0f, country);
-				else
-				{
-					GD.Print("Action Failed: Port must be on a coast!");
-					return false;
-				}
-				break;
-			case 3: // INFRASTRUCTURE
-				if (province.infrastructure >= province.maxInfrastructure)
-					return false;
-				EconomyManager.Instance.StartInfrastructureConstruction(pid, 10, 150.0f, country);
-				break;
-		}
-
-		return true;
-	}
+	public bool _ProvinceBuildIndustry(int pid, string aCountryName, int type) =>
+		BuildingManager.Instance.PlaceBuilding(pid, aCountryName, type);
 
 	public void _cleanup_interaction_state()
 	{
@@ -1062,80 +965,6 @@ public partial class MapManager : Node
 		}
 
 		GD.Print($"MapManager: Centroids calculated for {provinceCenters.Count} provinces.");
-	}
-
-	private void _build_adjacency_list(Godot.Collections.Array aProgress)
-	{
-		provinceGraph.NeighborFilterEnabled = true;
-		provinceGraph.Clear();
-
-		var inc = 0.1f / (MAP_WIDTH * MAP_HEIGHT);
-
-		for (var i = 0; i < MAP_WIDTH * MAP_HEIGHT; i++)
-		{
-			aProgress[0] = aProgress[0].AsDouble() + inc;
-			var x = i % MAP_WIDTH;
-			var y = i / MAP_WIDTH;
-			var pid = _get_pid_fast(x, y);
-			if (pid <= 1)
-				continue;
-
-			if (!provinceGraph.HasPoint(pid))
-				provinceGraph.AddPoint(pid, new Vector2(x, y));
-
-			// 4-directional neighbors
-			foreach (var d in ALL_DIRECTIONS)
-			{
-				var nx = x + d.X;
-				var ny = y + d.Y;
-				if (nx < 0 || ny < 0 || nx >= MAP_WIDTH || ny >= MAP_HEIGHT)
-					continue;
-
-				var neighbor = _get_pid_fast(nx, ny);
-
-				// Normal adjacency (Land-to-Land)
-				if (neighbor > 0 && neighbor != pid)
-				{
-					provinceGraph.AddPoint(neighbor, new Vector2(nx, ny));
-					provinceGraph.ConnectPoints(pid, neighbor);
-					continue;
-				}
-
-				// Border pixel scan (ID=1)
-				if (neighbor == 0)
-				{
-					var across = _scan_across_border(nx, ny, pid);
-					if (across > 0 && across != pid)
-					{
-						provinceGraph.AddPoint(across, new Vector2(nx, ny));
-						provinceGraph.ConnectPoints(pid, across);
-					}
-				}
-			}
-		}
-
-		GD.Print("MapManager: Adjacency list built and synced to Province objects.");
-	}
-
-	private int _scan_across_border(int x, int y, int pid)
-	{
-		// Check right
-		if (x + 1 < MAP_WIDTH)
-		{
-			var n = _get_pid_fast(x + 1, y);
-			if (n > 0 && n != pid)
-				return n;
-		}
-
-		// Check down
-		if (y + 1 < MAP_HEIGHT)
-		{
-			var n = _get_pid_fast(x, y + 1);
-			if (n > 0 && n != pid)
-				return n;
-		}
-
-		return -1;
 	}
 
 	// Faster direct pid fetch
@@ -1489,7 +1318,7 @@ public partial class MapManager : Node
 				color = Colors.Yellow;
 			//elif province.factory == province.FACTORY_BUILT:
 			//	color = Color.GREEN
-			else if (EconomyManager.Instance.IsProvinceBuilding(pid))
+			else if (BuildingManager.Instance.IsProvinceBuilding(pid))
 				color = Colors.Orange; // Show progress
 			//elif province.port == province.PORT_BUILT:
 			//	color = Color.BLUE
@@ -1512,7 +1341,7 @@ public partial class MapManager : Node
 		var oldControllerName = province.GetFunctionalOwner();
 		var countries = CountryManager.Instance.countries;
 
-		if (EconomyManager.Instance.constructionQueue.TryGetValue(pid, out var project))
+		if (BuildingManager.Instance.constructionQueue.TryGetValue(pid, out var project))
 			project.AsGodotDictionary()["country"] = CountryManager.Instance.GetCountry(newOwnerName);
 
 		if (Provinces.ContainsKey(pid))
@@ -1688,25 +1517,6 @@ public partial class MapManager : Node
 		EmitSignal(SignalName.ProvinceOwnershipChanged, pid, oldController, province.country);
 	}
 
-	private Vector3 _parse_color_string(string s)
-	{
-		var parts = s.Replace("(", "").Replace(")", "").Replace(" ", "").Split(',');
-		return new Vector3(
-			float.Parse(parts[0], CultureInfo.InvariantCulture),
-			float.Parse(parts[1], CultureInfo.InvariantCulture),
-			float.Parse(parts[2], CultureInfo.InvariantCulture));
-	}
-
-	// Helper to ensure we never return a single String when an Array is expected
-	private Godot.Collections.Array _force_array(Variant data)
-	{
-		if (data.VariantType == Variant.Type.Array)
-			return data.AsGodotArray();
-		if (data.VariantType == Variant.Type.String)
-			return new Godot.Collections.Array { data.AsString() }; // Wrap the single country in a list
-		return new Godot.Collections.Array();
-	}
-
 	public int[] GetProvincesNearSea(string countryName)
 	{
 		var provincesNearSea = new List<int>();
@@ -1728,42 +1538,6 @@ public partial class MapManager : Node
 		}
 
 		return provincesNearSea.ToArray();
-	}
-
-	// Returns an array of province IDs that are on the border of a different country
-	public int[] GetBorderProvinces(string countryName)
-	{
-		var borderProvinces = new List<int>();
-
-		// Get all provinces owned by this country
-		foreach (var provIdVariant in GetArray(countryToProvinces, countryName))
-		{
-			var provId = provIdVariant;
-			Provinces.TryGetValue(provId, out var provinceData);
-
-			if (provinceData == null)
-				continue;
-
-			// Province.cs currently has no `neighbors` field; fall back to graph connections.
-			var neighborIds = new Godot.Collections.Array();
-			foreach (var connection in provinceGraph.GetPointConnections(provId))
-				neighborIds.Add(connection);
-
-			// Check neighbors of this province
-			foreach (var neighborIdVariant in neighborIds)
-			{
-				var neighborId = (int)neighborIdVariant;
-				// If the neighbor is owned by someone else (and isn't sea/neutral)
-				if (Provinces.TryGetValue(neighborId, out var neighborProvince)
-					&& neighborProvince.GetFunctionalOwner() != countryName)
-				{
-					borderProvinces.Add(provId);
-					break; // Move to next province once we know this one is a border
-				}
-			}
-		}
-
-		return borderProvinces.ToArray();
 	}
 
 	public Godot.Collections.Array<Godot.Collections.Dictionary> GetAllReleasables(string myCountry)
@@ -1868,30 +1642,6 @@ public partial class MapManager : Node
 		ShowCountriesMap();
 	}
 
-	public void InstantiateCountryFromClaims(Godot.Collections.Dictionary aCountryData)
-	{
-		CountryManager.Instance.AddCountry(aCountryData);
-		var name = aCountryData.ContainsKey("name") ? aCountryData["name"].AsString() : "";
-
-		foreach (var objVariant in Provinces.Values)
-		{
-			var obj = objVariant;
-			if (Array.IndexOf(obj.claims, name) >= 0)
-			{
-				foreach (var troopVariant in ProvinceTroops(obj.id))
-				{
-					if (troopVariant is TroopData data)
-						TroopManager.Instance.RemoveTroop(data);
-				}
-
-				TransferOwnership(obj.id, name);
-			}
-		}
-
-		CountryManager.Instance.CleanupEmptyCountries();
-		ShowCountriesMap();
-	}
-
 	public GodotObject InstantiateCountryFromProvinces(Godot.Collections.Dictionary aCountryData, int[] aClaims)
 	{
 		var countryer = CountryManager.Instance.AddCountry(aCountryData);
@@ -1973,7 +1723,6 @@ public partial class MapManager : Node
 
 	public void AnnexCountry(string annexer, string annexee)
 	{
-		//var playerobj = CountryManager.player_country
 		foreach (var troopVariant in TroopManager.Instance.GetTroopsForCountry(annexee))
 		{
 			TroopManager.Instance.RemoveTroop(troopVariant);
@@ -1993,7 +1742,6 @@ public partial class MapManager : Node
 		foreach (var pidVariant in provincesToTransfer.ToArray())
 			TransferOwnership(pidVariant, annexer);
 
-		//playerobj.reset_manpower()
 		GD.Print("ANNEXATION COMPLETE: ", annexer, " has taken all of ", annexee);
 	}
 
@@ -2076,7 +1824,6 @@ public partial class MapManager : Node
 		foreach (var pos in uncertainPixels)
 		{
 			var touchesLand = false;
-			//var touches_sea = false
 
 			// Check 8-way neighbors (Radius 1 ONLY - very important)
 			for (var dy = -1; dy <= 1; dy++)
@@ -2097,8 +1844,6 @@ public partial class MapManager : Node
 							Provinces.TryGetValue(nid, out var nProv);
 							if (nProv != null && nProv.type != 0)
 								touchesLand = true;
-							//else:
-							//	touches_sea = true
 						}
 					}
 				}

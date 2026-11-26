@@ -6,7 +6,7 @@ namespace Sosr;
 
 public partial class WarManager : Node
 {
-	public static WarManager Instance => Autoload.Get<WarManager>("WarManager");
+	public static WarManager Instance => GameState.Instance.warManager;
 
 	// --- Constants ---
 	public const float BATTLE_TICK = 1.0f;
@@ -27,12 +27,10 @@ public partial class WarManager : Node
 	// MusicManager.SFX / MUSIC enum values (GDScript enum constants are not visible from C#).
 	// SFX: TROOP_MOVE=0, TROOP_SELECTED=1, BATTLE_START=2, OPEN_MENU=3, DECLARE_WAR=4,
 	// HOVERED=5, CLOSE_MENU=6, GAME_OVER=7, POPUP=8, BUILD=9, CLAPPING=10.
-	private const int SfxDeclareWar = 4;
 	private const int SfxGameOver = 7;
 	private const int SfxPopup = 8;
 	// MUSIC: MAIN_THEME=0, BATTLE_THEME=1.
 	private const int MusicMainTheme = 0;
-	private const int MusicBattleTheme = 1;
 
 	// --- State ---
 	public Dictionary<string, HashSet<string>> wars = new();
@@ -42,8 +40,6 @@ public partial class WarManager : Node
 	public void ResetState()
 	{
 		wars.Clear();
-		foreach (var battle in activeBattles)
-			battle.cleanup();
 		activeBattles.Clear();
 		originalTerritories.Clear();
 	}
@@ -196,10 +192,7 @@ public partial class WarManager : Node
 	public void EndBattle(Battle battle)
 	{
 		if (activeBattles.Contains(battle))
-		{
-			battle.cleanup();
 			activeBattles.Remove(battle);
-		}
 	}
 
 	public void ApplyCasualties(int pid, string country, float damageAmount)
@@ -330,30 +323,6 @@ public partial class WarManager : Node
 		}
 	}
 
-	public void _snapshot_country_territory(string cName)
-	{
-		if (originalTerritories.ContainsKey(cName))
-			return;
-
-		var provinces = MapManager.Instance.countryToProvinces;
-		var pids = new Godot.Collections.Array();
-		var snapshot = new List<int>();
-		if (provinces.TryGetValue(cName, out var value))
-		{
-			foreach (var pid in value)
-			{
-				pids.Add(pid);
-				snapshot.Add(pid);
-			}
-		}
-		originalTerritories[cName] = snapshot;
-
-		// Also store in CountryData if it exists.
-		var countryData = FindCountry(cName);
-		if (countryData != null && countryData.Get("preWarProvinces").AsGodotArray().Count == 0)
-			countryData.Set("preWarProvinces", pids.Duplicate());
-	}
-
 	public bool AddWarSilent(GodotObject a, GodotObject b)
 	{
 		if (IsSame(a, b) || IsAtWar(a, b))
@@ -393,15 +362,6 @@ public partial class WarManager : Node
 	public bool IsAtWarNames(string aName, string bName)
 	{
 		return wars.TryGetValue(aName, out var enemies) && enemies.Contains(bName);
-	}
-
-	// API for AI Manager.
-	public Godot.Collections.Array GetCountriesAtWar()
-	{
-		var result = new Godot.Collections.Array();
-		foreach (var name in wars.Keys)
-			result.Add(name);
-		return result;
 	}
 
 	// Returns an array of country names that are currently at war with the given country name.
@@ -602,8 +562,6 @@ public partial class WarManager : Node
 	}
 }
 
-// Inner Battle class from the GDScript ported as a top-level class so GDScript's
-// MapContainer can keep reading battle fields dynamically. No [GlobalClass].
 public partial class Battle : RefCounted
 {
 	public int attackerPid;
@@ -666,8 +624,6 @@ public partial class Battle : RefCounted
 		}
 		currentDefHp = total;
 	}
-
-	public void cleanup() { }
 
 	public void _resolve_round()
 	{
@@ -853,11 +809,6 @@ public partial class Battle : RefCounted
 				return n;
 		}
 		return -1;
-	}
-
-	public float _get_divisions(int pid, string country)
-	{
-		return TroopManager.Instance.GetProvinceStrength(pid, country);
 	}
 
 	private static List<TroopData> GetTroops(int pid)

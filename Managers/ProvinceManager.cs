@@ -8,7 +8,7 @@ namespace Sosr;
 // mutation systems; it reaches this state through forwarding properties.
 public partial class ProvinceManager : Node
 {
-	public static ProvinceManager Instance => Autoload.Get<ProvinceManager>("ProvinceManager");
+	public static ProvinceManager Instance => GameState.Instance.provinceManager;
 
 	public Dictionary<int, Province> Provinces = new();
 	public Dictionary<string, List<int>> CountryToProvinces = new();

@@ -11,7 +11,7 @@ nav_order: 0
 - [ ] [Filip's focus]({% link features/filips-focus.md %})
 - [ ] [Interpreter manager]({% link features/interpreter-manager.md %})
 - [ ] [Make characters do stuff]({% link features/make-characters-do-stuff.md %})
-- [ ] Fix starts loading too long
+- [x] Fix starts loading too long
 - [ ] [Multiplayer]({% link features/multiplayer.md %})
 
 ## Features
@@ -23,21 +23,21 @@ nav_order: 0
 - [ ] [Animations]({% link features/animations.md %})
 - [ ] Flags with puppet owner canton should only have 1 shade
 - [ ] [Country tags]({% link planning/country-tags.md %})
-- [ ] [Asset manager]({% link features/asset-manager.md %})
-
+- [ ] Gamestate only autoload
 ## Rewrites
 
-- [ ] [State diff format]({% link architecture/state-diff.md %})
-- [ ] [Unify events]({% link planning/unify-events.md %})
+- [x] [State diff format]({% link architecture/state-diff.md %})
+- [x] [Unify events]({% link planning/unify-events.md %})
 
 ## Bugs
 
 - [ ] Typing moving in decisions menu
 - [ ] Unpausing while selecting country breaks everything
+- [ ] default mouse mode is on building stuff
 
 ## Implementing
 
-- [ ] Enter and clicking a country opens the sidemenu differently
+- [x] Enter and clicking a country opens the sidemenu differently
 
 ## Done
 

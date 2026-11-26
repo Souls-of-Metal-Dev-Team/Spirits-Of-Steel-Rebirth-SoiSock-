@@ -8,7 +8,7 @@ namespace Sosr;
 
 public partial class ConsoleManager : Node
 {
-	public static ConsoleManager Instance => Autoload.Get<ConsoleManager>("ConsoleManager");
+	public static ConsoleManager Instance => GameState.Instance.consoleManager;
 
 	public Godot.Collections.Array<string> suffixes = new()
 	{
@@ -50,9 +50,6 @@ public partial class ConsoleManager : Node
 		RegisterCommands();
 	}
 
-	// Original GDScript method name, kept as an alias of the engine callback.
-	public void _ready() => _Ready();
-
 	private void RegisterCommands()
 	{
 		var console = GameConsole.Node;
@@ -60,9 +57,6 @@ public partial class ConsoleManager : Node
 			return;
 
 		Register(console, "play_country", Callable.From((string a) => _play_country(a)), new[] { "country_name" }, 1, "Change player country");
-		// Register(console, "play_as", Callable.From((string a) => _play_country(a)), new[] { "country_name" }, 1, "Change player country");
-		// Register(console, "play_as", ... autocomplete list ...)
-		// Register(console, "play", Callable.From((string a) => _play_country(a)), new[] { "country_name" }, 1, "Change player country");
 		Register(console, "tag", Callable.From((string a) => _play_country(a)), new[] { "country_name" }, 1, "Change player country");
 		Register(console, "drew_durnil_mode", Callable.From(_drew_durnil_mode), Array.Empty<string>(), 0, "Lets u spectate the map");
 		Register(console, "access", Callable.From((string a, string b) => MAddAccess(a, b)), new[] { "accesser", "accessee" }, 1, "Add military access to a country");
@@ -350,13 +344,10 @@ public partial class ConsoleManager : Node
 
 	public void MRandomFigure(string country, string budget)
 	{
-		var figure = ImportantFigureHost.FromRandom(country, ParseInt(budget));
+		var figure = FigureManager.Instance.Generate(country, ParseInt(budget));
 		var message = $"{country} {figure.name}";
 		ConsoleInfo(message);
 		GD.Print(message);
-		var map = MapManager.Instance as MapManager;
-		if (map != null)
-			map.significantFigures[figure.name] = figure;
 		CountryManager.Instance.GetCountry(country)?.Get("figures").AsGodotArray().Add(figure.name);
 	}
 
@@ -517,9 +508,9 @@ public partial class ConsoleManager : Node
 
 	public void _debug_decisions()
 	{
-		var settings = SettingsManager.Instance.settings;
+		var settings = GameState.Instance.settings;
 		// Faithful to the original, which called SettingsManager.get_value(...).
-		var value = SettingsManager.Instance.settings.GetValue("Developer Options", "debug_mode");
+		var value = GameState.Instance.settings.GetValue("Developer Options", "debug_mode");
 		settings?.Call("set_value", "Developer Options", "debug_mode", value);
 	}
 

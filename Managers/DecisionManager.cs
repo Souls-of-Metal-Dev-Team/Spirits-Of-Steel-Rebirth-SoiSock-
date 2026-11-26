@@ -6,7 +6,7 @@ namespace Sosr;
 
 public partial class DecisionManager : Node
 {
-	public static DecisionManager Instance => Autoload.Get<DecisionManager>("DecisionManager");
+	public static DecisionManager Instance => GameState.Instance.decisionManager;
 
 	public const string ROOT_DEFAULT_PATH = "res://decisions/default.json";
 

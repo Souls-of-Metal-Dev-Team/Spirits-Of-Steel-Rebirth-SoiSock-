@@ -8,7 +8,7 @@ nav_order: 1
 
 ## Entry shapes
 
-`SettingsManager.diff` emits one entry per changed key:
+`StateDiff.Diff` emits one entry per changed key:
 
 | Change | Entry |
 | --- | --- |
@@ -18,6 +18,6 @@ nav_order: 1
 | Change dictionary | nested diff object |
 | Change array | `{"type": "change", "add": [...], "remove": [...]}` |
 
-Array diffs store values, not indices. `merge` removes the listed values from the source array, then appends additions.
+Array diffs store values, not indices. `StateDiff.Merge` removes the listed values from the source array, then appends additions.
 
 Both start and current state are normalized through JSON before diffing. This keeps live `int` values from appearing changed against `float` values parsed from JSON.

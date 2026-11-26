@@ -37,24 +37,6 @@ public partial class DivisionItem : Control
 		labelExperience = GetNode<Label>("VBoxContainer/HBoxContainer/label_experience");
 		progressBar = GetNode<ProgressBar>("VBoxContainer/HBoxContainer/ProgressBar");
 
-		// Generated C# signal name is "Clicked"; keep the GDScript name for existing call sites.
-		if (!HasSignal("clicked"))
-		{
-			AddUserSignal("clicked", new Godot.Collections.Array
-			{
-				new Godot.Collections.Dictionary
-				{
-					{ "name", "card_node" },
-					{ "type", (int)Variant.Type.Object },
-				},
-				new Godot.Collections.Dictionary
-				{
-					{ "name", "associated_data" },
-					{ "type", (int)Variant.Type.Nil },
-				},
-			});
-		}
-
 		MouseFilter = Control.MouseFilterEnum.Stop;
 		foreach (var child in GetChildren())
 		{

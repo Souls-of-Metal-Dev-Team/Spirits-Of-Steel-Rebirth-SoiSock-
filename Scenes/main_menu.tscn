@@ -194,7 +194,7 @@ theme_override_fonts/font = ExtResource("4_yhxw7")
 theme_override_font_sizes/font_size = 161
 text = "Spirits Of Steel"
 
-[node name="PanelContainer" type="PanelContainer" parent="." unique_id=964712662 node_paths=PackedStringArray("startsUI", "creditsUI")]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=964712662 node_paths=PackedStringArray("StartsUI", "CreditsUI")]
 material = ExtResource("5_yhxw7")
 anchors_preset = 9
 anchor_bottom = 1.0

@@ -11,12 +11,14 @@
             "id": "d94dbff6502c5a39",
             "type": "leaf",
             "state": {
-              "type": "excalidraw",
+              "type": "markdown",
               "state": {
-                "file": "Excalidraw/IdealArchitectureDiagram.excalidraw.md"
+                "file": "features/make-characters-do-stuff.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "excalidraw-icon",
-              "title": "IdealArchitectureDiagram.excalidraw"
+              "icon": "lucide-file",
+              "title": "make-characters-do-stuff"
             }
           }
         ]
@@ -190,10 +192,19 @@
   },
   "active": "d94dbff6502c5a39",
   "lastOpenFiles": [
-    "Pasted image 20261125235655.png.import",
-    "Pasted image 20261125235655.png",
+    "features/interpreter-manager.md",
+    "features/filips-focus.md",
+    "features/civil-wars.md",
+    "features/building-types.md",
+    "features/asset-manager.md",
+    "features/animations.md",
+    "features/achievements.md",
+    "planning/kanban.md",
     "planning/unify-events.md",
     "planning/country-tags.md",
+    "Excalidraw/IdealArchitectureDiagram.excalidraw.md",
+    "Pasted image 20261125235655.png.import",
+    "Pasted image 20261125235655.png",
     "development/docs-site.md",
     "development/scenarios-and-saves.md",
     "development/scripting.md",
@@ -210,23 +221,14 @@
     "features/promote-to-youtube.md",
     "features/multiplayer.md",
     "features/make-characters-do-stuff.md",
-    "features/interpreter-manager.md",
-    "features/filips-focus.md",
-    "features/civil-wars.md",
-    "features/building-types.md",
-    "features/asset-manager.md",
-    "features/animations.md",
-    "features/achievements.md",
     "reference/important-figure-skills.md",
     "reference/functions.md",
     "reference/decision-editor.md",
-    "planning/kanban.md",
     "architecture/state-diff.md",
     "_layouts",
     "assets/css",
     "assets",
     "reference",
-    "planning",
     "Untitled.canvas"
   ]
 }

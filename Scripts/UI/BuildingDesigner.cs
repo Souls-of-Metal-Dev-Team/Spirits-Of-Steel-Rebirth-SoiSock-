@@ -29,7 +29,7 @@ public partial class BuildingDesigner : PanelContainer
 
 	public override void _Ready()
 	{
-		var functions = EconomyManager.Instance.buildingFunctions;
+		var functions = BuildingManager.Instance.buildingFunctions;
 		foreach (var key in functions.Keys)
 		{
 			var functionName = key.AsString();
@@ -280,7 +280,7 @@ public partial class BuildingDesigner : PanelContainer
 
 	private void _recalculate()
 	{
-		var functions = EconomyManager.Instance.buildingFunctions;
+		var functions = BuildingManager.Instance.buildingFunctions;
 		var funcIo = _gather_func_io();
 		var localPool = new GDict();
 		var resourceNet = new GDict();
@@ -577,7 +577,7 @@ public partial class BuildingDesigner : PanelContainer
 
 	public void _on_add_building_pressed()
 	{
-		var designs = EconomyManager.Instance.buildingDesigns;
+		var designs = BuildingManager.Instance.buildingDesigns;
 		var playerName = CountryManager.Instance.Player.countryName;
 		if (!designs.ContainsKey(playerName))
 			designs[playerName] = new GDict();

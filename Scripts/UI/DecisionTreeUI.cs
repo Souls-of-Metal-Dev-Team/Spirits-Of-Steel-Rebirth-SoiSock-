@@ -61,7 +61,7 @@ public partial class DecisionTreeUI : CanvasLayer
 	private (StringName node, long port, bool isOutput)? _drag_origin = null;
 
 	private static bool DebugMode
-		=> SettingsManager.Instance.settings.GetValue("Developer Options", "debug_mode").AsBool();
+		=> GameState.Instance.settings.GetValue("Developer Options", "debug_mode").AsBool();
 
 	private static CountryData Player => CountryManager.Instance.Player;
 

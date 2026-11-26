@@ -23,6 +23,11 @@ public partial class LoadingScreen : CanvasLayer
 		progressBar.Value = value * 100;
 	}
 
+	public void SetStatus(string text)
+	{
+		statusLabel.Text = text;
+	}
+
 	public async void ShowScreen()
 	{
 		if (!IsNodeReady())

@@ -118,7 +118,6 @@ public partial class World : Node2D
 
 		if (CountryManager.Instance.playerCountry == null)
 		{
-			// CountryManager.set_player_country(CountryManager.countries.keys().pick_random())
 			GameState.Instance.interactionType = GameState.InteractionType.SELECT_COUNTRY;
 			// NOTE(soi): wait so like when i click on a country this should magically play as it?????. damm
 		}
@@ -184,7 +183,7 @@ public partial class World : Node2D
 			GD.PushError("MapContainer node not found!");
 		}
 
-		SettingsManager.Instance.ApplySettings(SettingsManager.Instance.settings);
+		GameState.Instance.ApplySettings(GameState.Instance.settings);
 
 		aProgress[0] = 1.0;
 
@@ -200,8 +199,6 @@ public partial class World : Node2D
 				Callable.From(() => WarManager.Instance.OnHourPassed()));
 			clock.Connect(GameClock.SignalName.DayPassed,
 				Callable.From(() => CountryManager.Instance._on_day_passed()));
-			clock.Connect(GameClock.SignalName.DayPassed,
-				Callable.From(() => EventManager.Instance._on_day_passed()));
 		}
 
 		_refresh_map_visuals();
@@ -216,6 +213,8 @@ public partial class World : Node2D
 
 	public void SaveGame(string slot)
 	{
+		CountryManager.Instance.FlushDayQueue();
+
 		// Construct a unified save dictionary
 		var clockDict = clock != null ? clock.ToDict() : new Godot.Collections.Dictionary();
 		var saveData = new Godot.Collections.Dictionary
@@ -256,13 +255,7 @@ public partial class World : Node2D
 			GD.Print("Game State saved successfully to: ", ProjectSettings.GlobalizePath(path));
 	}
 
-	private static Godot.Collections.Array SaveFigures()
-	{
-		var figures = new Godot.Collections.Array();
-		foreach (var figure in MapManager.Instance.significantFigures.Values)
-			figures.Add(VariantState.ToVariant(figure.ToDict()));
-		return figures;
-	}
+	private static Godot.Collections.Array SaveFigures() => FigureManager.Instance.Serialize();
 
 	public void LoadGame(string saveName)
 	{

@@ -3,7 +3,6 @@ using Xunit;
 
 namespace Sosr.Tests;
 
-// Headless replacement for scratch/test_port_parity.gd, which loaded Godot scripts by path.
 public class DataRoundTripTests
 {
 	private static Dictionary<string, object?> D(string json) =>
