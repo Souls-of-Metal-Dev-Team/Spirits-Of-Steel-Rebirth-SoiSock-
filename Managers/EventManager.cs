@@ -100,8 +100,8 @@ public partial class EventManager : Node
 	{
 		var dialog = new Window();
 		dialog.Title = _get_default_title(data);
-		dialog.MinSize = new Vector2I(320, 140);
-		dialog.Size = new Vector2I(340, 160);
+		dialog.MinSize = new Vector2I(360, 180);
+		dialog.Size = new Vector2I(380, 200);
 
 		var margin = new MarginContainer();
 		margin.SetAnchorsPreset(Control.LayoutPreset.FullRect);
@@ -149,12 +149,16 @@ public partial class EventManager : Node
 		label.AutowrapMode = TextServer.AutowrapMode.WordSmart;
 		label.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
 		label.SizeFlagsVertical = Control.SizeFlags.ExpandFill;
+		label.HorizontalAlignment = HorizontalAlignment.Center;
+		label.VerticalAlignment = VerticalAlignment.Center;
+		label.AddThemeFontSizeOverride("font_size", 16);
 		label.Text = _get_default_text(data);
 		body.AddChild(label);
 
 		var okButton = new Button();
 		okButton.Text = "Ok";
 		okButton.SizeFlagsHorizontal = Control.SizeFlags.ShrinkCenter;
+		okButton.CustomMinimumSize = new Vector2(120, 32);
 		okButton.Connect("pressed", Callable.From(() => dialog.QueueFree()));
 		body.AddChild(okButton);
 
@@ -274,12 +278,15 @@ public partial class EventManager : Node
 		descLabel.AutowrapMode = TextServer.AutowrapMode.WordSmart;
 		descLabel.HorizontalAlignment = HorizontalAlignment.Center;
 		descLabel.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
+		descLabel.AddThemeFontSizeOverride("font_size", 16);
+		descLabel.AddThemeColorOverride("font_color", new Color(0.92f, 0.88f, 0.78f));
 		descLabel.Text = GetOrDefault(data, "desc", "").AsString();
 		root.AddChild(descLabel);
 
 		var button = new Button();
 		button.Text = GetOrDefault(data, "button", "Ok").AsString();
 		button.SizeFlagsHorizontal = Control.SizeFlags.ShrinkCenter;
+		button.CustomMinimumSize = new Vector2(160, 34);
 		button.Connect("pressed", Callable.From(() => dialog.QueueFree()));
 		root.AddChild(button);
 
@@ -319,7 +326,7 @@ public partial class EventManager : Node
 		tr.Texture = TroopManager.Instance.GetFlag(country, ideology);
 		tr.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
 		tr.StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered;
-		tr.CustomMinimumSize = new Vector2(50, 25);
+		tr.CustomMinimumSize = new Vector2(72, 40);
 		return tr;
 	}
 

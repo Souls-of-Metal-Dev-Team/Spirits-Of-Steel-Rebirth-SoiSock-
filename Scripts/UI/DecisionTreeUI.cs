@@ -313,9 +313,9 @@ public partial class DecisionTreeUI : CanvasLayer
 
 	private void _show_info(GDict data)
 	{
-		var text = $"[b][font_size=26][color=yellow]{data["title"]}[/color][/font_size][/b]\n";
-		text += $"[font_size=18][i]{Get(data, "desc", "")}[/i][/font_size]\n\n";
-		text += $"[color=orange]Time: {(int)data["days"].AsDouble()} Days | Cost: {(int)data["costPp"].AsDouble()} Political Power[/color]";
+		var text = $"[b][font_size=26][color=#e8c070]{data["title"]}[/color][/font_size][/b]\n";
+		text += $"[font_size=18][i][color=#c8c4ba]{Get(data, "desc", "")}[/color][/i][/font_size]\n\n";
+		text += $"[color=#d9a35a]Time: {(int)data["days"].AsDouble()} Days | Cost: {(int)data["cost_pp"].AsDouble()} Political Power[/color]";
 
 		if (data.TryGetValue("reqs", out var reqsVariant))
 		{
@@ -333,7 +333,7 @@ public partial class DecisionTreeUI : CanvasLayer
 			}
 
 			if (finalReqTexts.Count > 0)
-				text += $"\n[color=red]Requirement: {string.Join("\n", finalReqTexts)}[/color]";
+				text += $"\n[color=#e07a6a]Requirement: {string.Join("\n", finalReqTexts)}[/color]";
 		}
 		infoText.Text = text;
 	}
@@ -360,6 +360,25 @@ public partial class DecisionTreeUI : CanvasLayer
 		return tt;
 	}
 
+	private static StyleBoxFlat Box(Color bg, Color border, int top, int bottom, int borderBottom)
+	{
+		var box = new StyleBoxFlat
+		{
+			BgColor = bg,
+			BorderColor = border,
+			BorderWidthLeft = 1,
+			BorderWidthRight = 1,
+			BorderWidthTop = top > 0 ? 2 : 0,
+			BorderWidthBottom = borderBottom,
+			CornerRadiusTopLeft = top,
+			CornerRadiusTopRight = top,
+			CornerRadiusBottomLeft = bottom,
+			CornerRadiusBottomRight = bottom,
+		};
+		box.SetContentMarginAll(6);
+		return box;
+	}
+
 	private void _apply_node_style(GraphNode node, GDict data, CountryData player)
 	{
 		var body = node.GetNodeOrNull<Button>("Body");
@@ -368,25 +387,18 @@ public partial class DecisionTreeUI : CanvasLayer
 
 		var status = "";
 		var disabled = false;
-		var style = new StyleBoxFlat
-		{
-			CornerRadiusTopLeft = 4,
-			CornerRadiusTopRight = 4,
-			CornerRadiusBottomLeft = 4,
-			CornerRadiusBottomRight = 4,
-			BorderWidthBottom = 4,
-		};
+		Color accent;
 
 		if (Finished(player, id))
 		{
-			status = "[DONE]";
-			style.BgColor = new Color(0.1f, 0.4f, 0.1f);
+			status = "✔ Completed";
+			accent = new Color(0.4f, 0.78f, 0.42f);
 			disabled = true;
 		}
 		else if (decisions.IsInProgress(player, id))
 		{
-			status = $"⌛ {decisions.GetDaysLeft(player, id)} Days";
-			style.BgColor = new Color(0.1f, 0.2f, 0.5f); // Dark Blue
+			status = $"⌛ {decisions.GetDaysLeft(player, id)} days left";
+			accent = new Color(0.4f, 0.62f, 0.95f);
 			disabled = true;
 		}
 		else
@@ -397,43 +409,58 @@ public partial class DecisionTreeUI : CanvasLayer
 
 			if (isMutuallyLocked)
 			{
-				status = "[LOCKED]";
-				style.BgColor = new Color(0.4f, 0.1f, 0.1f);
+				status = "✖ Excluded";
+				accent = new Color(0.85f, 0.32f, 0.3f);
 				disabled = true;
 			}
 			else if (isPrereqLocked)
 			{
-				style.BgColor = new Color(0.241f, 0.102f, 0.101f, 1.0f);
+				status = "🔒 Needs prerequisite";
+				accent = new Color(0.45f, 0.42f, 0.4f);
 				disabled = true;
 			}
 			else
 			{
 				var costPp = data["cost_pp"].AsDouble();
-				status = $"{(int)costPp} PP";
-				style.BgColor = new Color(0.2f, 0.2f, 0.2f);
 				// Also check if another decision is already running
 				disabled = player.politicalPower < costPp || decisions.IsCountryBusy(player);
+				status = $"{(int)costPp} PP · {(int)data["days"].AsDouble()} days";
+				accent = disabled ? new Color(0.6f, 0.55f, 0.45f) : new Color(0.9f, 0.72f, 0.36f);
 			}
 		}
 
+		var dark = new Color(0.09f, 0.095f, 0.105f);
 		if (body != null)
 		{
+			var normal = Box(dark.Lerp(accent, 0.12f), accent.Darkened(0.4f), 4, 4, 1);
+			var hover = Box(dark.Lerp(accent, 0.28f), accent, 4, 4, 1);
 			// Keep bodies clickable in edit mode so they can be selected for editing.
 			body.Disabled = disabled && !editMode;
 			body.Text = status;
-			body.AddThemeStyleboxOverride("normal", style);
-			body.AddThemeStyleboxOverride("disabled", style);
-			body.AddThemeStyleboxOverride("hover", style);
-			body.AddThemeStyleboxOverride("pressed", style);
+			body.AddThemeStyleboxOverride("normal", normal);
+			body.AddThemeStyleboxOverride("disabled", normal);
+			body.AddThemeStyleboxOverride("hover", hover);
+			body.AddThemeStyleboxOverride("pressed", Box(dark.Lerp(accent, 0.4f), accent, 4, 4, 1));
+			body.AddThemeColorOverride("font_color", accent.Lightened(0.35f));
+			body.AddThemeColorOverride("font_hover_color", Colors.White);
+			body.AddThemeColorOverride("font_disabled_color", accent.Lightened(0.15f));
 		}
 
-		var titleStyle = (StyleBoxFlat)style.Duplicate();
-		titleStyle.BorderWidthBottom = 0;
+		var panel = Box(dark, accent.Darkened(0.2f), 0, 6, 3);
+		panel.ShadowColor = new Color(0, 0, 0, 0.55f);
+		panel.ShadowSize = 8;
+		panel.ShadowOffset = new Vector2(0, 3);
+		var selected = (StyleBoxFlat)panel.Duplicate();
+		selected.BorderColor = Colors.White;
+		var title = Box(dark.Lerp(accent, 0.35f), accent.Darkened(0.2f), 6, 0, 0);
+		var titleSelected = (StyleBoxFlat)title.Duplicate();
+		titleSelected.BorderColor = Colors.White;
+
 		node.Title = data["title"].ToString();
-		node.AddThemeStyleboxOverride("panel", style);
-		node.AddThemeStyleboxOverride("panel_selected", style);
-		node.AddThemeStyleboxOverride("titlebar", titleStyle);
-		node.AddThemeStyleboxOverride("titlebar_selected", titleStyle);
+		node.AddThemeStyleboxOverride("panel", panel);
+		node.AddThemeStyleboxOverride("panel_selected", selected);
+		node.AddThemeStyleboxOverride("titlebar", title);
+		node.AddThemeStyleboxOverride("titlebar_selected", titleSelected);
 	}
 
 	private void RestyleAll()

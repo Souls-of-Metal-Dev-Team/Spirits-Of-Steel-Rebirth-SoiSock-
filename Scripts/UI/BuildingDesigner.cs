@@ -27,9 +27,26 @@ public partial class BuildingDesigner : PanelContainer
 	private static readonly HashSet<string> RESERVED_KEYS =
 		["name", "functionalities", "assigned_inputs", "assigned_outputs", "money_cost"];
 
+	private GDict shownFunctions;
+
+	// _Ready runs before World.DoSetup loads building_functions.json (and the world scene
+	// is cached across starts), so build the list when the panel opens instead.
 	public override void _Ready()
 	{
-		var functions = BuildingManager.Instance.buildingFunctions;
+		VisibilityChanged += () =>
+		{
+			if (Visible && shownFunctions != BuildingManager.Instance.buildingFunctions)
+				PopulateFunctions();
+		};
+	}
+
+	private void PopulateFunctions()
+	{
+		var functions = shownFunctions = BuildingManager.Instance.buildingFunctions;
+		foreach (var child in InputsListOrGrid().GetChildren())
+			child.QueueFree();
+		funcUiContainers.Clear();
+		selectedFunctionalities.Clear();
 		foreach (var key in functions.Keys)
 		{
 			var functionName = key.AsString();
