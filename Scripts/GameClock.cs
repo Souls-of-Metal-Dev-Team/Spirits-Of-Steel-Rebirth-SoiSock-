@@ -15,35 +15,35 @@ public partial class GameClock : Node
 	[Signal]
 	public delegate void ClockUpdateEventHandler();
 
-	[Export] public int hours_per_tick = 1; // How many in-game hours pass per tick
-	[Export] public float seconds_per_tick = 1.0f; // Real seconds per tick
+	[Export] public int hoursPerTick = 1; // How many in-game hours pass per tick
+	[Export] public float secondsPerTick = 1.0f; // Real seconds per tick
 
-	[Export] public int start_year = 2010;
-	[Export] public int start_month = 1; // 1-12
-	[Export] public int start_day = 1; // 1-31
-	[Export] public int start_hour = 0;
+	[Export] public int startYear = 2010;
+	[Export] public int startMonth = 1; // 1-12
+	[Export] public int startDay = 1; // 1-31
+	[Export] public int startHour = 0;
 
-	public float time_scale = MIN_SPEED;
+	public float timeScale = MIN_SPEED;
 	public const int MIN_SPEED = 8;
 	public const float MAX_SPEED = 80.0f;
 
 	// GDScript cannot read C# static constants through an instance.
-	public float max_speed => MAX_SPEED;
+	public float maxSpeed => MAX_SPEED;
 
 	public int hour;
-	public Godot.Collections.Dictionary date_dict;
-	public float accumulated_time = 0.0f;
+	public Godot.Collections.Dictionary dateDict;
+	public float accumulatedTime = 0.0f;
 
 	public bool paused = true;
 
 	public GameClock()
 	{
-		hour = start_hour;
-		date_dict = new Godot.Collections.Dictionary
+		hour = startHour;
+		dateDict = new Godot.Collections.Dictionary
 		{
-			{ "year", start_year },
-			{ "month", start_month },
-			{ "day", start_day },
+			{ "year", startYear },
+			{ "month", startMonth },
+			{ "day", startDay },
 		};
 	}
 
@@ -52,49 +52,49 @@ public partial class GameClock : Node
 		if (paused)
 			return;
 
-		accumulated_time += (float)delta * time_scale;
-		while (accumulated_time >= seconds_per_tick)
+		accumulatedTime += (float)delta * timeScale;
+		while (accumulatedTime >= secondsPerTick)
 		{
-			accumulated_time -= seconds_per_tick;
-			hour += hours_per_tick;
+			accumulatedTime -= secondsPerTick;
+			hour += hoursPerTick;
 			EmitSignal(SignalName.HourPassed);
 
-			var dateDictAsUnixTime = Time.GetUnixTimeFromDatetimeDict(date_dict);
+			var dateDictAsUnixTime = Time.GetUnixTimeFromDatetimeDict(dateDict);
 			while (hour >= 24)
 			{
 				hour -= 24;
 				dateDictAsUnixTime += 86400;
 				EmitSignal(SignalName.DayPassed);
 			}
-			date_dict = Time.GetDatetimeDictFromUnixTime(dateDictAsUnixTime);
+			dateDict = Time.GetDatetimeDictFromUnixTime(dateDictAsUnixTime);
 		}
 	}
 
-	public float get_absolute_days()
+	public float GetAbsoluteDays()
 	{
-		var dateUnix = Time.GetUnixTimeFromDatetimeDict(date_dict);
+		var dateUnix = Time.GetUnixTimeFromDatetimeDict(dateDict);
 		// date_dict usually has hour 0 if updated via Time.get_datetime_dict_from_unix_time(date_dict_as_unix_time)
 		// where date_dict_as_unix_time was multiple of 86400.
-		var tickProgress = accumulated_time / seconds_per_tick;
-		var hoursToday = hour + (tickProgress * hours_per_tick);
+		var tickProgress = accumulatedTime / secondsPerTick;
+		var hoursToday = hour + (tickProgress * hoursPerTick);
 		return ((float)dateUnix / 86400.0f) + (hoursToday / 24.0f);
 	}
 
-	public string get_time_string()
+	public string GetTimeString()
 	{
 		return hour.ToString("D2", CultureInfo.InvariantCulture) + ":00";
 	}
 
-	public string get_date_string()
+	public string GetDateString()
 	{
 		return string.Format(CultureInfo.InvariantCulture, "{0:D4}-{1:D2}-{2:D2}",
-			date_dict["year"].AsInt32(), date_dict["month"].AsInt32(), date_dict["day"].AsInt32());
+			dateDict["year"].AsInt32(), dateDict["month"].AsInt32(), dateDict["day"].AsInt32());
 	}
 
-	public string get_datetime_string()
+	public string GetDatetimeString()
 	{
 		return string.Format(CultureInfo.InvariantCulture, "{0:D2}:00 {1:D4}-{2:D2}-{3:D2}",
-			hour, date_dict["year"].AsInt32(), date_dict["month"].AsInt32(), date_dict["day"].AsInt32());
+			hour, dateDict["year"].AsInt32(), dateDict["month"].AsInt32(), dateDict["day"].AsInt32());
 	}
 
 	public Godot.Collections.Dictionary ToDict()
@@ -102,37 +102,37 @@ public partial class GameClock : Node
 		return new Godot.Collections.Dictionary
 		{
 			{ "hour", hour },
-			{ "date", date_dict },
+			{ "date", dateDict },
 		};
 	}
 
 	public void FromDict(Godot.Collections.Dictionary data)
 	{
-		hour = data.ContainsKey("hour") ? data["hour"].AsInt32() : start_hour;
-		date_dict = data.ContainsKey("date")
+		hour = data.ContainsKey("hour") ? data["hour"].AsInt32() : startHour;
+		dateDict = data.ContainsKey("date")
 			? data["date"].AsGodotDictionary()
 			: new Godot.Collections.Dictionary
 			{
-				{ "year", start_year },
-				{ "month", start_month },
-				{ "day", start_day },
+				{ "year", startYear },
+				{ "month", startMonth },
+				{ "day", startDay },
 			};
 	}
 
-	public void set_speed(float scale)
+	public void SetSpeed(float scale)
 	{
-		time_scale = Mathf.Clamp(scale, MIN_SPEED, MAX_SPEED);
+		timeScale = Mathf.Clamp(scale, MIN_SPEED, MAX_SPEED);
 		EmitSignal(SignalName.ClockUpdate);
 	}
 
-	public void decrease_speed()
+	public void DecreaseSpeed()
 	{
-		set_speed(time_scale - 8);
+		SetSpeed(timeScale - 8);
 	}
 
-	public void increase_speed()
+	public void IncreaseSpeed()
 	{
-		set_speed(time_scale + 8);
+		SetSpeed(timeScale + 8);
 	}
 
 	public void pause()
@@ -143,21 +143,21 @@ public partial class GameClock : Node
 
 	public void resume()
 	{
-		if (Sosr.GameState.Instance.in_peace_process)
+		if (Sosr.GameState.Instance.inPeaceProcess)
 			return;
 
 		paused = false;
 		EmitSignal(SignalName.ClockUpdate);
 	}
 
-	public void toggle_pause()
+	public void TogglePause()
 	{
-		if (time_scale == 0)
+		if (timeScale == 0)
 			return;
 
 		if (paused)
 		{
-			if (Sosr.GameState.Instance.in_peace_process)
+			if (Sosr.GameState.Instance.inPeaceProcess)
 				return;
 			resume();
 		}

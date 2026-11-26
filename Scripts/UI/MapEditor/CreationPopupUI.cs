@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
@@ -42,11 +43,11 @@ public partial class CreationPopupUI : PopupPanel
 	[Export] public ColorPickerButton resourceColor;
 	[Export] public LineEdit resourceIcon;
 
-	public void m_OpenScreen(CreationMode a_mode)
+	public void MOpenScreen(CreationMode aMode)
 	{
 		var countries = CountryManager.Instance.countries;
-		tabs.CurrentTab = (int)a_mode;
-		switch (a_mode)
+		tabs.CurrentTab = (int)aMode;
+		switch (aMode)
 		{
 			case CreationMode.CREATE_FACTION:
 				factionFounder.Clear();
@@ -79,17 +80,17 @@ public partial class CreationPopupUI : PopupPanel
 		Visible = true;
 	}
 
-	public void m_CreateFaction()
+	public void MCreateFaction()
 	{
 		if (FactionManager.Instance.factions.ContainsKey(factionName.Text))
 			return;
-		FactionManager.Instance.create_faction(
+		FactionManager.Instance.CreateFaction(
 			factionFounder.GetItemText(factionFounder.Selected), factionName.Text, factionColor.Color);
 		mapEditor.SetupFactionList();
 		Visible = false;
 	}
 
-	public void m_CreatePolity()
+	public void MCreatePolity()
 	{
 		var cm = CountryManager.Instance;
 		if (cm.countries.ContainsKey(polityName.Text))
@@ -107,7 +108,7 @@ public partial class CreationPopupUI : PopupPanel
 		switch (polityType.CurrentTab)
 		{
 			case 0:
-				cm.add_country(countryData);
+				cm.AddCountry(countryData);
 				cm.MakeHost(cm.GetCountry(polityHost.Text), cm.GetCountry(polityName.Text));
 				break;
 			case 1:
@@ -124,12 +125,12 @@ public partial class CreationPopupUI : PopupPanel
 			}
 		}
 		if (polityOwner.Text != "None")
-			cm.make_puppet(cm.GetCountry(polityOwner.Text), cm.GetCountry(polityName.Text));
+			cm.MakePuppet(cm.GetCountry(polityOwner.Text), cm.GetCountry(polityName.Text));
 		mapEditor.SetupPolitiesList();
 		Visible = false;
 	}
 
-	public void m_CreateMember()
+	public void MCreateMember()
 	{
 		FactionManager.Instance.factions[mapEditor.selectedFaction].members
 			.Add(FactionMember.FromValues(memberPolity.Text, memberStatus.Text));
@@ -137,23 +138,23 @@ public partial class CreationPopupUI : PopupPanel
 		Visible = false;
 	}
 
-	public void m_CreateBiome()
+	public void MCreateBiome()
 	{
 		var biomes = MapManager.Instance.biomes;
 		if (biomes.ContainsKey(biomeName.Text))
 			return;
-		biomes[biomeName.Text] = BiomeData.FromValues(biomeName.Text, biomeColor.Color);
+		biomes[biomeName.Text] = BiomeData.FromValues(biomeName.Text, biomeColor.Color.ToHex());
 		mapEditor.SetupBiomesList();
 		Visible = false;
 	}
 
-	public void m_CreateResource()
+	public void MCreateResource()
 	{
 		var resources = MapManager.Instance.resources;
 		if (resources.ContainsKey(resourceName.Text))
 			return;
 		resources[resourceName.Text] = ResourceData.FromValues(
-			resourceName.Text, resourceColor.Color, resourceIcon.Text, new Godot.Collections.Dictionary());
+			resourceName.Text, resourceColor.Color.ToHex(), resourceIcon.Text, new Dictionary<string, object?>());
 		mapEditor.SetupResourcesList();
 		Visible = false;
 	}

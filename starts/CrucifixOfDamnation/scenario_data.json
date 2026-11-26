@@ -1,0 +1,5252 @@
+{
+	"factions": [
+		{
+			"color": "#FF8A3A",
+			"members": [
+				{
+					"polity": "Carolinian_Republic",
+					"status": "Leader"
+				},
+				{
+					"polity": "Guantanamo_Duchy",
+					"status": "Member"
+				}
+			],
+			"name": "Imperial_Coalition_Of_Moog"
+		},
+		{
+			"color": "#84FFFA",
+			"members": [
+				{
+					"polity": "Nicaragua",
+					"status": "Leader"
+				},
+				{
+					"polity": "Honduras",
+					"status": "Member"
+				},
+				{
+					"polity": "Panama",
+					"status": "Member"
+				},
+				{
+					"polity": "Costa_rica",
+					"status": "Member"
+				}
+			],
+			"name": "South_American_Defense_League"
+		}
+	],
+	"polities": [
+		{
+			"accepted_cultures": [
+				"Inuit",
+				"Canada",
+				"Quebecs"
+			],
+			"color": "#C35C6D",
+			"figures": [
+				"Canada_BenitoMussolini",
+				"Canada_YukawaHideki",
+				"Canada_TrofimLysenko",
+				"Canada_JaneAustenCassandra",
+				"Canada_BenjaminFranklin"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Canada",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Greenlandish",
+				"Danish"
+			],
+			"color": "#99745D",
+			"figures": [
+				"Denmark_TrofimLysenko",
+				"Denmark_TrofimLysenko",
+				"Denmark_BenjaminFranklin",
+				"Denmark_YukawaHideki",
+				"Denmark_JaneAustenCassandra"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Denmark",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Russians",
+				"Evenkis",
+				"Nenets",
+				"Yakuts",
+				"Chukoktans",
+				"Komi",
+				"Finnish",
+				"Evens",
+				"Berlarussians",
+				"Mari",
+				"Tartars",
+				"Balkarsk",
+				"Chuvash",
+				"Mordvins",
+				"Tuvans",
+				"Mongols",
+				"Altayns",
+				"Udegens",
+				"Kalmykians",
+				"Dagestani",
+				"Checnyians"
+			],
+			"color": "#386038",
+			"figures": [
+				"Russia_YukawaHideki",
+				"Russia_BenitoMussolini",
+				"Russia_JaneAustenCassandra",
+				"Russia_YukawaHideki",
+				"Russia_BenjaminFranklin"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Russia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Norway"
+			],
+			"color": "#6F4747",
+			"figures": [
+				"Norway_BenjaminFranklin",
+				"Norway_BenitoMussolini",
+				"Norway_YukawaHideki",
+				"Norway_YukawaHideki",
+				"Norway_BenitoMussolini"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Norway",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Anglo-americans"
+			],
+			"color": "#1485ED",
+			"figures": [
+				"United_states_ChevalierDEon",
+				"United_states_YukawaHideki",
+				"United_states_UrNammu",
+				"United_states_TrofimLysenko",
+				"United_states_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "United_states",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Finnish"
+			],
+			"color": "#C2C6D7",
+			"figures": [
+				"Finland_BenjaminFranklin",
+				"Finland_TrofimLysenko",
+				"Finland_BenitoMussolini",
+				"Finland_TrofimLysenko",
+				"Finland_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Finland",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Sweden"
+			],
+			"color": "#2484F7",
+			"figures": [
+				"Sweden_ChevalierDEon",
+				"Sweden_JaneAustenCassandra",
+				"Sweden_TrofimLysenko",
+				"Sweden_UrNammu",
+				"Sweden_UrNammu"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Sweden",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Icelandish"
+			],
+			"color": "#445171",
+			"figures": [
+				"Iceland_ChevalierDEon",
+				"Iceland_JaneAustenCassandra",
+				"Iceland_JaneAustenCassandra",
+				"Iceland_TrofimLysenko",
+				"Iceland_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Iceland",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Estonia"
+			],
+			"color": "#3287AF",
+			"figures": [
+				"Estonia_UrNammu",
+				"Estonia_BenjaminFranklin",
+				"Estonia_ChevalierDEon",
+				"Estonia_UrNammu",
+				"Estonia_YukawaHideki"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Estonia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Scottish",
+				"English",
+				"Ireland",
+				"Welish",
+				"Spaniards",
+				"Montserrat",
+				"Indian-ocean"
+			],
+			"color": "#C8385D",
+			"figures": [
+				"United_kingdom_UrNammu",
+				"United_kingdom_TrofimLysenko",
+				"United_kingdom_ChevalierDEon",
+				"United_kingdom_JaneAustenCassandra",
+				"United_kingdom_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "United_kingdom",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Latvia",
+				"Lithuanian"
+			],
+			"color": "#4B4DBA",
+			"figures": [
+				"Latvia_BenjaminFranklin",
+				"Latvia_UrNammu",
+				"Latvia_YukawaHideki",
+				"Latvia_TrofimLysenko",
+				"Latvia_UrNammu"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Latvia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Lithuanian",
+				"Berlarussians"
+			],
+			"color": "#DBDB77",
+			"figures": [
+				"Lithuania_ChevalierDEon",
+				"Lithuania_ChevalierDEon",
+				"Lithuania_UrNammu",
+				"Lithuania_UrNammu",
+				"Lithuania_BenjaminFranklin"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Lithuania",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Berlarussians"
+			],
+			"color": "#C7D5E0",
+			"figures": [
+				"Belarus_BenitoMussolini",
+				"Belarus_BenjaminFranklin",
+				"Belarus_BenjaminFranklin",
+				"Belarus_BenjaminFranklin",
+				"Belarus_BenjaminFranklin"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Belarus",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Ireland"
+			],
+			"color": "#509F5A",
+			"figures": [
+				"Ireland_ChevalierDEon",
+				"Ireland_YukawaHideki",
+				"Ireland_YukawaHideki",
+				"Ireland_ChevalierDEon",
+				"Ireland_TrofimLysenko"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Ireland",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Russians",
+				"Khazaks"
+			],
+			"color": "#58A1C1",
+			"figures": [
+				"Kazakhstan_BenitoMussolini",
+				"Kazakhstan_YukawaHideki",
+				"Kazakhstan_TrofimLysenko",
+				"Kazakhstan_BenjaminFranklin",
+				"Kazakhstan_BenitoMussolini"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Kazakhstan",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Germans",
+				"Unknown"
+			],
+			"color": "#49484D",
+			"figures": [
+				"Germany_BenjaminFranklin",
+				"Germany_YukawaHideki",
+				"Germany_UrNammu",
+				"Germany_TrofimLysenko",
+				"Germany_UrNammu"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Germany",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Poles"
+			],
+			"color": "#C55C6A",
+			"figures": [
+				"Poland_JaneAustenCassandra",
+				"Poland_ChevalierDEon",
+				"Poland_BenjaminFranklin",
+				"Poland_JaneAustenCassandra",
+				"Poland_TrofimLysenko"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Poland",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Dutch"
+			],
+			"color": "#C78749",
+			"figures": [
+				"Netherlands_ChevalierDEon",
+				"Netherlands_JaneAustenCassandra",
+				"Netherlands_YukawaHideki",
+				"Netherlands_YukawaHideki",
+				"Netherlands_UrNammu"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Netherlands",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Russians",
+				"Mongols",
+				"Han-chinise",
+				"East-turks",
+				"Koreans",
+				"Tajiks",
+				"Tibet",
+				"Yunnans",
+				"Thai"
+			],
+			"color": "#A7575A",
+			"figures": [
+				"China_BenjaminFranklin",
+				"China_UrNammu",
+				"China_YukawaHideki",
+				"China_UrNammu",
+				"China_BenitoMussolini"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "China",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Ukranian",
+				"Carpanthian-russ",
+				"Russians"
+			],
+			"color": "#34588A",
+			"figures": [
+				"Ukraine_BenitoMussolini",
+				"Ukraine_YukawaHideki",
+				"Ukraine_BenjaminFranklin",
+				"Ukraine_JaneAustenCassandra",
+				"Ukraine_UrNammu"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Ukraine",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Mongols"
+			],
+			"color": "#A38E4B",
+			"figures": [
+				"Mongolia_BenitoMussolini",
+				"Mongolia_BenjaminFranklin",
+				"Mongolia_BenjaminFranklin",
+				"Mongolia_BenjaminFranklin",
+				"Mongolia_UrNammu"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Mongolia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Dutch",
+				"France"
+			],
+			"color": "#C1AB08",
+			"figures": [
+				"Belgium_TrofimLysenko",
+				"Belgium_YukawaHideki",
+				"Belgium_JaneAustenCassandra",
+				"Belgium_BenjaminFranklin",
+				"Belgium_BenitoMussolini"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Belgium",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"France",
+				"",
+				"Guadeloupe",
+				"French-guyanese",
+				"Mayotte",
+				"French-polynesian",
+				"New-caledonia",
+				"Reunion-creole",
+				"French-antartic"
+			],
+			"color": "#3D75E8",
+			"figures": [
+				"France_ChevalierDEon",
+				"France_TrofimLysenko",
+				"France_BenjaminFranklin",
+				"France_JaneAustenCassandra",
+				"France_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "France",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Czech"
+			],
+			"color": "#36A79C",
+			"figures": [
+				"Czechia_BenitoMussolini",
+				"Czechia_TrofimLysenko",
+				"Czechia_YukawaHideki",
+				"Czechia_YukawaHideki",
+				"Czechia_BenitoMussolini"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Czechia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"France"
+			],
+			"color": "#55E4E9",
+			"figures": [
+				"Luxembourg_YukawaHideki",
+				"Luxembourg_TrofimLysenko",
+				"Luxembourg_BenitoMussolini",
+				"Luxembourg_UrNammu",
+				"Luxembourg_UrNammu"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Luxembourg",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Slovaks"
+			],
+			"color": "#795C9F",
+			"figures": [
+				"Slovakia_ChevalierDEon",
+				"Slovakia_BenitoMussolini",
+				"Slovakia_YukawaHideki",
+				"Slovakia_BenitoMussolini",
+				"Slovakia_YukawaHideki"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Slovakia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Germans"
+			],
+			"color": "#A8AEC6",
+			"figures": [
+				"Austria_YukawaHideki",
+				"Austria_JaneAustenCassandra",
+				"Austria_UrNammu",
+				"Austria_BenitoMussolini",
+				"Austria_BenitoMussolini"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Austria",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Hungarians"
+			],
+			"color": "#4E7D73",
+			"figures": [
+				"Hungary_UrNammu",
+				"Hungary_TrofimLysenko",
+				"Hungary_JaneAustenCassandra",
+				"Hungary_BenitoMussolini",
+				"Hungary_YukawaHideki"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Hungary",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Romanian",
+				"Gagauz-turks"
+			],
+			"color": "#866E52",
+			"figures": [
+				"Moldova_YukawaHideki",
+				"Moldova_BenitoMussolini",
+				"Moldova_JaneAustenCassandra",
+				"Moldova_YukawaHideki",
+				"Moldova_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Moldova",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Romanian",
+				"Hungarians"
+			],
+			"color": "#D7C448",
+			"figures": [
+				"Romania_UrNammu",
+				"Romania_UrNammu",
+				"Romania_BenitoMussolini",
+				"Romania_TrofimLysenko",
+				"Romania_JaneAustenCassandra"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Romania",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Romanian",
+				"Russians"
+			],
+			"color": "#2A1618",
+			"figures": [
+				"Transnistria_BenjaminFranklin",
+				"Transnistria_BenjaminFranklin",
+				"Transnistria_BenjaminFranklin",
+				"Transnistria_ChevalierDEon",
+				"Transnistria_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Transnistria",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Germans",
+				"Romanch",
+				"France",
+				"Italians"
+			],
+			"color": "#E00505",
+			"figures": [
+				"Switzerland_JaneAustenCassandra",
+				"Switzerland_BenjaminFranklin",
+				"Switzerland_UrNammu",
+				"Switzerland_TrofimLysenko",
+				"Switzerland_YukawaHideki"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Switzerland",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Liechtenstein"
+			],
+			"color": "#575A7F",
+			"figures": [
+				"Liechtenstein_UrNammu",
+				"Liechtenstein_TrofimLysenko",
+				"Liechtenstein_ChevalierDEon",
+				"Liechtenstein_ChevalierDEon",
+				"Liechtenstein_YukawaHideki"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Liechtenstein",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Germans",
+				"Italians",
+				"France"
+			],
+			"color": "#437F3F",
+			"figures": [
+				"Italy_TrofimLysenko",
+				"Italy_BenitoMussolini",
+				"Italy_JaneAustenCassandra",
+				"Italy_YukawaHideki",
+				"Italy_YukawaHideki"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Italy",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Slovenes"
+			],
+			"color": "#4F6F96",
+			"figures": [
+				"Slovenia_ChevalierDEon",
+				"Slovenia_UrNammu",
+				"Slovenia_TrofimLysenko",
+				"Slovenia_YukawaHideki",
+				"Slovenia_UrNammu"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Slovenia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Croat"
+			],
+			"color": "#2A2D60",
+			"figures": [
+				"Croatia_UrNammu",
+				"Croatia_JaneAustenCassandra",
+				"Croatia_BenjaminFranklin",
+				"Croatia_JaneAustenCassandra",
+				"Croatia_BenitoMussolini"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Croatia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Serbs",
+				"Bulgarians"
+			],
+			"color": "#9A6867",
+			"figures": [
+				"Serbia_BenitoMussolini",
+				"Serbia_UrNammu",
+				"Serbia_YukawaHideki",
+				"Serbia_JaneAustenCassandra",
+				"Serbia_TrofimLysenko"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Serbia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Serbs",
+				"Bosnia-and-herzegovina"
+			],
+			"color": "#DFC087",
+			"figures": [
+				"Bosnia_and_herzegovina_BenjaminFranklin",
+				"Bosnia_and_herzegovina_UrNammu",
+				"Bosnia_and_herzegovina_YukawaHideki",
+				"Bosnia_and_herzegovina_YukawaHideki",
+				"Bosnia_and_herzegovina_YukawaHideki"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Bosnia_and_herzegovina",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Uzebeks"
+			],
+			"color": "#CACEFD",
+			"figures": [
+				"Uzbekistan_BenjaminFranklin",
+				"Uzbekistan_TrofimLysenko",
+				"Uzbekistan_JaneAustenCassandra",
+				"Uzbekistan_BenjaminFranklin",
+				"Uzbekistan_BenitoMussolini"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Uzbekistan",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Japanase"
+			],
+			"color": "#FFC9B2",
+			"figures": [
+				"Japan_BenjaminFranklin",
+				"Japan_ChevalierDEon",
+				"Japan_TrofimLysenko",
+				"Japan_ChevalierDEon",
+				"Japan_TrofimLysenko"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Japan",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Bulgarians"
+			],
+			"color": "#339B00",
+			"figures": [
+				"Bulgaria_BenjaminFranklin",
+				"Bulgaria_TrofimLysenko",
+				"Bulgaria_JaneAustenCassandra",
+				"Bulgaria_BenitoMussolini",
+				"Bulgaria_BenjaminFranklin"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Bulgaria",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Spaniards",
+				"Basque",
+				"Catalonians",
+				"Portugese",
+				"Canary-islander"
+			],
+			"color": "#F2CD5E",
+			"figures": [
+				"Spain_BenitoMussolini",
+				"Spain_YukawaHideki",
+				"Spain_BenjaminFranklin",
+				"Spain_BenitoMussolini",
+				"Spain_YukawaHideki"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Spain",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"San-marino"
+			],
+			"color": "#62B0C6",
+			"figures": [
+				"San_marino_BenitoMussolini",
+				"San_marino_BenjaminFranklin",
+				"San_marino_YukawaHideki",
+				"San_marino_BenitoMussolini",
+				"San_marino_YukawaHideki"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "San_marino",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Monaco"
+			],
+			"color": "#EDA2BA",
+			"figures": [
+				"Monaco_BenjaminFranklin",
+				"Monaco_BenitoMussolini",
+				"Monaco_JaneAustenCassandra",
+				"Monaco_ChevalierDEon",
+				"Monaco_UrNammu"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Monaco",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Russians"
+			],
+			"color": "#3F1F2D",
+			"figures": [
+				"Abkhazia_UrNammu",
+				"Abkhazia_BenitoMussolini",
+				"Abkhazia_BenjaminFranklin",
+				"Abkhazia_TrofimLysenko",
+				"Abkhazia_JaneAustenCassandra"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Abkhazia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Serbs"
+			],
+			"color": "#FC7279",
+			"figures": [
+				"Montenegro_BenitoMussolini",
+				"Montenegro_TrofimLysenko",
+				"Montenegro_YukawaHideki",
+				"Montenegro_ChevalierDEon",
+				"Montenegro_UrNammu"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Montenegro",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Albanians"
+			],
+			"color": "#768EBA",
+			"figures": [
+				"Kosovo_BenjaminFranklin",
+				"Kosovo_UrNammu",
+				"Kosovo_YukawaHideki",
+				"Kosovo_BenitoMussolini",
+				"Kosovo_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Kosovo",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Georgia"
+			],
+			"color": "#EFE4E8",
+			"figures": [
+				"Georgia_TrofimLysenko",
+				"Georgia_YukawaHideki",
+				"Georgia_JaneAustenCassandra",
+				"Georgia_JaneAustenCassandra",
+				"Georgia_BenjaminFranklin"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Georgia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Kirghiz"
+			],
+			"color": "#F43D6F",
+			"figures": [
+				"Kyrgyzstan_YukawaHideki",
+				"Kyrgyzstan_BenjaminFranklin",
+				"Kyrgyzstan_UrNammu",
+				"Kyrgyzstan_TrofimLysenko",
+				"Kyrgyzstan_UrNammu"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Kyrgyzstan",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Andorra"
+			],
+			"color": "#C90001",
+			"figures": [
+				"Andorra_ChevalierDEon",
+				"Andorra_BenitoMussolini",
+				"Andorra_UrNammu",
+				"Andorra_TrofimLysenko",
+				"Andorra_JaneAustenCassandra"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Andorra",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Russians"
+			],
+			"color": "#C29657",
+			"figures": [
+				"South_ossetia_ChevalierDEon",
+				"South_ossetia_ChevalierDEon",
+				"South_ossetia_JaneAustenCassandra",
+				"South_ossetia_TrofimLysenko",
+				"South_ossetia_YukawaHideki"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "South_ossetia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Turkmen",
+				"Uzebeks"
+			],
+			"color": "#BD8C6E",
+			"figures": [
+				"Turkmenistan_TrofimLysenko",
+				"Turkmenistan_ChevalierDEon",
+				"Turkmenistan_BenitoMussolini",
+				"Turkmenistan_ChevalierDEon",
+				"Turkmenistan_JaneAustenCassandra"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Turkmenistan",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Koreans"
+			],
+			"color": "#F50C37",
+			"figures": [
+				"North_korea_UrNammu",
+				"North_korea_YukawaHideki",
+				"North_korea_BenjaminFranklin",
+				"North_korea_YukawaHideki",
+				"North_korea_TrofimLysenko"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "North_korea",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Albanians"
+			],
+			"color": "#952D66",
+			"figures": [
+				"Albania_TrofimLysenko",
+				"Albania_JaneAustenCassandra",
+				"Albania_BenjaminFranklin",
+				"Albania_YukawaHideki",
+				"Albania_TrofimLysenko"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Albania",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Macedonians",
+				"Albanians"
+			],
+			"color": "#CA9576",
+			"figures": [
+				"North_macedonia_YukawaHideki",
+				"North_macedonia_JaneAustenCassandra",
+				"North_macedonia_YukawaHideki",
+				"North_macedonia_BenjaminFranklin",
+				"North_macedonia_BenjaminFranklin"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "North_macedonia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Azerbis"
+			],
+			"color": "#728CD9",
+			"figures": [
+				"Azerbaijan_UrNammu",
+				"Azerbaijan_BenitoMussolini",
+				"Azerbaijan_ChevalierDEon",
+				"Azerbaijan_BenitoMussolini",
+				"Azerbaijan_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Azerbaijan",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Portugese"
+			],
+			"color": "#277446",
+			"figures": [
+				"Portugal_TrofimLysenko",
+				"Portugal_UrNammu",
+				"Portugal_UrNammu",
+				"Portugal_YukawaHideki",
+				"Portugal_UrNammu"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Portugal",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Turks",
+				"Kurds",
+				"Arab"
+			],
+			"color": "#A63443",
+			"figures": [
+				"Turkey_JaneAustenCassandra",
+				"Turkey_BenjaminFranklin",
+				"Turkey_BenitoMussolini",
+				"Turkey_TrofimLysenko",
+				"Turkey_UrNammu"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Turkey",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Vatican-city"
+			],
+			"color": "#C4B582",
+			"figures": [
+				"Vatican_city_ChevalierDEon",
+				"Vatican_city_YukawaHideki",
+				"Vatican_city_YukawaHideki",
+				"Vatican_city_YukawaHideki",
+				"Vatican_city_BenjaminFranklin"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Vatican_city",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Hellenics"
+			],
+			"color": "#5DB5E3",
+			"figures": [
+				"Greece_JaneAustenCassandra",
+				"Greece_JaneAustenCassandra",
+				"Greece_UrNammu",
+				"Greece_YukawaHideki",
+				"Greece_TrofimLysenko"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Greece",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Armenia"
+			],
+			"color": "#F6A286",
+			"figures": [
+				"Armenia_ChevalierDEon",
+				"Armenia_YukawaHideki",
+				"Armenia_ChevalierDEon",
+				"Armenia_ChevalierDEon",
+				"Armenia_JaneAustenCassandra"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Armenia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Tajiks"
+			],
+			"color": "#6D9482",
+			"figures": [
+				"Tajikistan_BenjaminFranklin",
+				"Tajikistan_YukawaHideki",
+				"Tajikistan_UrNammu",
+				"Tajikistan_ChevalierDEon",
+				"Tajikistan_BenitoMussolini"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Tajikistan",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Persians",
+				"Azerbis",
+				"Kurds",
+				"Turkmen",
+				"Lurs",
+				"Arab",
+				"Balochs"
+			],
+			"color": "#5A8F7B",
+			"figures": [
+				"Iran_YukawaHideki",
+				"Iran_BenjaminFranklin",
+				"Iran_TrofimLysenko",
+				"Iran_JaneAustenCassandra",
+				"Iran_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Iran",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Tajiks",
+				"Hazara",
+				"Pashtuns",
+				"Balochs"
+			],
+			"color": "#716B79",
+			"figures": [
+				"Afghanistan_BenitoMussolini",
+				"Afghanistan_YukawaHideki",
+				"Afghanistan_UrNammu",
+				"Afghanistan_TrofimLysenko",
+				"Afghanistan_JaneAustenCassandra"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Afghanistan",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Koreans"
+			],
+			"color": "#5E76BE",
+			"figures": [
+				"South_korea_BenjaminFranklin",
+				"South_korea_JaneAustenCassandra",
+				"South_korea_UrNammu",
+				"South_korea_BenjaminFranklin",
+				"South_korea_BenitoMussolini"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "South_korea",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab"
+			],
+			"color": "#B9566A",
+			"figures": [
+				"Tunisia_BenitoMussolini",
+				"Tunisia_UrNammu",
+				"Tunisia_JaneAustenCassandra",
+				"Tunisia_YukawaHideki",
+				"Tunisia_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Tunisia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Kurds",
+				"Assyrians",
+				"Arab"
+			],
+			"color": "#B27263",
+			"figures": [
+				"Iraq_UrNammu",
+				"Iraq_BenjaminFranklin",
+				"Iraq_TrofimLysenko",
+				"Iraq_ChevalierDEon",
+				"Iraq_JaneAustenCassandra"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Iraq",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Kurds",
+				"Arab"
+			],
+			"color": "#374E5C",
+			"figures": [
+				"Syria_YukawaHideki",
+				"Syria_UrNammu",
+				"Syria_JaneAustenCassandra",
+				"Syria_ChevalierDEon",
+				"Syria_YukawaHideki"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Syria",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Kashmiri",
+				"Chitrall",
+				"Pashtu",
+				"",
+				"Punjabs",
+				"Saeaikis",
+				"Balochs",
+				"Saraikis"
+			],
+			"color": "#002917",
+			"figures": [
+				"Pakistan_TrofimLysenko",
+				"Pakistan_UrNammu",
+				"Pakistan_JaneAustenCassandra",
+				"Pakistan_BenjaminFranklin",
+				"Pakistan_YukawaHideki"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Pakistan",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab",
+				""
+			],
+			"color": "#0A2B24",
+			"figures": [
+				"Algeria_UrNammu",
+				"Algeria_ChevalierDEon",
+				"Algeria_YukawaHideki",
+				"Algeria_JaneAustenCassandra",
+				"Algeria_JaneAustenCassandra"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Algeria",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab",
+				"",
+				"Western-sahara"
+			],
+			"color": "#9B4A59",
+			"figures": [
+				"Morocco_YukawaHideki",
+				"Morocco_TrofimLysenko",
+				"Morocco_YukawaHideki",
+				"Morocco_BenitoMussolini",
+				"Morocco_YukawaHideki"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Morocco",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Malta"
+			],
+			"color": "#D9D9D9",
+			"figures": [
+				"Malta_ChevalierDEon",
+				"Malta_TrofimLysenko",
+				"Malta_BenjaminFranklin",
+				"Malta_UrNammu",
+				"Malta_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Malta",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Turks"
+			],
+			"color": "#5C4D32",
+			"figures": [
+				"Turkish_cyprus_TrofimLysenko",
+				"Turkish_cyprus_UrNammu",
+				"Turkish_cyprus_UrNammu",
+				"Turkish_cyprus_BenjaminFranklin",
+				"Turkish_cyprus_BenjaminFranklin"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Turkish_cyprus",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Ladakashi",
+				"Kashmiri",
+				"Kinnauris",
+				"Bbagris",
+				"",
+				"Saraikis",
+				"Adi",
+				"Kaurais",
+				"Marwais",
+				"Chakma",
+				"Sikinn",
+				"Tada",
+				"Awashis",
+				"Kannaujis",
+				"Maithils",
+				"Bengal",
+				"Bundelis",
+				"Magahis",
+				"Gukarati",
+				"Baghelis",
+				"Mizo",
+				"Chhattisgrahiya",
+				"Bhils",
+				"Nimads",
+				"Odia",
+				"Marathi",
+				"Gond",
+				"Teiugu",
+				"Kannada",
+				"Tami",
+				"Malayali",
+				"India"
+			],
+			"color": "#D0A36C",
+			"figures": [
+				"India_JaneAustenCassandra",
+				"India_BenjaminFranklin",
+				"India_TrofimLysenko",
+				"India_UrNammu",
+				"India_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "India",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Hellenics"
+			],
+			"color": "#DEB51B",
+			"figures": [
+				"Cyprus_JaneAustenCassandra",
+				"Cyprus_ChevalierDEon",
+				"Cyprus_JaneAustenCassandra",
+				"Cyprus_BenitoMussolini",
+				"Cyprus_BenjaminFranklin"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Cyprus",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Lebanon"
+			],
+			"color": "#549C8B",
+			"figures": [
+				"Lebanon_UrNammu",
+				"Lebanon_JaneAustenCassandra",
+				"Lebanon_ChevalierDEon",
+				"Lebanon_BenitoMussolini",
+				"Lebanon_BenjaminFranklin"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Lebanon",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab",
+				""
+			],
+			"color": "#2A7054",
+			"figures": [
+				"Libya_TrofimLysenko",
+				"Libya_BenitoMussolini",
+				"Libya_JaneAustenCassandra",
+				"Libya_ChevalierDEon",
+				"Libya_TrofimLysenko"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Libya",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Israel"
+			],
+			"color": "#4569D9",
+			"figures": [
+				"Israel_UrNammu",
+				"Israel_TrofimLysenko",
+				"Israel_ChevalierDEon",
+				"Israel_BenitoMussolini",
+				"Israel_JaneAustenCassandra"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Israel",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab"
+			],
+			"color": "#E3989C",
+			"figures": [
+				"Jordan_BenitoMussolini",
+				"Jordan_TrofimLysenko",
+				"Jordan_YukawaHideki",
+				"Jordan_ChevalierDEon",
+				"Jordan_YukawaHideki"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Jordan",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Mexican"
+			],
+			"color": "#689752",
+			"figures": [
+				"Mexico_UrNammu",
+				"Mexico_BenitoMussolini",
+				"Mexico_BenitoMussolini",
+				"Mexico_TrofimLysenko",
+				"Mexico_YukawaHideki"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Mexico",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab"
+			],
+			"color": "#ABBE98",
+			"figures": [
+				"Saudi_arabia_BenjaminFranklin",
+				"Saudi_arabia_UrNammu",
+				"Saudi_arabia_JaneAustenCassandra",
+				"Saudi_arabia_TrofimLysenko",
+				"Saudi_arabia_TrofimLysenko"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Saudi_arabia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab"
+			],
+			"color": "#564857",
+			"figures": [
+				"Palestine_JaneAustenCassandra",
+				"Palestine_BenitoMussolini",
+				"Palestine_YukawaHideki",
+				"Palestine_BenjaminFranklin",
+				"Palestine_TrofimLysenko"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Palestine",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab"
+			],
+			"color": "#AFA358",
+			"figures": [
+				"Egypt_UrNammu",
+				"Egypt_TrofimLysenko",
+				"Egypt_BenjaminFranklin",
+				"Egypt_TrofimLysenko",
+				"Egypt_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Egypt",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Nepali"
+			],
+			"color": "#003893",
+			"figures": [
+				"Nepal_BenjaminFranklin",
+				"Nepal_JaneAustenCassandra",
+				"Nepal_YukawaHideki",
+				"Nepal_BenjaminFranklin",
+				"Nepal_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Nepal",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab"
+			],
+			"color": "#5A402A",
+			"figures": [
+				"Kuwait_ChevalierDEon",
+				"Kuwait_UrNammu",
+				"Kuwait_ChevalierDEon",
+				"Kuwait_JaneAustenCassandra",
+				"Kuwait_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Kuwait",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Bhutanese"
+			],
+			"color": "#79645F",
+			"figures": [
+				"Bhutan_TrofimLysenko",
+				"Bhutan_BenitoMussolini",
+				"Bhutan_BenjaminFranklin",
+				"Bhutan_UrNammu",
+				"Bhutan_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Bhutan",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Myammar"
+			],
+			"color": "#3B714F",
+			"figures": [
+				"Myanmar_BenjaminFranklin",
+				"Myanmar_BenitoMussolini",
+				"Myanmar_BenitoMussolini",
+				"Myanmar_BenjaminFranklin",
+				"Myanmar_UrNammu"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Myanmar",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Western-sahara"
+			],
+			"color": "#C5AE78",
+			"figures": [
+				"Western_sahara_TrofimLysenko",
+				"Western_sahara_BenitoMussolini",
+				"Western_sahara_JaneAustenCassandra",
+				"Western_sahara_UrNammu",
+				"Western_sahara_UrNammu"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Western_sahara",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				""
+			],
+			"color": "#2A6F53",
+			"figures": [
+				"Mauritania_UrNammu",
+				"Mauritania_BenjaminFranklin",
+				"Mauritania_BenjaminFranklin",
+				"Mauritania_YukawaHideki",
+				"Mauritania_JaneAustenCassandra"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Mauritania",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab"
+			],
+			"color": "#3A414B",
+			"figures": [
+				"Bahrain_UrNammu",
+				"Bahrain_ChevalierDEon",
+				"Bahrain_ChevalierDEon",
+				"Bahrain_BenjaminFranklin",
+				"Bahrain_JaneAustenCassandra"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Bahrain",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Bengal"
+			],
+			"color": "#002A30",
+			"figures": [
+				"Bangladesh_YukawaHideki",
+				"Bangladesh_JaneAustenCassandra",
+				"Bangladesh_ChevalierDEon",
+				"Bangladesh_JaneAustenCassandra",
+				"Bangladesh_UrNammu"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Bangladesh",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab"
+			],
+			"color": "#6F2373",
+			"figures": [
+				"Qatar_ChevalierDEon",
+				"Qatar_TrofimLysenko",
+				"Qatar_ChevalierDEon",
+				"Qatar_BenjaminFranklin",
+				"Qatar_BenitoMussolini"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Qatar",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab"
+			],
+			"color": "#815458",
+			"figures": [
+				"Oman_YukawaHideki",
+				"Oman_UrNammu",
+				"Oman_UrNammu",
+				"Oman_BenitoMussolini",
+				"Oman_JaneAustenCassandra"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Oman",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Han-chinise"
+			],
+			"color": "#5B4D5C",
+			"figures": [
+				"Taiwan_ChevalierDEon",
+				"Taiwan_TrofimLysenko",
+				"Taiwan_BenjaminFranklin",
+				"Taiwan_BenjaminFranklin",
+				"Taiwan_BenitoMussolini"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Taiwan",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Mali-amazigh",
+				"Fulani",
+				"Malinke",
+				"Nenets",
+				"Bomu"
+			],
+			"color": "#9E8A57",
+			"figures": [
+				"Mali_TrofimLysenko",
+				"Mali_TrofimLysenko",
+				"Mali_BenjaminFranklin",
+				"Mali_ChevalierDEon",
+				"Mali_BenitoMussolini"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Mali",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab"
+			],
+			"color": "#279678",
+			"figures": [
+				"United_arab_emirates_UrNammu",
+				"United_arab_emirates_JaneAustenCassandra",
+				"United_arab_emirates_BenitoMussolini",
+				"United_arab_emirates_JaneAustenCassandra",
+				"United_arab_emirates_UrNammu"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "United_arab_emirates",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Tuareg",
+				"Kanura",
+				"Hausa",
+				"Nenets"
+			],
+			"color": "#26584D",
+			"figures": [
+				"Niger_UrNammu",
+				"Niger_JaneAustenCassandra",
+				"Niger_BenitoMussolini",
+				"Niger_BenjaminFranklin",
+				"Niger_BenitoMussolini"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Niger",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Cuba"
+			],
+			"color": "#9744B0",
+			"figures": [
+				"Cuba_UrNammu",
+				"Cuba_TrofimLysenko",
+				"Cuba_UrNammu",
+				"Cuba_UrNammu",
+				"Cuba_BenjaminFranklin"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Cuba",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab",
+				"Muslims-cristian-minotiry"
+			],
+			"color": "#BBAA7E",
+			"figures": [
+				"Chad_BenitoMussolini",
+				"Chad_ChevalierDEon",
+				"Chad_JaneAustenCassandra",
+				"Chad_BenitoMussolini",
+				"Chad_BenjaminFranklin"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Chad",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab",
+				"Beja",
+				"Koalib-tagoi",
+				"Moro-bamgetu",
+				"Sudan-dago",
+				"Shilluk"
+			],
+			"color": "#0C3827",
+			"figures": [
+				"Sudan_TrofimLysenko",
+				"Sudan_YukawaHideki",
+				"Sudan_UrNammu",
+				"Sudan_BenjaminFranklin",
+				"Sudan_YukawaHideki"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Sudan",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Vietnam"
+			],
+			"color": "#C6BE75",
+			"figures": [
+				"Vietnam_TrofimLysenko",
+				"Vietnam_TrofimLysenko",
+				"Vietnam_BenitoMussolini",
+				"Vietnam_TrofimLysenko",
+				"Vietnam_UrNammu"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Vietnam",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Lao"
+			],
+			"color": "#594D3F",
+			"figures": [
+				"Laos_TrofimLysenko",
+				"Laos_UrNammu",
+				"Laos_BenitoMussolini",
+				"Laos_BenitoMussolini",
+				"Laos_BenjaminFranklin"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Laos",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Myammar",
+				"Thai",
+				"Lao",
+				"Cambodia",
+				"Malaya"
+			],
+			"color": "#142D4C",
+			"figures": [
+				"Thailand_TrofimLysenko",
+				"Thailand_ChevalierDEon",
+				"Thailand_ChevalierDEon",
+				"Thailand_YukawaHideki",
+				"Thailand_BenjaminFranklin"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Thailand",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Haiti"
+			],
+			"color": "#A5746F",
+			"figures": [
+				"Haiti_BenitoMussolini",
+				"Haiti_BenjaminFranklin",
+				"Haiti_ChevalierDEon",
+				"Haiti_BenjaminFranklin",
+				"Haiti_UrNammu"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Haiti",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Dominican-republic"
+			],
+			"color": "#728877",
+			"figures": [
+				"Dominican_republic_BenjaminFranklin",
+				"Dominican_republic_YukawaHideki",
+				"Dominican_republic_UrNammu",
+				"Dominican_republic_TrofimLysenko",
+				"Dominican_republic_YukawaHideki"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Dominican_republic",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Belize"
+			],
+			"color": "#823214",
+			"figures": [
+				"Belize_UrNammu",
+				"Belize_JaneAustenCassandra",
+				"Belize_YukawaHideki",
+				"Belize_UrNammu",
+				"Belize_JaneAustenCassandra"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Belize",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab"
+			],
+			"color": "#4E3235",
+			"figures": [
+				"Yemen_YukawaHideki",
+				"Yemen_YukawaHideki",
+				"Yemen_BenjaminFranklin",
+				"Yemen_UrNammu",
+				"Yemen_BenjaminFranklin"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Yemen",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Jamaica"
+			],
+			"color": "#8BDC0A",
+			"figures": [
+				"Jamaica_ChevalierDEon",
+				"Jamaica_BenitoMussolini",
+				"Jamaica_ChevalierDEon",
+				"Jamaica_JaneAustenCassandra",
+				"Jamaica_BenitoMussolini"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Jamaica",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Filipino"
+			],
+			"color": "#7255A6",
+			"figures": [
+				"Philippines_YukawaHideki",
+				"Philippines_JaneAustenCassandra",
+				"Philippines_JaneAustenCassandra",
+				"Philippines_BenjaminFranklin",
+				"Philippines_UrNammu"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Philippines",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Guatemala"
+			],
+			"color": "#48306D",
+			"figures": [
+				"Guatemala_YukawaHideki",
+				"Guatemala_JaneAustenCassandra",
+				"Guatemala_TrofimLysenko",
+				"Guatemala_ChevalierDEon",
+				"Guatemala_BenitoMussolini"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Guatemala",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Eritrea"
+			],
+			"color": "#CE8CA2",
+			"figures": [
+				"Eritrea_JaneAustenCassandra",
+				"Eritrea_UrNammu",
+				"Eritrea_UrNammu",
+				"Eritrea_JaneAustenCassandra",
+				"Eritrea_BenitoMussolini"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Eritrea",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Cabo-verde"
+			],
+			"color": "#CE2027",
+			"figures": [
+				"Cabo_verde_ChevalierDEon",
+				"Cabo_verde_ChevalierDEon",
+				"Cabo_verde_UrNammu",
+				"Cabo_verde_UrNammu",
+				"Cabo_verde_JaneAustenCassandra"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Cabo_verde",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"St-kitts-and-nevis"
+			],
+			"color": "#3B3800",
+			"figures": [
+				"St_kitts_and_nevis_TrofimLysenko",
+				"St_kitts_and_nevis_YukawaHideki",
+				"St_kitts_and_nevis_UrNammu",
+				"St_kitts_and_nevis_BenitoMussolini",
+				"St_kitts_and_nevis_BenjaminFranklin"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "St_kitts_and_nevis",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Serer",
+				"Nenets",
+				"Senagal-wolofia",
+				"Diola"
+			],
+			"color": "#B8757C",
+			"figures": [
+				"Senegal_ChevalierDEon",
+				"Senegal_JaneAustenCassandra",
+				"Senegal_ChevalierDEon",
+				"Senegal_UrNammu",
+				"Senegal_JaneAustenCassandra"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Senegal",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Honduras"
+			],
+			"color": "#99B04A",
+			"figures": [
+				"Honduras_ChevalierDEon",
+				"Honduras_UrNammu",
+				"Honduras_JaneAustenCassandra",
+				"Honduras_JaneAustenCassandra",
+				"Honduras_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Honduras",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Peuls",
+				"Marka",
+				"Burkina-faso-mossi",
+				"Senofu"
+			],
+			"color": "#CA6E7B",
+			"figures": [
+				"Burkina_faso_ChevalierDEon",
+				"Burkina_faso_ChevalierDEon",
+				"Burkina_faso_JaneAustenCassandra",
+				"Burkina_faso_JaneAustenCassandra",
+				"Burkina_faso_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Burkina_faso",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"El-salvadoreans"
+			],
+			"color": "#9F88C6",
+			"figures": [
+				"El_salvador_BenjaminFranklin",
+				"El_salvador_UrNammu",
+				"El_salvador_JaneAustenCassandra",
+				"El_salvador_JaneAustenCassandra",
+				"El_salvador_YukawaHideki"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "El_salvador",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Nicaragua"
+			],
+			"color": "#91B2BE",
+			"figures": [
+				"Nicaragua_ChevalierDEon",
+				"Nicaragua_ChevalierDEon",
+				"Nicaragua_BenjaminFranklin",
+				"Nicaragua_BenjaminFranklin",
+				"Nicaragua_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Nicaragua",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Tigrayans",
+				"",
+				"Amharas",
+				"Somalia",
+				"Comoros",
+				"Aaris"
+			],
+			"color": "#30477B",
+			"figures": [
+				"Ethiopia_JaneAustenCassandra",
+				"Ethiopia_YukawaHideki",
+				"Ethiopia_ChevalierDEon",
+				"Ethiopia_YukawaHideki",
+				"Ethiopia_BenjaminFranklin"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Ethiopia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Cambodia"
+			],
+			"color": "#E2B490",
+			"figures": [
+				"Cambodia_TrofimLysenko",
+				"Cambodia_BenitoMussolini",
+				"Cambodia_JaneAustenCassandra",
+				"Cambodia_BenjaminFranklin",
+				"Cambodia_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Cambodia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Dominica"
+			],
+			"color": "#7670B2",
+			"figures": [
+				"Dominica_UrNammu",
+				"Dominica_BenjaminFranklin",
+				"Dominica_BenjaminFranklin",
+				"Dominica_YukawaHideki",
+				"Dominica_BenjaminFranklin"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Dominica",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Hausa-&-fulani",
+				"Yaruba",
+				"Igbo"
+			],
+			"color": "#C27A6B",
+			"figures": [
+				"Nigeria_UrNammu",
+				"Nigeria_UrNammu",
+				"Nigeria_BenjaminFranklin",
+				"Nigeria_BenjaminFranklin",
+				"Nigeria_BenjaminFranklin"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Nigeria",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Gambia"
+			],
+			"color": "#44355C",
+			"figures": [
+				"Gambia_YukawaHideki",
+				"Gambia_BenitoMussolini",
+				"Gambia_ChevalierDEon",
+				"Gambia_YukawaHideki",
+				"Gambia_TrofimLysenko"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Gambia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Barbados"
+			],
+			"color": "#FCD116",
+			"figures": [
+				"Barbados_BenjaminFranklin",
+				"Barbados_TrofimLysenko",
+				"Barbados_UrNammu",
+				"Barbados_BenitoMussolini",
+				"Barbados_UrNammu"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Barbados",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"St-lucia"
+			],
+			"color": "#5DB7E6",
+			"figures": [
+				"St_lucia_BenjaminFranklin",
+				"St_lucia_UrNammu",
+				"St_lucia_BenjaminFranklin",
+				"St_lucia_UrNammu",
+				"St_lucia_TrofimLysenko"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "St_lucia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Guinea-bissau"
+			],
+			"color": "#DABD81",
+			"figures": [
+				"Guinea_bissau_ChevalierDEon",
+				"Guinea_bissau_ChevalierDEon",
+				"Guinea_bissau_TrofimLysenko",
+				"Guinea_bissau_JaneAustenCassandra",
+				"Guinea_bissau_YukawaHideki"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Guinea_bissau",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"",
+				"Malinke",
+				"Soussou",
+				"Kpelle"
+			],
+			"color": "#205A4E",
+			"figures": [
+				"Guinea_BenjaminFranklin",
+				"Guinea_UrNammu",
+				"Guinea_ChevalierDEon",
+				"Guinea_UrNammu",
+				"Guinea_UrNammu"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Guinea",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Venezuelans",
+				"Colombia"
+			],
+			"color": "#DEBB5B",
+			"figures": [
+				"Colombia_ChevalierDEon",
+				"Colombia_ChevalierDEon",
+				"Colombia_JaneAustenCassandra",
+				"Colombia_TrofimLysenko",
+				"Colombia_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Colombia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Venezuelans"
+			],
+			"color": "#C86496",
+			"figures": [
+				"Venezuela_YukawaHideki",
+				"Venezuela_YukawaHideki",
+				"Venezuela_JaneAustenCassandra",
+				"Venezuela_BenitoMussolini",
+				"Venezuela_UrNammu"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Venezuela",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Grenada"
+			],
+			"color": "#007B5F",
+			"figures": [
+				"Grenada_BenjaminFranklin",
+				"Grenada_BenjaminFranklin",
+				"Grenada_YukawaHideki",
+				"Grenada_BenjaminFranklin",
+				"Grenada_JaneAustenCassandra"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Grenada",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Benin"
+			],
+			"color": "#DBC478",
+			"figures": [
+				"Benin_BenitoMussolini",
+				"Benin_TrofimLysenko",
+				"Benin_YukawaHideki",
+				"Benin_BenjaminFranklin",
+				"Benin_BenjaminFranklin"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Benin",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Djibouti"
+			],
+			"color": "#D7141A",
+			"figures": [
+				"Djibouti_ChevalierDEon",
+				"Djibouti_YukawaHideki",
+				"Djibouti_YukawaHideki",
+				"Djibouti_BenitoMussolini",
+				"Djibouti_TrofimLysenko"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Djibouti",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Mbum",
+				"Bamileke",
+				"Bantu"
+			],
+			"color": "#185E61",
+			"figures": [
+				"Cameroon_UrNammu",
+				"Cameroon_UrNammu",
+				"Cameroon_BenitoMussolini",
+				"Cameroon_JaneAustenCassandra",
+				"Cameroon_JaneAustenCassandra"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Cameroon",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Berta",
+				"Bande",
+				"Dinka",
+				"Berti",
+				"South-sudan--nuer",
+				"Azande",
+				"Bari"
+			],
+			"color": "#D4BF6E",
+			"figures": [
+				"South_sudan_UrNammu",
+				"South_sudan_BenitoMussolini",
+				"South_sudan_BenjaminFranklin",
+				"South_sudan_JaneAustenCassandra",
+				"South_sudan_YukawaHideki"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "South_sudan",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Somalia"
+			],
+			"color": "#6683AB",
+			"figures": [
+				"Somalia_TrofimLysenko",
+				"Somalia_UrNammu",
+				"Somalia_BenitoMussolini",
+				"Somalia_TrofimLysenko",
+				"Somalia_BenitoMussolini"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Somalia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Somalia"
+			],
+			"color": "#55AB70",
+			"figures": [
+				"Somaliland_UrNammu",
+				"Somaliland_BenitoMussolini",
+				"Somaliland_JaneAustenCassandra",
+				"Somaliland_JaneAustenCassandra",
+				"Somaliland_YukawaHideki"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Somaliland",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Costa-rica"
+			],
+			"color": "#A78C2A",
+			"figures": [
+				"Costa_rica_UrNammu",
+				"Costa_rica_ChevalierDEon",
+				"Costa_rica_TrofimLysenko",
+				"Costa_rica_BenjaminFranklin",
+				"Costa_rica_BenitoMussolini"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Costa_rica",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"",
+				"Togo"
+			],
+			"color": "#153323",
+			"figures": [
+				"Togo_UrNammu",
+				"Togo_ChevalierDEon",
+				"Togo_YukawaHideki",
+				"Togo_TrofimLysenko",
+				"Togo_BenitoMussolini"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Togo",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Maldives"
+			],
+			"color": "#929BA2",
+			"figures": [
+				"Maldives_TrofimLysenko",
+				"Maldives_UrNammu",
+				"Maldives_BenjaminFranklin",
+				"Maldives_JaneAustenCassandra",
+				"Maldives_YukawaHideki"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Maldives",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Ghana"
+			],
+			"color": "#A24A58",
+			"figures": [
+				"Ghana_BenjaminFranklin",
+				"Ghana_BenitoMussolini",
+				"Ghana_YukawaHideki",
+				"Ghana_JaneAustenCassandra",
+				"Ghana_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Ghana",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"",
+				"Central-african-republic",
+				"Gbaya",
+				"Nzakara"
+			],
+			"color": "#A64D63",
+			"figures": [
+				"Central_african_republic_YukawaHideki",
+				"Central_african_republic_YukawaHideki",
+				"Central_african_republic_YukawaHideki",
+				"Central_african_republic_TrofimLysenko",
+				"Central_african_republic_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Central_african_republic",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Trinidad-and-tobago"
+			],
+			"color": "#F05A27",
+			"figures": [
+				"Trinidad_and_tobago_TrofimLysenko",
+				"Trinidad_and_tobago_BenjaminFranklin",
+				"Trinidad_and_tobago_BenitoMussolini",
+				"Trinidad_and_tobago_ChevalierDEon",
+				"Trinidad_and_tobago_TrofimLysenko"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Trinidad_and_tobago",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Ivory-coast-mande",
+				"Voltaiqe",
+				"Krou",
+				"Akan"
+			],
+			"color": "#D1996A",
+			"figures": [
+				"Ivory_coast_YukawaHideki",
+				"Ivory_coast_BenjaminFranklin",
+				"Ivory_coast_BenjaminFranklin",
+				"Ivory_coast_BenjaminFranklin",
+				"Ivory_coast_UrNammu"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Ivory_coast",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Sierra-leone-mende",
+				"Sherbor"
+			],
+			"color": "#729FBE",
+			"figures": [
+				"Sierra_leone_UrNammu",
+				"Sierra_leone_BenitoMussolini",
+				"Sierra_leone_BenitoMussolini",
+				"Sierra_leone_BenjaminFranklin",
+				"Sierra_leone_UrNammu"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Sierra_leone",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Panama"
+			],
+			"color": "#3C3558",
+			"figures": [
+				"Panama_TrofimLysenko",
+				"Panama_JaneAustenCassandra",
+				"Panama_TrofimLysenko",
+				"Panama_BenjaminFranklin",
+				"Panama_BenitoMussolini"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Panama",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Sri-lankan"
+			],
+			"color": "#564B39",
+			"figures": [
+				"Sri_lanka_UrNammu",
+				"Sri_lanka_TrofimLysenko",
+				"Sri_lanka_ChevalierDEon",
+				"Sri_lanka_TrofimLysenko",
+				"Sri_lanka_BenitoMussolini"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Sri_lanka",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				""
+			],
+			"color": "#513D76",
+			"figures": [
+				"Liberia_JaneAustenCassandra",
+				"Liberia_ChevalierDEon",
+				"Liberia_YukawaHideki",
+				"Liberia_BenjaminFranklin",
+				"Liberia_JaneAustenCassandra"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Liberia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Guyanans"
+			],
+			"color": "#B49678",
+			"figures": [
+				"Guyana_TrofimLysenko",
+				"Guyana_TrofimLysenko",
+				"Guyana_BenitoMussolini",
+				"Guyana_YukawaHideki",
+				"Guyana_JaneAustenCassandra"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Guyana",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Palau"
+			],
+			"color": "#FFC90E",
+			"figures": [
+				"Palau_TrofimLysenko",
+				"Palau_ChevalierDEon",
+				"Palau_UrNammu",
+				"Palau_YukawaHideki",
+				"Palau_BenitoMussolini"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Palau",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Nauru",
+				"Maldives"
+			],
+			"color": "#292F85",
+			"figures": [
+				"Nauru_BenjaminFranklin",
+				"Nauru_JaneAustenCassandra",
+				"Nauru_UrNammu",
+				"Nauru_TrofimLysenko",
+				"Nauru_TrofimLysenko"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Nauru",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Malaya"
+			],
+			"color": "#C56064",
+			"figures": [
+				"Malaysia_YukawaHideki",
+				"Malaysia_TrofimLysenko",
+				"Malaysia_BenjaminFranklin",
+				"Malaysia_TrofimLysenko",
+				"Malaysia_TrofimLysenko"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Malaysia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Surinamians"
+			],
+			"color": "#803754",
+			"figures": [
+				"Suriname_JaneAustenCassandra",
+				"Suriname_ChevalierDEon",
+				"Suriname_BenjaminFranklin",
+				"Suriname_YukawaHideki",
+				"Suriname_TrofimLysenko"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Suriname",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Acio",
+				"Javanese",
+				"Batak",
+				"Tobelo",
+				"Malau",
+				"Mihanasa",
+				"Kaili",
+				"Gorontalo",
+				"Minangkabau",
+				"",
+				"Papuans",
+				"Banjarese",
+				"Indonesia",
+				"Rejang",
+				"Tolaki",
+				"Javaenese",
+				"Batanese",
+				"Atoni",
+				"Mollucans"
+			],
+			"color": "#DDBEC4",
+			"figures": [
+				"Indonesia_TrofimLysenko",
+				"Indonesia_UrNammu",
+				"Indonesia_BenjaminFranklin",
+				"Indonesia_ChevalierDEon",
+				"Indonesia_TrofimLysenko"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Indonesia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Brazilian-natives",
+				"Brazilians",
+				"Colombia",
+				"Uruguay"
+			],
+			"color": "#4C913F",
+			"figures": [
+				"Brazil_ChevalierDEon",
+				"Brazil_JaneAustenCassandra",
+				"Brazil_JaneAustenCassandra",
+				"Brazil_TrofimLysenko",
+				"Brazil_JaneAustenCassandra"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Brazil",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Zande",
+				"Gbaya",
+				"",
+				"Komo-birra",
+				"Mongo",
+				"Lega",
+				"Kongo",
+				"Katanga",
+				"Lunda"
+			],
+			"color": "#416893",
+			"figures": [
+				"Dr_congo_ChevalierDEon",
+				"Dr_congo_UrNammu",
+				"Dr_congo_UrNammu",
+				"Dr_congo_TrofimLysenko",
+				"Dr_congo_UrNammu"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Dr_congo",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Mili-hmitic",
+				"Kamba",
+				"Somalia",
+				"Nilotic",
+				"Kenya-bantu"
+			],
+			"color": "#833640",
+			"figures": [
+				"Kenya_ChevalierDEon",
+				"Kenya_BenjaminFranklin",
+				"Kenya_ChevalierDEon",
+				"Kenya_BenjaminFranklin",
+				"Kenya_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Kenya",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Brunei"
+			],
+			"color": "#3C6E55",
+			"figures": [
+				"Brunei_YukawaHideki",
+				"Brunei_ChevalierDEon",
+				"Brunei_YukawaHideki",
+				"Brunei_BenitoMussolini",
+				"Brunei_JaneAustenCassandra"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Brunei",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Uganda-bantu",
+				"",
+				"Uganda"
+			],
+			"color": "#92824F",
+			"figures": [
+				"Uganda_BenitoMussolini",
+				"Uganda_BenjaminFranklin",
+				"Uganda_UrNammu",
+				"Uganda_ChevalierDEon",
+				"Uganda_JaneAustenCassandra"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Uganda",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Equatorial-guinea"
+			],
+			"color": "#5090AB",
+			"figures": [
+				"Equatorial_guinea_JaneAustenCassandra",
+				"Equatorial_guinea_YukawaHideki",
+				"Equatorial_guinea_ChevalierDEon",
+				"Equatorial_guinea_UrNammu",
+				"Equatorial_guinea_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Equatorial_guinea",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Sangha",
+				"Makaa",
+				"Mbere-nzabi",
+				"Teke"
+			],
+			"color": "#D16C78",
+			"figures": [
+				"Congo_TrofimLysenko",
+				"Congo_JaneAustenCassandra",
+				"Congo_YukawaHideki",
+				"Congo_YukawaHideki",
+				"Congo_TrofimLysenko"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Congo",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Fang",
+				"Bakote",
+				"Okande",
+				"Omiene",
+				"Eshira"
+			],
+			"color": "#DCBF7B",
+			"figures": [
+				"Gabon_BenitoMussolini",
+				"Gabon_JaneAustenCassandra",
+				"Gabon_ChevalierDEon",
+				"Gabon_YukawaHideki",
+				"Gabon_BenjaminFranklin"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Gabon",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Han-chinise"
+			],
+			"color": "#4D4986",
+			"figures": [
+				"Singapore_BenjaminFranklin",
+				"Singapore_YukawaHideki",
+				"Singapore_ChevalierDEon",
+				"Singapore_BenjaminFranklin",
+				"Singapore_JaneAustenCassandra"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Singapore",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Trinida-and-tobago-equador"
+			],
+			"color": "#F99262",
+			"figures": [
+				"Ecuador_TrofimLysenko",
+				"Ecuador_ChevalierDEon",
+				"Ecuador_UrNammu",
+				"Ecuador_BenjaminFranklin",
+				"Ecuador_BenitoMussolini"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Ecuador",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Sao-tome-and-principe"
+			],
+			"color": "#12AD2B",
+			"figures": [
+				"Sao_tome_and_principe_BenitoMussolini",
+				"Sao_tome_and_principe_UrNammu",
+				"Sao_tome_and_principe_TrofimLysenko",
+				"Sao_tome_and_principe_BenitoMussolini",
+				"Sao_tome_and_principe_UrNammu"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Sao_tome_and_principe",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Peru"
+			],
+			"color": "#C4BDCC",
+			"figures": [
+				"Peru_JaneAustenCassandra",
+				"Peru_BenitoMussolini",
+				"Peru_TrofimLysenko",
+				"Peru_JaneAustenCassandra",
+				"Peru_JaneAustenCassandra"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Peru",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Rwanda"
+			],
+			"color": "#1D3841",
+			"figures": [
+				"Rwanda_UrNammu",
+				"Rwanda_JaneAustenCassandra",
+				"Rwanda_ChevalierDEon",
+				"Rwanda_BenitoMussolini",
+				"Rwanda_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Rwanda",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Sukuma",
+				"",
+				"Fipa",
+				"Rufiji",
+				"Turu",
+				"Chhattisgrahiya",
+				"Ngoni",
+				"Makonde"
+			],
+			"color": "#678792",
+			"figures": [
+				"Tanzania_UrNammu",
+				"Tanzania_JaneAustenCassandra",
+				"Tanzania_JaneAustenCassandra",
+				"Tanzania_JaneAustenCassandra",
+				"Tanzania_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Tanzania",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Burundi"
+			],
+			"color": "#9A4BA0",
+			"figures": [
+				"Burundi_TrofimLysenko",
+				"Burundi_TrofimLysenko",
+				"Burundi_ChevalierDEon",
+				"Burundi_ChevalierDEon",
+				"Burundi_YukawaHideki"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Burundi",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Angan",
+				"Osapminlk",
+				"Papuans"
+			],
+			"color": "#2B385A",
+			"figures": [
+				"Papua_new_guinea_UrNammu",
+				"Papua_new_guinea_UrNammu",
+				"Papua_new_guinea_TrofimLysenko",
+				"Papua_new_guinea_BenitoMussolini",
+				"Papua_new_guinea_YukawaHideki"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Papua_new_guinea",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"",
+				"Lunda",
+				"Angola-kimbudu"
+			],
+			"color": "#2C1823",
+			"figures": [
+				"Angola_YukawaHideki",
+				"Angola_UrNammu",
+				"Angola_ChevalierDEon",
+				"Angola_BenitoMussolini",
+				"Angola_TrofimLysenko"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Angola",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Seychelles"
+			],
+			"color": "#A11E24",
+			"figures": [
+				"Seychelles_YukawaHideki",
+				"Seychelles_UrNammu",
+				"Seychelles_ChevalierDEon",
+				"Seychelles_ChevalierDEon",
+				"Seychelles_BenjaminFranklin"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Seychelles",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Solomon-islands"
+			],
+			"color": "#E20C0C",
+			"figures": [
+				"Solomon_islands_BenitoMussolini",
+				"Solomon_islands_TrofimLysenko",
+				"Solomon_islands_UrNammu",
+				"Solomon_islands_ChevalierDEon",
+				"Solomon_islands_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Solomon_islands",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Zambia-mamba",
+				"Luyana",
+				"Tonga"
+			],
+			"color": "#22562F",
+			"figures": [
+				"Zambia_BenitoMussolini",
+				"Zambia_YukawaHideki",
+				"Zambia_BenitoMussolini",
+				"Zambia_ChevalierDEon",
+				"Zambia_BenjaminFranklin"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Zambia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"East-timor"
+			],
+			"color": "#28AA4C",
+			"figures": [
+				"East_timor_TrofimLysenko",
+				"East_timor_ChevalierDEon",
+				"East_timor_UrNammu",
+				"East_timor_UrNammu",
+				"East_timor_TrofimLysenko"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "East_timor",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Tuvalu"
+			],
+			"color": "#ED1C24",
+			"figures": [
+				"Tuvalu_TrofimLysenko",
+				"Tuvalu_ChevalierDEon",
+				"Tuvalu_BenitoMussolini",
+				"Tuvalu_UrNammu",
+				"Tuvalu_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Tuvalu",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Tumbuka",
+				"Malawi-chewa"
+			],
+			"color": "#A15468",
+			"figures": [
+				"Malawi_TrofimLysenko",
+				"Malawi_TrofimLysenko",
+				"Malawi_BenjaminFranklin",
+				"Malawi_TrofimLysenko",
+				"Malawi_YukawaHideki"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Malawi",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Brazilians",
+				"Bolivia"
+			],
+			"color": "#CCA66C",
+			"figures": [
+				"Bolivia_YukawaHideki",
+				"Bolivia_ChevalierDEon",
+				"Bolivia_ChevalierDEon",
+				"Bolivia_JaneAustenCassandra",
+				"Bolivia_YukawaHideki"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Bolivia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Makonde",
+				"Loka-lomwe",
+				"Maravi",
+				"Xona-karanga",
+				"Mozambiue-tsonnga"
+			],
+			"color": "#0E363E",
+			"figures": [
+				"Mozambique_TrofimLysenko",
+				"Mozambique_TrofimLysenko",
+				"Mozambique_BenitoMussolini",
+				"Mozambique_UrNammu",
+				"Mozambique_UrNammu"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Mozambique",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Australia"
+			],
+			"color": "#398F61",
+			"figures": [
+				"Australia_JaneAustenCassandra",
+				"Australia_UrNammu",
+				"Australia_BenitoMussolini",
+				"Australia_YukawaHideki",
+				"Australia_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Australia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"",
+				"Madagascar"
+			],
+			"color": "#2C8C04",
+			"figures": [
+				"Madagascar_JaneAustenCassandra",
+				"Madagascar_YukawaHideki",
+				"Madagascar_BenitoMussolini",
+				"Madagascar_ChevalierDEon",
+				"Madagascar_YukawaHideki"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Madagascar",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Vanuatu"
+			],
+			"color": "#EDA720",
+			"figures": [
+				"Vanuatu_JaneAustenCassandra",
+				"Vanuatu_TrofimLysenko",
+				"Vanuatu_ChevalierDEon",
+				"Vanuatu_TrofimLysenko",
+				"Vanuatu_TrofimLysenko"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Vanuatu",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Shona",
+				"Northen-ndebele",
+				"Makonde",
+				"Tswa"
+			],
+			"color": "#AD585D",
+			"figures": [
+				"Zimbabwe_ChevalierDEon",
+				"Zimbabwe_ChevalierDEon",
+				"Zimbabwe_TrofimLysenko",
+				"Zimbabwe_TrofimLysenko",
+				"Zimbabwe_BenjaminFranklin"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Zimbabwe",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Fiji"
+			],
+			"color": "#8F4952",
+			"figures": [
+				"Fiji_ChevalierDEon",
+				"Fiji_TrofimLysenko",
+				"Fiji_YukawaHideki",
+				"Fiji_BenitoMussolini",
+				"Fiji_YukawaHideki"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Fiji",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Namibia-himba",
+				"",
+				"Lozi",
+				"Nama"
+			],
+			"color": "#C1D9A7",
+			"figures": [
+				"Namibia_ChevalierDEon",
+				"Namibia_TrofimLysenko",
+				"Namibia_UrNammu",
+				"Namibia_YukawaHideki",
+				"Namibia_JaneAustenCassandra"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Namibia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Niue"
+			],
+			"color": "#B97A57",
+			"figures": [
+				"Niue_UrNammu",
+				"Niue_ChevalierDEon",
+				"Niue_TrofimLysenko",
+				"Niue_ChevalierDEon",
+				"Niue_BenjaminFranklin"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Niue",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Chile"
+			],
+			"color": "#9B656B",
+			"figures": [
+				"Chile_UrNammu",
+				"Chile_BenitoMussolini",
+				"Chile_BenjaminFranklin",
+				"Chile_UrNammu",
+				"Chile_BenjaminFranklin"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Chile",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Botswana",
+				"",
+				"Kqalaqai"
+			],
+			"color": "#889DBC",
+			"figures": [
+				"Botswana_BenitoMussolini",
+				"Botswana_BenitoMussolini",
+				"Botswana_JaneAustenCassandra",
+				"Botswana_BenitoMussolini",
+				"Botswana_BenjaminFranklin"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Botswana",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Paraguay"
+			],
+			"color": "#3971E4",
+			"figures": [
+				"Paraguay_BenitoMussolini",
+				"Paraguay_UrNammu",
+				"Paraguay_UrNammu",
+				"Paraguay_UrNammu",
+				"Paraguay_JaneAustenCassandra"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Paraguay",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Mauritius"
+			],
+			"color": "#B39500",
+			"figures": [
+				"Mauritius_ChevalierDEon",
+				"Mauritius_ChevalierDEon",
+				"Mauritius_ChevalierDEon",
+				"Mauritius_BenjaminFranklin",
+				"Mauritius_YukawaHideki"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Mauritius",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Tonga"
+			],
+			"color": "#FF7578",
+			"figures": [
+				"Tonga_YukawaHideki",
+				"Tonga_TrofimLysenko",
+				"Tonga_JaneAustenCassandra",
+				"Tonga_UrNammu",
+				"Tonga_ChevalierDEon"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Tonga",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Argentina"
+			],
+			"color": "#919DEC",
+			"figures": [
+				"Argentina_BenjaminFranklin",
+				"Argentina_BenjaminFranklin",
+				"Argentina_JaneAustenCassandra",
+				"Argentina_UrNammu",
+				"Argentina_BenitoMussolini"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Argentina",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"North-sotho",
+				"Sesotho",
+				"Swasi",
+				"Tsawna",
+				"Afrikaan",
+				"Zulu",
+				"Xhosa"
+			],
+			"color": "#D2A56C",
+			"figures": [
+				"South_africa_BenitoMussolini",
+				"South_africa_UrNammu",
+				"South_africa_UrNammu",
+				"South_africa_TrofimLysenko",
+				"South_africa_TrofimLysenko"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "South_africa",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Eswatini"
+			],
+			"color": "#575F86",
+			"figures": [
+				"Eswatini_UrNammu",
+				"Eswatini_ChevalierDEon",
+				"Eswatini_JaneAustenCassandra",
+				"Eswatini_BenjaminFranklin",
+				"Eswatini_UrNammu"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Eswatini",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Lesotho"
+			],
+			"color": "#00BEF0",
+			"figures": [
+				"Lesotho_JaneAustenCassandra",
+				"Lesotho_ChevalierDEon",
+				"Lesotho_TrofimLysenko",
+				"Lesotho_BenjaminFranklin",
+				"Lesotho_JaneAustenCassandra"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Lesotho",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Uruguay"
+			],
+			"color": "#AEC09C",
+			"figures": [
+				"Uruguay_TrofimLysenko",
+				"Uruguay_BenjaminFranklin",
+				"Uruguay_BenitoMussolini",
+				"Uruguay_BenjaminFranklin",
+				"Uruguay_YukawaHideki"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Uruguay",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"New-zealand"
+			],
+			"color": "#DAD1E9",
+			"figures": [
+				"New_zealand_YukawaHideki",
+				"New_zealand_YukawaHideki",
+				"New_zealand_BenjaminFranklin",
+				"New_zealand_YukawaHideki",
+				"New_zealand_BenjaminFranklin"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "New_zealand",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#FDFDFD",
+			"figures": [
+				"Antartica_ChevalierDEon",
+				"Antartica_JaneAustenCassandra",
+				"Antartica_ChevalierDEon",
+				"Antartica_TrofimLysenko"
+			],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Antartica",
+			"political_power": 0.56,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#A29CF5",
+			"figures": [],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 10000.0,
+			"name": "Carolinian_Republic",
+			"political_power": 100.0,
+			"puppets": [
+				"Guantanamo_Duchy"
+			],
+			"stability": 0.99999999999996,
+			"war_support": 0.99999999999996
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#AE484E",
+			"figures": [],
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 10000.0,
+			"name": "Guantanamo_Duchy",
+			"political_power": 100.0,
+			"puppets": [],
+			"stability": 0.99999999999996,
+			"war_support": 0.99999999999996
+		}
+	],
+	"significant_figures": []
+}

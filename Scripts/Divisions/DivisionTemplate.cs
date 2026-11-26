@@ -20,23 +20,23 @@ public partial class DivisionTemplate : RefCounted
 	public float organization;
 	public float speed;
 
-	public static DivisionTemplate FromDict(Godot.Collections.Dictionary a_data)
+	public static DivisionTemplate FromDict(Godot.Collections.Dictionary aData)
 	{
 		var divisionTemplate = new DivisionTemplate();
 
-		divisionTemplate.name = a_data["name"].AsString();
-		divisionTemplate.hp = a_data["hp"].AsSingle();
-		divisionTemplate.manpower = a_data["manpower"].AsInt32();
-		divisionTemplate.cost = a_data["cost"].AsInt32();
-		divisionTemplate.days = a_data["days"].AsInt32();
-		divisionTemplate.softAttack = a_data["softAttack"].AsSingle();
-		divisionTemplate.hardAttack = a_data["hardAttack"].AsSingle();
-		divisionTemplate.staticDefense = a_data["staticDefense"].AsSingle();
-		divisionTemplate.offensiveDefense = a_data["offensiveDefense"].AsSingle();
-		divisionTemplate.cohesion = a_data["cohesion"].AsSingle();
-		divisionTemplate.resiliance = a_data["resiliance"].AsSingle();
-		divisionTemplate.organization = a_data["organization"].AsSingle();
-		divisionTemplate.speed = a_data["speed"].AsSingle();
+		divisionTemplate.name = aData["name"].AsString();
+		divisionTemplate.hp = aData["hp"].AsSingle();
+		divisionTemplate.manpower = aData["manpower"].AsInt32();
+		divisionTemplate.cost = aData["cost"].AsInt32();
+		divisionTemplate.days = aData["days"].AsInt32();
+		divisionTemplate.softAttack = aData["softAttack"].AsSingle();
+		divisionTemplate.hardAttack = aData["hardAttack"].AsSingle();
+		divisionTemplate.staticDefense = aData["staticDefense"].AsSingle();
+		divisionTemplate.offensiveDefense = aData["offensiveDefense"].AsSingle();
+		divisionTemplate.cohesion = aData["cohesion"].AsSingle();
+		divisionTemplate.resiliance = aData["resiliance"].AsSingle();
+		divisionTemplate.organization = aData["organization"].AsSingle();
+		divisionTemplate.speed = aData["speed"].AsSingle();
 
 		return divisionTemplate;
 	}

@@ -16,9 +16,9 @@ Spirits of Steel Rebirth is a Godot **4.7.2 mono/.NET** game using the GL Compat
 | Headless smoke test | `godot-mono --headless --path . --quit-after 300` |
 | C# round-trip checks | `godot-mono --headless --path . --script res://scratch/test_port_parity.gd` |
 | Save-diff flow checks | `godot-mono --headless --path . res://scratch/test_save_diff_flow.tscn` |
-| Settings diff checks | `godot-mono --headless --path . res://scratch/test_settings_manager_diff.tscn` |
+| Unit tests (engine-free `Core/`) | `dotnet test Tests/Sosr.Tests.csproj` |
 
-There is no code CI, linter, formatter, or formal test suite beyond Godot and the scratch checks. The docs workflow publishes this site; it does not build the game. The smoke test treats a non-zero exit, such as 139, as a crash.
+There is no code CI, linter, or formatter. The only formal tests are the `Tests/` xUnit suite. The docs workflow publishes this site; it does not build the game. The smoke test treats a non-zero exit, such as 139, as a crash.
 
 `--script` harnesses cannot see autoloads. Harnesses that need `MapData`, `SettingsManager`, or other autoloads use a `.tscn` scene instead.
 

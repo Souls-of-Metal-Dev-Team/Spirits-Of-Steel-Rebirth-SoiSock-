@@ -10,7 +10,7 @@ public partial class Console : Node{
     public static int FontSize{ get{return console.Get("font_size").AsInt32();} set{console.Set("font_size", value);} }
 
     public static RichTextLabel RichLabel{ get{return (RichTextLabel)console.Get("rich_label").AsGodotObject();} set{console.Set("rich_label", value);} }
-    public static LineEdit LineEdit{ get{return (LineEdit)console.Get("line_edit").AsGodotObject();} set{console.Set("line_edit", value);} }
+    public static LineEdit LineEdit{ get{return (LineEdit)console.Get("lineEdit").AsGodotObject();} set{console.Set("lineEdit", value);} }
 
     public override void _Ready(){
         AddChild((Node)console);

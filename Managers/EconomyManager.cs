@@ -21,26 +21,26 @@ public partial class EconomyManager : Node
 	private const int SfxClapping = 10;
 
 	// Format: { province_id: { "type": "factory", "days": 20, "daily_cost": 50, "country": CountryData } }
-	public Godot.Collections.Dictionary construction_queue = new();
-	public Godot.Collections.Dictionary building_functions = new();
-	public Godot.Collections.Dictionary<string, Godot.Collections.Dictionary> building_designs = new();
+	public Godot.Collections.Dictionary constructionQueue = new();
+	public Godot.Collections.Dictionary buildingFunctions = new();
+	public Godot.Collections.Dictionary<string, Godot.Collections.Dictionary> buildingDesigns = new();
 
 	public void initialize(string path)
 	{
 		var parsed = MapData.Instance.LoadJSON(path);
 		if (parsed.VariantType == Variant.Type.Dictionary)
-			building_functions = parsed.AsGodotDictionary();
+			buildingFunctions = parsed.AsGodotDictionary();
 		else
-			building_functions = new Godot.Collections.Dictionary();
+			buildingFunctions = new Godot.Collections.Dictionary();
 	}
 
-	public void process_economy_day()
+	public void ProcessEconomyDay()
 	{
-		var finished_projects = new List<int>();
-		foreach (var pidValue in construction_queue.Keys)
+		var finishedProjects = new List<int>();
+		foreach (var pidValue in constructionQueue.Keys)
 		{
 			var pid = pidValue.AsInt32();
-			var project = construction_queue[pidValue].AsGodotDictionary();
+			var project = constructionQueue[pidValue].AsGodotDictionary();
 			var country = project["country"].AsGodotObject();
 			var cost = project["daily_cost"].AsDouble();
 
@@ -55,95 +55,95 @@ public partial class EconomyManager : Node
 				// 2. Check for completion
 				if (project["days"].AsInt32() <= 0)
 				{
-					finished_projects.Add(pid);
+					finishedProjects.Add(pid);
 					_complete_construction(pid, project);
 				}
 			}
-			else if (country.Get("is_player").AsBool())
+			else if (country.Get("isPlayer").AsBool())
 			{
 				//#print("Construction stalled in %d: Need %d money" % [pid, cost])
 			}
 		}
 
-		foreach (var pid in finished_projects)
-			construction_queue.Remove(pid);
+		foreach (var pid in finishedProjects)
+			constructionQueue.Remove(pid);
 
-		var building_counts = MapManager.Instance.buildingTypesToCountryCount;
-		foreach (var keyValue in building_counts.Keys)
+		var buildingCounts = MapManager.Instance.buildingTypesToCountryCount;
+		foreach (var keyValue in buildingCounts.Keys)
 		{
 			var parts = keyValue.AsString().Split(":");
-			var owner_name = parts[0];
+			var ownerName = parts[0];
 			var building = parts[1];
-			var template = building_designs[owner_name][building].AsGodotObject() as BuildingTemplate;
-			foreach (var countryValue in building_counts[keyValue].AsGodotDictionary().Keys)
+			var template = BuildingTemplate.FromDict(buildingDesigns[ownerName][building].AsGodotDictionary().AsState());
+			foreach (var countryValue in buildingCounts[keyValue].AsGodotDictionary().Keys)
 			{
 				var country = CountryManager.Instance.GetCountry(countryValue.AsString());
-				var amount = building_counts[keyValue].AsGodotDictionary()[countryValue].AsDouble();
+				var amount = buildingCounts[keyValue].AsGodotDictionary()[countryValue].AsDouble();
 				country.money += template.produces * amount;
 			}
 		}
 	}
 
-	public void LoadBuildings(Godot.Collections.Dictionary a_globohomo)
+	public void LoadBuildings(Godot.Collections.Dictionary aGlobohomo)
 	{
-		foreach (var countryValue in a_globohomo.Keys)
+		foreach (var countryValue in aGlobohomo.Keys)
 		{
 			var country = countryValue.AsString();
-			building_designs[country] = new Godot.Collections.Dictionary();
-			foreach (var templateValue in a_globohomo[countryValue].AsGodotArray())
+			buildingDesigns[country] = new Godot.Collections.Dictionary();
+			foreach (var templateValue in aGlobohomo[countryValue].AsGodotArray())
 			{
-				var buildingTemplate = BuildingTemplate.FromDict(templateValue.AsGodotDictionary());
-				building_designs[country][buildingTemplate.name] = buildingTemplate;
+				var buildingTemplate = BuildingTemplate.FromDict(templateValue.AsGodotDictionary().AsState());
+				buildingDesigns[country][buildingTemplate.name] = VariantState.ToVariant(buildingTemplate.ToDict());
 			}
 		}
 	}
 
-	public void StartInfrastructureConstruction(int a_provinceID, int a_totalDays, float a_dailyCost, GodotObject a_country)
+	public void StartInfrastructureConstruction(int aProvinceID, int aTotalDays, float aDailyCost, GodotObject aCountry)
 	{
-		if (IsSame(a_country, CountryManager.Instance.player_country))
-			MusicManager.Instance.play_sfx(SfxBuild);
+		if (IsSame(aCountry, CountryManager.Instance.playerCountry))
+			MusicManager.Instance.PlaySfx(SfxBuild);
 
-		construction_queue[a_provinceID] = new Godot.Collections.Dictionary
+		constructionQueue[aProvinceID] = new Godot.Collections.Dictionary
 		{
 			{ "type", "Infrastructure" },
 			{ "index", -1 },
-			{ "days", a_totalDays },
-			{ "daily_cost", a_dailyCost },
-			{ "country", a_country },
+			{ "days", aTotalDays },
+			{ "daily_cost", aDailyCost },
+			{ "country", aCountry },
 		};
-		EmitSignal(SignalName.ConstructionStarted, a_provinceID, a_country);
+		EmitSignal(SignalName.ConstructionStarted, aProvinceID, aCountry);
 
 		if (GameState.Instance.instabuild)
 		{
-			_complete_construction(a_provinceID, construction_queue[a_provinceID].AsGodotDictionary());
-			construction_queue.Remove(a_provinceID);
+			_complete_construction(aProvinceID, constructionQueue[aProvinceID].AsGodotDictionary());
+			constructionQueue.Remove(aProvinceID);
 		}
 	}
 
-	public void start_construction(int pid, string type, int total_days, float daily_cost, GodotObject country)
+	public void StartConstruction(int pid, string type, int totalDays, float dailyCost, GodotObject country)
 	{
 		// Set the province enum to BUILDING state immediately
 		var province = ProvinceObject(pid);
 		var buildings = province.buildings;
 		buildings.Add(BuildingData.FromValues(type, BuildingData.BuildingState.CONSTRUCTION));
 
-		if (IsSame(country, CountryManager.Instance.player_country))
-			MusicManager.Instance.play_sfx(SfxBuild);
+		if (IsSame(country, CountryManager.Instance.playerCountry))
+			MusicManager.Instance.PlaySfx(SfxBuild);
 
-		construction_queue[pid] = new Godot.Collections.Dictionary
+		constructionQueue[pid] = new Godot.Collections.Dictionary
 		{
 			{ "type", type },
 			{ "index", buildings.Count - 1 },
-			{ "days", total_days },
-			{ "daily_cost", daily_cost },
+			{ "days", totalDays },
+			{ "daily_cost", dailyCost },
 			{ "country", country },
 		};
 		EmitSignal(SignalName.ConstructionStarted, pid, country);
 
 		if (GameState.Instance.instabuild)
 		{
-			_complete_construction(pid, construction_queue[pid].AsGodotDictionary());
-			construction_queue.Remove(pid);
+			_complete_construction(pid, constructionQueue[pid].AsGodotDictionary());
+			constructionQueue.Remove(pid);
 		}
 	}
 
@@ -157,7 +157,7 @@ public partial class EconomyManager : Node
 		if (index != -1 && buildings.Count > index)
 		{
 			buildings[index].state = BuildingData.BuildingState.FUNCTIONAL;
-			CountryManager.Instance.GetCountry(province.country).factories_amount += 1;
+			CountryManager.Instance.GetCountry(province.country).factoriesAmount += 1;
 		}
 		else
 		{
@@ -169,12 +169,12 @@ public partial class EconomyManager : Node
 			}
 		}
 
-		var project_country = project["country"].AsGodotObject();
-		if (project_country.Get("is_player").AsBool())
+		var projectCountry = project["country"].AsGodotObject();
+		if (projectCountry.Get("isPlayer").AsBool())
 		{
 			//#EventManager.show_alert("economy", country, null, "Construction of %s complete!" % type.capitalize())
-			if (GameState.Instance.industry_building != GameState.IndustryType.DEFAULT)
-				MusicManager.Instance.play_sfx(SfxClapping);
+			if (GameState.Instance.industryBuilding != GameState.IndustryType.DEFAULT)
+				MusicManager.Instance.PlaySfx(SfxClapping);
 			MapManager.Instance.ProvinceUpdated();
 		}
 
@@ -182,24 +182,24 @@ public partial class EconomyManager : Node
 		CallDeferred("emit_signal", SignalName.ConstructionFinished, pid, project["country"]);
 	}
 
-	public bool is_province_building(int pid)
+	public bool IsProvinceBuilding(int pid)
 	{
-		return construction_queue.ContainsKey(pid);
+		return constructionQueue.ContainsKey(pid);
 	}
 
-	public string get_progress_string(int pid)
+	public string GetProgressString(int pid)
 	{
-		if (construction_queue.ContainsKey(pid))
+		if (constructionQueue.ContainsKey(pid))
 		{
-			var p = construction_queue[pid].AsGodotDictionary();
+			var p = constructionQueue[pid].AsGodotDictionary();
 			var type = p["type"].AsString().Capitalize();
-			return $"{type}: {p["days"].AsInt32()} days left ({p["daily_cost"].AsInt32()}/day)";
+			return $"{type}: {p["days"].AsInt32()} days left ({p["dailyCost"].AsInt32()}/day)";
 		}
 		return "";
 	}
 
 	private static Province ProvinceObject(int pid)
-		=> MapManager.Instance.province_objects[pid];
+		=> MapManager.Instance.provinceObjects[pid];
 
 	private static bool IsSame(GodotObject a, GodotObject b)
 	{

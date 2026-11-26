@@ -24,13 +24,13 @@ public partial class GovernmentUI : CanvasLayer
 	[Export] public HBoxContainer listOfPositions;
 	private readonly System.Collections.Generic.Dictionary<string, GovernmentPosition> positions = new();
 
-	private bool m_wasPaused = false;
+	private bool mWasPaused = false;
 
-	public void m_OnBackPressed()
+	public void MOnBackPressed()
 	{
 		SetGameUiVisible(true);
-		if (!m_wasPaused)
-			GameState.Instance.current_world.clock.resume();
+		if (!mWasPaused)
+			GameState.Instance.currentWorld.clock.resume();
 
 		Hide();
 
@@ -40,31 +40,31 @@ public partial class GovernmentUI : CanvasLayer
 			child.QueueFree();
 	}
 
-	private void SetGameUiVisible(bool a_visible)
+	private void SetGameUiVisible(bool aVisible)
 	{
-		if (GetTree().Root.FindChild("ui_game", true, false) is CanvasLayer game_ui)
-			game_ui.Visible = a_visible;
+		if (GetTree().Root.FindChild("ui_game", true, false) is CanvasLayer gameUi)
+			gameUi.Visible = aVisible;
 	}
 
 	private static void ShowFigure(GovernmentPosition govPos, ImportantFigure figure)
 	{
 		govPos.sigName.Text = figure.name;
-		govPos.sigPortrait.Texture = (Texture2D)ImportantFigure.GetPortrait(figure);
+		govPos.sigPortrait.Texture = (Texture2D)ImportantFigureHost.GetPortrait(figure);
 		govPos.sigBlood.Visible = figure.status == ImportantFigure.Status.WOUNDED;
 		govPos.sigDesc.Text = string.Format(SKILLS_FORMAT, figure.GetDisplaySkills());
 	}
 
-	public void OpenMenu(CountryData a_country)
+	public void OpenMenu(CountryData aCountry)
 	{
 		Show();
-		country = a_country;
+		country = aCountry;
 		var figures = MapManager.Instance.significantFigures;
 
-		foreach (var (position, holders) in a_country.governmentPositions)
+		foreach (var (position, holders) in aCountry.governmentPositions)
 		{
-			foreach (var I_figure in holders)
+			foreach (var iFigure in holders)
 			{
-				var govPos = new GovernmentPosition { sigFig = I_figure, position = position };
+				var govPos = new GovernmentPosition { sigFig = iFigure, position = position };
 				var leader = (PanelContainer)template.Duplicate();
 				govPos.sigPos = leader.GetNode<Label>("VBoxContainer/Label");
 				govPos.sigPos.Text = position;
@@ -72,12 +72,12 @@ public partial class GovernmentUI : CanvasLayer
 				govPos.sigPortrait = leader.GetNode<TextureRect>("VBoxContainer/Picture/TextureRect");
 				govPos.sigBlood = leader.GetNode<TextureRect>("VBoxContainer/Picture/TextureRect/Blood");
 				govPos.sigOpt = leader.GetNode<OptionButton>("VBoxContainer/PanelContainer3/OptionButton2");
-				foreach (var sigFig in a_country.figures)
+				foreach (var sigFig in aCountry.figures)
 					govPos.sigOpt.AddItem(sigFig);
 				govPos.sigDesc = leader.GetNode<RichTextLabel>("VBoxContainer/Display/RichTextLabel");
 				if (holders.Count > 0)
 				{
-					var figure = figures[I_figure];
+					var figure = figures[iFigure];
 					ShowFigure(govPos, figure);
 					for (var i = 0; i < govPos.sigOpt.ItemCount; i++)
 					{
@@ -85,9 +85,9 @@ public partial class GovernmentUI : CanvasLayer
 							govPos.sigOpt.Select(i);
 					}
 				}
-				govPos.sigOpt.ItemSelected += a_index =>
+				govPos.sigOpt.ItemSelected += aIndex =>
 				{
-					var figureName = govPos.sigOpt.GetItemText((int)a_index);
+					var figureName = govPos.sigOpt.GetItemText((int)aIndex);
 					var figure = figures[figureName];
 					ShowFigure(govPos, figure);
 					country.SetGovernmentPosition(govPos.position, figure);
@@ -99,8 +99,8 @@ public partial class GovernmentUI : CanvasLayer
 		}
 
 		SetGameUiVisible(false);
-		var clock = GameState.Instance.current_world.clock;
-		m_wasPaused = clock.paused;
+		var clock = GameState.Instance.currentWorld.clock;
+		mWasPaused = clock.paused;
 		clock.pause();
 	}
 }

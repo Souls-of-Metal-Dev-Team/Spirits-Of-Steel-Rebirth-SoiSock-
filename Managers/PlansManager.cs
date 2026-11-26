@@ -8,25 +8,25 @@ public partial class PlansManager : Node
 	public static PlansManager Instance => Autoload.Get<PlansManager>("PlansManager");
 
 	public Godot.Collections.Dictionary plans = new Godot.Collections.Dictionary();
-	public string current_start_folder = "";
+	public string currentStartFolder = "";
 
 	public override void _Ready()
 	{
-		load_plans_from_path("res://plans.json");
+		LoadPlansFromPath("res://plans.json");
 	}
 
-	public void load_plans_from_path(string path)
+	public void LoadPlansFromPath(string path)
 	{
-		current_start_folder = path.GetBaseDir() + "/";
+		currentStartFolder = path.GetBaseDir() + "/";
 		plans.Clear();
 		var data = MapData.Instance.LoadJSON(path);
 		if (data.VariantType == Variant.Type.Dictionary)
 			plans = data.AsGodotDictionary();
 	}
 
-	public bool has_available_plans(GodotObject country)
+	public bool HasAvailablePlans(GodotObject country)
 	{
-		var countryName = country.Get("country_name").AsString();
+		var countryName = country.Get("countryName").AsString();
 		if (!plans.ContainsKey(countryName))
 			return false;
 
@@ -40,9 +40,9 @@ public partial class PlansManager : Node
 			if (GetOrDefault(elementDict, "type", "").AsString() == "button")
 			{
 				var condition = GetOrDefault(elementDict, "condition", new Godot.Collections.Dictionary());
-				if (InterpreterManager.Instance.get_function(condition, country).AsBool())
+				if (InterpreterManager.Instance.GetFunction(condition, country).AsBool())
 				{
-					if (country.Get("is_player").AsBool())
+					if (country.Get("isPlayer").AsBool())
 						return true;
 
 					choices.Add(GetOrDefault(elementDict, "finished", new Godot.Collections.Dictionary()));
@@ -52,9 +52,9 @@ public partial class PlansManager : Node
 
 		if (choices.Count > 0)
 		{
-			var choice = choices[(int)(GD.Randi() % (uint)choices.Count)];
+			var choice = choices[(int)(SimRandom.Shared.NextUInt() % (uint)choices.Count)];
 			if (choice.VariantType != Variant.Type.Nil && choice.AsBool())
-				InterpreterManager.Instance.get_function(choice, country);
+				InterpreterManager.Instance.GetFunction(choice, country);
 		}
 		return false;
 	}

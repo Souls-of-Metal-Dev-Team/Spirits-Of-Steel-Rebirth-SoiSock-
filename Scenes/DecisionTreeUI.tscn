@@ -3,26 +3,26 @@
 [ext_resource type="Script" uid="uid://cdspipsa2vbk5" path="res://Scripts/UI/DecisionTreeUI.cs" id="1_x8y2v"]
 [ext_resource type="Material" uid="uid://btordm7082cxn" path="res://Materials/damaged.tres" id="2_qq7pm"]
 
-[node name="DecisionTreeUI" type="CanvasLayer" unique_id=1860343269 node_paths=PackedStringArray("info_text", "info_tab", "edit_label", "edit_desc", "edit_days", "edit_ppcost", "close_button", "edit_button", "editing_buttons", "edit_function", "save_button", "add_decision", "add_req", "add_finished", "editor_tab", "reqs_block", "finished_block")]
+[node name="DecisionTreeUI" type="CanvasLayer" unique_id=1860343269 node_paths=PackedStringArray("infoText", "infoTab", "editLabel", "editDesc", "editDays", "editPpcost", "closeButton", "editButton", "editingButtons", "editFunction", "saveButton", "addDecision", "addReq", "addFinished", "editorTab", "reqsBlock", "finishedBlock")]
 layer = 100
 script = ExtResource("1_x8y2v")
-info_text = NodePath("StaticUI/InfoPanel/TabContainer/InfoText")
-info_tab = NodePath("StaticUI/InfoPanel/TabContainer")
-edit_label = NodePath("StaticUI/InfoPanel/TabContainer/EditDecisions/HBoxcontainer/EditLabel")
-edit_desc = NodePath("StaticUI/InfoPanel/TabContainer/EditDecisions/HBoxcontainer/EditDesc")
-edit_days = NodePath("StaticUI/InfoPanel/TabContainer/EditDecisions/HBoxContainer/EditDays")
-edit_ppcost = NodePath("StaticUI/InfoPanel/TabContainer/EditDecisions/HBoxContainer/PPCost")
-close_button = NodePath("StaticUI/Header/HBoxContainer/CloseButton")
-edit_button = NodePath("StaticUI/Header/HBoxContainer/EditMode")
-editing_buttons = NodePath("StaticUI/Header/HBoxContainer/EditingButtons")
-edit_function = NodePath("StaticUI/Header/HBoxContainer/EditingButtons/EditFunc")
-save_button = NodePath("StaticUI/Header/HBoxContainer/EditingButtons/SaveDecisions")
-add_decision = NodePath("StaticUI/Header/HBoxContainer/EditingButtons/AddDecision")
-add_req = NodePath("StaticUI/Header/HBoxContainer/EditingButtons/AddRequirement")
-add_finished = NodePath("StaticUI/Header/HBoxContainer/EditingButtons/AddFinished")
-editor_tab = NodePath("StaticUI/TabContainer")
-reqs_block = NodePath("StaticUI/TabContainer/Requirements/ReqsBlock")
-finished_block = NodePath("StaticUI/TabContainer/Finished/FinishedBlock")
+infoText = NodePath("StaticUI/InfoPanel/TabContainer/InfoText")
+infoTab = NodePath("StaticUI/InfoPanel/TabContainer")
+editLabel = NodePath("StaticUI/InfoPanel/TabContainer/EditDecisions/HBoxcontainer/EditLabel")
+editDesc = NodePath("StaticUI/InfoPanel/TabContainer/EditDecisions/HBoxcontainer/EditDesc")
+editDays = NodePath("StaticUI/InfoPanel/TabContainer/EditDecisions/HBoxContainer/EditDays")
+editPpcost = NodePath("StaticUI/InfoPanel/TabContainer/EditDecisions/HBoxContainer/PPCost")
+closeButton = NodePath("StaticUI/Header/HBoxContainer/CloseButton")
+editButton = NodePath("StaticUI/Header/HBoxContainer/EditMode")
+editingButtons = NodePath("StaticUI/Header/HBoxContainer/EditingButtons")
+editFunction = NodePath("StaticUI/Header/HBoxContainer/EditingButtons/EditFunc")
+saveButton = NodePath("StaticUI/Header/HBoxContainer/EditingButtons/SaveDecisions")
+addDecision = NodePath("StaticUI/Header/HBoxContainer/EditingButtons/AddDecision")
+addReq = NodePath("StaticUI/Header/HBoxContainer/EditingButtons/AddRequirement")
+addFinished = NodePath("StaticUI/Header/HBoxContainer/EditingButtons/AddFinished")
+editorTab = NodePath("StaticUI/TabContainer")
+reqsBlock = NodePath("StaticUI/TabContainer/Requirements/ReqsBlock")
+finishedBlock = NodePath("StaticUI/TabContainer/Finished/FinishedBlock")
 
 [node name="Background" type="ColorRect" parent="." unique_id=1064194189]
 anchors_preset = 15

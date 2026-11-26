@@ -8,10 +8,10 @@ public partial class CameraController : Node
 {
 	// The scene assigns a NodePath ("..") to this exported property.
 	[Export] public Camera2D camera;
-	[Export] public float base_speed = 600.0f;
+	[Export] public float baseSpeed = 600.0f;
 
-	public bool is_dragging = false;
-	public int top_bar_height = 26;
+	public bool isDragging = false;
+	public int topBarHeight = 26;
 
 	public override void _Ready()
 	{
@@ -26,10 +26,10 @@ public partial class CameraController : Node
 			return;
 
 		if (GetViewport().GuiGetFocusOwner() == null
-			&& !GameState.Instance.decision_menu_open)
+			&& !GameState.Instance.decisionMenuOpen)
 		{
 			var input = Input.GetVector("move_left", "move_right", "move_up", "move_down");
-			camera.Position += input * (base_speed / camera.Zoom.X) * (float)delta;
+			camera.Position += input * (baseSpeed / camera.Zoom.X) * (float)delta;
 		}
 		_clamp_y();
 	}
@@ -41,8 +41,8 @@ public partial class CameraController : Node
 			return;
 
 		var zoomY = Mathf.Max(Mathf.Abs(camera.Zoom.Y), 0.0001f);
-		var minY = -(float)top_bar_height / zoomY;
-		var maxY = MapManager.Instance.map_height
+		var minY = -(float)topBarHeight / zoomY;
+		var maxY = MapManager.Instance.mapHeight
 			- camera.GetViewportRect().Size.Y / zoomY;
 		if (minY > maxY)
 		{
@@ -71,17 +71,17 @@ public partial class CameraController : Node
 			{
 				if (!GameConsole.IsVisible() && !_is_mouse_over_ui())
 				{
-					is_dragging = true;
+					isDragging = true;
 					GetViewport().SetInputAsHandled();
 				}
 			}
 			else
 			{
-				is_dragging = false;
+				isDragging = false;
 			}
 		}
 
-		if (@event is InputEventMouseMotion motion && is_dragging)
+		if (@event is InputEventMouseMotion motion && isDragging)
 		{
 			camera.Position -= motion.Relative / camera.Zoom.X;
 			_clamp_y();
@@ -109,7 +109,7 @@ public partial class CameraController : Node
 		var mousePosBefore = camera.GetGlobalMousePosition();
 
 		camera.Zoom = (camera.Zoom * (1.0f + direction * 0.1f)).Clamp(
-			Vector2.One * camera.GetViewportRect().Size.Y / MapManager.Instance.map_height,
+			Vector2.One * camera.GetViewportRect().Size.Y / MapManager.Instance.mapHeight,
 			Vector2.One * 12f);
 
 		camera.Position += mousePosBefore - camera.GetGlobalMousePosition();

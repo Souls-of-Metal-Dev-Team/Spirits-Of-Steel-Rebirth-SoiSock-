@@ -29,28 +29,28 @@ public partial class KeyboardManager : Node
 	// Original GDScript method name, kept as an alias of the engine callback.
 	public void _ready() => _Ready();
 
-	public override void _UnhandledInput(InputEvent a_event)
+	public override void _UnhandledInput(InputEvent aEvent)
 	{
 		if (GameConsole.IsVisible())
 			return;
 
-		if (a_event is InputEventKey)
+		if (aEvent is InputEventKey)
 		{
-			var world = GameState.Instance.current_world;
+			var world = GameState.Instance.currentWorld;
 			var clock = world?.clock;
 
-			if (a_event.IsActionPressed("deselect_troops"))
+			if (aEvent.IsActionPressed("deselect_troops"))
 			{
 				if (settings != null && GodotObject.IsInstanceValid(settings))
 					settings.Visible = !settings.Visible;
 
 				if (SceneType() == TypeWorld)
 				{
-					var troopSelection = TroopManager.Instance.troop_selection;
+					var troopSelection = TroopManager.Instance.troopSelection;
 					if (troopSelection != null && GodotObject.IsInstanceValid(troopSelection))
 					{
-						if (troopSelection.selected_troops.Count > 0)
-							troopSelection.deselect_all();
+						if (troopSelection.selectedTroops.Count > 0)
+							troopSelection.DeselectAll();
 						else
 							EmitSignal(SignalName.SidemenuCloseRequested);
 					}
@@ -59,30 +59,30 @@ public partial class KeyboardManager : Node
 				}
 			}
 
-			if (a_event.IsActionPressed("open_menu"))
+			if (aEvent.IsActionPressed("open_menu"))
 			{
 				if (SceneType() != TypeEditor)
 					EmitSignal(SignalName.SidemenuToggleRequested);
 			}
 
 			// --- 2. MAP MODE CYCLING (Independent of Menu) ---
-			if (a_event.IsActionPressed("cycle_map_mode"))
-				_cycle_map_mode((a_event as InputEventWithModifiers)?.ShiftPressed ?? false);
+			if (aEvent.IsActionPressed("cycle_map_mode"))
+				_cycle_map_mode((aEvent as InputEventWithModifiers)?.ShiftPressed ?? false);
 
 			if (world != null && GodotObject.IsInstanceValid(world) && SceneType() == TypeWorld)
 			{
-				if (a_event.IsActionPressed("pause_game"))
-					clock?.toggle_pause();
-				else if (a_event.IsActionPressed("increase_speed"))
-					clock?.increase_speed();
-				else if (a_event.IsActionPressed("decrease_speed"))
-					clock?.decrease_speed();
+				if (aEvent.IsActionPressed("pause_game"))
+					clock?.TogglePause();
+				else if (aEvent.IsActionPressed("increase_speed"))
+					clock?.IncreaseSpeed();
+				else if (aEvent.IsActionPressed("decrease_speed"))
+					clock?.DecreaseSpeed();
 			}
 		}
 	}
 
 	// Original GDScript method name, kept as an alias of the engine callback.
-	public void _unhandled_input(InputEvent a_event) => _UnhandledInput(a_event);
+	public void _unhandled_input(InputEvent aEvent) => _UnhandledInput(aEvent);
 
 	public void _cycle_map_mode(bool shift)
 	{

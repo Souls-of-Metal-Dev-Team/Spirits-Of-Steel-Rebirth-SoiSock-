@@ -8,6 +8,6 @@ public partial class Audio : Node
 {
 	public override void _Ready()
 	{
-		MusicManager.Instance.setup_audio();
+		MusicManager.Instance.SetupAudio();
 	}
 }

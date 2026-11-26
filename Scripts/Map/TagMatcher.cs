@@ -8,10 +8,10 @@ public partial class TagMatcher : RefCounted
 {
 	public Expression expression = new Expression();
 
-	public Godot.Collections.Dictionary local_pool = new();
+	public Godot.Collections.Dictionary localPool = new();
 
-	public Godot.Collections.Array slotted_resources = new();
-	public ResourceData evaluated_resource = null; // Used for evaluating a single resource's validity
+	public Godot.Collections.Array slottedResources = new();
+	public ResourceData evaluatedResource = null; // Used for evaluating a single resource's validity
 
 	// Godot instantiates classes with a parameterless constructor; the (Dictionary)
 	// overload mirrors GDScript's _init(local).
@@ -21,84 +21,84 @@ public partial class TagMatcher : RefCounted
 
 	public TagMatcher(Godot.Collections.Dictionary local)
 	{
-		local_pool = local;
+		localPool = local;
 	}
 
 	public static TagMatcher Create(Godot.Collections.Dictionary local)
 		=> new TagMatcher(local);
 
-	public void set_context(Godot.Collections.Array resources)
+	public void SetContext(Godot.Collections.Array resources)
 	{
-		slotted_resources = resources;
+		slottedResources = resources;
 	}
 
-	public void set_eval_resource(ResourceData res)
+	public void SetEvalResource(ResourceData res)
 	{
-		evaluated_resource = res;
+		evaluatedResource = res;
 	}
 
 	// -----------------
 	// For validating an OptionButton choice:
-	public bool has_tag(string tag_name)
+	public bool HasTag(string tagName)
 	{
-		if (evaluated_resource != null)
-			return evaluated_resource.tags.ContainsKey(tag_name);
+		if (evaluatedResource != null)
+			return evaluatedResource.tags.ContainsKey(tagName);
 		return false;
 	}
 
-	public float tag_val(string tag_name)
+	public float TagVal(string tagName)
 	{
-		if (evaluated_resource != null && evaluated_resource.tags.ContainsKey(tag_name))
-			return evaluated_resource.tags[tag_name].AsSingle();
+		if (evaluatedResource != null && evaluatedResource.tags.ContainsKey(tagName))
+			return evaluatedResource.tags[tagName].Single();
 		return 0.0f;
 	}
 	// -----------------
 
 	// -----------------
 	// For evaluating the functionality math formulas:
-	public float input_amount(int index)
+	public float InputAmount(int index)
 	{
-		if (index >= 0 && index < slotted_resources.Count)
+		if (index >= 0 && index < slottedResources.Count)
 		{
-			var slot = slotted_resources[index].AsGodotDictionary();
+			var slot = slottedResources[index].AsGodotDictionary();
 			return slot.ContainsKey("amount") ? slot["amount"].AsSingle() : 0.0f;
 		}
 		return 0.0f;
 	}
 
-	public bool input_has_tag(int index, string tag_name)
+	public bool InputHasTag(int index, string tagName)
 	{
-		if (index >= 0 && index < slotted_resources.Count)
+		if (index >= 0 && index < slottedResources.Count)
 		{
-			var slot = slotted_resources[index].AsGodotDictionary();
+			var slot = slottedResources[index].AsGodotDictionary();
 			if (slot.ContainsKey("resource"))
 			{
 				var tags = TagsOf(slot["resource"].AsGodotObject());
 				if (tags != null)
-					return tags.ContainsKey(tag_name);
+					return tags.ContainsKey(tagName);
 			}
 		}
 		return false;
 	}
 
-	public float input_tag_val(int index, string tag_name)
+	public float InputTagVal(int index, string tagName)
 	{
-		if (index >= 0 && index < slotted_resources.Count)
+		if (index >= 0 && index < slottedResources.Count)
 		{
-			var slot = slotted_resources[index].AsGodotDictionary();
+			var slot = slottedResources[index].AsGodotDictionary();
 			if (slot.ContainsKey("resource"))
 			{
 				var tags = TagsOf(slot["resource"].AsGodotObject());
-				if (tags != null && tags.ContainsKey(tag_name))
-					return tags[tag_name].AsSingle();
+				if (tags != null && tags.ContainsKey(tagName))
+					return tags[tagName].AsSingle();
 			}
 		}
 		return 0.0f;
 	}
 
-	public float local_pool_amount(string tag_name)
+	public float LocalPoolAmount(string tagName)
 	{
-		return local_pool.ContainsKey(tag_name) ? local_pool[tag_name].AsSingle() : 0.0f;
+		return localPool.ContainsKey(tagName) ? localPool[tagName].AsSingle() : 0.0f;
 	}
 	// -----------------
 
@@ -110,12 +110,12 @@ public partial class TagMatcher : RefCounted
 		return tags.VariantType == Variant.Type.Dictionary ? tags.AsGodotDictionary() : null;
 	}
 
-	public Variant evaluate(string expr_string)
+	public Variant evaluate(string exprString)
 	{
-		if (expr_string == "" || expr_string == "true")
+		if (exprString == "" || exprString == "true")
 			return true;
 
-		var error = expression.Parse(expr_string);
+		var error = expression.Parse(exprString);
 		if (error != Error.Ok)
 		{
 			GD.PushError("TagMatcher Parse Error: " + expression.GetErrorText());
@@ -125,7 +125,7 @@ public partial class TagMatcher : RefCounted
 		var result = expression.Execute(new Godot.Collections.Array(), this);
 		if (expression.HasExecuteFailed())
 		{
-			GD.PushError("TagMatcher Execute Error in: " + expr_string);
+			GD.PushError("TagMatcher Execute Error in: " + exprString);
 			return false;
 		}
 		return result;

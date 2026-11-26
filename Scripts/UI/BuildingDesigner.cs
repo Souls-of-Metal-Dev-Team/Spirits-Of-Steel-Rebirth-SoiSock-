@@ -8,105 +8,105 @@ namespace Sosr;
 
 public partial class BuildingDesigner : PanelContainer
 {
-	[Export] public VBoxContainer functions_list;
-	[Export] public GridContainer functions_grid;
-	[Export] public TextEdit building_name;
-	[Export] public Label feasibility_text;
-	[Export] public Button add_building;
-	[Export] public VBoxContainer existing_design;
+	[Export] public VBoxContainer functionsList;
+	[Export] public GridContainer functionsGrid;
+	[Export] public TextEdit buildingName;
+	[Export] public Label feasibilityText;
+	[Export] public Button addBuilding;
+	[Export] public VBoxContainer existingDesign;
 
-	public GDict current_building_template = new();
+	public GDict currentBuildingTemplate = new();
 
-	public readonly List<string> selected_functionalities = new();
+	public readonly List<string> selectedFunctionalities = new();
 
 	// Maps functionality names to their specific VBoxContainers containing their OptionButtons/Sliders
-	private readonly Dictionary<string, VBoxContainer> func_ui_containers = new();
+	private readonly Dictionary<string, VBoxContainer> funcUiContainers = new();
 
-	private readonly TagMatcher active_tag_matcher = TagMatcher.Create(new GDict());
+	private readonly TagMatcher activeTagMatcher = TagMatcher.Create(new GDict());
 
 	private static readonly HashSet<string> RESERVED_KEYS =
 		["name", "functionalities", "assigned_inputs", "assigned_outputs", "money_cost"];
 
 	public override void _Ready()
 	{
-		var functions = EconomyManager.Instance.building_functions;
+		var functions = EconomyManager.Instance.buildingFunctions;
 		foreach (var key in functions.Keys)
 		{
-			var function_name = key.AsString();
-			var func_data = functions[key].AsGodotDictionary();
-			var cb = new CheckButton { Text = function_name };
-			cb.Toggled += toggled_on =>
+			var functionName = key.AsString();
+			var funcData = functions[key].AsGodotDictionary();
+			var cb = new CheckButton { Text = functionName };
+			cb.Toggled += toggledOn =>
 			{
-				if (toggled_on)
+				if (toggledOn)
 				{
-					if (!selected_functionalities.Contains(function_name))
+					if (!selectedFunctionalities.Contains(functionName))
 					{
-						selected_functionalities.Add(function_name);
-						_spawn_func_ui(function_name, func_data);
+						selectedFunctionalities.Add(functionName);
+						_spawn_func_ui(functionName, funcData);
 					}
 				}
 				else
 				{
-					selected_functionalities.Remove(function_name);
-					_destroy_func_ui(function_name);
+					selectedFunctionalities.Remove(functionName);
+					_destroy_func_ui(functionName);
 				}
 				_recalculate();
 			};
-			inputs_list_or_grid().AddChild(cb);
+			InputsListOrGrid().AddChild(cb);
 		}
 	}
 
-	public Container inputs_list_or_grid() => functions_list != null ? functions_list : functions_grid;
+	public Container InputsListOrGrid() => functionsList != null ? functionsList : functionsGrid;
 
 	private static Range AmountNode(Node holder) => holder.GetMeta("amount_node").As<Range>();
 
-	private void _spawn_func_ui(string func_name, GDict func_data)
+	private void _spawn_func_ui(string funcName, GDict funcData)
 	{
 		var vbox = new VBoxContainer();
 
-		if (func_data.TryGetValue("input", out var inputs))
+		if (funcData.TryGetValue("input", out var inputs))
 		{
-			var match_index = 0;
+			var matchIndex = 0;
 			foreach (var _ in inputs.AsGodotArray())
-				active_tag_matcher.slotted_resources.Add(new GDict());
+				activeTagMatcher.slottedResources.Add(new GDict());
 
 			foreach (var inpVariant in inputs.AsGodotArray())
 			{
 				var inp = inpVariant.AsGodotDictionary();
 				if (inp.ContainsKey("match"))
 				{
-					_build_match_ui(vbox, inp, "Input", match_index);
-					match_index++;
+					_build_match_ui(vbox, inp, "Input", matchIndex);
+					matchIndex++;
 				}
 				else if (inp.ContainsKey("resource_tag"))
 				{
-					_build_tag_ui(vbox, inp, "Input", match_index);
-					match_index++;
+					_build_tag_ui(vbox, inp, "Input", matchIndex);
+					matchIndex++;
 				}
 			}
 		}
 
-		if (func_data.TryGetValue("output", out var outputs))
+		if (funcData.TryGetValue("output", out var outputs))
 		{
-			var match_index = 0;
+			var matchIndex = 0;
 			foreach (var outVariant in outputs.AsGodotArray())
 			{
 				var output = outVariant.AsGodotDictionary();
 				if (output.ContainsKey("match"))
 				{
 					// For output, we just build a match card but amount is non-editable
-					_build_match_ui(vbox, output, "Output", match_index);
-					match_index++;
+					_build_match_ui(vbox, output, "Output", matchIndex);
+					matchIndex++;
 				}
 			}
 		}
 
-		func_ui_containers[func_name] = vbox;
+		funcUiContainers[funcName] = vbox;
 
-		var list = inputs_list_or_grid();
+		var list = InputsListOrGrid();
 		for (var i = 0; i < list.GetChildCount(); i++)
 		{
-			if (list.GetChild(i) is CheckButton c && c.Text == func_name)
+			if (list.GetChild(i) is CheckButton c && c.Text == funcName)
 			{
 				list.AddChild(vbox);
 				list.MoveChild(vbox, i + 1);
@@ -118,10 +118,10 @@ public partial class BuildingDesigner : PanelContainer
 	private void _build_match_ui(Container vbox, GDict block, string prefix, int index)
 	{
 		var card = new PanelContainer();
-		var card_vbox = new VBoxContainer();
+		var cardVbox = new VBoxContainer();
 		card.SetMeta("io_type", prefix);
 
-		var hbox_opt = new HBoxContainer();
+		var hboxOpt = new HBoxContainer();
 		var lbl = new Label { Text = $"{prefix} {index}" };
 		var opt = new OptionButton { SizeFlagsHorizontal = Control.SizeFlags.ExpandFill };
 		opt.AddItem("...");
@@ -129,44 +129,44 @@ public partial class BuildingDesigner : PanelContainer
 		opt.SetMeta("last_selected", "");
 		opt.ItemSelected += _ => _recalculate();
 
-		hbox_opt.AddChild(lbl);
-		hbox_opt.AddChild(opt);
-		card_vbox.AddChild(hbox_opt);
+		hboxOpt.AddChild(lbl);
+		hboxOpt.AddChild(opt);
+		cardVbox.AddChild(hboxOpt);
 
-		var amount_data = block.TryGetValue("amount", out var amount) ? amount : "0";
+		var amountData = block.TryGetValue("amount", out var amount) ? amount : "0";
 		// If it's an output, it's evaluated, so we force it to basically be a spinbox
-		_build_amount_ui(card_vbox, amount_data, prefix != "Output");
+		_build_amount_ui(cardVbox, amountData, prefix != "Output");
 
-		card.AddChild(card_vbox);
+		card.AddChild(cardVbox);
 		vbox.AddChild(card);
 	}
 
 	private void _build_tag_ui(Container vbox, GDict block, string prefix, int _index)
 	{
-		var r_tag = block["resource_tag"].AsString();
+		var rTag = block["resource_tag"].AsString();
 		var hbox = new HBoxContainer();
 		hbox.SetMeta("io_type", prefix);
 		var lbl = new Label
 		{
 			SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
-			Text = "Pool Req: " + r_tag,
+			Text = "Pool Req: " + rTag,
 		};
 		hbox.AddChild(lbl);
 
-		var amount_data = block.TryGetValue("amount", out var amount) ? amount : "0";
-		var amount_cnt = new VBoxContainer { SizeFlagsHorizontal = Control.SizeFlags.ExpandFill };
-		amount_cnt.SetMeta("resource_tag", r_tag);
+		var amountData = block.TryGetValue("amount", out var amount) ? amount : "0";
+		var amountCnt = new VBoxContainer { SizeFlagsHorizontal = Control.SizeFlags.ExpandFill };
+		amountCnt.SetMeta("resource_tag", rTag);
 
-		_build_amount_ui(amount_cnt, amount_data, prefix == "Input");
-		hbox.AddChild(amount_cnt);
+		_build_amount_ui(amountCnt, amountData, prefix == "Input");
+		hbox.AddChild(amountCnt);
 		vbox.AddChild(hbox);
 	}
 
-	private void _build_amount_ui(Container parent, Variant amount_data, bool editable)
+	private void _build_amount_ui(Container parent, Variant amountData, bool editable)
 	{
-		if (amount_data.VariantType == Variant.Type.Dictionary && editable)
+		if (amountData.VariantType == Variant.Type.Dictionary && editable)
 		{
-			var range = amount_data.AsGodotDictionary();
+			var range = amountData.AsGodotDictionary();
 			var hsl = new HSlider { SizeFlagsHorizontal = Control.SizeFlags.ExpandFill, Step = 0.1 };
 			hsl.SetMeta("min_expr", range.TryGetValue("min", out var min) ? min : "0");
 			hsl.SetMeta("max_expr", range.TryGetValue("max", out var max) ? max : "0");
@@ -178,11 +178,11 @@ public partial class BuildingDesigner : PanelContainer
 				_recalculate();
 			};
 
-			var amt_hbox = new HBoxContainer();
-			amt_hbox.AddChild(hsl);
-			amt_hbox.AddChild(lbl);
+			var amtHbox = new HBoxContainer();
+			amtHbox.AddChild(hsl);
+			amtHbox.AddChild(lbl);
 
-			parent.AddChild(amt_hbox);
+			parent.AddChild(amtHbox);
 			parent.SetMeta("amount_node", hsl);
 		}
 		else
@@ -194,27 +194,27 @@ public partial class BuildingDesigner : PanelContainer
 				MinValue = -999999.0,
 				MaxValue = 999999.0,
 			};
-			sp.SetMeta("fixed_expr", amount_data.ToString());
+			sp.SetMeta("fixed_expr", amountData.ToString());
 
-			var amt_hbox = new HBoxContainer();
-			amt_hbox.AddChild(new Label { Text = "Amt:" });
-			amt_hbox.AddChild(sp);
+			var amtHbox = new HBoxContainer();
+			amtHbox.AddChild(new Label { Text = "Amt:" });
+			amtHbox.AddChild(sp);
 
-			parent.AddChild(amt_hbox);
+			parent.AddChild(amtHbox);
 			parent.SetMeta("amount_node", sp);
 		}
 	}
 
-	private void _destroy_func_ui(string func_name)
+	private void _destroy_func_ui(string funcName)
 	{
-		if (func_ui_containers.Remove(func_name, out var vbox))
+		if (funcUiContainers.Remove(funcName, out var vbox))
 			vbox.QueueFree();
 	}
 
-	private static ResourceData ResourceByName(string res_name)
+	private static ResourceData ResourceByName(string resName)
 	{
 		var resources = MapManager.Instance.resources;
-		return resources.TryGetValue(res_name, out var r) ? r.As<ResourceData>() : null;
+		return resources.TryGetValue(resName, out var r) ? r : null;
 	}
 
 	// Gathers chosen values and resources mapping for evaluating dynamic data.
@@ -223,42 +223,42 @@ public partial class BuildingDesigner : PanelContainer
 	private Dictionary<string, (GArray inputs, GArray outputs)> _gather_func_io()
 	{
 		var mapping = new Dictionary<string, (GArray inputs, GArray outputs)>();
-		foreach (var func_name in selected_functionalities)
+		foreach (var funcName in selectedFunctionalities)
 		{
 			var inputs = new GArray();
 			var outputs = new GArray();
-			if (func_ui_containers.TryGetValue(func_name, out var vbox))
+			if (funcUiContainers.TryGetValue(funcName, out var vbox))
 			{
-				foreach (var ui_element in vbox.GetChildren())
+				foreach (var uiElement in vbox.GetChildren())
 				{
-					var slot_data = new GDict { { "resource", new Variant() }, { "amount", 0.0 }, { "resource_tag", "" } };
-					GArray target_arr = null;
+					var slotData = new GDict { { "resource", new Variant() }, { "amount", 0.0 }, { "resource_tag", "" } };
+					GArray targetArr = null;
 
-					if (ui_element is PanelContainer card)
+					if (uiElement is PanelContainer card)
 					{
-						target_arr = card.GetMeta("io_type").AsString() == "Input" ? inputs : outputs;
-						var card_vc = card.GetChild(0);
-						var opt = card_vc.GetChild(0).GetChild<OptionButton>(1);
+						targetArr = card.GetMeta("io_type").AsString() == "Input" ? inputs : outputs;
+						var cardVc = card.GetChild(0);
+						var opt = cardVc.GetChild(0).GetChild<OptionButton>(1);
 						if (opt.ItemCount > 0 && opt.Selected >= 0)
 						{
 							var res = ResourceByName(opt.GetItemText(opt.Selected));
 							if (res != null)
-								slot_data["resource"] = res;
+								slotData["resource"] = VariantState.ToVariant(res.ToDict());
 						}
-						slot_data["amount"] = AmountNode(card_vc)?.Value ?? 0.0;
+						slotData["amount"] = AmountNode(cardVc)?.Value ?? 0.0;
 					}
-					else if (ui_element is HBoxContainer row)
+					else if (uiElement is HBoxContainer row)
 					{
-						target_arr = row.GetMeta("io_type").AsString() == "Input" ? inputs : outputs;
-						var amt_cnt = row.GetChild(1);
-						slot_data["resource_tag"] = amt_cnt.GetMeta("resource_tag");
-						slot_data["amount"] = AmountNode(amt_cnt)?.Value ?? 0.0;
+						targetArr = row.GetMeta("io_type").AsString() == "Input" ? inputs : outputs;
+						var amtCnt = row.GetChild(1);
+						slotData["resource_tag"] = amtCnt.GetMeta("resource_tag");
+						slotData["amount"] = AmountNode(amtCnt)?.Value ?? 0.0;
 					}
 
-					target_arr?.Add(slot_data);
+					targetArr?.Add(slotData);
 				}
 			}
-			mapping[func_name] = (inputs, outputs);
+			mapping[funcName] = (inputs, outputs);
 		}
 		return mapping;
 	}
@@ -268,35 +268,35 @@ public partial class BuildingDesigner : PanelContainer
 		dict[key] = (dict.TryGetValue(key, out var v) ? v.AsDouble() : 0.0) + amount;
 	}
 
-	private static GDict SlotSummary(GDict slot, bool include_tag)
+	private static GDict SlotSummary(GDict slot, bool includeTag)
 	{
-		var d_str = new GDict { { "amount", slot["amount"] } };
-		if (slot["resource"].As<ResourceData>() is { } res)
-			d_str["resource"] = res.name;
-		if (include_tag && slot["resource_tag"].AsString() != "")
-			d_str["resource_tag"] = slot["resource_tag"];
-		return d_str;
+		var dStr = new GDict { { "amount", slot["amount"] } };
+		if (ResourceData.FromDict(slot["resource"].AsGodotDictionary().AsState()) is { } res)
+			dStr["resource"] = res.name;
+		if (includeTag && slot["resource_tag"].AsString() != "")
+			dStr["resource_tag"] = slot["resource_tag"];
+		return dStr;
 	}
 
 	private void _recalculate()
 	{
-		var functions = EconomyManager.Instance.building_functions;
-		var func_io = _gather_func_io();
-		var local_pool = new GDict();
-		var resource_net = new GDict();
+		var functions = EconomyManager.Instance.buildingFunctions;
+		var funcIo = _gather_func_io();
+		var localPool = new GDict();
+		var resourceNet = new GDict();
 
-		var assigned_inputs = new GDict();
-		var assigned_outputs = new GDict();
-		var template_result = new GDict
+		var assignedInputs = new GDict();
+		var assignedOutputs = new GDict();
+		var templateResult = new GDict
 		{
-			{ "name", building_name.Text },
-			{ "functionalities", new GArray(selected_functionalities.Select(f => (Variant)f)) },
-			{ "assigned_inputs", assigned_inputs },
-			{ "assigned_outputs", assigned_outputs },
+			{ "name", buildingName.Text },
+			{ "functionalities", new GArray(selectedFunctionalities.Select(f => (Variant)f)) },
+			{ "assigned_inputs", assignedInputs },
+			{ "assigned_outputs", assignedOutputs },
 			{ "money_cost", 0.0 },
 		};
 
-		foreach (var (fn, io) in func_io)
+		foreach (var (fn, io) in funcIo)
 		{
 			var ins = new GArray();
 			var outs = new GArray();
@@ -304,267 +304,267 @@ public partial class BuildingDesigner : PanelContainer
 				ins.Add(SlotSummary(slot.AsGodotDictionary(), true));
 			foreach (var slot in io.outputs)
 				outs.Add(SlotSummary(slot.AsGodotDictionary(), false));
-			assigned_inputs[fn] = ins;
-			assigned_outputs[fn] = outs;
+			assignedInputs[fn] = ins;
+			assignedOutputs[fn] = outs;
 		}
 
-		var all_feasible = true;
-		var tag_matcher = TagMatcher.Create(local_pool);
+		var allFeasible = true;
+		var tagMatcher = TagMatcher.Create(localPool);
 
 		// Pass 1: Setup Input Sliders, Dropdowns
-		foreach (var func_name in selected_functionalities)
+		foreach (var funcName in selectedFunctionalities)
 		{
-			var (slotted_inputs, slotted_outputs) = func_io[func_name];
-			tag_matcher.set_context(slotted_inputs);
+			var (slottedInputs, slottedOutputs) = funcIo[funcName];
+			tagMatcher.SetContext(slottedInputs);
 
-			if (!func_ui_containers.TryGetValue(func_name, out var vbox))
+			if (!funcUiContainers.TryGetValue(funcName, out var vbox))
 				continue;
 
-			var match_idx_in = 0;
-			var match_idx_out = 0;
-			foreach (var ui_element in vbox.GetChildren())
+			var matchIdxIn = 0;
+			var matchIdxOut = 0;
+			foreach (var uiElement in vbox.GetChildren())
 			{
-				if (ui_element is PanelContainer card)
+				if (uiElement is PanelContainer card)
 				{
 					var prefix = card.GetMeta("io_type").AsString();
-					var card_vc = card.GetChild(0);
-					var opt = card_vc.GetChild(0).GetChild<OptionButton>(1);
-					var target_match = opt.GetMeta("match_expr").AsString();
-					var last_sel = opt.Selected >= 0 ? opt.GetItemText(opt.Selected) : opt.GetMeta("last_selected").AsString();
+					var cardVc = card.GetChild(0);
+					var opt = cardVc.GetChild(0).GetChild<OptionButton>(1);
+					var targetMatch = opt.GetMeta("match_expr").AsString();
+					var lastSel = opt.Selected >= 0 ? opt.GetItemText(opt.Selected) : opt.GetMeta("last_selected").AsString();
 					opt.Clear();
 					opt.AddItem("...");
 
 					foreach (var resource in MapManager.Instance.resources.Values)
 					{
-						var res = resource.As<ResourceData>();
-						tag_matcher.set_eval_resource(res);
-						if (tag_matcher.evaluate(target_match).AsBool())
+						var res = resource;
+						tagMatcher.SetEvalResource(res);
+						if (tagMatcher.evaluate(targetMatch).AsBool())
 							opt.AddItem(res.name);
 					}
 
-					var target_slots = prefix == "Input" ? slotted_inputs : slotted_outputs;
-					var target_index = prefix == "Input" ? match_idx_in : match_idx_out;
+					var targetSlots = prefix == "Input" ? slottedInputs : slottedOutputs;
+					var targetIndex = prefix == "Input" ? matchIdxIn : matchIdxOut;
 
-					var did_reselect = false;
+					var didReselect = false;
 					for (var i = 0; i < opt.ItemCount; i++)
 					{
-						if (opt.GetItemText(i) != last_sel)
+						if (opt.GetItemText(i) != lastSel)
 							continue;
 						opt.Select(i);
-						did_reselect = true;
-						if (last_sel != "...")
-							target_slots[target_index].AsGodotDictionary()["resource"] = ResourceByName(last_sel);
+						didReselect = true;
+						if (lastSel != "...")
+							VariantState.ToVariant(ResourceByName(lastSel).ToDict());
 						break;
 					}
-					if (!did_reselect && opt.ItemCount > 1)
+					if (!didReselect && opt.ItemCount > 1)
 					{
 						opt.Select(1);
-						target_slots[target_index].AsGodotDictionary()["resource"] = ResourceByName(opt.GetItemText(1));
+						VariantState.ToVariant(ResourceByName(opt.GetItemText(1)).ToDict());
 					}
 					opt.SetMeta("last_selected", opt.GetItemText(opt.Selected));
 
 					// Build limit setting for INPUT
 					if (prefix == "Input")
 					{
-						var amt_node = AmountNode(card_vc);
-						ApplyLimits(amt_node, tag_matcher);
-						slotted_inputs[match_idx_in].AsGodotDictionary()["amount"] = amt_node.Value;
-						match_idx_in++;
+						var amtNode = AmountNode(cardVc);
+						ApplyLimits(amtNode, tagMatcher);
+						slottedInputs[matchIdxIn].AsGodotDictionary()["amount"] = amtNode.Value;
+						matchIdxIn++;
 					}
 					else
 					{
 						// Output nodes evaluated in pass 2, but we update index
-						match_idx_out++;
+						matchIdxOut++;
 					}
 				}
-				else if (ui_element is HBoxContainer row)
+				else if (uiElement is HBoxContainer row)
 				{
-					var amt_node = AmountNode(row.GetChild(1));
-					ApplyLimits(amt_node, tag_matcher);
-					slotted_inputs[match_idx_in].AsGodotDictionary()["amount"] = amt_node.Value;
-					match_idx_in++;
+					var amtNode = AmountNode(row.GetChild(1));
+					ApplyLimits(amtNode, tagMatcher);
+					slottedInputs[matchIdxIn].AsGodotDictionary()["amount"] = amtNode.Value;
+					matchIdxIn++;
 				}
 			}
 		}
 
 		// Pass 2: Calculate outputs (Passive and Resource Net)
-		foreach (var func_name in selected_functionalities)
+		foreach (var funcName in selectedFunctionalities)
 		{
-			var func_data = functions[func_name].AsGodotDictionary();
-			var (slotted_inputs, slotted_outputs) = func_io[func_name];
-			tag_matcher.set_context(slotted_inputs);
+			var funcData = functions[funcName].AsGodotDictionary();
+			var (slottedInputs, slottedOutputs) = funcIo[funcName];
+			tagMatcher.SetContext(slottedInputs);
 
 			// Evaluate Output amounts onto UI
-			if (func_data.TryGetValue("output", out var outputs))
+			if (funcData.TryGetValue("output", out var outputs))
 			{
-				func_ui_containers.TryGetValue(func_name, out var vbox);
-				var match_idx_out = 0;
-				var c_index = 0;
+				funcUiContainers.TryGetValue(funcName, out var vbox);
+				var matchIdxOut = 0;
+				var cIndex = 0;
 				foreach (var outVariant in outputs.AsGodotArray())
 				{
-					var out_cfg = outVariant.AsGodotDictionary();
-					var amt = _eval_or_float(out_cfg.TryGetValue("amount", out var a) ? a : "0", tag_matcher);
+					var outCfg = outVariant.AsGodotDictionary();
+					var amt = _eval_or_float(outCfg.TryGetValue("amount", out var a) ? a : "0", tagMatcher);
 
 					// Update UI Element
 					if (vbox != null)
 					{
-						foreach (var ui_element in vbox.GetChildren())
+						foreach (var uiElement in vbox.GetChildren())
 						{
-							if (ui_element is not PanelContainer card || card.GetMeta("io_type").AsString() != "Output")
+							if (uiElement is not PanelContainer card || card.GetMeta("io_type").AsString() != "Output")
 								continue;
-							if (c_index == match_idx_out)
+							if (cIndex == matchIdxOut)
 							{
 								if (AmountNode(card.GetChild(0)) is SpinBox sp)
 									sp.Value = amt;
-								slotted_outputs[match_idx_out].AsGodotDictionary()["amount"] = amt;
+								slottedOutputs[matchIdxOut].AsGodotDictionary()["amount"] = amt;
 								break;
 							}
-							c_index++;
+							cIndex++;
 						}
 					}
 
 					// Track Yield Natively
-					if (out_cfg.ContainsKey("match"))
+					if (outCfg.ContainsKey("match"))
 					{
-						var res = match_idx_out < slotted_outputs.Count
-							? slotted_outputs[match_idx_out].AsGodotDictionary()["resource"].As<ResourceData>()
+						var res = matchIdxOut < slottedOutputs.Count
+							? ResourceData.FromDict(slottedOutputs[matchIdxOut].AsGodotDictionary()["resource"].AsGodotDictionary().AsState())
 							: null;
 						if (res != null)
-							AddTo(resource_net, res.name, amt);
-						match_idx_out++;
+							AddTo(resourceNet, res.name, amt);
+						matchIdxOut++;
 					}
-					else if (out_cfg.TryGetValue("tag", out var tagVariant))
+					else if (outCfg.TryGetValue("tag", out var tagVariant))
 					{
 						var tag = tagVariant.AsString();
-						if (!template_result.ContainsKey(tag))
-							template_result[tag] = 0.0;
-						if (template_result[tag].VariantType == Variant.Type.Bool)
-							template_result[tag] = amt > 0.0;
+						if (!templateResult.ContainsKey(tag))
+							templateResult[tag] = 0.0;
+						if (templateResult[tag].VariantType == Variant.Type.Bool)
+							templateResult[tag] = amt > 0.0;
 						else
-							AddTo(template_result, tag, amt);
-						AddTo(local_pool, tag, amt);
+							AddTo(templateResult, tag, amt);
+						AddTo(localPool, tag, amt);
 					}
 				}
 			}
 
 			// Cost processing
-			if (func_data.TryGetValue("build_cost", out var bcVariant))
+			if (funcData.TryGetValue("build_cost", out var bcVariant))
 			{
 				var bc = bcVariant.AsGodotDictionary();
 				if (bc.TryGetValue("money", out var money))
-					AddTo(template_result, "money_cost", _eval_or_float(money, tag_matcher));
+					AddTo(templateResult, "money_cost", _eval_or_float(money, tagMatcher));
 			}
 		}
 
 		// Pass 3: Process inputs footprint globally
-		foreach (var func_name in selected_functionalities)
+		foreach (var funcName in selectedFunctionalities)
 		{
-			var func_data = functions[func_name].AsGodotDictionary();
-			var slotted = func_io[func_name].inputs;
-			tag_matcher.set_context(slotted);
+			var funcData = functions[funcName].AsGodotDictionary();
+			var slotted = funcIo[funcName].inputs;
+			tagMatcher.SetContext(slotted);
 
-			if (!func_data.TryGetValue("input", out var inputs))
+			if (!funcData.TryGetValue("input", out var inputs))
 				continue;
 
-			var input_list = inputs.AsGodotArray();
-			for (var match_index = 0; match_index < input_list.Count; match_index++)
+			var inputList = inputs.AsGodotArray();
+			for (var matchIndex = 0; matchIndex < inputList.Count; matchIndex++)
 			{
-				var inp = input_list[match_index].AsGodotDictionary();
+				var inp = inputList[matchIndex].AsGodotDictionary();
 
-				if (match_index >= slotted.Count)
+				if (matchIndex >= slotted.Count)
 				{
-					all_feasible = false;
+					allFeasible = false;
 					continue;
 				}
-				var slot = slotted[match_index].AsGodotDictionary();
-				var user_allocated_amt = slot["amount"].AsDouble();
-				var res = slot["resource"].As<ResourceData>();
+				var slot = slotted[matchIndex].AsGodotDictionary();
+				var userAllocatedAmt = slot["amount"].AsDouble();
+				var res = ResourceData.FromDict(slot["resource"].AsGodotDictionary().AsState());
 
 				if (inp.ContainsKey("match"))
 				{
 					if (res == null)
 					{
-						all_feasible = false;
+						allFeasible = false;
 						continue;
 					}
-					tag_matcher.set_eval_resource(res);
-					if (!tag_matcher.evaluate(inp["match"].AsString()).AsBool())
-						all_feasible = false;
+					tagMatcher.SetEvalResource(res);
+					if (!tagMatcher.evaluate(inp["match"].AsString()).AsBool())
+						allFeasible = false;
 					else
-						AddTo(resource_net, res.name, -user_allocated_amt);
+						AddTo(resourceNet, res.name, -userAllocatedAmt);
 				}
 				else if (inp.ContainsKey("resource_tag"))
 				{
-					var c_tag = inp["resource_tag"].AsString();
-					AddTo(local_pool, c_tag, -user_allocated_amt);
+					var cTag = inp["resource_tag"].AsString();
+					AddTo(localPool, cTag, -userAllocatedAmt);
 
-					if (!template_result.ContainsKey(c_tag))
-						template_result[c_tag] = 0.0;
-					if (template_result[c_tag].VariantType != Variant.Type.Bool)
-						AddTo(template_result, c_tag, -user_allocated_amt);
+					if (!templateResult.ContainsKey(cTag))
+						templateResult[cTag] = 0.0;
+					if (templateResult[cTag].VariantType != Variant.Type.Bool)
+						AddTo(templateResult, cTag, -userAllocatedAmt);
 				}
 			}
 		}
 
-		if (selected_functionalities.Count == 0 || building_name.Text.Length == 0)
-			all_feasible = false;
+		if (selectedFunctionalities.Count == 0 || buildingName.Text.Length == 0)
+			allFeasible = false;
 
-		var summary_text = $"Feasible: {(all_feasible ? "true" : "false")}\nCost: {template_result["money_cost"].AsDouble()}\n";
+		var summaryText = $"Feasible: {(allFeasible ? "true" : "false")}\nCost: {templateResult["moneyCost"].AsDouble()}\n";
 
 		// Dynamically populate passive states that have changed
-		foreach (var keyVariant in template_result.Keys)
+		foreach (var keyVariant in templateResult.Keys)
 		{
 			var key = keyVariant.AsString();
 			if (RESERVED_KEYS.Contains(key))
 				continue;
-			var val = template_result[keyVariant];
+			var val = templateResult[keyVariant];
 			if (val.VariantType is Variant.Type.Float or Variant.Type.Int)
 			{
 				if (val.AsDouble() != 0.0)
-					summary_text += $"{key.Capitalize()}: {val.AsDouble():F1}\n";
+					summaryText += $"{key.Capitalize()}: {val.AsDouble():F1}\n";
 			}
 			else if (val.VariantType == Variant.Type.Bool && val.AsBool())
 			{
-				summary_text += $"{key.Capitalize()}: True\n";
+				summaryText += $"{key.Capitalize()}: True\n";
 			}
 		}
 
-		if (resource_net.Count > 0)
+		if (resourceNet.Count > 0)
 		{
-			summary_text += "\nResources Net:\n";
-			foreach (var (r_name, net) in resource_net)
+			summaryText += "\nResources Net:\n";
+			foreach (var (rName, net) in resourceNet)
 			{
 				var value = net.AsDouble();
-				summary_text += $"- {r_name.AsString()}: {(value >= 0 ? "+" : "")}{value:F1}\n";
+				summaryText += $"- {rName.AsString()}: {(value >= 0 ? "+" : "")}{value:F1}\n";
 			}
 		}
 
-		template_result["resource_net"] = resource_net;
-		feasibility_text.Text = summary_text;
-		add_building.Disabled = !all_feasible;
-		current_building_template = template_result;
+		templateResult["resource_net"] = resourceNet;
+		feasibilityText.Text = summaryText;
+		addBuilding.Disabled = !allFeasible;
+		currentBuildingTemplate = templateResult;
 	}
 
-	private static void ApplyLimits(Range amt_node, TagMatcher tag_matcher)
+	private static void ApplyLimits(Range amtNode, TagMatcher tagMatcher)
 	{
-		if (amt_node is HSlider slider)
+		if (amtNode is HSlider slider)
 		{
-			slider.MinValue = _eval_or_float(slider.GetMeta("min_expr"), tag_matcher);
-			slider.MaxValue = _eval_or_float(slider.GetMeta("max_expr"), tag_matcher);
+			slider.MinValue = _eval_or_float(slider.GetMeta("min_expr"), tagMatcher);
+			slider.MaxValue = _eval_or_float(slider.GetMeta("max_expr"), tagMatcher);
 		}
-		else if (amt_node is SpinBox sp)
+		else if (amtNode is SpinBox sp)
 		{
-			sp.Value = _eval_or_float(sp.GetMeta("fixed_expr"), tag_matcher);
+			sp.Value = _eval_or_float(sp.GetMeta("fixed_expr"), tagMatcher);
 		}
 	}
 
-	private static double _eval_or_float(Variant val, TagMatcher tag_matcher)
+	private static double _eval_or_float(Variant val, TagMatcher tagMatcher)
 	{
 		switch (val.VariantType)
 		{
 			case Variant.Type.String:
 			{
-				var result = tag_matcher.evaluate(val.AsString());
+				var result = tagMatcher.evaluate(val.AsString());
 				return result.VariantType is Variant.Type.Float or Variant.Type.Int ? result.AsDouble() : 0.0;
 			}
 			case Variant.Type.Float:
@@ -577,21 +577,21 @@ public partial class BuildingDesigner : PanelContainer
 
 	public void _on_add_building_pressed()
 	{
-		var designs = EconomyManager.Instance.building_designs;
-		var player_name = CountryManager.Instance.Player.country_name;
-		if (!designs.ContainsKey(player_name))
-			designs[player_name] = new GDict();
+		var designs = EconomyManager.Instance.buildingDesigns;
+		var playerName = CountryManager.Instance.Player.countryName;
+		if (!designs.ContainsKey(playerName))
+			designs[playerName] = new GDict();
 
-		var bt = BuildingTemplate.FromDict(current_building_template);
-		designs[player_name][bt.name] = bt;
+		var bt = BuildingTemplate.FromDict(currentBuildingTemplate.AsState());
+		designs[playerName][bt.name] = VariantState.ToVariant(bt.ToDict());
 
-		foreach (var child in existing_design.GetChildren())
+		foreach (var child in existingDesign.GetChildren())
 			child.Free();
 
-		foreach (var design in designs[player_name].Values)
+		foreach (var design in designs[playerName].Values)
 		{
-			var btn = new Button { Text = design.As<BuildingTemplate>().name };
-			existing_design.AddChild(btn);
+			var btn = new Button { Text = BuildingTemplate.FromDict(design.AsGodotDictionary().AsState()).name };
+			existingDesign.AddChild(btn);
 		}
 	}
 

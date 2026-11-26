@@ -31,27 +31,27 @@ public partial class MusicManager : Node
 	[Signal]
 	public delegate void TrackChangedEventHandler(string trackName);
 
-	public const string default_music_path = "res://assets/music/";
-	public const string custom_music_path = "res://radios/";
+	public const string defaultMusicPath = "res://assets/music/";
+	public const string customMusicPath = "res://radios/";
 	private static readonly bool USE_INTERACTIVE = false; // Fallback to manual shuffle if interactive fails
 
-	public int current_track_type = -1;
+	public int currentTrackType = -1;
 
 	private AudioStream _interactive_stream = null;
 
-	public AudioStreamPlayer music_player => GetNodeOrNull<AudioStreamPlayer>("/root/Main/Audio/Music");
+	public AudioStreamPlayer musicPlayer => GetNodeOrNull<AudioStreamPlayer>("/root/Main/Audio/Music");
 
-	public Godot.Collections.Array<AudioStreamPlayer> sfx_players
+	public Godot.Collections.Array<AudioStreamPlayer> sfxPlayers
 	{
 		get
 		{
 			var players = new Godot.Collections.Array<AudioStreamPlayer>();
-			var sfx_node = GetNodeOrNull("/root/Main/Audio/SFX");
-			if (sfx_node is AudioStreamPlayer single)
+			var sfxNode = GetNodeOrNull("/root/Main/Audio/SFX");
+			if (sfxNode is AudioStreamPlayer single)
 				players.Add(single);
-			if (sfx_node != null)
+			if (sfxNode != null)
 			{
-				foreach (var child in sfx_node.GetChildren())
+				foreach (var child in sfxNode.GetChildren())
 					if (child is AudioStreamPlayer player)
 						players.Add(player);
 			}
@@ -59,7 +59,7 @@ public partial class MusicManager : Node
 		}
 	}
 
-	public Godot.Collections.Dictionary sfx_map = new()
+	public Godot.Collections.Dictionary sfxMap = new()
 	{
 		{ (int)SFX.TROOP_MOVE, GD.Load<AudioStream>("res://assets/snd/moveDivSound.mp3") },
 		{ (int)SFX.TROOP_SELECTED, GD.Load<AudioStream>("res://assets/snd/selectDivSound.mp3") },
@@ -74,7 +74,7 @@ public partial class MusicManager : Node
 		{ (int)SFX.CLAPPING, GD.Load<AudioStream>("res://assets/snd/clappingSound.mp3") },
 	};
 
-	public Godot.Collections.Dictionary music_map = new()
+	public Godot.Collections.Dictionary musicMap = new()
 	{
 		{ (int)MUSIC.MAIN_THEME, new Godot.Collections.Dictionary() },
 		{ (int)MUSIC.BATTLE_THEME, new Godot.Collections.Dictionary() },
@@ -82,19 +82,19 @@ public partial class MusicManager : Node
 
 	public Godot.Collections.Array<string> radios = new() { "default" };
 
-	public Godot.Collections.Dictionary music_volume_map = new()
+	public Godot.Collections.Dictionary musicVolumeMap = new()
 	{
 		{ (int)MUSIC.MAIN_THEME, 1.0f },
 		{ (int)MUSIC.BATTLE_THEME, 1.0f },
 	};
 
-	public int last_track_type = (int)MUSIC.MAIN_THEME;
-	public bool locking_custom_track = false;
+	public int lastTrackType = (int)MUSIC.MAIN_THEME;
+	public bool lockingCustomTrack = false;
 
-	private static Godot.Collections.Dictionary radio_map(Godot.Collections.Dictionary map, int track)
+	private static Godot.Collections.Dictionary RadioMap(Godot.Collections.Dictionary map, int track)
 		=> map.ContainsKey(track) ? map[track].AsGodotDictionary() : null;
 
-	private static float setting_volume(string key)
+	private static float SettingVolume(string key)
 	{
 		var settings = SettingsManager.Instance?.settings;
 		if (settings == null)
@@ -120,33 +120,33 @@ public partial class MusicManager : Node
 
 	public override void _Ready()
 	{
-		var default_dir = DirAccess.Open(default_music_path);
-		if (default_dir != null)
+		var defaultDir = DirAccess.Open(defaultMusicPath);
+		if (defaultDir != null)
 		{
-			foreach (var radio in default_dir.GetDirectories())
+			foreach (var radio in defaultDir.GetDirectories())
 			{
 				if (radio == "superevents")
 					continue;
 				foreach (var track in new[] { (int)MUSIC.MAIN_THEME, (int)MUSIC.BATTLE_THEME })
-					((Godot.Collections.Dictionary)music_map[track])[radio] = new Godot.Collections.Array<AudioStream>();
-				_load_music_folder(default_music_path, radio, (int)MUSIC.MAIN_THEME);
-				_load_music_folder(default_music_path, radio, (int)MUSIC.BATTLE_THEME);
+					((Godot.Collections.Dictionary)musicMap[track])[radio] = new Godot.Collections.Array<AudioStream>();
+				_load_music_folder(defaultMusicPath, radio, (int)MUSIC.MAIN_THEME);
+				_load_music_folder(defaultMusicPath, radio, (int)MUSIC.BATTLE_THEME);
 				if (!radios.Contains(radio))
 					radios.Add(radio);
 			}
 		}
 
-		var custom_dir = DirAccess.Open(custom_music_path);
-		if (custom_dir != null)
+		var customDir = DirAccess.Open(customMusicPath);
+		if (customDir != null)
 		{
-			foreach (var radio in custom_dir.GetDirectories())
+			foreach (var radio in customDir.GetDirectories())
 			{
 				if (radio == "superevents")
 					continue;
 				foreach (var track in new[] { (int)MUSIC.MAIN_THEME, (int)MUSIC.BATTLE_THEME })
-					((Godot.Collections.Dictionary)music_map[track])[radio] = new Godot.Collections.Array<AudioStream>();
-				_load_music_folder(custom_music_path, radio, (int)MUSIC.MAIN_THEME);
-				_load_music_folder(custom_music_path, radio, (int)MUSIC.BATTLE_THEME);
+					((Godot.Collections.Dictionary)musicMap[track])[radio] = new Godot.Collections.Array<AudioStream>();
+				_load_music_folder(customMusicPath, radio, (int)MUSIC.MAIN_THEME);
+				_load_music_folder(customMusicPath, radio, (int)MUSIC.BATTLE_THEME);
 				if (!radios.Contains(radio))
 					radios.Add(radio);
 			}
@@ -158,17 +158,17 @@ public partial class MusicManager : Node
 		{
 			wars.WarDeclared += (_, _) =>
 			{
-				play_music((int)MUSIC.BATTLE_THEME);
-				play_sfx((int)SFX.DECLARE_WAR);
+				PlayMusic((int)MUSIC.BATTLE_THEME);
+				PlaySfx((int)SFX.DECLARE_WAR);
 			};
 		}
 
 		// Audio.gd calls setup_audio() when it is ready; the scene tree isn't ready here.
 	}
 
-	public void setup_audio()
+	public void SetupAudio()
 	{
-		var player = music_player;
+		var player = musicPlayer;
 		if (player == null)
 		{
 			GD.PushError("MusicManager: setup_audio called but music_player is still null!");
@@ -184,67 +184,67 @@ public partial class MusicManager : Node
 			_interactive_stream = player.Stream;
 			GD.Print("MusicManager: Captured interactive stream: ", _interactive_stream);
 		}
-		update_interactive_playlists();
-		if (current_track_type == -1)
-			play_music((int)MUSIC.MAIN_THEME);
+		UpdateInteractivePlaylists();
+		if (currentTrackType == -1)
+			PlayMusic((int)MUSIC.MAIN_THEME);
 		else
-			play_music(current_track_type);
+			PlayMusic(currentTrackType);
 
-		debug_audio_status();
+		DebugAudioStatus();
 	}
 
-	public void debug_audio_status()
+	public void DebugAudioStatus()
 	{
 		GD.Print("--- AUDIO DIAGNOSTIC ---");
 		GD.Print("Master Bus Volume: ", AudioServer.GetBusVolumeDb(0), " Muted: ", AudioServer.IsBusMute(0));
-		var music_bus_idx = AudioServer.GetBusIndex("Music");
-		if (music_bus_idx != -1)
-			GD.Print("Music Bus Volume: ", AudioServer.GetBusVolumeDb(music_bus_idx), " Muted: ", AudioServer.IsBusMute(music_bus_idx));
+		var musicBusIdx = AudioServer.GetBusIndex("Music");
+		if (musicBusIdx != -1)
+			GD.Print("Music Bus Volume: ", AudioServer.GetBusVolumeDb(musicBusIdx), " Muted: ", AudioServer.IsBusMute(musicBusIdx));
 		else
 			GD.Print("Music Bus NOT FOUND!");
 
-		var m_player = music_player;
-		if (m_player != null)
+		var mPlayer = musicPlayer;
+		if (mPlayer != null)
 		{
-			GD.Print("Music Player Node: ", m_player.GetPath());
-			GD.Print("Music Player Stream: ", m_player.Stream);
-			GD.Print("Music Player Playing: ", m_player.Playing);
-			GD.Print("Music Player Volume DB: ", m_player.VolumeDb);
-			GD.Print("Music Player Bus: ", m_player.Bus);
+			GD.Print("Music Player Node: ", mPlayer.GetPath());
+			GD.Print("Music Player Stream: ", mPlayer.Stream);
+			GD.Print("Music Player Playing: ", mPlayer.Playing);
+			GD.Print("Music Player Volume DB: ", mPlayer.VolumeDb);
+			GD.Print("Music Player Bus: ", mPlayer.Bus);
 		}
 		else
 			GD.Print("Music Player Node NOT FOUND at path '/root/Main/Audio/Music'");
 		GD.Print("-----------------------");
 	}
 
-	public void debug_play_direct()
+	public void DebugPlayDirect()
 	{
 		GD.Print("MusicManager: Attempting direct playback test...");
-		var m_player = music_player;
-		if (m_player == null)
+		var mPlayer = musicPlayer;
+		if (mPlayer == null)
 			return;
-		var test_path = "res://assets/music/default/gameMusic/Miyasan_Miyasan.mp3";
-		var stream = ResourceLoader.Load(test_path) as AudioStream;
+		var testPath = "res://assets/music/default/gameMusic/Miyasan_Miyasan.mp3";
+		var stream = ResourceLoader.Load(testPath) as AudioStream;
 		if (stream != null)
 		{
-			GD.Print("MusicManager: Loaded test stream: ", test_path);
-			m_player.Stream = stream;
-			m_player.VolumeDb = 0; // Full volume
-			m_player.Play();
+			GD.Print("MusicManager: Loaded test stream: ", testPath);
+			mPlayer.Stream = stream;
+			mPlayer.VolumeDb = 0; // Full volume
+			mPlayer.Play();
 			GD.Print("MusicManager: Called play() on test stream.");
 		}
 		else
-			GD.Print("MusicManager: FAILED to load test stream: ", test_path);
+			GD.Print("MusicManager: FAILED to load test stream: ", testPath);
 	}
 
-	public void update_interactive_playlists()
+	public void UpdateInteractivePlaylists()
 	{
-		var m_player = music_player;
-		if (m_player == null)
+		var mPlayer = musicPlayer;
+		if (mPlayer == null)
 			return;
 
 		AudioStreamInteractive interactive = null;
-		if (m_player.Stream is AudioStreamInteractive streamInteractive)
+		if (mPlayer.Stream is AudioStreamInteractive streamInteractive)
 			interactive = streamInteractive;
 		else if (_interactive_stream is AudioStreamInteractive savedInteractive)
 			interactive = savedInteractive;
@@ -256,58 +256,58 @@ public partial class MusicManager : Node
 		}
 
 		GD.Print("MusicManager: Updating interactive playlists for radios: ", string.Join(", ", radios));
-		for (var clip_idx = 0; clip_idx < interactive.ClipCount; clip_idx++)
+		for (var clipIdx = 0; clipIdx < interactive.ClipCount; clipIdx++)
 		{
-			var clip_name = interactive.GetClipName(clip_idx);
-			var playlist = interactive.GetClipStream(clip_idx) as AudioStreamPlaylist;
+			var clipName = interactive.GetClipName(clipIdx);
+			var playlist = interactive.GetClipStream(clipIdx) as AudioStreamPlaylist;
 			if (playlist == null)
 				continue;
 
-			var target_track = -1;
-			if (clip_name.ToString() == "Main")
-				target_track = (int)MUSIC.MAIN_THEME;
-			else if (clip_name.ToString() == "War")
-				target_track = (int)MUSIC.BATTLE_THEME;
+			var targetTrack = -1;
+			if (clipName.ToString() == "Main")
+				targetTrack = (int)MUSIC.MAIN_THEME;
+			else if (clipName.ToString() == "War")
+				targetTrack = (int)MUSIC.BATTLE_THEME;
 
-			if (target_track != -1)
+			if (targetTrack != -1)
 			{
 				var songs = new Godot.Collections.Array<AudioStream>();
-				AddSongs(songs, radio_map(music_map, target_track), radios);
+				AddSongs(songs, RadioMap(musicMap, targetTrack), radios);
 
 				if (songs.Count > 0)
 				{
-					var new_playlist = new AudioStreamPlaylist
+					var newPlaylist = new AudioStreamPlaylist
 					{
 						StreamCount = songs.Count,
 						Loop = true,
 						Shuffle = true,
 					};
 					for (var i = 0; i < songs.Count; i++)
-						new_playlist.SetListStream(i, songs[i]);
+						newPlaylist.SetListStream(i, songs[i]);
 
-					interactive.SetClipStream(clip_idx, new_playlist);
-					GD.Print($"MusicManager: Assigned fresh playlist to '{clip_name}' with {songs.Count} songs.");
+					interactive.SetClipStream(clipIdx, newPlaylist);
+					GD.Print($"MusicManager: Assigned fresh playlist to '{clipName}' with {songs.Count} songs.");
 				}
 				else
-					GD.Print($"MusicManager: No songs found for radio group '{target_track}'");
+					GD.Print($"MusicManager: No songs found for radio group '{targetTrack}'");
 			}
 		}
 
 		// Force refresh the playback by re-assigning the stream
-		if (m_player.Stream == interactive || m_player.Stream == _interactive_stream)
+		if (mPlayer.Stream == interactive || mPlayer.Stream == _interactive_stream)
 		{
-			m_player.Stream = null; // Temporarily clear to force rebuild
-			m_player.Stream = interactive;
-			if (current_track_type != -1)
-				play_music(current_track_type);
+			mPlayer.Stream = null; // Temporarily clear to force rebuild
+			mPlayer.Stream = interactive;
+			if (currentTrackType != -1)
+				PlayMusic(currentTrackType);
 			GD.Print("MusicManager: Forced stream refresh for AudioStreamInteractive.");
 		}
 	}
 
-	public void _load_music_folder(string path, string radio, int track_enum)
+	public void _load_music_folder(string path, string radio, int trackEnum)
 	{
 		path += radio;
-		switch (track_enum)
+		switch (trackEnum)
 		{
 			case (int)MUSIC.MAIN_THEME:
 				path += "/gameMusic";
@@ -321,60 +321,60 @@ public partial class MusicManager : Node
 		if (dir == null)
 			return;
 		dir.ListDirBegin();
-		var file_name = dir.GetNext();
-		while (file_name != "")
+		var fileName = dir.GetNext();
+		while (fileName != "")
 		{
-			if (!dir.CurrentIsDir() && !file_name.EndsWith(".import", StringComparison.Ordinal))
+			if (!dir.CurrentIsDir() && !fileName.EndsWith(".import", StringComparison.Ordinal))
 			{
-				var stream = ResourceLoader.Load(path + "/" + file_name) as AudioStream;
+				var stream = ResourceLoader.Load(path + "/" + fileName) as AudioStream;
 				if (stream != null)
-					((Godot.Collections.Dictionary)music_map[track_enum])[radio].AsGodotArray().Add(stream);
+					((Godot.Collections.Dictionary)musicMap[trackEnum])[radio].AsGodotArray().Add(stream);
 			}
-			file_name = dir.GetNext();
+			fileName = dir.GetNext();
 		}
 	}
 
-	public void play_music(int track)
+	public void PlayMusic(int track)
 	{
 		// If a custom track is playing and locked, ignore normal music requests
-		if (locking_custom_track)
+		if (lockingCustomTrack)
 		{
 			if (track == (int)MUSIC.MAIN_THEME || track == (int)MUSIC.BATTLE_THEME)
-				last_track_type = track;
+				lastTrackType = track;
 			return;
 		}
 
-		var radioMap = radio_map(music_map, track);
+		var radioMap = RadioMap(musicMap, track);
 		if (radioMap == null || radioMap.Count == 0)
 			return;
 
-		var m_player = music_player;
-		if (m_player == null)
+		var mPlayer = musicPlayer;
+		if (mPlayer == null)
 			return;
 
-		if (_interactive_stream == null && m_player.Stream is AudioStreamInteractive)
+		if (_interactive_stream == null && mPlayer.Stream is AudioStreamInteractive)
 		{
-			_interactive_stream = m_player.Stream;
-			update_interactive_playlists();
+			_interactive_stream = mPlayer.Stream;
+			UpdateInteractivePlaylists();
 		}
 
 		// Store as last track if it's a valid standard track
 		if (track == (int)MUSIC.MAIN_THEME || track == (int)MUSIC.BATTLE_THEME)
-			last_track_type = track;
+			lastTrackType = track;
 
-		if (current_track_type == track && m_player.Playing)
+		if (currentTrackType == track && mPlayer.Playing)
 			return;
 
-		current_track_type = track;
+		currentTrackType = track;
 
 		if (USE_INTERACTIVE)
 		{
-			m_player.Play();
+			mPlayer.Play();
 			GD.Print("MusicManager: Started m_player playback.");
 
-			EmitSignal(SignalName.TrackChanged, m_player.Stream.ResourcePath.GetFile());
+			EmitSignal(SignalName.TrackChanged, mPlayer.Stream.ResourcePath.GetFile());
 
-			var playback = m_player.GetStreamPlayback() as AudioStreamPlaybackInteractive;
+			var playback = mPlayer.GetStreamPlayback() as AudioStreamPlaybackInteractive;
 			if (playback != null)
 			{
 				if (track == (int)MUSIC.MAIN_THEME)
@@ -394,82 +394,82 @@ public partial class MusicManager : Node
 				var song = songs[GD.RandRange(0, songs.Count - 1)];
 				GD.Print("MusicManager: Manual Fallback - Playing song: ", song.ResourcePath.GetFile());
 				EmitSignal(SignalName.TrackChanged, song.ResourcePath.GetFile());
-				m_player.Stream = song;
-				m_player.Play();
+				mPlayer.Stream = song;
+				mPlayer.Play();
 			}
 			else
 				GD.Print("MusicManager: Manual Fallback - No songs found!");
 		}
 
-		var vol = music_volume_map.ContainsKey(track) ? music_volume_map[track].AsSingle() : 1.0f;
-		vol *= setting_volume("music_volume");
-		m_player.VolumeDb = Mathf.LinearToDb(vol);
-		GD.Print($"MusicManager: Playing track {track} at volume linear: {vol} (db: {m_player.VolumeDb})");
+		var vol = musicVolumeMap.ContainsKey(track) ? musicVolumeMap[track].AsSingle() : 1.0f;
+		vol *= SettingVolume("music_volume");
+		mPlayer.VolumeDb = Mathf.LinearToDb(vol);
+		GD.Print($"MusicManager: Playing track {track} at volume linear: {vol} (db: {mPlayer.VolumeDb})");
 	}
 
-	public void play_custom_file(string full_path)
+	public void PlayCustomFile(string fullPath)
 	{
-		if (!FileAccess.FileExists(full_path) && !ResourceLoader.Exists(full_path))
+		if (!FileAccess.FileExists(fullPath) && !ResourceLoader.Exists(fullPath))
 		{
-			GD.PushWarning("MusicManager: Custom file not found: " + full_path);
+			GD.PushWarning("MusicManager: Custom file not found: " + fullPath);
 			return;
 		}
 
 		// Stop standard shuffle
-		current_track_type = -1;
+		currentTrackType = -1;
 
-		var stream = ResourceLoader.Load(full_path) as AudioStream;
+		var stream = ResourceLoader.Load(fullPath) as AudioStream;
 		if (stream != null)
 		{
-			var m_player = music_player;
-			if (m_player != null)
+			var mPlayer = musicPlayer;
+			if (mPlayer != null)
 			{
-				locking_custom_track = true;
+				lockingCustomTrack = true;
 				if (_interactive_stream == null)
-					_interactive_stream = m_player.Stream;
-				GD.Print($"MusicManager: Playing custom file: {full_path}. Locking interactive music.");
-				m_player.Stream = stream;
-				m_player.VolumeDb = Mathf.LinearToDb(1.0f); // Default volume for events
-				m_player.Play();
+					_interactive_stream = mPlayer.Stream;
+				GD.Print($"MusicManager: Playing custom file: {fullPath}. Locking interactive music.");
+				mPlayer.Stream = stream;
+				mPlayer.VolumeDb = Mathf.LinearToDb(1.0f); // Default volume for events
+				mPlayer.Play();
 			}
 		}
 	}
 
-	public void resume_last_track()
+	public void ResumeLastTrack()
 	{
-		locking_custom_track = false; // Ensure lock is released
-		var m_player = music_player;
-		if (_interactive_stream != null && m_player != null)
-			m_player.Stream = _interactive_stream;
-		if (last_track_type != -1)
-			play_music(last_track_type);
+		lockingCustomTrack = false; // Ensure lock is released
+		var mPlayer = musicPlayer;
+		if (_interactive_stream != null && mPlayer != null)
+			mPlayer.Stream = _interactive_stream;
+		if (lastTrackType != -1)
+			PlayMusic(lastTrackType);
 		else
-			play_music((int)MUSIC.MAIN_THEME);
+			PlayMusic((int)MUSIC.MAIN_THEME);
 	}
 
-	public void skip_track()
+	public void SkipTrack()
 	{
-		if (locking_custom_track)
+		if (lockingCustomTrack)
 		{
-			resume_last_track();
+			ResumeLastTrack();
 			return;
 		}
-		var m_player = music_player;
-		if (m_player != null)
+		var mPlayer = musicPlayer;
+		if (mPlayer != null)
 		{
-			m_player.Stop();
-			if (current_track_type != -1)
-				play_music(current_track_type);
+			mPlayer.Stop();
+			if (currentTrackType != -1)
+				PlayMusic(currentTrackType);
 			else
-				play_music((int)MUSIC.MAIN_THEME);
+				PlayMusic((int)MUSIC.MAIN_THEME);
 		}
 	}
 
 	public void _on_music_finished()
 	{
-		if (locking_custom_track)
+		if (lockingCustomTrack)
 		{
-			resume_last_track();
+			ResumeLastTrack();
 			return;
 		}
 
@@ -477,19 +477,19 @@ public partial class MusicManager : Node
 		{
 			// In manual mode, we need to pick the next song
 			GD.Print("MusicManager: Manual Fallback - Song finished, picking next...");
-			if (current_track_type != -1)
-				play_music(current_track_type);
+			if (currentTrackType != -1)
+				PlayMusic(currentTrackType);
 			else
-				play_music((int)MUSIC.MAIN_THEME);
+				PlayMusic((int)MUSIC.MAIN_THEME);
 		}
 		// In interactive mode, AudioStreamPlaylist handles it natively.
 	}
 
-	public void play_sfx(int sfx)
+	public void PlaySfx(int sfx)
 	{
-		if (!sfx_map.ContainsKey(sfx))
+		if (!sfxMap.ContainsKey(sfx))
 			return;
-		var players = sfx_players;
+		var players = sfxPlayers;
 		if (players.Count == 0)
 			return;
 		AudioStreamPlayer player = null;
@@ -503,37 +503,37 @@ public partial class MusicManager : Node
 		}
 		if (player == null)
 			player = players[0];
-		player.Stream = sfx_map[sfx].AsGodotObject() as AudioStream;
-		player.VolumeDb = Mathf.LinearToDb(1.0f * setting_volume("sfx_volume"));
+		player.Stream = sfxMap[sfx].AsGodotObject() as AudioStream;
+		player.VolumeDb = Mathf.LinearToDb(1.0f * SettingVolume("sfx_volume"));
 		player.Play();
 	}
 
-	public void stop_all_sfx()
+	public void StopAllSfx()
 	{
-		foreach (var p in sfx_players)
+		foreach (var p in sfxPlayers)
 			p.Stop();
 	}
 
-	public void set_music_volume(float volume_linear)
+	public void SetMusicVolume(float volumeLinear)
 	{
-		var player = music_player;
+		var player = musicPlayer;
 		if (player != null)
 		{
-			var baseVolume = music_volume_map.ContainsKey(current_track_type)
-				? music_volume_map[current_track_type].AsSingle()
+			var baseVolume = musicVolumeMap.ContainsKey(currentTrackType)
+				? musicVolumeMap[currentTrackType].AsSingle()
 				: 0.5f;
-			player.VolumeDb = Mathf.LinearToDb(baseVolume * volume_linear);
+			player.VolumeDb = Mathf.LinearToDb(baseVolume * volumeLinear);
 		}
 	}
 
-	public void set_sfx_volume(float _volume_linear)
+	public void SetSfxVolume(float _volume_linear)
 	{
 		// No-op in the original implementation.
 	}
 
 	public void _toggle_pause()
 	{
-		var player = music_player;
+		var player = musicPlayer;
 		if (player != null)
 			player.Playing = !player.Playing;
 	}

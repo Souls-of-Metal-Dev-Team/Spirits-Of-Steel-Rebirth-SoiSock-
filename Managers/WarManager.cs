@@ -36,22 +36,22 @@ public partial class WarManager : Node
 
 	// --- State ---
 	public Dictionary<string, HashSet<string>> wars = new();
-	public List<Battle> active_battles = new();
-	public Dictionary<string, List<int>> original_territories = new();
+	public List<Battle> activeBattles = new();
+	public Dictionary<string, List<int>> originalTerritories = new();
 
-	public void reset_state()
+	public void ResetState()
 	{
 		wars.Clear();
-		foreach (var battle in active_battles)
+		foreach (var battle in activeBattles)
 			battle.cleanup();
-		active_battles.Clear();
-		original_territories.Clear();
+		activeBattles.Clear();
+		originalTerritories.Clear();
 	}
 
-	public Godot.Collections.Array save_wars()
+	public Godot.Collections.Array SaveWars()
 	{
-		var saved_wars = new Godot.Collections.Array();
-		var processed_pairs = new HashSet<string>();
+		var savedWars = new Godot.Collections.Array();
+		var processedPairs = new HashSet<string>();
 
 		foreach (var countryA in wars)
 		{
@@ -63,17 +63,17 @@ public partial class WarManager : Node
 				if (string.CompareOrdinal(first, second) > 0)
 					(first, second) = (second, first);
 
-				if (!processed_pairs.Add($"{first}|{second}"))
+				if (!processedPairs.Add($"{first}|{second}"))
 					continue;
 
-				saved_wars.Add(new Godot.Collections.Array { first, second });
+				savedWars.Add(new Godot.Collections.Array { first, second });
 			}
 		}
 
-		return saved_wars;
+		return savedWars;
 	}
 
-	public void load_wars(Godot.Collections.Array data)
+	public void LoadWars(Godot.Collections.Array data)
 	{
 		// wars.Clear() is already handled by reset_state() in load_game().
 		var countries = CountryManager.Instance.countries;
@@ -86,14 +86,14 @@ public partial class WarManager : Node
 			var countryA = TryCountry(countries, pair[0].AsString());
 			var countryB = TryCountry(countries, pair[1].AsString());
 			if (countryA != null && countryB != null)
-				add_war_silent(countryA, countryB);
+				AddWarSilent(countryA, countryB);
 		}
 	}
 
-	public Godot.Collections.Dictionary save_original_territories()
+	public Godot.Collections.Dictionary SaveOriginalTerritories()
 	{
 		var result = new Godot.Collections.Dictionary();
-		foreach (var pair in original_territories)
+		foreach (var pair in originalTerritories)
 		{
 			var pids = new Godot.Collections.Array();
 			foreach (var pid in pair.Value)
@@ -103,44 +103,44 @@ public partial class WarManager : Node
 		return result;
 	}
 
-	public void load_original_territories(Godot.Collections.Dictionary data)
+	public void LoadOriginalTerritories(Godot.Collections.Dictionary data)
 	{
-		original_territories.Clear();
+		originalTerritories.Clear();
 		foreach (var key in data.Keys)
 		{
 			var pids = new List<int>();
 			foreach (var pid in data[key].AsGodotArray())
 				pids.Add(pid.AsInt32());
-			original_territories[key.AsString()] = pids;
+			originalTerritories[key.AsString()] = pids;
 		}
 	}
 
-	public void check_for_new_battles()
+	public void CheckForNewBattles()
 	{
 		if (!GodotObject.IsInstanceValid(MapManager.Instance) || !GodotObject.IsInstanceValid(TroopManager.Instance))
 			return;
 
-		var troops_by_province = TroopManager.Instance.troops_by_province;
-		foreach (var pair in troops_by_province)
+		var troopsByProvince = TroopManager.Instance.troopsByProvince;
+		foreach (var pair in troopsByProvince)
 		{
-			var province_troops = pair.Value;
-			if (province_troops.Count < 2)
+			var provinceTroops = pair.Value;
+			if (provinceTroops.Count < 2)
 				continue;
 
 			// We need at least two different countries at war in this province.
-			for (var i = 0; i < province_troops.Count; i++)
+			for (var i = 0; i < provinceTroops.Count; i++)
 			{
-				var troopA = province_troops[i];
-				for (var j = i + 1; j < province_troops.Count; j++)
+				var troopA = provinceTroops[i];
+				for (var j = i + 1; j < provinceTroops.Count; j++)
 				{
-					var troopB = province_troops[j];
+					var troopB = provinceTroops[j];
 
-					if (troopA.country_name != troopB.country_name)
+					if (troopA.countryName != troopB.countryName)
 					{
-						if (is_at_war_names(troopA.country_name, troopB.country_name))
+						if (IsAtWarNames(troopA.countryName, troopB.countryName))
 						{
 							// start_battle checks for existing duplicates internally.
-							start_battle(pair.Key, pair.Key); // In same province, use pid for both.
+							StartBattle(pair.Key, pair.Key); // In same province, use pid for both.
 						}
 					}
 				}
@@ -148,101 +148,94 @@ public partial class WarManager : Node
 		}
 	}
 
-	public override void _Process(double delta)
+	// One battle round per game hour. No Timer and no frame delta: peers replay the
+	// same rounds from the same seed.
+	public void OnHourPassed()
 	{
-		if (active_battles.Count == 0)
+		var clock = GameState.Instance.currentWorld?.clock;
+		if (clock != null && clock.paused)
 			return;
 
-		var clock = GameState.Instance.current_world?.clock;
-		var paused = clock == null || clock.Get("paused").AsBool();
-		var time_scale = clock != null ? Mathf.Max(clock.Get("time_scale").AsSingle(), 0.001f) : 1.0f;
-		foreach (var battle in active_battles)
-		{
-			if (!GodotObject.IsInstanceValid(battle.timer_node))
-				continue;
-			battle.timer_node.Paused = paused;
-			var target_wait = BATTLE_TICK / time_scale;
-			if (!Mathf.IsEqualApprox(battle.timer_node.WaitTime, target_wait))
-				battle.timer_node.WaitTime = target_wait;
-		}
+		foreach (var battle in activeBattles.ToArray())
+			battle._resolve_round();
 	}
 
-	public void start_battle(int attacker_pid, int defender_pid)
+	public void StartBattle(int attackerPid, int defenderPid)
 	{
-		var clock = GameState.Instance.current_world?.clock;
+		var clock = GameState.Instance.currentWorld?.clock;
 		if (clock != null && clock.Get("paused").AsBool())
 			return;
 
 		// Prevent duplicate battles.
-		foreach (var battle in active_battles)
+		foreach (var battle in activeBattles)
 		{
-			if (battle.attacker_pid == attacker_pid && battle.defender_pid == defender_pid)
+			if (battle.attackerPid == attackerPid && battle.defenderPid == defenderPid)
 				return;
 		}
 
-		var att_troops = GetTroops(attacker_pid);
-		var def_troops = GetTroops(defender_pid);
-		if (att_troops.Count == 0 || def_troops.Count == 0)
+		var attTroops = GetTroops(attackerPid);
+		var defTroops = GetTroops(defenderPid);
+		if (attTroops.Count == 0 || defTroops.Count == 0)
 			return;
 
-		var attFirst = att_troops[0].AsGodotObject();
-		var defFirst = def_troops[0].AsGodotObject();
+		var attFirst = attTroops[0];
+		var defFirst = defTroops[0];
 		if (attFirst == null || defFirst == null)
 			return;
 
-		active_battles.Add(new Battle(
-			attacker_pid,
-			defender_pid,
-			attFirst.Get("country_name").AsString(),
-			defFirst.Get("country_name").AsString(),
-			get_province_midpoint(attacker_pid, defender_pid),
+		activeBattles.Add(new Battle(
+			attackerPid,
+			defenderPid,
+			attFirst.countryName,
+			defFirst.countryName,
+			GetProvinceMidpoint(attackerPid, defenderPid),
 			this
 		));
 	}
 
-	public void end_battle(Battle battle)
+	public void EndBattle(Battle battle)
 	{
-		if (active_battles.Contains(battle))
+		if (activeBattles.Contains(battle))
 		{
 			battle.cleanup();
-			active_battles.Remove(battle);
+			activeBattles.Remove(battle);
 		}
 	}
 
-	public void apply_casualties(int pid, string country, float damage_amount)
+	public void ApplyCasualties(int pid, string country, float damageAmount)
 	{
-		var troops_list = new Godot.Collections.Array();
+		var troopsList = new List<TroopData>();
 		foreach (var troopVariant in GetTroops(pid))
 		{
-			var troop = troopVariant.AsGodotObject();
-			if (troop != null && troop.Get("country_name").AsString() == country)
-				troops_list.Add(troop);
+			var troop = troopVariant;
+			if (troop != null && troop.countryName == country)
+				troopsList.Add(troop);
 		}
 
-		if (troops_list.Count == 0 || damage_amount <= 0)
+		if (troopsList.Count == 0 || damageAmount <= 0)
 			return;
 
 		var countryTime = CountryManager.Instance.GetCountry(country);
 
 		// Distribute total damage among all army stacks in the province.
-		var damage_per_troop = damage_amount / troops_list.Count;
-		foreach (var troopVariant in troops_list)
+		var damagePerTroop = damageAmount / troopsList.Count;
+		foreach (var troopVariant in troopsList)
 		{
-			if (troopVariant.AsGodotObject() is not TroopData t)
+			if (troopVariant is not TroopData t)
 				continue;
 
 			// Distribute troop damage among all divisions in that stack.
-			var damage_per_div = damage_per_troop / t.stored_divisions.Count;
-			var lost_division = false;
+			var damagePerDiv = damagePerTroop / t.storedDivisions.Count;
+			var lostDivision = false;
 
-			for (var i = t.stored_divisions.Count - 1; i >= 0; i--)
+			for (var i = t.storedDivisions.Count - 1; i >= 0; i--)
 			{
-				var div = t.stored_divisions[i];
+				var div = t.storedDivisions[i];
 
 				// Deduct HP.
 				countryTime.Set("mobilized", countryTime.Get("mobilized").AsInt32() -
-					(int)(Mathf.Min(div.hp, damage_per_div) * div.manpowerPerHP));
-				div.hp -= damage_per_div;
+					(int)(Mathf.Min(div.hp, damagePerDiv) * div.manpowerPerHP));
+				div.hp -= damagePerDiv;
 
 				// Gain Experience based on how much damage they took/dealt.
 				div.experience += 0.005f;
@@ -250,85 +243,85 @@ public partial class WarManager : Node
 				// Remove division if it hits 0 HP.
 				if (div.hp <= 0)
 				{
-					t.stored_divisions.RemoveAt(i);
-					lost_division = true;
+					t.storedDivisions.RemoveAt(i);
+					lostDivision = true;
 				}
 			}
 
 			// If the entire stack is gone, remove the troop icon from the map.
-			if (t.stored_divisions.Count == 0)
+			if (t.storedDivisions.Count == 0)
 				TroopManager.Instance.RemoveTroop(t);
-			else if (lost_division)
+			else if (lostDivision)
 				TroopManager.Instance.EmitSignal("TroopsChanged", country);
 		}
 	}
 
-	public void resolve_province_arrival(int pid, TroopData troop)
+	public void ResolveProvinceArrival(int pid, TroopData troop)
 	{
 		if (troop == null)
 			return;
 
-		var provinces = MapManager.Instance.province_objects;
+		var provinces = MapManager.Instance.provinceObjects;
 		if (!provinces.TryGetValue(pid, out var provinceValue))
 			return;
-		var target_country = FunctionalOwner(provinceValue);
+		var targetCountry = FunctionalOwner(provinceValue);
 
-		if (target_country != troop.country_name && is_at_war_names(troop.country_name, target_country))
+		if (targetCountry != troop.countryName && IsAtWarNames(troop.countryName, targetCountry))
 		{
-			if (TroopManager.Instance.get_province_strength(pid, target_country) <= 0)
+			if (TroopManager.Instance.GetProvinceStrength(pid, targetCountry) <= 0)
 			{
-				if (!is_at_war_names(troop.country_name, target_country))
+				if (!IsAtWarNames(troop.countryName, targetCountry))
 					MapManager.Instance.DeoccupyProvince(pid);
 				else
-					MapManager.Instance.OccupyProvince(pid, troop.country_name);
-				check_country_collapse(target_country, troop.country_name);
+					MapManager.Instance.OccupyProvince(pid, troop.countryName);
+				CheckCountryCollapse(targetCountry, troop.countryName);
 			}
 		}
 	}
 
-	public void call_to_arms(GodotObject caller, GodotObject target)
+	public void CallToArms(GodotObject caller, GodotObject target)
 	{
 		if (IsSame(caller, target))
 			return;
 
 		// DEAD CHECK: Target must have land to fight.
-		var provinces = MapManager.Instance.country_to_provinces;
-		if (!HasProvinces(provinces, target.Get("country_name").AsString()) && !IsTrue(target.Get("is_exiled")))
+		var provinces = MapManager.Instance.countryToProvinces;
+		if (!HasProvinces(provinces, target.Get("countryName").AsString()) && !IsTrue(target.Get("isExiled")))
 			return;
 
-		foreach (var enemyNameVariant in get_enemies_of(caller.Get("country_name").AsString()))
+		foreach (var enemyNameVariant in GetEnemiesOf(caller.Get("countryName").AsString()))
 		{
-			var enemy_data = FindCountry(enemyNameVariant.AsString());
-			if (enemy_data != null)
-				declare_war(target, enemy_data);
+			var enemyData = FindCountry(enemyNameVariant.AsString());
+			if (enemyData != null)
+				DeclareWar(target, enemyData);
 		}
 	}
 
 	// GDScript exposes the optional a_silent parameter; Godot does not pass C# default
 	// values to GDScript callers, so keep both arities as separate registered methods.
-	public void declare_war(GodotObject warer, GodotObject waree)
+	public void DeclareWar(GodotObject warer, GodotObject waree)
 	{
-		declare_war(warer, waree, false);
+		DeclareWar(warer, waree, false);
 	}
 
-	public void declare_war(GodotObject warer, GodotObject waree, bool a_silent)
+	public void DeclareWar(GodotObject warer, GodotObject waree, bool aSilent)
 	{
-		if (IsSame(warer, waree) || is_at_war(warer, waree) ||
-			FactionManager.Instance.in_faction(warer, waree))
+		if (IsSame(warer, waree) || IsAtWar(warer, waree) ||
+			FactionManager.Instance.InFaction(warer, waree))
 			return;
 
-		var provinces = MapManager.Instance.country_to_provinces;
-		if (!HasProvinces(provinces, warer.Get("country_name").AsString()) && !IsTrue(warer.Get("is_exiled")))
+		var provinces = MapManager.Instance.countryToProvinces;
+		if (!HasProvinces(provinces, warer.Get("countryName").AsString()) && !IsTrue(warer.Get("isExiled")))
 			return;
-		if (!HasProvinces(provinces, waree.Get("country_name").AsString()) && !IsTrue(waree.Get("is_exiled")))
-			return;
-
-		if (!add_war_silent(warer, waree) || a_silent)
+		if (!HasProvinces(provinces, waree.Get("countryName").AsString()) && !IsTrue(waree.Get("isExiled")))
 			return;
 
-		var player = CountryManager.Instance.player_country;
-		if (IsTrue(warer.Get("is_player")) || IsTrue(waree.Get("is_player")) ||
-			is_at_war(player, warer) || is_at_war(player, waree))
+		if (!AddWarSilent(warer, waree) || aSilent)
+			return;
+
+		var player = CountryManager.Instance.playerCountry;
+		if (IsTrue(warer.Get("isPlayer")) || IsTrue(waree.Get("isPlayer")) ||
+			IsAtWar(player, warer) || IsAtWar(player, waree))
 		{
 			EmitSignal(SignalName.WarDeclared, warer, waree);
 			// MusicManager.play_music(MUSIC.BATTLE_THEME) -> 1
@@ -337,15 +330,15 @@ public partial class WarManager : Node
 		}
 	}
 
-	public void _snapshot_country_territory(string c_name)
+	public void _snapshot_country_territory(string cName)
 	{
-		if (original_territories.ContainsKey(c_name))
+		if (originalTerritories.ContainsKey(cName))
 			return;
 
-		var provinces = MapManager.Instance.country_to_provinces;
+		var provinces = MapManager.Instance.countryToProvinces;
 		var pids = new Godot.Collections.Array();
 		var snapshot = new List<int>();
-		if (provinces.TryGetValue(c_name, out var value))
+		if (provinces.TryGetValue(cName, out var value))
 		{
 			foreach (var pid in value)
 			{
@@ -353,17 +346,17 @@ public partial class WarManager : Node
 				snapshot.Add(pid);
 			}
 		}
-		original_territories[c_name] = snapshot;
+		originalTerritories[cName] = snapshot;
 
 		// Also store in CountryData if it exists.
-		var country_data = FindCountry(c_name);
-		if (country_data != null && country_data.Get("pre_war_provinces").AsGodotArray().Count == 0)
-			country_data.Set("pre_war_provinces", pids.Duplicate());
+		var countryData = FindCountry(cName);
+		if (countryData != null && countryData.Get("preWarProvinces").AsGodotArray().Count == 0)
+			countryData.Set("preWarProvinces", pids.Duplicate());
 	}
 
-	public bool add_war_silent(GodotObject a, GodotObject b)
+	public bool AddWarSilent(GodotObject a, GodotObject b)
 	{
-		if (IsSame(a, b) || is_at_war(a, b))
+		if (IsSame(a, b) || IsAtWar(a, b))
 			return false;
 
 		var nameA = CountryData.NameOf(a);
@@ -384,26 +377,26 @@ public partial class WarManager : Node
 		return true;
 	}
 
-	public bool is_at_war(GodotObject a, GodotObject b)
+	public bool IsAtWar(GodotObject a, GodotObject b)
 	{
 		if (a == null || b == null)
 			return false;
 		return wars.TryGetValue(CountryData.NameOf(a), out var enemies) && enemies.Contains(CountryData.NameOf(b));
 	}
 
-	public bool is_country_at_war(string country_name)
+	public bool IsCountryAtWar(string countryName)
 	{
-		var country_data = FindCountry(country_name);
-		return country_name != "" && wars.TryGetValue(country_name, out var enemies) && enemies.Count > 0;
+		var countryData = FindCountry(countryName);
+		return countryName != "" && wars.TryGetValue(countryName, out var enemies) && enemies.Count > 0;
 	}
 
-	public bool is_at_war_names(string a_name, string b_name)
+	public bool IsAtWarNames(string aName, string bName)
 	{
-		return wars.TryGetValue(a_name, out var enemies) && enemies.Contains(b_name);
+		return wars.TryGetValue(aName, out var enemies) && enemies.Contains(bName);
 	}
 
 	// API for AI Manager.
-	public Godot.Collections.Array get_countries_at_war()
+	public Godot.Collections.Array GetCountriesAtWar()
 	{
 		var result = new Godot.Collections.Array();
 		foreach (var name in wars.Keys)
@@ -412,110 +405,110 @@ public partial class WarManager : Node
 	}
 
 	// Returns an array of country names that are currently at war with the given country name.
-	public Godot.Collections.Array get_enemies_of(string country_name)
+	public Godot.Collections.Array GetEnemiesOf(string countryName)
 	{
 		var enemies = new Godot.Collections.Array();
-		if (wars.TryGetValue(country_name, out var enemyNames))
+		if (wars.TryGetValue(countryName, out var enemyNames))
 			foreach (var enemyName in enemyNames)
 				enemies.Add(enemyName);
 		return enemies;
 	}
 
-	public Vector2 get_province_midpoint(int pid1, int pid2)
+	public Vector2 GetProvinceMidpoint(int pid1, int pid2)
 	{
-		var centers = MapManager.Instance.province_centers;
+		var centers = MapManager.Instance.provinceCenters;
 		var p1 = centers.TryGetValue(pid1, out var v1) ? v1 : Vector2.Zero;
 		var p2 = centers.TryGetValue(pid2, out var v2) ? v2 : Vector2.Zero;
 		return (p1 + p2) * 0.5f;
 	}
 
-	public void check_country_collapse(string country_name, string victor_name)
+	public void CheckCountryCollapse(string countryName, string victorName)
 	{
-		if (MapManager.Instance.GetCitiesProvinceCountry(country_name).Count == 0)
-			_handle_total_collapse(country_name, victor_name);
+		if (MapManager.Instance.GetCitiesProvinceCountry(countryName).Count == 0)
+			_handle_total_collapse(countryName, victorName);
 	}
 
-	public void _handle_total_collapse(string fallen_name, string victor_name)
+	public void _handle_total_collapse(string fallenName, string victorName)
 	{
-		var loser = FindCountry(fallen_name);
-		var winner = FindCountry(victor_name);
+		var loser = FindCountry(fallenName);
+		var winner = FindCountry(victorName);
 		if (loser == null)
 			return;
 
 		// NOTE Z21: Fixes some bug that makes this function run multiple times.
-		if (!wars.ContainsKey(fallen_name))
+		if (!wars.ContainsKey(fallenName))
 			return;
-		var player = CountryManager.Instance.player_country;
-		var player_won = player != null &&
-			((winner != null && IsTrue(winner.Get("is_player"))) || is_at_war(player, loser));
-		var winners = get_enemies_of(fallen_name);
+		var player = CountryManager.Instance.playerCountry;
+		var playerWon = player != null &&
+			((winner != null && IsTrue(winner.Get("isPlayer"))) || IsAtWar(player, loser));
+		var winners = GetEnemiesOf(fallenName);
 		// Ensure the primary winner is included (might already be if they were at war).
-		if (!winners.Contains(victor_name))
-			winners.Add(victor_name);
+		if (!winners.Contains(victorName))
+			winners.Add(victorName);
 
 		// --- 0. Remove all remaining troops ---
-		foreach (var troopVariant in TroopManager.Instance.get_troops_for_country(fallen_name).Duplicate())
-			TroopManager.Instance.RemoveTroop(troopVariant.As<TroopData>());
+		foreach (var troop in TroopManager.Instance.GetTroopsForCountry(fallenName).ToArray())
+			TroopManager.Instance.RemoveTroop(troop);
 
 		// --- 1. Clean up wars and permissions ---
-		var former_enemies = new Godot.Collections.Array();
-		if (wars.TryGetValue(fallen_name, out var loserEnemies))
+		var formerEnemies = new Godot.Collections.Array();
+		if (wars.TryGetValue(fallenName, out var loserEnemies))
 		{
-			former_enemies = new Godot.Collections.Array();
+			formerEnemies = new Godot.Collections.Array();
 			foreach (var enemyName in loserEnemies)
-				former_enemies.Add(enemyName);
-			wars.Remove(fallen_name);
+				formerEnemies.Add(enemyName);
+			wars.Remove(fallenName);
 			var loserAllowed = loser.Get("allowedCountries").AsGodotArray();
-			if (loserAllowed.Contains(victor_name))
-				loserAllowed.Remove(victor_name);
+			if (loserAllowed.Contains(victorName))
+				loserAllowed.Remove(victorName);
 		}
 
-		FactionManager.Instance.clear_faction(loser);
+		FactionManager.Instance.ClearFaction(loser);
 
 		foreach (var pair in wars)
 		{
-			pair.Value.Remove(fallen_name);
+			pair.Value.Remove(fallenName);
 			var country = FindCountry(pair.Key);
 			if (country == null)
 				continue;
 			var allowed = country.Get("allowedCountries").AsGodotArray();
-			if (allowed.Contains(fallen_name))
-				allowed.Remove(fallen_name);
+			if (allowed.Contains(fallenName))
+				allowed.Remove(fallenName);
 		}
 
-		foreach (var enemy in former_enemies)
+		foreach (var enemy in formerEnemies)
 			EmitSignal(SignalName.PeaceMade, FindCountry(enemy.AsString()), loser);
 
-		if (IsTrue(loser.Get("is_player")) || player_won)
+		if (IsTrue(loser.Get("isPlayer")) || playerWon)
 		{
-			MusicManager.Instance.play_music(MusicMainTheme);
-			MusicManager.Instance.play_sfx(SfxPopup);
+			MusicManager.Instance.PlayMusic(MusicMainTheme);
+			MusicManager.Instance.PlaySfx(SfxPopup);
 
-			EventManager.Instance.show_alert(new Godot.Collections.Dictionary
+			EventManager.Instance.ShowAlert(new Godot.Collections.Dictionary
 			{
 				{ "event", "capitulated" },
 				{ "c1", loser },
 				{ "c2", loser },
 			});
 
-			if (IsTrue(loser.Get("is_player")))
+			if (IsTrue(loser.Get("isPlayer")))
 			{
-				MusicManager.Instance.play_sfx(SfxGameOver);
-				MusicManager.Instance.play_music(MusicMainTheme);
+				MusicManager.Instance.PlaySfx(SfxGameOver);
+				MusicManager.Instance.PlayMusic(MusicMainTheme);
 			}
-			else if (player == null || !is_country_at_war(player.Get("country_name").AsString()))
+			else if (player == null || !IsCountryAtWar(player.Get("countryName").AsString()))
 			{
-				MusicManager.Instance.play_music(MusicMainTheme);
+				MusicManager.Instance.PlayMusic(MusicMainTheme);
 			}
 		}
 
 		// --- 2. Return territory occupied BY the loser to original owners ---
-		var allProvinces = MapManager.Instance.country_to_provinces;
-		var ownedProvinces = MapManager.Instance.country_to_owned_provinces;
-		var fallenProvinces = allProvinces.TryGetValue(fallen_name, out var fp)
+		var allProvinces = MapManager.Instance.countryToProvinces;
+		var ownedProvinces = MapManager.Instance.countryToOwnedProvinces;
+		var fallenProvinces = allProvinces.TryGetValue(fallenName, out var fp)
 			? new List<int>(fp)
 			: new List<int>();
-		var fallenOwned = ownedProvinces.TryGetValue(fallen_name, out var fo)
+		var fallenOwned = ownedProvinces.TryGetValue(fallenName, out var fo)
 			? fo
 			: new List<int>();
 		foreach (var pid in fallenProvinces)
@@ -525,21 +518,21 @@ public partial class WarManager : Node
 		}
 
 		// --- 3. Territory preview (for peace UI only) ---
-		if (player_won)
+		if (playerWon)
 		{
 			foreach (var pid in new List<int>(fallenOwned))
 				MapManager.Instance.DeoccupyProvince(pid);
 
-			var winners_data = new Godot.Collections.Array();
+			var winnersData = new Godot.Collections.Array();
 			foreach (var winnerName in winners)
 			{
-				var w_data = FindCountry(winnerName.AsString());
-				if (w_data != null)
-					winners_data.Add(w_data);
+				var wData = FindCountry(winnerName.AsString());
+				if (wData != null)
+					winnersData.Add(wData);
 			}
 
-			EmitSignal(SignalName.PeaceConferenceRequested, winners_data, loser);
-			original_territories.Remove(fallen_name);
+			EmitSignal(SignalName.PeaceConferenceRequested, winnersData, loser);
+			originalTerritories.Remove(fallenName);
 		}
 		else // --- 5. AI takes everything ---
 		{
@@ -548,21 +541,21 @@ public partial class WarManager : Node
 				var province = ProvinceObject(pid);
 				var occupier = province == null ? "" : province.occupier;
 				if (occupier == "")
-					MapManager.Instance.TransferOwnership(pid, victor_name);
+					MapManager.Instance.TransferOwnership(pid, victorName);
 				else
 					MapManager.Instance.TransferOwnership(pid, occupier);
 			}
 
-			original_territories.Remove(fallen_name);
-			CountryManager.Instance.cleanup_empty_countries();
+			originalTerritories.Remove(fallenName);
+			CountryManager.Instance.CleanupEmptyCountries();
 		}
 	}
 
 	// --- Helpers ---
 
-	private static Godot.Collections.Array GetTroops(int pid)
+	private static List<TroopData> GetTroops(int pid)
 	{
-		return TroopManager.Instance.get_troops_in_province(pid);
+		return TroopManager.Instance.GetTroopsInProvince(pid);
 	}
 
 	private static GodotObject FindCountry(string name)
@@ -578,7 +571,7 @@ public partial class WarManager : Node
 
 	private static Province ProvinceObject(int pid)
 	{
-		var provinces = MapManager.Instance.province_objects;
+		var provinces = MapManager.Instance.provinceObjects;
 		return provinces.TryGetValue(pid, out var value) ? value : null;
 	}
 
@@ -613,264 +606,247 @@ public partial class WarManager : Node
 // MapContainer can keep reading battle fields dynamically. No [GlobalClass].
 public partial class Battle : RefCounted
 {
-	public int attacker_pid;
-	public int defender_pid;
-	public string attacker_country;
-	public string defender_country;
+	public int attackerPid;
+	public int defenderPid;
+	public string attackerCountry;
+	public string defenderCountry;
 
-	public GodotObject attacker_stats;
-	public GodotObject defender_stats;
+	public GodotObject attackerStats;
+	public GodotObject defenderStats;
 
-	public float attack_progress = 0.0f;
-	public float att_morale;
-	public float def_morale;
-	public float initial_def_morale;
+	public float attackProgress = 0.0f;
+	public float attMorale;
+	public float defMorale;
+	public float initialDefMorale;
 
 	// These represent the total combined HP of all divisions in the battle.
-	public float current_def_hp = 0.0f;
-	public float total_starting_hp = 0.0f;
+	public float currentDefHp = 0.0f;
+	public float totalStartingHp = 0.0f;
 
-	public Timer timer_node;
 	public Vector2 position;
 	public WarManager manager;
 
 	public Battle() { }
 
-	public Battle(int atk_pid, int def_pid, string atk_c, string def_c, Vector2 pos, WarManager m)
+	public Battle(int atkPid, int defPid, string atkC, string defC, Vector2 pos, WarManager m)
 	{
-		attacker_pid = atk_pid;
-		defender_pid = def_pid;
-		attacker_country = atk_c;
-		defender_country = def_c;
+		attackerPid = atkPid;
+		defenderPid = defPid;
+		attackerCountry = atkC;
+		defenderCountry = defC;
 		position = pos;
 		manager = m;
 
 		var countries = CountryManager.Instance.countries;
-		attacker_stats = countries.TryGetValue(attacker_country, out var atkValue) ? atkValue.AsGodotObject() : null;
-		defender_stats = countries.TryGetValue(defender_country, out var defValue) ? defValue.AsGodotObject() : null;
+		attackerStats = countries.TryGetValue(attackerCountry, out var atkValue) ? atkValue.AsGodotObject() : null;
+		defenderStats = countries.TryGetValue(defenderCountry, out var defValue) ? defValue.AsGodotObject() : null;
 
 		// Sync morale.
-		att_morale = attacker_stats != null ? attacker_stats.Call("get_max_morale").AsSingle() : 80.0f;
-		initial_def_morale = (defender_stats != null ? defender_stats.Call("get_max_morale").AsSingle() : 80.0f)
+		attMorale = attackerStats != null ? attackerStats.Call("GetMaxMorale").AsSingle() : 80.0f;
+		initialDefMorale = (defenderStats != null ? defenderStats.Call("GetMaxMorale").AsSingle() : 80.0f)
 			+ WarManager.MORALE_BOOST_DEFENDER;
-		def_morale = initial_def_morale;
+		defMorale = initialDefMorale;
 
 		// Set initial HP snapshot.
 		_update_hp_totals();
-		total_starting_hp = current_def_hp;
+		totalStartingHp = currentDefHp;
 
-		timer_node = new Timer
-		{
-			OneShot = false,
-			WaitTime = WarManager.BATTLE_TICK,
-		};
-		timer_node.Timeout += _resolve_round;
-		manager.AddChild(timer_node);
-		timer_node.Start();
 	}
 
 	public void _update_hp_totals()
 	{
 		// This sums up the current HP of every division the defender has in the province.
 		var total = 0.0f;
-		foreach (var troopVariant in GetTroops(defender_pid))
+		foreach (var troopVariant in GetTroops(defenderPid))
 		{
-			if (troopVariant.AsGodotObject() is not TroopData t || t.country_name != defender_country)
+			if (troopVariant is not TroopData t || t.countryName != defenderCountry)
 				continue;
-			foreach (var div in t.stored_divisions)
+			foreach (var div in t.storedDivisions)
 				total += div.hp;
 		}
-		current_def_hp = total;
+		currentDefHp = total;
 	}
 
-	public void cleanup()
-	{
-		if (GodotObject.IsInstanceValid(timer_node))
-		{
-			timer_node.Stop();
-			timer_node.QueueFree();
-			timer_node = null;
-		}
-	}
+	public void cleanup() { }
 
 	public void _resolve_round()
 	{
-		var att_troops = GetTroopsForCountry(attacker_pid, attacker_country);
-		var def_troops = GetTroopsForCountry(defender_pid, defender_country);
-		if (att_troops.Count == 0)
+		var attTroops = GetTroopsForCountry(attackerPid, attackerCountry);
+		var defTroops = GetTroopsForCountry(defenderPid, defenderCountry);
+		if (attTroops.Count == 0)
 		{
-			manager.end_battle(this);
+			manager.EndBattle(this);
 			return;
 		}
 
 		// --- NEW: SUPPLY & MONEY CHECK ---
 		// 1% of recruitment cost as a "per-round" supply cost.
-		var att_supply_cost = 0.0f;
-		foreach (var t in att_troops)
+		var attSupplyCost = 0.0f;
+		foreach (var t in attTroops)
 		{
-			foreach (var div in t.stored_divisions)
+			foreach (var div in t.storedDivisions)
 			{
 				var template = DivisionData.TEMPLATES.ContainsKey(div.type)
 					? DivisionData.TEMPLATES[div.type]
 					: DivisionData.TEMPLATES["infantry"];
-				att_supply_cost += template["cost"].AsSingle() * 0.5f;
+				attSupplyCost += template.Get("cost").Single() * 0.5f;
 			}
 		}
-		if (attacker_stats != null)
-			attacker_stats.Set("money", attacker_stats.Get("money").AsDouble() - att_supply_cost);
+		if (attackerStats != null)
+			attackerStats.Set("money", attackerStats.Get("money").AsDouble() - attSupplyCost);
 
-		var def_supply_cost = 0.0f;
-		foreach (var t in def_troops)
+		var defSupplyCost = 0.0f;
+		foreach (var t in defTroops)
 		{
-			foreach (var div in t.stored_divisions)
+			foreach (var div in t.storedDivisions)
 			{
 				var template = DivisionData.TEMPLATES.ContainsKey(div.type)
 					? DivisionData.TEMPLATES[div.type]
 					: DivisionData.TEMPLATES["infantry"];
-				def_supply_cost += template["cost"].AsSingle() * 0.1f;
+				defSupplyCost += template.Get("cost").Single() * 0.1f;
 			}
 		}
-		if (defender_stats != null)
-			defender_stats.Set("money", defender_stats.Get("money").AsDouble() - def_supply_cost);
+		if (defenderStats != null)
+			defenderStats.Set("money", defenderStats.Get("money").AsDouble() - defSupplyCost);
 
 		// Apply costs and determine penalties.
-		var att_supply_mult = 1.0f;
-		var def_supply_mult = 1.0f;
+		var attSupplyMult = 1.0f;
+		var defSupplyMult = 1.0f;
 
-		if (attacker_stats != null)
+		if (attackerStats != null)
 		{
-			if (attacker_stats.Get("money").AsDouble() >= att_supply_cost)
-				attacker_stats.Set("money", attacker_stats.Get("money").AsDouble() - att_supply_cost);
+			if (attackerStats.Get("money").AsDouble() >= attSupplyCost)
+				attackerStats.Set("money", attackerStats.Get("money").AsDouble() - attSupplyCost);
 			else
 			{
-				att_supply_mult = 0.4f;
-				att_morale -= 2.0f; // Extra morale penalty for hungry troops.
+				attSupplyMult = 0.4f;
+				attMorale -= 2.0f; // Extra morale penalty for hungry troops.
 			}
 		}
 
-		if (defender_stats != null)
+		if (defenderStats != null)
 		{
-			if (defender_stats.Get("money").AsDouble() >= def_supply_cost)
-				defender_stats.Set("money", defender_stats.Get("money").AsDouble() - def_supply_cost);
+			if (defenderStats.Get("money").AsDouble() >= defSupplyCost)
+				defenderStats.Set("money", defenderStats.Get("money").AsDouble() - defSupplyCost);
 			else
 			{
-				def_supply_mult = 0.4f;
-				def_morale -= 2.0f;
+				defSupplyMult = 0.4f;
+				defMorale -= 2.0f;
 			}
 		}
 
 		// --- 1. Calculate Power (now including Supply Penalty) ---
-		var total_atk_power = 0.0f;
-		foreach (var t in att_troops)
+		var totalAtkPower = 0.0f;
+		foreach (var t in attTroops)
 		{
-			foreach (var div in t.stored_divisions)
-				total_atk_power += div.get_attack_power() * (div.hp / div.max_hp);
+			foreach (var div in t.storedDivisions)
+				totalAtkPower += div.GetAttackPower() * (div.hp / div.maxHp);
 		}
-		total_atk_power *= att_supply_mult;
+		totalAtkPower *= attSupplyMult;
 
-		var total_def_power = 0.0f;
-		foreach (var t in def_troops)
+		var totalDefPower = 0.0f;
+		foreach (var t in defTroops)
 		{
-			foreach (var div in t.stored_divisions)
-				total_def_power += div.get_defense_power() * (div.hp / div.max_hp);
+			foreach (var div in t.storedDivisions)
+				totalDefPower += div.GetDefensePower() * (div.hp / div.maxHp);
 		}
-		total_def_power *= def_supply_mult;
+		totalDefPower *= defSupplyMult;
 
 		// --- 2. Modifiers (Morale and Efficiency) ---
-		var final_attack = total_atk_power * (att_morale * 0.01f) *
-			(attacker_stats != null ? attacker_stats.Call("get_attack_efficiency").AsSingle() : 1.0f);
-		var final_defense = total_def_power * (def_morale * 0.01f) *
-			(defender_stats != null ? defender_stats.Call("get_defense_efficiency").AsSingle() : 1.0f);
+		var finalAttack = totalAtkPower * (attMorale * 0.01f) *
+			(attackerStats != null ? attackerStats.Call("GetAttackEfficiency").AsSingle() : 1.0f);
+		var finalDefense = totalDefPower * (defMorale * 0.01f) *
+			(defenderStats != null ? defenderStats.Call("GetDefenseEfficiency").AsSingle() : 1.0f);
 
 		// --- 3. Apply Damage ---
-		manager.apply_casualties(defender_pid, defender_country,
-			final_attack * defender_stats.Get("attacker_attack_mitigation").AsSingle());
-		manager.apply_casualties(attacker_pid, attacker_country,
-			final_defense * attacker_stats.Get("defender_attack_mitigation").AsSingle() * 0.5f);
+		manager.ApplyCasualties(defenderPid, defenderCountry,
+			finalAttack * defenderStats.Get("attackerAttackMitigation").AsSingle());
+		manager.ApplyCasualties(attackerPid, attackerCountry,
+			finalDefense * attackerStats.Get("defenderAttackMitigation").AsSingle() * 0.5f);
 
 		// --- 4. Update Morale Decay ---
-		att_morale -= final_defense * WarManager.MORALE_DECAY_RATE;
-		def_morale -= final_attack * WarManager.MORALE_DECAY_RATE;
+		attMorale -= finalDefense * WarManager.MORALE_DECAY_RATE;
+		defMorale -= finalAttack * WarManager.MORALE_DECAY_RATE;
 
 		// --- 5. Wrap up Round ---
 		_update_hp_totals();
 
-		if (current_def_hp <= 0 || def_morale <= 5.0f)
+		if (currentDefHp <= 0 || defMorale <= 5.0f)
 		{
 			_defender_loses();
 			return;
 		}
 
-		if (att_morale <= 5.0f)
+		if (attMorale <= 5.0f)
 		{
-			manager.end_battle(this);
+			manager.EndBattle(this);
 			return;
 		}
 
 		// Progress Calculation.
-		var hp_ratio = total_starting_hp > 0 ? 1.0f - current_def_hp / total_starting_hp : 1.0f;
-		attack_progress = Mathf.Clamp(Mathf.Max(hp_ratio, 1.0f - def_morale / initial_def_morale), 0.0f, 1.0f);
+		var hpRatio = totalStartingHp > 0 ? 1.0f - currentDefHp / totalStartingHp : 1.0f;
+		attackProgress = Mathf.Clamp(Mathf.Max(hpRatio, 1.0f - defMorale / initialDefMorale), 0.0f, 1.0f);
 	}
 
 	public void _defender_loses()
 	{
-		var retreat_pid = _find_retreat_province(defender_pid, defender_country);
+		var retreatPid = _find_retreat_province(defenderPid, defenderCountry);
 
 		// Duplicate to avoid modification errors during loop.
-		foreach (var troopVariant in GetTroops(defender_pid).Duplicate())
+		foreach (var troopVariant in GetTroops(defenderPid).ToArray())
 		{
-			if (troopVariant.AsGodotObject() is not TroopData t || t.country_name != defender_country)
+			if (troopVariant is not TroopData t || t.countryName != defenderCountry)
 				continue;
 
 			// If nowhere to run or bad luck, unit is destroyed.
-			if (retreat_pid == -1 || GD.Randf() < 0.2f)
+			if (retreatPid == -1 || SimRandom.Shared.NextDouble() < 0.2f)
 			{
 				TroopManager.Instance.RemoveTroop(t);
 			}
 			else
 			{
 				// RETREAT: Lose 20% of strength then move.
-				var iterations = Mathf.CeilToInt(t.stored_divisions.Count * 0.2f);
+				var iterations = Mathf.CeilToInt(t.storedDivisions.Count * 0.2f);
 				for (var i = 0; i < iterations; i++)
 				{
-					if (t.stored_divisions.Count == 0)
+					if (t.storedDivisions.Count == 0)
 						continue;
-					var removing = (int)(GD.Randi() % (uint)t.stored_divisions.Count);
-					var div = t.stored_divisions[i];
-					if (t.country_obj != null)
+					var removing = (int)(SimRandom.Shared.NextUInt() % (uint)t.storedDivisions.Count);
+					var div = t.storedDivisions[i];
+					if (t.countryObj != null)
 					{
-						t.country_obj.Set("mobilized", t.country_obj.Get("mobilized").AsInt32() -
+						((GodotObject)t.countryObj).Set("mobilized", ((GodotObject)t.countryObj).Get("mobilized").AsInt32() -
 							(int)(div.hp * div.manpowerPerHP));
 					}
-					t.stored_divisions.RemoveAt(removing);
+					t.storedDivisions.RemoveAt(removing);
 				}
 
-				if (t.stored_divisions.Count == 0)
+				if (t.storedDivisions.Count == 0)
 					TroopManager.Instance.RemoveTroop(t);
 				else
 				{
-					TroopManager.Instance.EmitSignal("TroopsChanged", t.country_name);
-					TroopManager.Instance.teleport_troop_to_province(t, retreat_pid);
+					TroopManager.Instance.EmitSignal("TroopsChanged", t.countryName);
+					TroopManager.Instance.TeleportTroopToProvince(t, retreatPid);
 				}
 			}
 		}
 
-		MapManager.Instance.OccupyProvince(defender_pid, attacker_country);
-		manager.check_country_collapse(defender_country, attacker_country);
-		manager.end_battle(this);
+		MapManager.Instance.OccupyProvince(defenderPid, attackerCountry);
+		manager.CheckCountryCollapse(defenderCountry, attackerCountry);
+		manager.EndBattle(this);
 	}
 
-	public int _find_retreat_province(int from_pid, string country)
+	public int _find_retreat_province(int fromPid, string country)
 	{
-		var graph = MapManager.Instance.province_graph;
-		if (graph == null || !graph.Call("has_point", (long)from_pid).AsBool())
+		var graph = MapManager.Instance.provinceGraph;
+		if (graph == null || !graph.Call("has_point", (long)fromPid).AsBool())
 			return -1;
 
-		foreach (var neighbor in graph.Call("get_point_connections", (long)from_pid).AsGodotArray())
+		foreach (var neighbor in graph.Call("get_point_connections", (long)fromPid).AsGodotArray())
 		{
 			var n = (int)neighbor.AsInt64();
 			// Retreat logic: must be owned by self and not currently under attack.
-			var provinces = MapManager.Instance.province_objects;
+			var provinces = MapManager.Instance.provinceObjects;
 			if (!provinces.TryGetValue(n, out var provinceValue))
 				continue;
 			if (FunctionalOwner(provinceValue) == country)
@@ -881,12 +857,12 @@ public partial class Battle : RefCounted
 
 	public float _get_divisions(int pid, string country)
 	{
-		return TroopManager.Instance.get_province_strength(pid, country);
+		return TroopManager.Instance.GetProvinceStrength(pid, country);
 	}
 
-	private static Godot.Collections.Array GetTroops(int pid)
+	private static List<TroopData> GetTroops(int pid)
 	{
-		return TroopManager.Instance.get_troops_in_province(pid);
+		return TroopManager.Instance.GetTroopsInProvince(pid);
 	}
 
 	private static List<TroopData> GetTroopsForCountry(int pid, string country)
@@ -894,7 +870,7 @@ public partial class Battle : RefCounted
 		var result = new List<TroopData>();
 		foreach (var troopVariant in GetTroops(pid))
 		{
-			if (troopVariant.AsGodotObject() is TroopData t && t.country_name == country)
+			if (troopVariant is TroopData t && t.countryName == country)
 				result.Add(t);
 		}
 		return result;

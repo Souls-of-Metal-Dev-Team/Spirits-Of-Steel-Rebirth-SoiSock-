@@ -22,25 +22,29 @@ public partial class TroopSelection : Node2D
 
 	// --- State (field names match the GDScript originals) ---
 	public bool dragging = false;
-	public Vector2 drag_start = Vector2.Zero;
-	public Vector2 drag_end = Vector2.Zero;
+	public Vector2 dragStart = Vector2.Zero;
+	public Vector2 dragEnd = Vector2.Zero;
 
-	public bool right_dragging = false;
-	public Godot.Collections.Array right_path = new Godot.Collections.Array();
+	public bool rightDragging = false;
+	public Godot.Collections.Array rightPath = new Godot.Collections.Array();
 
-	public Sprite2D map_sprite;
+	public Sprite2D mapSprite;
 
 	// --- Path Length Limit ---
-	public int max_path_length = 0;
+	public int maxPathLength = 0;
 
-	public Godot.Collections.Array<TroopData> selected_troops = new Godot.Collections.Array<TroopData>();
+	public List<TroopData> selectedTroops = new();
+
+	private string CurrentIssuer() => selectedTroops.Count > 0
+		? selectedTroops[0].countryName
+		: CountryData.NameOf(CountryManager.Instance.playerCountry);
 
 	[Signal]
-	public delegate void SelectionChangedEventHandler(Godot.Collections.Array troops);
+	public delegate void SelectionChangedEventHandler();
 
 	public override void _Ready()
 	{
-		map_sprite = GetNode<Sprite2D>("../../../MapContainer/CultureSprite");
+		mapSprite = GetNode<Sprite2D>("../../../MapContainer/CultureSprite");
 
 		// The generated C# signal name is "SelectionChanged". Keep the old camelCase
 		// GDScript name alive until those call sites are patched centrally.
@@ -59,15 +63,12 @@ public partial class TroopSelection : Node2D
 
 	private void EmitSelectionChanged()
 	{
-		var troops = (Godot.Collections.Array)selected_troops;
-		EmitSignal(SignalName.SelectionChanged, troops);
-		if (HasSignal("selectionChanged"))
-			EmitSignal("selectionChanged", troops);
+		EmitSignal(SignalName.SelectionChanged);
 	}
 
 	public override void _Input(InputEvent @event)
 	{
-		if (map_sprite == null || GameConsole.IsVisible())
+		if (mapSprite == null || GameConsole.IsVisible())
 			return;
 
 		if (@event is InputEventMouseButton mouseButton)
@@ -83,9 +84,9 @@ public partial class TroopSelection : Node2D
 		}
 	}
 
-	public void deselect_all()
+	public void DeselectAll()
 	{
-		selected_troops.Clear();
+		selectedTroops.Clear();
 		EmitSelectionChanged();
 	}
 
@@ -93,12 +94,12 @@ public partial class TroopSelection : Node2D
 	{
 		if (dragging)
 		{
-			drag_end = GetGlobalMousePosition();
-			if (drag_start.DistanceTo(drag_end) >= ClickThreshold)
+			dragEnd = GetGlobalMousePosition();
+			if (dragStart.DistanceTo(dragEnd) >= ClickThreshold)
 				_perform_selection();
 		}
 
-		if (right_dragging && drag_start.DistanceTo(GetGlobalMousePosition()) >= ClickThreshold)
+		if (rightDragging && dragStart.DistanceTo(GetGlobalMousePosition()) >= ClickThreshold)
 			_sample_province_under_mouse();
 	}
 
@@ -112,16 +113,16 @@ public partial class TroopSelection : Node2D
 		if (@event.Pressed)
 		{
 			dragging = true;
-			drag_start = GetGlobalMousePosition();
-			drag_end = drag_start;
+			dragStart = GetGlobalMousePosition();
+			dragEnd = dragStart;
 		}
 		else if (dragging)
 		{
-			drag_end = GetGlobalMousePosition();
+			dragEnd = GetGlobalMousePosition();
 			dragging = false;
 
-			if (selected_troops.Count > 0)
-				MusicManager.Instance.play_sfx(SfxTroopSelected);
+			if (selectedTroops.Count > 0)
+				MusicManager.Instance.PlaySfx(SfxTroopSelected);
 			// Empty selection (clicked empty ground) hides the container.
 			EmitSelectionChanged();
 		}
@@ -129,71 +130,71 @@ public partial class TroopSelection : Node2D
 
 	private void _handle_right_mouse(InputEventMouseButton @event)
 	{
-		if (@event.Pressed && selected_troops.Count > 0)
+		if (@event.Pressed && selectedTroops.Count > 0)
 		{
-			right_dragging = true;
-			drag_start = GetGlobalMousePosition();
-			right_path.Clear();
+			rightDragging = true;
+			dragStart = GetGlobalMousePosition();
+			rightPath.Clear();
 			_sample_province_under_mouse();
 		}
-		else if (right_dragging)
+		else if (rightDragging)
 		{
 			_perform_path_assignment();
-			right_path.Clear();
-			right_dragging = false;
+			rightPath.Clear();
+			rightDragging = false;
 		}
 	}
 
 	private void _perform_selection()
 	{
-		if (map_sprite == null)
+		if (mapSprite == null)
 			return;
 
-		var worldRect = new Rect2(drag_start, drag_end - drag_start).Abs();
-		var textureWidth = map_sprite.Texture.GetWidth();
+		var worldRect = new Rect2(dragStart, dragEnd - dragStart).Abs();
+		var textureWidth = mapSprite.Texture.GetWidth();
 		var cam = GetViewport().GetCamera2D();
 		var invZoom = cam != null ? 1.0f / cam.Zoom.X : 1.0f;
 
-		var selectedList = new Godot.Collections.Array<TroopData>();
+		var selectedList = new List<TroopData>();
 		var flagSize = new Vector2(FlagWidthBase, FlagHeightBase) * invZoom;
 		var pad = PaddingBase * invZoom * 2f;
 		var baseBoxSize = new Vector2(flagSize.X + (GapBase * invZoom) + pad, pad);
 
-		var playerCountry = CountryManager.Instance.player_country;
+		var playerCountry = CountryManager.Instance.playerCountry;
 		var playerCountryName = playerCountry == null ? "" : CountryData.NameOf(playerCountry);
 		var fontSize = MapContainerFontSize();
 
 		foreach (var troopValue in TroopManager.Instance.troops)
 		{
-			var t = troopValue.AsGodotObject() as TroopData;
-			if (t == null || t.country_name != playerCountryName)
+			var t = troopValue;
+			if (t == null || t.countryName != playerCountryName)
 				continue;
 
 			var textSize = font.GetStringSize(
-				t.divisions_count.ToString(CultureInfo.InvariantCulture),
+				t.divisionsCount.ToString(CultureInfo.InvariantCulture),
 				HorizontalAlignment.Center, -1f, fontSize) * invZoom;
 
 			var boxSize = baseBoxSize + new Vector2(textSize.X, Mathf.Max(flagSize.Y, textSize.Y));
 			if (_check_rect_intersection(worldRect,
-				new Rect2(t.position + map_sprite.Position - boxSize * 0.5f, boxSize),
+				new Rect2(t.position.ToGodot() + mapSprite.Position - boxSize * 0.5f, boxSize),
 				t.position.X, textureWidth))
 				selectedList.Add(t);
 		}
 
 		// Apply selection.
 		if (!Input.IsKeyPressed(Key.Shift))
-			selected_troops.Clear();
+			selectedTroops.Clear();
 
 		foreach (var t in selectedList)
 		{
-			if (!selected_troops.Contains(t))
-				selected_troops.Add(t);
+			if (!selectedTroops.Contains(t))
+				selectedTroops.Add(t);
 		}
 
 		// Update max_path_length based on current live selection.
-		max_path_length = 0;
+		maxPathLength = 0;
 		foreach (var troop in selectedList)
-			max_path_length += troop.divisions_count;
+			maxPathLength += troop.divisionsCount;
 	}
 
 	private static int MapContainerFontSize()
@@ -230,60 +231,60 @@ public partial class TroopSelection : Node2D
 
 	private void _sample_province_under_mouse()
 	{
-		if (map_sprite == null)
+		if (mapSprite == null)
 			return;
 
 		// Stop sampling if we've reached max provinces.
-		if (right_path.Count >= max_path_length)
+		if (rightPath.Count >= maxPathLength)
 			return;
 
-		var pid = MapManager.Instance.GetProvinceAtPos(GetGlobalMousePosition(), map_sprite);
+		var pid = MapManager.Instance.GetProvinceAtPos(GetGlobalMousePosition(), mapSprite);
 
 		// Check for military access.
-		var provinceObjects = MapManager.Instance.province_objects;
+		var provinceObjects = MapManager.Instance.provinceObjects;
 		if (!provinceObjects.TryGetValue(pid, out var prov))
 			return;
-		var player = CountryManager.Instance.player_country;
+		var player = CountryManager.Instance.playerCountry;
 		if (prov == null || player == null)
 			return;
-		var allowed = player.Call("get_all_allowed_countries").AsGodotArray();
+		var allowed = player.Call("GetAllAllowedCountries").AsGodotArray();
 		if (!allowed.Contains(prov.GetFunctionalOwner()))
 			return;
 
 		// Don't add duplicate consecutive provinces.
-		if (right_path.Count > 0 && right_path[right_path.Count - 1].AsGodotDictionary()["pid"].AsInt32() == pid)
+		if (rightPath.Count > 0 && rightPath[rightPath.Count - 1].AsGodotDictionary()["pid"].AsInt32() == pid)
 			return;
 
 		// Force the next province to be a neighbor of the previous one (no "jumping").
-		if (right_path.Count > 0)
+		if (rightPath.Count > 0)
 		{
-			var lastPid = right_path[right_path.Count - 1].AsGodotDictionary()["pid"].AsInt32();
-			var graph = MapManager.Instance.province_graph;
+			var lastPid = rightPath[rightPath.Count - 1].AsGodotDictionary()["pid"].AsInt32();
+			var graph = MapManager.Instance.provinceGraph;
 			if (graph == null || !graph.ArePointsConnected(lastPid, pid))
 				return;
 		}
 
-		var centers = MapManager.Instance.province_centers;
+		var centers = MapManager.Instance.provinceCenters;
 		if (!centers.TryGetValue(pid, out var centerTex) || centerTex == Vector2.Zero)
 			return;
 
-		right_path.Add(new Godot.Collections.Dictionary
+		rightPath.Add(new Godot.Collections.Dictionary
 		{
 			{ "pid", pid },
 			{ "map_pos", centerTex },
 			{ "texture_pos", centerTex },
 		});
 
-		GD.Print($"Sampled province {pid}. Path length: {right_path.Count}/{max_path_length}");
+		GD.Print($"Sampled province {pid}. Path length: {rightPath.Count}/{maxPathLength}");
 	}
 
 	private void _perform_path_assignment()
 	{
-		if (right_path.Count == 0 || selected_troops.Count == 0)
+		if (rightPath.Count == 0 || selectedTroops.Count == 0)
 			return;
 
 		var pathPids = new Godot.Collections.Array();
-		foreach (var entryValue in right_path)
+		foreach (var entryValue in rightPath)
 		{
 			var entry = entryValue.AsGodotDictionary();
 			var pid = entry["pid"].AsInt32();
@@ -295,12 +296,12 @@ public partial class TroopSelection : Node2D
 			return;
 
 		// 1. Cast the moving pool correctly.
-		var gameUi = GameState.Instance.game_ui;
+		var gameUi = GameState.Instance.gameUi;
 		var uiSelected = gameUi != null && GodotObject.IsInstanceValid(gameUi)
-			? gameUi.selected_division_objects
-			: new Godot.Collections.Array<DivisionData>();
+			? gameUi.selectedDivisionObjects
+			: new List<DivisionData>();
 
-		var movingPool = new Godot.Collections.Array<DivisionData>();
+		var movingPool = new List<DivisionData>();
 		if (uiSelected.Count > 0)
 		{
 			foreach (var div in uiSelected)
@@ -308,40 +309,40 @@ public partial class TroopSelection : Node2D
 		}
 		else
 		{
-			foreach (var t in selected_troops)
+			foreach (var t in selectedTroops)
 			{
-				foreach (var div in t.stored_divisions)
+				foreach (var div in t.storedDivisions)
 					movingPool.Add(div);
 			}
 		}
 
 		// 2. Ensure the Dictionary values are typed arrays.
-		var poolByOrigin = new Dictionary<int, Godot.Collections.Array<DivisionData>>();
+		var poolByOrigin = new Dictionary<int, List<DivisionData>>();
 		foreach (var div in movingPool)
 		{
-			var owningPolity = TroopManager.Instance.find_troop_owning_division(div) as TroopData;
+			var owningPolity = TroopManager.Instance.FindTroopOwningDivision(div) as TroopData;
 			if (owningPolity == null)
 				continue;
 
-			var originId = owningPolity.province_id;
+			var originId = owningPolity.provinceId;
 			if (!poolByOrigin.TryGetValue(originId, out var originBatch))
 			{
-				originBatch = new Godot.Collections.Array<DivisionData>();
+				originBatch = new List<DivisionData>();
 				poolByOrigin[originId] = originBatch;
 			}
 			originBatch.Add(div);
 		}
 
-		var allAssignments = new Godot.Collections.Array();
+		var allAssignments = new List<Dictionary<string, object?>>();
 		foreach (var pair in poolByOrigin)
 		{
 			var originId = pair.Key;
 			var originBatch = pair.Value;
 
 			TroopData template = null;
-			foreach (var t in selected_troops)
+			foreach (var t in selectedTroops)
 			{
-				if (t.province_id == originId)
+				if (t.provinceId == originId)
 				{
 					template = t;
 					break;
@@ -350,9 +351,9 @@ public partial class TroopSelection : Node2D
 
 			if (template == null)
 			{
-				var troopsAtOrigin = TroopManager.Instance.get_troops_in_province(originId);
+				var troopsAtOrigin = TroopManager.Instance.GetTroopsInProvince(originId);
 				if (troopsAtOrigin.Count > 0)
-					template = troopsAtOrigin[0].AsGodotObject() as TroopData;
+					template = troopsAtOrigin[0];
 				if (template == null)
 					continue;
 			}
@@ -365,7 +366,7 @@ public partial class TroopSelection : Node2D
 
 			for (var provinceIdx = 0; provinceIdx < pathPids.Count; provinceIdx++)
 			{
-				var finalDivs = new Godot.Collections.Array<DivisionData>();
+				var finalDivs = new List<DivisionData>();
 				var batchCount = divsPerTarget + (provinceIdx < remainder ? 1 : 0);
 				for (var i = 0; i < batchCount; i++)
 				{
@@ -381,21 +382,28 @@ public partial class TroopSelection : Node2D
 				if (finalDivs.Count == 0)
 					continue;
 
-				var newTroop = TroopManager.Instance._create_new_split_troop(
-					template, (Godot.Collections.Array)finalDivs) as TroopData;
-				allAssignments.Add(new Godot.Collections.Dictionary
+				var dispatcher = ActionDispatcher.Instance;
+				dispatcher.Submit(new SplitTroopAction
+				{
+					Issuer = CurrentIssuer(), Original = template, Divisions = finalDivs,
+				});
+				var newTroop = dispatcher.LastResult as TroopData;
+				allAssignments.Add(new Dictionary<string, object?>
 				{
 					{ "troop", newTroop },
-					{ "province_id", pathPids[provinceIdx] },
+					{ "province_id", (double)pathPids[provinceIdx] },
 				});
 			}
 		}
 
-		TroopManager.Instance.command_move_assigned(allAssignments);
+		ActionDispatcher.Instance.Submit(new MoveTroopsAction
+		{
+			Issuer = CurrentIssuer(), Assignments = allAssignments,
+		});
 		_cleanup_empty_troops();
 
-		selected_troops.Clear();
-		right_path.Clear();
+		selectedTroops.Clear();
+		rightPath.Clear();
 		EmitSelectionChanged();
 	}
 
@@ -404,11 +412,11 @@ public partial class TroopSelection : Node2D
 	private void _remove_division_from_current_owner(DivisionData div)
 	{
 		// Search all our selected troops and remove the div from their stored_divisions.
-		foreach (var t in selected_troops)
+		foreach (var t in selectedTroops)
 		{
-			if (t.stored_divisions.Contains(div))
+			if (t.storedDivisions.Contains(div))
 			{
-				t.stored_divisions.Remove(div);
+				t.storedDivisions.Remove(div);
 				return;
 			}
 		}
@@ -417,43 +425,43 @@ public partial class TroopSelection : Node2D
 	private void _cleanup_empty_troops()
 	{
 		// If a troop gave away all its divisions, delete it from the world.
-		foreach (var t in selected_troops)
+		foreach (var t in selectedTroops)
 		{
-			if (t.stored_divisions.Count == 0)
-				TroopManager.Instance.RemoveTroop(t);
+			if (t.storedDivisions.Count == 0)
+				ActionDispatcher.Instance.Submit(new RemoveTroopAction { Issuer = CurrentIssuer(), Troop = t });
 		}
 	}
 
 	// --- Helpers to keep logic clean ---
 
-	private TroopData _find_template_troop_for_divs(Godot.Collections.Array<DivisionData> batch)
+	private TroopData _find_template_troop_for_divs(List<DivisionData> batch)
 	{
 		// Find which troop currently owns the first division in this batch
 		// to use as a template (country name, flag, etc).
-		foreach (var t in selected_troops)
+		foreach (var t in selectedTroops)
 		{
-			if (batch.Count > 0 && t.stored_divisions.Contains(batch[0]))
+			if (batch.Count > 0 && t.storedDivisions.Contains(batch[0]))
 				return t;
 		}
-		return selected_troops[0];
+		return selectedTroops[0];
 	}
 
 	// --- MODE A: Move only the units clicked in the UI ---
-	private void _handle_selective_ui_move(Godot.Collections.Array divObjects, Godot.Collections.Array path)
+	private void _handle_selective_ui_move(List<DivisionData> divObjects, List<object?> path)
 	{
 		// Group the divisions by their current "parent" troop so we can split them.
-		var splitMap = new Dictionary<TroopData, Godot.Collections.Array<DivisionData>>();
+		var splitMap = new Dictionary<TroopData, List<DivisionData>>();
 		foreach (var divValue in divObjects)
 		{
-			if (divValue.AsGodotObject() is not DivisionData div)
+			if (divValue is not DivisionData div)
 				continue;
-			var owningPolity = TroopManager.Instance.find_troop_owning_division(div) as TroopData;
+			var owningPolity = TroopManager.Instance.FindTroopOwningDivision(div) as TroopData;
 			if (owningPolity == null)
 				continue;
 
 			if (!splitMap.TryGetValue(owningPolity, out var divsToMove))
 			{
-				divsToMove = new Godot.Collections.Array<DivisionData>();
+				divsToMove = new List<DivisionData>();
 				splitMap[owningPolity] = divsToMove;
 			}
 			divsToMove.Add(div);
@@ -466,33 +474,37 @@ public partial class TroopSelection : Node2D
 
 			// Remove these objects from the original stack.
 			foreach (var d in divsToMove)
-				originalTroop.stored_divisions.Remove(d);
+				originalTroop.storedDivisions.Remove(d);
 
 			// Create the new troop instance for the split-off units.
-			var newTroop = TroopManager.Instance._create_new_split_troop(
-				originalTroop, (Godot.Collections.Array)divsToMove) as TroopData;
+			var dispatcher = ActionDispatcher.Instance;
+			dispatcher.Submit(new SplitTroopAction
+			{
+				Issuer = CurrentIssuer(), Original = originalTroop, Divisions = divsToMove,
+			});
+			var newTroop = dispatcher.LastResult as TroopData;
 			if (newTroop == null)
 				continue;
-			newTroop.path = path.Duplicate();
+			newTroop.path = new List<object?>(path);
 			TroopManager.Instance._start_next_leg(newTroop);
 
 			// If the original troop is now empty, delete it from the map.
-			if (originalTroop.stored_divisions.Count == 0)
-				TroopManager.Instance.RemoveTroop(originalTroop);
+			if (originalTroop.storedDivisions.Count == 0)
+				ActionDispatcher.Instance.Submit(new RemoveTroopAction { Issuer = CurrentIssuer(), Troop = originalTroop });
 		}
 	}
 
 	// --- MODE B: Spread the whole selected army across the path ---
-	private void _handle_frontline_spread(Godot.Collections.Array path)
+	private void _handle_frontline_spread(List<object?> path)
 	{
 		// Collect ALL division objects from all selected troops.
-		var allDivs = new Godot.Collections.Array<DivisionData>();
-		foreach (var t in selected_troops)
+		var allDivs = new List<DivisionData>();
+		foreach (var t in selectedTroops)
 		{
-			foreach (var div in t.stored_divisions)
+			foreach (var div in t.storedDivisions)
 				allDivs.Add(div);
 			// We will effectively "re-distribute" all these, so clear the originals.
-			t.stored_divisions.Clear();
+			t.storedDivisions.Clear();
 		}
 
 		var divsPerProv = Mathf.Max(1, allDivs.Count / path.Count);
@@ -501,7 +513,7 @@ public partial class TroopSelection : Node2D
 		var divIndex = 0;
 		for (var i = 0; i < path.Count; i++)
 		{
-			var batch = new Godot.Collections.Array<DivisionData>();
+			var batch = new List<DivisionData>();
 			var batchCount = divsPerProv + (i < remainder ? 1 : 0);
 			for (var j = 0; j < batchCount; j++)
 			{
@@ -514,26 +526,30 @@ public partial class TroopSelection : Node2D
 			if (batch.Count == 0)
 				continue;
 
-			var newTroop = TroopManager.Instance._create_new_split_troop(
-				selected_troops[0], (Godot.Collections.Array)batch) as TroopData;
+			var dispatcher = ActionDispatcher.Instance;
+			dispatcher.Submit(new SplitTroopAction
+			{
+				Issuer = CurrentIssuer(), Original = selectedTroops[0], Divisions = batch,
+			});
+			var newTroop = dispatcher.LastResult as TroopData;
 			if (newTroop == null)
 				continue;
-			newTroop.path = path.Slice(0, i + 1);
+			newTroop.path = path.GetRange(0, i + 1);
 			TroopManager.Instance._start_next_leg(newTroop);
 		}
 
 		// Clean up the now-empty original troops.
-		foreach (var t in selected_troops)
+		foreach (var t in selectedTroops)
 		{
-			if (t.stored_divisions.Count == 0)
-				TroopManager.Instance.RemoveTroop(t);
+			if (t.storedDivisions.Count == 0)
+				ActionDispatcher.Instance.Submit(new RemoveTroopAction { Issuer = CurrentIssuer(), Troop = t });
 		}
 	}
 
 	private void _print_troop_details(TroopData troop)
 	{
-		GD.Print($"--- Selected Troop (Prov: {troop.province_id}) ---");
-		foreach (var div in troop.stored_divisions)
+		GD.Print($"--- Selected Troop (Prov: {troop.provinceId}) ---");
+		foreach (var div in troop.storedDivisions)
 		{
 			var expLevel = "Green";
 			if (div.experience > 0.7f)

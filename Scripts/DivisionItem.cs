@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 using Sosr;
 
@@ -7,20 +8,21 @@ namespace Sosr;
 public partial class DivisionItem : Control
 {
 	[Signal]
-	public delegate void ClickedEventHandler(GodotObject cardNode, Variant data);
+	public delegate void ClickedEventHandler(GodotObject cardNode);
 
 	[Export] public Button disband;
 
-	private TextureRect texture_rect;
-	private Label label_division;
-	private Label label_attack;
-	private Label label_defense;
-	private Label label_experience;
-	private ProgressBar progress_bar;
+	private TextureRect textureRect;
+	private Label labelDivision;
+	private Label labelAttack;
+	private Label labelDefense;
+	private Label labelExperience;
+	private ProgressBar progressBar;
 
 	// Can be DivisionData OR Array[DivisionData].
-	public Variant data_payload;
-	public bool is_selected = false;
+	public object? dataPayload;
+	public List<DivisionData>? groupDivisions;
+	public bool isSelected = false;
 
 	private static readonly Color ColorNormal = new Color(0.6f, 0.6f, 0.6f, 0.9f);
 	private static readonly Color ColorSelected = new Color(0.2f, 0.6f, 0.9f, 1.0f);
@@ -28,12 +30,12 @@ public partial class DivisionItem : Control
 
 	public override void _Ready()
 	{
-		texture_rect = GetNode<TextureRect>("VBoxContainer/HBoxContainer2/TextureRect");
-		label_division = GetNode<Label>("VBoxContainer/HBoxContainer2/label_division");
-		label_attack = GetNode<Label>("VBoxContainer/HBoxContainer2/label_attack");
-		label_defense = GetNode<Label>("VBoxContainer/HBoxContainer/label_defense");
-		label_experience = GetNode<Label>("VBoxContainer/HBoxContainer/label_experience");
-		progress_bar = GetNode<ProgressBar>("VBoxContainer/HBoxContainer/ProgressBar");
+		textureRect = GetNode<TextureRect>("VBoxContainer/HBoxContainer2/TextureRect");
+		labelDivision = GetNode<Label>("VBoxContainer/HBoxContainer2/label_division");
+		labelAttack = GetNode<Label>("VBoxContainer/HBoxContainer2/label_attack");
+		labelDefense = GetNode<Label>("VBoxContainer/HBoxContainer/label_defense");
+		labelExperience = GetNode<Label>("VBoxContainer/HBoxContainer/label_experience");
+		progressBar = GetNode<ProgressBar>("VBoxContainer/HBoxContainer/ProgressBar");
 
 		// Generated C# signal name is "Clicked"; keep the GDScript name for existing call sites.
 		if (!HasSignal("clicked"))
@@ -63,28 +65,30 @@ public partial class DivisionItem : Control
 
 	private void EmitClicked()
 	{
-		EmitSignal(SignalName.Clicked, this, data_payload);
-		if (HasSignal("clicked"))
-			EmitSignal("clicked", this, data_payload);
+		EmitSignal(SignalName.Clicked, this);
 	}
 
 	// Setup for the new Grouped View.
-	public void setup_grouped(TroopData aTroop, string type, Godot.Collections.Array divisions, bool currentlySelected)
+	public void SetupGrouped(TroopData aTroop, string type, List<DivisionData> divisions, bool currentlySelected)
 	{
-		data_payload = divisions;
-		is_selected = currentlySelected;
+		dataPayload = divisions;
+		groupDivisions = divisions;
+		isSelected = currentlySelected;
 
 		if (disband != null)
 		{
 			disband.Pressed += () =>
 			{
-				TroopManager.Instance.RemoveTroop(aTroop);
+				ActionDispatcher.Instance.Submit(new RemoveTroopAction
+				{
+					Issuer = aTroop.countryName, Troop = aTroop,
+				});
 				QueueFree();
 			};
 		}
 
 		var count = divisions.Count;
-		label_division.Text = $"{count}x {type.Capitalize()}";
+		labelDivision.Text = $"{count}x {type.Capitalize()}";
 
 		// Calculate Group Averages.
 		var totalAtk = 0.0f;
@@ -94,40 +98,40 @@ public partial class DivisionItem : Control
 
 		foreach (var divisionValue in divisions)
 		{
-			if (divisionValue.AsGodotObject() is not DivisionData d)
+			if (divisionValue is not DivisionData d)
 				continue;
-			totalAtk += d.get_attack_power();
-			totalDef += d.get_defense_power();
+			totalAtk += d.GetAttackPower();
+			totalDef += d.GetDefensePower();
 			totalHp += d.hp;
 			totalExp += d.experience;
 		}
 
-		label_attack.Text = ((int)(totalAtk / count)).ToString();
-		label_defense.Text = ((int)(totalDef / count)).ToString();
-		label_experience.Text = $"{((int)((totalExp / count) * 100))}%";
-		progress_bar.Value = totalHp / count;
+		labelAttack.Text = ((int)(totalAtk / count)).ToString();
+		labelDefense.Text = ((int)(totalDef / count)).ToString();
+		labelExperience.Text = $"{((int)((totalExp / count) * 100))}%";
+		progressBar.Value = totalHp / count;
 
 		var iconPath = $"res://assets/icons/hoi4/{type.ToLowerInvariant()}.png";
 		if (ResourceLoader.Exists(iconPath))
-			texture_rect.Texture = GD.Load<Texture2D>(iconPath);
+			textureRect.Texture = GD.Load<Texture2D>(iconPath);
 
-		update_visuals();
+		UpdateVisuals();
 	}
 
-	public void update_visuals()
+	public void UpdateVisuals()
 	{
-		Modulate = is_selected ? ColorSelected : ColorNormal;
+		Modulate = isSelected ? ColorSelected : ColorNormal;
 	}
 
 	public void _on_mouse_entered()
 	{
-		if (!is_selected)
+		if (!isSelected)
 			Modulate = ColorHover;
 	}
 
 	public void _on_mouse_exited()
 	{
-		update_visuals();
+		UpdateVisuals();
 	}
 
 	public void _on_gui_input(InputEvent @event)

@@ -9,37 +9,37 @@ public partial class InputDivision : SpinBox
 		GetLineEdit().TextChanged += _on_line_edit_text_changed;
 	}
 
-	private void _on_line_edit_text_changed(string new_text)
+	private void _on_line_edit_text_changed(string newText)
 	{
 		var filtered = "";
-		var is_first_char = true;
-		var has_decimal = false;
+		var isFirstChar = true;
+		var hasDecimal = false;
 		// The GDScript original tested `"float" in str(step)`, which never matched.
-		var allow_decimal = false;
+		var allowDecimal = false;
 
-		foreach (var c in new_text)
+		foreach (var c in newText)
 		{
 			if (char.IsDigit(c))
 			{
 				filtered += c;
 			}
-			else if (is_first_char && c == '-')
+			else if (isFirstChar && c == '-')
 			{
 				filtered += c;
 			}
-			else if (c == '.' && !has_decimal && allow_decimal)
+			else if (c == '.' && !hasDecimal && allowDecimal)
 			{
 				filtered += c;
-				has_decimal = true;
+				hasDecimal = true;
 			}
-			is_first_char = false;
+			isFirstChar = false;
 		}
 
-		if (filtered != new_text)
+		if (filtered != newText)
 		{
-			var line_edit = GetLineEdit();
-			line_edit.Text = filtered;
-			line_edit.CaretColumn = filtered.Length;
+			var lineEdit = GetLineEdit();
+			lineEdit.Text = filtered;
+			lineEdit.CaretColumn = filtered.Length;
 		}
 
 		if (filtered != "" && filtered != "-")

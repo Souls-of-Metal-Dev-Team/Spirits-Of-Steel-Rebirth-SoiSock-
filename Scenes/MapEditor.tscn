@@ -50,16 +50,16 @@ content_margin_bottom = 0.0
 bg_color = Color(0.1, 0.1, 0.1, 0.6)
 corner_detail = 5
 
-[node name="MapEditor" type="CanvasLayer" unique_id=189757573 node_paths=PackedStringArray("leftSidebar", "status_label", "provinceName", "input_country", "inputOccupier", "input_city", "input_gdp", "input_claims", "provincePopulationList", "provincePopulationTemplate", "provinceResourcesList", "provinceResourcesTemplate", "factionsItemList", "factionName", "factionColor", "factionMemberList", "factionMemberTemplate", "politiesItemList", "polityPuppet", "polityOwner", "polityInExile", "polityHost", "polityName", "polityColor", "polityMoney", "polityPoliticalPower", "polityWarSupport", "polityStability", "polityPuppetList", "polityPuppetTemplate", "polityFactionList", "polityFactionTemplate", "biomesItemList", "biomeName", "biomeColor", "resourcesItemList", "resourceName", "resourceColor", "resourceIcon", "resourceIconTexture")]
+[node name="MapEditor" type="CanvasLayer" unique_id=189757573 node_paths=PackedStringArray("leftSidebar", "statusLabel", "provinceName", "inputCountry", "inputOccupier", "inputCity", "inputGdp", "inputClaims", "provincePopulationList", "provincePopulationTemplate", "provinceResourcesList", "provinceResourcesTemplate", "factionsItemList", "factionName", "factionColor", "factionMemberList", "factionMemberTemplate", "politiesItemList", "polityPuppet", "polityOwner", "polityInExile", "polityHost", "polityName", "polityColor", "polityMoney", "polityPoliticalPower", "polityWarSupport", "polityStability", "polityPuppetList", "polityPuppetTemplate", "polityFactionList", "polityFactionTemplate", "biomesItemList", "biomeName", "biomeColor", "resourcesItemList", "resourceName", "resourceColor", "resourceIcon", "resourceIconTexture")]
 script = ExtResource("1_mcl4l")
 leftSidebar = NodePath("Sidebar/TabContainer")
-status_label = NodePath("PanelContainer/VBoxContainer/TabContainer/Province/MarginContainer/VBoxContainer/StatusLabel")
+statusLabel = NodePath("PanelContainer/VBoxContainer/TabContainer/Province/MarginContainer/VBoxContainer/StatusLabel")
 provinceName = NodePath("PanelContainer/VBoxContainer/TabContainer/Province/MarginContainer/VBoxContainer/GridContainer/InputName")
-input_country = NodePath("PanelContainer/VBoxContainer/TabContainer/Province/MarginContainer/VBoxContainer/GridContainer/InputCountry")
+inputCountry = NodePath("PanelContainer/VBoxContainer/TabContainer/Province/MarginContainer/VBoxContainer/GridContainer/InputCountry")
 inputOccupier = NodePath("PanelContainer/VBoxContainer/TabContainer/Province/MarginContainer/VBoxContainer/GridContainer/InputOccupier")
-input_city = NodePath("PanelContainer/VBoxContainer/TabContainer/Province/MarginContainer/VBoxContainer/GridContainer/InputCity")
-input_gdp = NodePath("PanelContainer/VBoxContainer/TabContainer/Province/MarginContainer/VBoxContainer/GridContainer/InputGDP")
-input_claims = NodePath("PanelContainer/VBoxContainer/TabContainer/Province/MarginContainer/VBoxContainer/InputClaims")
+inputCity = NodePath("PanelContainer/VBoxContainer/TabContainer/Province/MarginContainer/VBoxContainer/GridContainer/InputCity")
+inputGdp = NodePath("PanelContainer/VBoxContainer/TabContainer/Province/MarginContainer/VBoxContainer/GridContainer/InputGDP")
+inputClaims = NodePath("PanelContainer/VBoxContainer/TabContainer/Province/MarginContainer/VBoxContainer/InputClaims")
 provincePopulationList = NodePath("PanelContainer/VBoxContainer/TabContainer/Province/MarginContainer/VBoxContainer/Population/VBoxContainer/ScrollContainer/VBoxContainer")
 provincePopulationTemplate = NodePath("PanelContainer/VBoxContainer/TabContainer/Province/MarginContainer/VBoxContainer/Population/VBoxContainer/Template")
 provinceResourcesList = NodePath("PanelContainer/VBoxContainer/TabContainer/Province/MarginContainer/VBoxContainer/Resources/VBoxContainer/ScrollContainer/VBoxContainer")
@@ -1042,8 +1042,7 @@ texture_normal = ExtResource("4_kdxsy")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="PopupPanel" type="PopupPanel" parent="." unique_id=957807822 node_paths=PackedStringArray("mapEditor", "tabs", "factionName", "factionColor", "factionFounder", "polityName", "polityOwner", "polityColor", "polityMoney", "polityPoliticalPower", "polityWarSupport", "polityStability", "polityType", "polityHost", "polityClaims", "memberPolity", "memberStatus", "biomeName", "biomeColor", "resourceName", "resourceColor", "resourceIcon")]
-oversampling_override = 1.0
+[node name="PopupPanel" type="PopupPanel" parent="." unique_id=957807822 node_paths=PackePackedStringArray("mapEditor", "tabs", "factionName", "factionColor", "factionFounder", "polityName", "polityOwner", "polityColor", "polityMoney", "polityPoliticalPower", "polityWarSupport", "polityStability", "polityType", "polityHost", "polityClaims", "memberPolity", "memberStatus", "biomeName", "biomeColor", "resourceName", "resourceColor", "resourceIcon")rsampling_override = 1.0
 initial_position = 2
 size = Vector2i(230, 360)
 theme = ExtResource("2_5xoin")

@@ -12,7 +12,7 @@ content_margin_right = 14.0
 content_margin_bottom = 14.0
 bg_color = Color(0.08627451, 0.08627451, 0.08627451, 1)
 
-[node name="Logistics" type="PanelContainer" unique_id=542448780 node_paths=PackedStringArray("military_laws_grid", "economy_laws_grid", "country_laws_grid", "releasable_laws_grid", "header_label", "flag_rect", "economic_status_val", "army_logistics_val")]
+[node name="Logistics" type="PanelContainer" unique_id=542448780 node_paths=PackedStringArray("militaryLawsGrid", "economyLawsGrid", "countryLawsGrid", "releasableLawsGrid", "headerLabel", "flagRect", "economicStatusVal", "armyLogisticsVal")]
 material = ExtResource("1_sj0rh")
 offset_left = 340.0
 offset_top = 108.0
@@ -20,14 +20,14 @@ offset_right = 908.0
 offset_bottom = 532.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_t7hts")
 script = ExtResource("1_xesbs")
-military_laws_grid = NodePath("VBoxContainer/TabContainer/Military/PanelContainer/ScrollContainer/VBoxContainer")
-economy_laws_grid = NodePath("VBoxContainer/TabContainer/Economy/PanelContainer/ScrollContainer/VBoxContainer")
-country_laws_grid = NodePath("VBoxContainer/TabContainer/Country/ScrollContainer/VBoxContainer")
-releasable_laws_grid = NodePath("VBoxContainer/TabContainer/Releasable/ScrollContainer/VBoxContainer")
-header_label = NodePath("VBoxContainer/HBoxContainer/Label")
-flag_rect = NodePath("VBoxContainer/HBoxContainer/nation_flag")
-economic_status_val = NodePath("VBoxContainer/TabContainer/Economy/Values")
-army_logistics_val = NodePath("VBoxContainer/TabContainer/Military/Values")
+militaryLawsGrid = NodePath("VBoxContainer/TabContainer/Military/PanelContainer/ScrollContainer/VBoxContainer")
+economyLawsGrid = NodePath("VBoxContainer/TabContainer/Economy/PanelContainer/ScrollContainer/VBoxContainer")
+countryLawsGrid = NodePath("VBoxContainer/TabContainer/Country/ScrollContainer/VBoxContainer")
+releasableLawsGrid = NodePath("VBoxContainer/TabContainer/Releasable/ScrollContainer/VBoxContainer")
+headerLabel = NodePath("VBoxContainer/HBoxContainer/Label")
+flagRect = NodePath("VBoxContainer/HBoxContainer/nation_flag")
+economicStatusVal = NodePath("VBoxContainer/TabContainer/Economy/Values")
+armyLogisticsVal = NodePath("VBoxContainer/TabContainer/Military/Values")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=915670831]
 use_parent_material = true

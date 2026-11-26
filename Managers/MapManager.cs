@@ -15,13 +15,13 @@ public partial class MapManager : Node
 	public bool DEBUG_MODE = false;
 
 	[Signal]
-	public delegate void ProvinceHoveredEventHandler(int province_id, string country_name);
+	public delegate void ProvinceHoveredEventHandler(int provinceId, string countryName);
 
 	[Signal]
-	public delegate void CountryClickedEventHandler(string country_name);
+	public delegate void CountryClickedEventHandler(string countryName);
 
 	[Signal]
-	public delegate void ProvinceOwnershipChangedEventHandler(int pid, string old_owner, string new_owner);
+	public delegate void ProvinceOwnershipChangedEventHandler(int pid, string oldOwner, string newOwner);
 
 	// Emitted when a click couldn't be processed (so likely sea or border)
 	[Signal]
@@ -33,7 +33,7 @@ public partial class MapManager : Node
 
 	// Emitted when a country is picked in SELECT_COUNTRY mode
 	[Signal]
-	public delegate void CountrySelectedEventHandler(string country_name);
+	public delegate void CountrySelectedEventHandler(string countryName);
 
 	// The exact colors you provided
 	public static readonly Color SEA_MAIN = Color.FromHtml("#7e8e9e");
@@ -64,118 +64,146 @@ public partial class MapManager : Node
 	public string hoveredCountry = "Sea";
 
 	// --- DATA ---
-	public Image id_map_image;
-	public Image state_color_image;
-	public ImageTexture state_color_texture;
-	public int max_province_id = 0;
+	public Image idMapImage;
+	public Image stateColorImage;
+	public ImageTexture stateColorTexture;
+	public int maxProvinceId = 0;
 
-	public Godot.Collections.Dictionary ethnic_name_to_color = new();
-	public Godot.Collections.Dictionary gdp_map = new();
+	public Godot.Collections.Dictionary ethnicNameToColor = new();
+	public Godot.Collections.Dictionary gdpMap = new();
 
-	public Dictionary<string, List<int>> country_to_provinces = new();
-	public Dictionary<string, List<int>> country_to_owned_provinces = new();
-	public Dictionary<string, List<int>> country_to_occupied_provinces = new();
-	public Dictionary<string, List<int>> country_to_rightful_provinces = new();
-	public Dictionary<string, List<int>> country_to_cities = new();
-	public Dictionary<int, Province> province_objects => _provinces;
-	private readonly Dictionary<int, Province> _provinces = new();
+	public Dictionary<string, List<int>> countryToProvinces
+	{
+		get => ProvinceManager.Instance.CountryToProvinces;
+		set => ProvinceManager.Instance.CountryToProvinces = value;
+	}
+	public Dictionary<string, List<int>> countryToOwnedProvinces
+	{
+		get => ProvinceManager.Instance.CountryToOwnedProvinces;
+		set => ProvinceManager.Instance.CountryToOwnedProvinces = value;
+	}
+	public Dictionary<string, List<int>> countryToOccupiedProvinces
+	{
+		get => ProvinceManager.Instance.CountryToOccupiedProvinces;
+		set => ProvinceManager.Instance.CountryToOccupiedProvinces = value;
+	}
+	public Dictionary<string, List<int>> countryToRightfulProvinces
+	{
+		get => ProvinceManager.Instance.CountryToRightfulProvinces;
+		set => ProvinceManager.Instance.CountryToRightfulProvinces = value;
+	}
+	public Dictionary<string, List<int>> countryToCities
+	{
+		get => ProvinceManager.Instance.CountryToCities;
+		set => ProvinceManager.Instance.CountryToCities = value;
+	}
+	public Dictionary<int, Province> provinceObjects => Provinces;
+	private Dictionary<int, Province> Provinces => ProvinceManager.Instance.Provinces;
 	public Godot.Collections.Dictionary buildingTypesToCountryCount = new(); // Stores {BuildingID: {CountryName: nuumber}}
 
-	public Godot.Collections.Dictionary biomes = new();
-	public Godot.Collections.Dictionary resources = new();
+	public Dictionary<string, BiomeData> biomes = new();
+	public Dictionary<string, ResourceData> resources = new();
 
-	public int current_hovered_pid = -1;
-	public int last_hovered_pid = -1;
-	public Color original_color = Colors.Black;
-	public Dictionary<int, Vector2> province_centers = new(); // Stores {ID: Vector2(x, y)}
-	public Dictionary<int, int> unique_regions = new(); // NOTE(soi): eh
-	public SoiStar province_graph = new SoiStar(); // NOTE(soi): ehh
+	public int currentHoveredPid = -1;
+	public int lastHoveredPid = -1;
+	public Color originalColor = Colors.Black;
+	public Dictionary<int, Vector2> provinceCenters = new(); // Stores {ID: Vector2(x, y)}
+	public Dictionary<int, int> uniqueRegions = new(); // NOTE(soi): eh
+	public SoiStar provinceGraph = new SoiStar(); // NOTE(soi): ehh
 
 	// This will look like: {"french_empire": [101, 102, 103], "canada": [1, 2, 5]}
-	public Dictionary<string, List<int>> global_claims_registry = new();
-	public float world_tension = 0.1f; // Global tension level (0.1 to 1.0)
+	public Dictionary<string, List<int>> globalClaimsRegistry
+	{
+		get => ProvinceManager.Instance.GlobalClaimsRegistry;
+		set => ProvinceManager.Instance.GlobalClaimsRegistry = value;
+	}
+	public float worldTension = 0.1f; // Global tension level (0.1 to 1.0)
 
-	public Godot.Collections.Array<Godot.Collections.Dictionary> all_cities = new();
+	public Godot.Collections.Array<Godot.Collections.Dictionary> allCities = new();
 
-	public Godot.Collections.Dictionary<string, ImportantFigure> significantFigures = new();
+	public Dictionary<string, ImportantFigure> significantFigures = new();
 
 	public Label gay = new Label();
 	// soiladin time
-	public Dictionary<string, List<int>> allowed_pids = new();
-
-	public void IncreaseWorldTension(float a_amount)
+	public Dictionary<string, List<int>> allowedPids
 	{
-		world_tension = Mathf.Clamp(world_tension + a_amount, 0.1f, 1.0f);
+		get => ProvinceManager.Instance.AllowedPids;
+		set => ProvinceManager.Instance.AllowedPids = value;
+	}
+
+	public void IncreaseWorldTension(float aAmount)
+	{
+		worldTension = Mathf.Clamp(worldTension + aAmount, 0.1f, 1.0f);
 	}
 
 	public const string CACHE_FOLDER = "res://map_data/";
 
 	// NOTE(soi): these should probably be in like world or smthng
-	[Export] public Texture2D region_texture;
-	[Export] public Texture2D culture_texture;
-	[Export] public Texture2D population_texture;
-	[Export] public Texture2D city_texture;
-	[Export] public Texture2D gdp_texture;
-	[Export] public Texture2D ethnicity_texture;
-	[Export] public Texture2D claims_texture;
+	[Export] public Texture2D regionTexture;
+	[Export] public Texture2D cultureTexture;
+	[Export] public Texture2D populationTexture;
+	[Export] public Texture2D cityTexture;
+	[Export] public Texture2D gdpTexture;
+	[Export] public Texture2D ethnicityTexture;
+	[Export] public Texture2D claimsTexture;
 
 	[Export] public int MAP_WIDTH = 0;
 	[Export] public int MAP_HEIGHT = 625;
 
 	// GDScript cannot read C# static constants through an instance.
-	public int map_width => MAP_WIDTH;
-	public int map_height => MAP_HEIGHT;
+	public int mapWidth => MAP_WIDTH;
+	public int mapHeight => MAP_HEIGHT;
 
-	public Dictionary<string, Texture2D> icon_cache = new();
+	public Dictionary<string, Texture2D> iconCache = new();
 
-	public void LoadBiomes(Godot.Collections.Array a_biomeData)
+	public void LoadBiomes(Godot.Collections.Array aBiomeData)
 	{
 		biomes.Clear();
-		foreach (var biomeVariant in a_biomeData)
+		foreach (var biomeVariant in aBiomeData)
 		{
 			var biome = biomeVariant.AsGodotDictionary();
-			biomes[biome["name"].AsString()] = BiomeData.FromDict(biome);
+			biomes[biome["name"].AsString()] = BiomeData.FromDict(biome.AsState());
 		}
 	}
 
-	public void LoadResources(Godot.Collections.Array a_resourceData)
+	public void LoadResources(Godot.Collections.Array aResourceData)
 	{
 		resources.Clear();
-		foreach (var resourceVariant in a_resourceData)
+		foreach (var resourceVariant in aResourceData)
 		{
 			var resource = resourceVariant.AsGodotDictionary();
-			resources[resource["name"].AsString()] = ResourceData.FromDict(resource);
+			resources[resource["name"].AsString()] = ResourceData.FromDict(resource.AsState());
 		}
 	}
 
 	// Helper to check both custom and default locations
-	public string FindResourceResource(string sub_path)
+	public string FindResourceResource(string subPath)
 	{
-		var full_default = "res://assets/icons/Resources/" + sub_path;
-		if (ResourceLoader.Exists(full_default))
-			return full_default;
+		var fullDefault = "res://assets/icons/Resources/" + subPath;
+		if (ResourceLoader.Exists(fullDefault))
+			return fullDefault;
 		return "";
 	}
 
-	public Texture2D GetResourceIcon(string a_resourceType)
+	public Texture2D GetResourceIcon(string aResourceType)
 	{
-		var cache_key = a_resourceType;
+		var cacheKey = aResourceType;
 
 		// If already cached -> return it
-		if (icon_cache.TryGetValue(cache_key, out var cachedIcon))
+		if (iconCache.TryGetValue(cacheKey, out var cachedIcon))
 			return cachedIcon;
 
 		// Cache key needs to include ideology if provided
-		if (!resources.ContainsKey(a_resourceType))
+		if (!resources.ContainsKey(aResourceType))
 		{
 			var tex = GD.Load<Texture2D>(FindResourceResource("Droplet.svg"));
-			icon_cache[cache_key] = tex;
+			iconCache[cacheKey] = tex;
 			return tex;
 		}
 
 		// 0. Check Redirects
 		// 4. Fallback to old flat structure (just in case): {path}/country_flag.png
-		var resource = resources[a_resourceType].AsGodotObject() as ResourceData;
+		var resource = resources[aResourceType];
 		var path = FindResourceResource($"{resource?.icon}.svg");
 
 		if (path == "")
@@ -184,7 +212,7 @@ public partial class MapManager : Node
 		if (path != "")
 		{
 			var tex = GD.Load<Texture2D>(path);
-			icon_cache[cache_key] = tex;
+			iconCache[cacheKey] = tex;
 			return tex;
 		}
 
@@ -193,183 +221,183 @@ public partial class MapManager : Node
 
 	public void _ClearInternalData()
 	{
-		all_cities.Clear();
-		unique_regions.Clear();
-		_provinces.Clear();
-		country_to_provinces.Clear();
-		country_to_owned_provinces.Clear();
-		country_to_occupied_provinces.Clear();
-		allowed_pids.Clear();
-		province_centers.Clear();
+		allCities.Clear();
+		uniqueRegions.Clear();
+		Provinces.Clear();
+		countryToProvinces.Clear();
+		countryToOwnedProvinces.Clear();
+		countryToOccupiedProvinces.Clear();
+		allowedPids.Clear();
+		provinceCenters.Clear();
 		// Clear graph and global registry
-		global_claims_registry.Clear();
+		globalClaimsRegistry.Clear();
 		// Re-init significant figures if needed, but for now just clear
 		significantFigures.Clear();
 		// Reset state variables
-		max_province_id = 0;
-		current_hovered_pid = -1;
-		last_hovered_pid = -1;
+		maxProvinceId = 0;
+		currentHoveredPid = -1;
+		lastHoveredPid = -1;
 		hoveredCountry = "Sea";
 	}
 
 	public void Initialize(
-		Texture2D a_map,
-		Godot.Collections.Dictionary a_provinceData,
-		Godot.Collections.Array a_progress
+		Texture2D aMap,
+		Godot.Collections.Dictionary aProvinceData,
+		Godot.Collections.Array aProgress
 	)
 	{
 		_ClearInternalData();
 
-		MAP_WIDTH = a_map.GetWidth();
-		MAP_HEIGHT = a_map.GetHeight();
+		MAP_WIDTH = aMap.GetWidth();
+		MAP_HEIGHT = aMap.GetHeight();
 
-		id_map_image = Image.CreateEmpty(MAP_WIDTH, MAP_HEIGHT, false, Image.Format.Rgb8);
-		var next_id = 2;
+		idMapImage = Image.CreateEmpty(MAP_WIDTH, MAP_HEIGHT, false, Image.Format.Rgb8);
+		var nextId = 2;
 
-		var mapImage = a_map.GetImage();
+		var mapImage = aMap.GetImage();
 		if (mapImage.GetFormat() != Image.Format.Rgb8)
 			mapImage.Convert(Image.Format.Rgb8);
 
 		var cultureSprite = GetNodeOrNull<Sprite2D>("../Main/MapContainer/CultureSprite");
 		if (cultureSprite != null)
-			cultureSprite.Texture = a_map;
+			cultureSprite.Texture = aMap;
 
-		province_graph.NeighborFilterEnabled = true;
-		province_graph.Clear();
+		provinceGraph.NeighborFilterEnabled = true;
+		provinceGraph.Clear();
 
 		var inc = 0.1f / (MAP_WIDTH * MAP_HEIGHT);
 
 		// Flat per-province arrays, indexed by pid. Positions are interleaved: [x0, y0, x1, y1, ...].
 		// pid 0 and 1 are unused placeholders, so real province IDs index directly.
-		var first_pos = new List<int> { 0, 0, 0, 0 };
-		var last_pos = new List<int> { 0, 0, 0, 0 };
-		var pixel_count = new List<int> { 0, 0 };
+		var firstPos = new List<int> { 0, 0, 0, 0 };
+		var lastPos = new List<int> { 0, 0, 0, 0 };
+		var pixelCount = new List<int> { 0, 0 };
 
 		// RGB8 raw bytes: 3 per pixel, row-major. Index = packed RGB, same as old to_rgba32() >> 8.
 		var mapData = mapImage.GetData();
 		// pid of every pixel scanned so far, indexed by i. Border pixels stay 0.
 		// Left / top / two-left / two-up neighbours have already been scanned when we read them.
-		var pid_buf = new int[MAP_WIDTH * MAP_HEIGHT];
+		var pidBuf = new int[MAP_WIDTH * MAP_HEIGHT];
 
 		for (var i = 0; i < MAP_WIDTH * MAP_HEIGHT; i++)
 		{
 			var x = i % MAP_WIDTH;
 			var y = i / MAP_WIDTH;
-			var byte_offset = i * 3;
-			var index = (mapData[byte_offset] << 16) | (mapData[byte_offset + 1] << 8) | mapData[byte_offset + 2];
+			var byteOffset = i * 3;
+			var index = (mapData[byteOffset] << 16) | (mapData[byteOffset + 1] << 8) | mapData[byteOffset + 2];
 
 			// Check for Borders/Grid (ID 1)
 			if (index == 0)
 			{
 				// NOTE: int 1 converts to Color.hex(1), so this pixel reads back as pid 0.
-				id_map_image.SetPixel(x, y, new Color(1u));
+				idMapImage.SetPixel(x, y, new Color(1u));
 				continue;
 			}
 
 			// If this is a new region (Unique Sea Zone or Land Province)
-			if (unique_regions.TryAdd(index, next_id))
+			if (uniqueRegions.TryAdd(index, nextId))
 			{
 
-				var province_dict = a_provinceData.ContainsKey(index.ToString())
-					? a_provinceData[index.ToString()].AsGodotDictionary()
+				var provinceDict = aProvinceData.ContainsKey(index.ToString())
+					? aProvinceData[index.ToString()].AsGodotDictionary()
 					: new Godot.Collections.Dictionary();
-				var province = Province.FromDict(province_dict);
-				province.id = next_id;
+				var province = Province.FromDict(provinceDict.AsState());
+				province.id = nextId;
 
-				_provinces[next_id] = province;
+				Provinces[nextId] = province;
 
 				// First pixel of a province in scan order. Last starts here and moves on.
-				first_pos.Add(x);
-				first_pos.Add(y);
-				last_pos.Add(x);
-				last_pos.Add(y);
-				pixel_count.Add(0);
+				firstPos.Add(x);
+				firstPos.Add(y);
+				lastPos.Add(x);
+				lastPos.Add(y);
+				pixelCount.Add(0);
 
-				next_id += 1;
+				nextId += 1;
 			}
 
 			// Write the unique ID to your id_map_image
-			var pid = unique_regions[index];
-			id_map_image.SetPixel(x, y, new Color((uint)((pid << 8) | 0x000000FF)));
+			var pid = uniqueRegions[index];
+			idMapImage.SetPixel(x, y, new Color((uint)((pid << 8) | 0x000000FF)));
 
 			// NOTE(soi): its soiladin time 2
-			if (!province_graph.HasPoint(pid))
-				province_graph.AddPoint(pid, new Vector2(x, y));
+			if (!provinceGraph.HasPoint(pid))
+				provinceGraph.AddPoint(pid, new Vector2(x, y));
 
-			pid_buf[i] = pid;
+			pidBuf[i] = pid;
 
 			// Connect to the left / top pixel. If that pixel is a 1px border (0),
 			// look one pixel further across it, like _scan_across_border did.
 			if (x != 0)
 			{
-				var left_pid = pid_buf[i - 1];
-				if (left_pid == 0 && x >= 2)
-					left_pid = pid_buf[i - 2];
-				if (left_pid > 1 && left_pid != pid && !province_graph.ArePointsConnected(pid, left_pid))
-					province_graph.ConnectPoints(pid, left_pid);
+				var leftPid = pidBuf[i - 1];
+				if (leftPid == 0 && x >= 2)
+					leftPid = pidBuf[i - 2];
+				if (leftPid > 1 && leftPid != pid && !provinceGraph.ArePointsConnected(pid, leftPid))
+					provinceGraph.ConnectPoints(pid, leftPid);
 			}
 
 			if (y != 0)
 			{
-				var top_pid = pid_buf[i - MAP_WIDTH];
-				if (top_pid == 0 && y >= 2)
-					top_pid = pid_buf[i - 2 * MAP_WIDTH];
-				if (top_pid > 1 && top_pid != pid && !province_graph.ArePointsConnected(pid, top_pid))
-					province_graph.ConnectPoints(pid, top_pid);
+				var topPid = pidBuf[i - MAP_WIDTH];
+				if (topPid == 0 && y >= 2)
+					topPid = pidBuf[i - 2 * MAP_WIDTH];
+				if (topPid > 1 && topPid != pid && !provinceGraph.ArePointsConnected(pid, topPid))
+					provinceGraph.ConnectPoints(pid, topPid);
 			}
 
 			var k = pid << 1;
-			last_pos[k] = x;
-			last_pos[k + 1] = y;
-			pixel_count[pid] += 1;
+			lastPos[k] = x;
+			lastPos[k + 1] = y;
+			pixelCount[pid] += 1;
 		}
 
-		a_progress[0] = a_progress[0].AsDouble() + inc * MAP_WIDTH * MAP_HEIGHT;
-		max_province_id = next_id - 1;
+		aProgress[0] = aProgress[0].AsDouble() + inc * MAP_WIDTH * MAP_HEIGHT;
+		maxProvinceId = nextId - 1;
 		BuildLookupTexture();
-		a_progress[0] = a_progress[0].AsDouble() + 0.015;
+		aProgress[0] = aProgress[0].AsDouble() + 0.015;
 
-		_calculate_province_centroids(first_pos, last_pos, pixel_count);
-		a_progress[0] = a_progress[0].AsDouble() + 0.01;
+		_calculate_province_centroids(firstPos, lastPos, pixelCount);
+		aProgress[0] = aProgress[0].AsDouble() + 0.01;
 
 		// Pass 2: Load troops now that centroids (positions) are definitely known
-		foreach (var I_index in a_provinceData.Keys)
+		foreach (var iIndex in aProvinceData.Keys)
 		{
-			var key = I_index.AsInt32();
-			if (unique_regions.TryGetValue(key, out var regionPid))
+			var key = iIndex.AsInt32();
+			if (uniqueRegions.TryGetValue(key, out var regionPid))
 			{
-				var p_dict = a_provinceData[I_index].AsGodotDictionary();
-				if (p_dict.ContainsKey("troops"))
-					TroopManager.Instance.load_troops_for_province(regionPid, p_dict["troops"].AsGodotArray());
+				var pDict = aProvinceData[iIndex].AsGodotDictionary();
+				if (pDict.ContainsKey("troops"))
+					TroopManager.Instance.LoadTroopsForProvince(regionPid, pDict["troops"].AsGodotArray());
 			}
 		}
 
-		a_progress[0] = a_progress[0].AsDouble() + 0.025;
+		aProgress[0] = aProgress[0].AsDouble() + 0.025;
 		_build_country_to_provinces();
-		a_progress[0] = a_progress[0].AsDouble() + 0.025;
+		aProgress[0] = aProgress[0].AsDouble() + 0.025;
 		// _build_adjacency_list(a_progress)
 		_BuildGlobalRegistry();
-		a_progress[0] = a_progress[0].AsDouble() + 0.025;
+		aProgress[0] = aProgress[0].AsDouble() + 0.025;
 	}
 
 	public void LoadProvinces(
-		CompressedTexture2D region_map,
-		Godot.Collections.Dictionary a_provinceData,
-		Godot.Collections.Array a_progress
+		CompressedTexture2D regionMap,
+		Godot.Collections.Dictionary aProvinceData,
+		Godot.Collections.Array aProgress
 	)
 	{
-		Initialize(region_map, a_provinceData, a_progress);
+		Initialize(regionMap, aProvinceData, aProgress);
 	}
 
 	public Godot.Collections.Dictionary SaveProvinces()
 	{
 		var provinces = new Godot.Collections.Dictionary();
-		foreach (var index in unique_regions.Keys)
+		foreach (var index in uniqueRegions.Keys)
 		{
-			var next_id = unique_regions[index];
-			var province = _provinces[next_id];
-			var troops = TroopManager.Instance.get_serialized_troops_for_province(next_id);
-			provinces[index.ToString()] = province.ToDictWithTroops(troops);
+			var nextId = uniqueRegions[index];
+			var province = Provinces[nextId];
+			var troops = TroopManager.Instance.GetSerializedTroopsForProvince(nextId);
+			provinces[index.ToString()] = VariantState.ToVariant(province.ToDictWithTroops(((Variant)troops).AsState().List()));
 		}
 		return provinces;
 	}
@@ -379,8 +407,8 @@ public partial class MapManager : Node
 		var returnResources = new Godot.Collections.Array();
 		foreach (var resourceVariant in resources.Values)
 		{
-			var resource = (ResourceData)resourceVariant.AsGodotObject();
-			returnResources.Add(resource.ToDict());
+			var resource = resourceVariant;
+			returnResources.Add(VariantState.ToVariant(resource.ToDict()));
 		}
 		return returnResources;
 	}
@@ -390,8 +418,8 @@ public partial class MapManager : Node
 		var returnBiomes = new Godot.Collections.Array();
 		foreach (var biomeVariant in biomes.Values)
 		{
-			var biome = (BiomeData)biomeVariant.AsGodotObject();
-			returnBiomes.Add(biome.ToDict());
+			var biome = biomeVariant;
+			returnBiomes.Add(VariantState.ToVariant(biome.ToDict()));
 		}
 		return returnBiomes;
 	}
@@ -399,15 +427,15 @@ public partial class MapManager : Node
 	public Godot.Collections.Dictionary SaveBuildingData()
 	{
 		var returnBuildings = new Godot.Collections.Dictionary();
-		var designs = EconomyManager.Instance.building_designs;
-		foreach (var I_country in designs.Keys)
+		var designs = EconomyManager.Instance.buildingDesigns;
+		foreach (var iCountry in designs.Keys)
 		{
-			var country = I_country;
+			var country = iCountry;
 			var countryBuildings = new Godot.Collections.Array();
-			foreach (var I_building in designs[I_country].Values)
+			foreach (var iBuilding in designs[iCountry].Values)
 			{
-				var template = (BuildingTemplate)I_building.AsGodotObject();
-				countryBuildings.Add(template.ToDict());
+				var template = BuildingTemplate.FromDict(iBuilding.AsGodotDictionary().AsState());
+				countryBuildings.Add(VariantState.ToVariant(template.ToDict()));
 			}
 			returnBuildings[country] = countryBuildings;
 		}
@@ -415,7 +443,7 @@ public partial class MapManager : Node
 	}
 
 	// NOTE(soi): where was this even used for???
-	public void draw_province_centroids(Image image, Color color = default)
+	public void DrawProvinceCentroids(Image image, Color color = default)
 	{
 		if (color == default)
 			color = new Color(0, 1, 0, 1);
@@ -426,7 +454,7 @@ public partial class MapManager : Node
 			return;
 		}
 
-		foreach (var center in province_centers.Values)
+		foreach (var center in provinceCenters.Values)
 		{
 			var x = Mathf.RoundToInt(center.X);
 			var y = Mathf.RoundToInt(center.Y);
@@ -456,9 +484,9 @@ public partial class MapManager : Node
 			cities[country] = new List<int>();
 		}
 
-		foreach (var pid in _provinces.Keys)
+		foreach (var pid in Provinces.Keys)
 		{
-			var province = _provinces[pid];
+			var province = Provinces[pid];
 			var country = province.country;
 			var occupier = province.occupier;
 
@@ -482,43 +510,43 @@ public partial class MapManager : Node
 			}
 		}
 
-		country_to_provinces = result;
-		allowed_pids = new Dictionary<string, List<int>>();
+		countryToProvinces = result;
+		allowedPids = new Dictionary<string, List<int>>();
 		foreach (var pair in result)
-			allowed_pids[pair.Key] = new List<int>(pair.Value);
-		country_to_owned_provinces = owned;
-		country_to_occupied_provinces = occupied;
-		country_to_rightful_provinces = rightful;
-		country_to_cities = cities;
+			allowedPids[pair.Key] = new List<int>(pair.Value);
+		countryToOwnedProvinces = owned;
+		countryToOccupiedProvinces = occupied;
+		countryToRightfulProvinces = rightful;
+		countryToCities = cities;
 	}
 
 	public void BuildLookupTexture()
 	{
-		state_color_image = Image.CreateEmpty(max_province_id + 1, 2, false, Image.Format.Rgba8);
+		stateColorImage = Image.CreateEmpty(maxProvinceId + 1, 2, false, Image.Format.Rgba8);
 
-		for (var pid = 0; pid <= max_province_id; pid++)
+		for (var pid = 0; pid <= maxProvinceId; pid++)
 		{
 			if (pid <= 1)
 			{
-				state_color_image.SetPixel(pid, 0, Colors.Black);
-				state_color_image.SetPixel(pid, 1, Colors.Black);
+				stateColorImage.SetPixel(pid, 0, Colors.Black);
+				stateColorImage.SetPixel(pid, 1, Colors.Black);
 				continue;
 			}
 
-			_provinces.TryGetValue(pid, out var province);
+			Provinces.TryGetValue(pid, out var province);
 
 			if (province == null || province.type == 0) // 0 is province.SEA
 			{
-				state_color_image.SetPixel(pid, 0, Colors.Black);
-				state_color_image.SetPixel(pid, 1, Colors.Black);
+				stateColorImage.SetPixel(pid, 0, Colors.Black);
+				stateColorImage.SetPixel(pid, 1, Colors.Black);
 				continue;
 			}
 
-			state_color_image.SetPixel(pid, 0, CountryColor(province.country, Colors.Gray));
-			state_color_image.SetPixel(pid, 1, CountryColor(province.GetFunctionalOwner(), Colors.Gray));
+			stateColorImage.SetPixel(pid, 0, CountryColor(province.country, Colors.Gray));
+			stateColorImage.SetPixel(pid, 1, CountryColor(province.GetFunctionalOwner(), Colors.Gray));
 		}
 
-		state_color_texture = ImageTexture.CreateFromImage(state_color_image);
+		stateColorTexture = ImageTexture.CreateFromImage(stateColorImage);
 	}
 
 	private bool _is_sea(Color c)
@@ -531,103 +559,103 @@ public partial class MapManager : Node
 		return Mathf.Pow(c1.R - c2.R, 2) + Mathf.Pow(c1.G - c2.G, 2) + Mathf.Pow(c1.B - c2.B, 2);
 	}
 
-	public void UpdateProvinceColor(int pid, string country_name)
+	public void UpdateProvinceColor(int pid, string countryName)
 	{
-		if (pid <= 1 || pid > max_province_id)
+		if (pid <= 1 || pid > maxProvinceId)
 			return;
 
-		var new_color = CountryColor(country_name, Colors.Gray);
-		UpdateLookup(pid, new_color, new_color);
+		var newColor = CountryColor(countryName, Colors.Gray);
+		UpdateLookup(pid, newColor, newColor);
 
-		if (pid == last_hovered_pid)
+		if (pid == lastHoveredPid)
 		{
-			original_color = new_color;
+			originalColor = newColor;
 			UpdateLookup(pid,
-				new_color + new Color(0.15f, 0.15f, 0.15f, 0),
-				new_color + new Color(0.15f, 0.15f, 0.15f, 0));
+				newColor + new Color(0.15f, 0.15f, 0.15f, 0),
+				newColor + new Color(0.15f, 0.15f, 0.15f, 0));
 		}
 	}
 
 	public void SetProvinceColor(int pid, Color primaryColor)
 	{
-		if (pid <= 1 || pid > max_province_id)
+		if (pid <= 1 || pid > maxProvinceId)
 			return;
 
-		var province = _provinces[pid];
+		var province = Provinces[pid];
 		UpdateLookup(pid, primaryColor, CountryColor(province.country, Colors.Gray));
 	}
 
-	public void SetProvinceColors(int a_pid, Color a_primaryColor, Color a_secondaryColor)
+	public void SetProvinceColors(int aPid, Color aPrimaryColor, Color aSecondaryColor)
 	{
-		if (a_pid <= 1 || a_pid > max_province_id)
+		if (aPid <= 1 || aPid > maxProvinceId)
 			return;
 
-		UpdateLookup(a_pid, a_primaryColor, a_secondaryColor);
+		UpdateLookup(aPid, aPrimaryColor, aSecondaryColor);
 	}
 
 	public void ResetProvinceColor(int pid)
 	{
-		if (pid <= 1 || pid > max_province_id)
+		if (pid <= 1 || pid > maxProvinceId)
 			return;
 
-		var province = _provinces[pid];
+		var province = Provinces[pid];
 		UpdateLookup(pid,
 			CountryColor(province.GetFunctionalOwner(), Colors.Gray),
 			CountryColor(province.country, Colors.Gray));
 	}
 
-	public void SetCountryColor(string country_name, Color custom_color = default)
+	public void SetCountryColor(string countryName, Color customColor = default)
 	{
-		var new_color = custom_color;
-		if (new_color == default)
-			new_color = Colors.Transparent;
-		if (new_color == Colors.Transparent)
-			new_color = CountryColor(country_name, Colors.Gray);
+		var newColor = customColor;
+		if (newColor == default)
+			newColor = Colors.Transparent;
+		if (newColor == Colors.Transparent)
+			newColor = CountryColor(countryName, Colors.Gray);
 
-		var provinces = GetArray(country_to_provinces, country_name);
+		var provinces = GetArray(countryToProvinces, countryName);
 
 		if (provinces.Count == 0)
 		{
-			GD.Print("Warning: No provinces found for country: ", country_name);
+			GD.Print("Warning: No provinces found for country: ", countryName);
 			return;
 		}
 
 		foreach (var pidVariant in provinces)
 		{
 			var pid = pidVariant;
-			UpdateLookup(pid, new_color, new_color);
+			UpdateLookup(pid, newColor, newColor);
 
-			if (pid == last_hovered_pid)
+			if (pid == lastHoveredPid)
 			{
-				original_color = new_color;
+				originalColor = newColor;
 				UpdateLookup(pid,
-					new_color + new Color(0.15f, 0.15f, 0.15f, 0),
-					new_color + new Color(0.15f, 0.15f, 0.15f, 0));
+					newColor + new Color(0.15f, 0.15f, 0.15f, 0),
+					newColor + new Color(0.15f, 0.15f, 0.15f, 0));
 			}
 		}
 	}
 
-	public int GetProvinceAtPos(Vector2 pos, Sprite2D map_sprite = null)
+	public int GetProvinceAtPos(Vector2 pos, Sprite2D mapSprite = null)
 	{
-		if (id_map_image == null)
+		if (idMapImage == null)
 			return 0;
 
 		int x;
 		int y;
 
-		if (map_sprite != null)
+		if (mapSprite != null)
 		{
-			var local = map_sprite.ToLocal(pos);
-			var sprite_size = map_sprite.Texture.GetSize();
+			var local = mapSprite.ToLocal(pos);
+			var spriteSize = mapSprite.Texture.GetSize();
 
 			// If sprite is centered, offset the local position to be top-left based
-			if (map_sprite.Centered)
-				local += sprite_size * 0.5f;
+			if (mapSprite.Centered)
+				local += spriteSize * 0.5f;
 
 			// --- INFINITE SCROLL MATH ---
-			x = (int)local.X % (int)sprite_size.X;
+			x = (int)local.X % (int)spriteSize.X;
 			if (x < 0)
-				x += (int)sprite_size.X;
+				x += (int)spriteSize.X;
 			y = (int)local.Y;
 		}
 		else
@@ -640,14 +668,14 @@ public partial class MapManager : Node
 		if (y < 0 || y >= MAP_HEIGHT || x < 0 || x >= MAP_WIDTH)
 			return 0;
 
-		return (int)(id_map_image.GetPixel(x, y).ToRgba32() >> 8);
+		return (int)(idMapImage.GetPixel(x, y).ToRgba32() >> 8);
 	}
 
 	private string _GetHoverViewer()
 	{
 		if (InteractionType() == 1) // GameState.InteractionType.SELECT_COUNTRY
 			return "";
-		return CountryData.NameOf(CountryManager.Instance.player_country);
+		return CountryData.NameOf(CountryManager.Instance.playerCountry);
 	}
 
 	public void UnhighlightCountry()
@@ -656,86 +684,86 @@ public partial class MapManager : Node
 			return;
 
 		var countryColor = GetCountryDisplayColor(hoveredCountry);
-		foreach (var provinceVariant in GetArray(country_to_provinces, hoveredCountry))
+		foreach (var provinceVariant in GetArray(countryToProvinces, hoveredCountry))
 		{
 			var province = provinceVariant;
 			UpdateLookup(
 				province,
-				GetCountryDisplayColor((_provinces[province]).country),
+				GetCountryDisplayColor((Provinces[province]).country),
 				countryColor);
 		}
-		foreach (var provinceVariant in GetArray(country_to_rightful_provinces, hoveredCountry))
+		foreach (var provinceVariant in GetArray(countryToRightfulProvinces, hoveredCountry))
 		{
 			var province = provinceVariant;
 			UpdateLookup(
 				province,
 				countryColor,
-				GetCountryDisplayColor((_provinces[province]).GetFunctionalOwner()));
+				GetCountryDisplayColor((Provinces[province]).GetFunctionalOwner()));
 		}
 		hoveredCountry = "Sea";
 	}
 
-	public void HighlightCountry(int a_pid, Color a_highlightColor)
+	public void HighlightCountry(int aPid, Color aHighlightColor)
 	{
-		var newHoveredCountry = (_provinces[a_pid]).GetFunctionalOwner();
+		var newHoveredCountry = (Provinces[aPid]).GetFunctionalOwner();
 
-		foreach (var provinceVariant in GetArray(country_to_provinces, newHoveredCountry))
+		foreach (var provinceVariant in GetArray(countryToProvinces, newHoveredCountry))
 		{
 			var province = provinceVariant;
-			var provinceObject = _provinces[province];
+			var provinceObject = Provinces[province];
 			UpdateLookup(
 				province,
 				provinceObject.occupier == newHoveredCountry
 					? GetCountryDisplayColor(provinceObject.country)
-					: a_highlightColor,
-				a_highlightColor);
+					: aHighlightColor,
+				aHighlightColor);
 		}
-		foreach (var provinceVariant in GetArray(country_to_rightful_provinces, newHoveredCountry))
+		foreach (var provinceVariant in GetArray(countryToRightfulProvinces, newHoveredCountry))
 		{
 			var province = provinceVariant;
-			var provinceObject = _provinces[province];
+			var provinceObject = Provinces[province];
 			UpdateLookup(
 				province,
-				a_highlightColor,
+				aHighlightColor,
 				GetCountryDisplayColor(provinceObject.GetFunctionalOwner()));
 		}
 		hoveredCountry = newHoveredCountry;
 	}
 
-	public void HoverCountry(int a_pid, Color a_highlightColor)
+	public void HoverCountry(int aPid, Color aHighlightColor)
 	{
 		// Still inside the same country, so the highlight is already correct.
-		if (_provinces.TryGetValue(a_pid, out var hoveredProvince)
+		if (Provinces.TryGetValue(aPid, out var hoveredProvince)
 			&& hoveredProvince.GetFunctionalOwner() == hoveredCountry)
 		{
-			last_hovered_pid = a_pid;
+			lastHoveredPid = aPid;
 			return;
 		}
 
 		ResetHover();
 
-		_provinces.TryGetValue(a_pid, out var province);
-		if (a_highlightColor == Colors.Transparent || province == null || province.country == "Sea")
+		Provinces.TryGetValue(aPid, out var province);
+		if (aHighlightColor == Colors.Transparent || province == null || province.country == "Sea")
 		{
 			Input.SetDefaultCursorShape(Input.CursorShape.Arrow);
 			EmitSignal(SignalName.ProvinceHovered, -1, "");
 			return;
 		}
 
-		if (current_view != MapView.COUNTRIES)
+		if (currentView != MapView.COUNTRIES)
 			return;
 
-		HighlightCountry(a_pid, a_highlightColor);
-		last_hovered_pid = a_pid;
+		HighlightCountry(aPid, aHighlightColor);
+		lastHoveredPid = aPid;
 		Input.SetDefaultCursorShape(Input.CursorShape.PointingHand);
-		EmitSignal(SignalName.ProvinceHovered, a_pid, _GetHoverViewer());
+		EmitSignal(SignalName.ProvinceHovered, aPid, _GetHoverViewer());
 	}
 
-	public void HoverProvince(int a_pid, Color a_highlightColor)
+	public void HoverProvince(int aPid, Color aHighlightColor)
 	{
 		ResetHover();
 
-		if (a_pid <= 1)
+		if (aPid <= 1)
 		{
 			Input.SetDefaultCursorShape(Input.CursorShape.Arrow);
 			EmitSignal(SignalName.ProvinceHovered, -1, "");
@@ -743,7 +771,7 @@ public partial class MapManager : Node
 			return;
 		}
 
-		switch (current_view)
+		switch (currentView)
 		{
 			case MapView.COUNTRIES:
 				SwitchTooltip(1);
@@ -756,13 +784,13 @@ public partial class MapManager : Node
 				break;
 		}
 
-		if (a_highlightColor != Colors.Transparent)
+		if (aHighlightColor != Colors.Transparent)
 		{
-			original_color = state_color_image.GetPixel(a_pid, 0);
-			UpdateLookup(a_pid, a_highlightColor, a_highlightColor);
-			last_hovered_pid = a_pid;
+			originalColor = stateColorImage.GetPixel(aPid, 0);
+			UpdateLookup(aPid, aHighlightColor, aHighlightColor);
+			lastHoveredPid = aPid;
 			Input.SetDefaultCursorShape(Input.CursorShape.PointingHand);
-			EmitSignal(SignalName.ProvinceHovered, a_pid, _GetHoverViewer());
+			EmitSignal(SignalName.ProvinceHovered, aPid, _GetHoverViewer());
 		}
 	}
 
@@ -776,9 +804,9 @@ public partial class MapManager : Node
 	{
 		if (InteractionType() == 1) // SELECT_COUNTRY
 			UnhighlightCountry();
-		else if (last_hovered_pid > 1)
-			UpdateLookup(last_hovered_pid, original_color, original_color);
-		last_hovered_pid = -1;
+		else if (lastHoveredPid > 1)
+			UpdateLookup(lastHoveredPid, originalColor, originalColor);
+		lastHoveredPid = -1;
 	}
 
 	public Color GetContextualHighlight(int pid)
@@ -789,26 +817,26 @@ public partial class MapManager : Node
 		if (InteractionType() == 1) // SELECT_COUNTRY
 			return Colors.AntiqueWhite;
 
-		var player_name = CountryData.NameOf(CountryManager.Instance.player_country);
-		var province = _provinces[pid];
-		var is_player_owned = province.GetFunctionalOwner() == player_name;
+		var playerName = CountryData.NameOf(CountryManager.Instance.playerCountry);
+		var province = Provinces[pid];
+		var isPlayerOwned = province.GetFunctionalOwner() == playerName;
 
-		if (!is_player_owned)
+		if (!isPlayerOwned)
 			return Colors.Transparent;
 
 		if (IndustryBuilding() == 2) // PORT
 		{
-			var coastal_provinces = GetProvincesNearSea(player_name);
-			var has_port = false;
+			var coastalProvinces = GetProvincesNearSea(playerName);
+			var hasPort = false;
 			foreach (var building in province.buildings)
 			{
 				if (building.type == "Port")
 				{
-					has_port = true;
+					hasPort = true;
 					break;
 				}
 			}
-			if (Array.IndexOf(coastal_provinces, pid) >= 0 && has_port)
+			if (Array.IndexOf(coastalProvinces, pid) >= 0 && hasPort)
 				return Colors.Cyan;
 			return Colors.Transparent;
 		}
@@ -819,30 +847,30 @@ public partial class MapManager : Node
 			return Colors.Transparent; // Don't highlight non-city provinces during deploy
 		}
 		if (IndustryBuilding() != 0) // DEFAULT
-			return state_color_image.GetPixel(pid, 0).Lightened(0.2f).Blend(Colors.GreenYellow);
+			return stateColorImage.GetPixel(pid, 0).Lightened(0.2f).Blend(Colors.GreenYellow);
 
 		return Colors.Transparent;
 	}
 
 	// Relation of a_country1 as seen from a_country2. Returns CountryRelation bitflags.
-	public int GetRelativeCountryRelation(GodotObject a_country1, GodotObject a_country2)
+	public int GetRelativeCountryRelation(GodotObject aCountry1, GodotObject aCountry2)
 	{
-		if (a_country1.Get("country_name").AsString() == a_country2.Get("country_name").AsString())
+		if (aCountry1.Get("countryName").AsString() == aCountry2.Get("countryName").AsString())
 			return (int)CountryRelation.PLAYER;
-		if (a_country2.Get("puppets").AsGodotArray().Contains(a_country1.Get("country_name").AsString()))
+		if (aCountry2.Get("puppets").AsGodotArray().Contains(aCountry1.Get("countryName").AsString()))
 			return (int)CountryRelation.PUPPET; // never neutral
 
 		var relation = RELATION_NEUTRAL_BIT;
-		if (FactionManager.Instance.in_faction(a_country2, a_country1))
+		if (FactionManager.Instance.InFaction(aCountry2, aCountry1))
 			relation |= RELATION_ALLY_BIT;
-		if (WarManager.Instance.is_at_war(a_country1, a_country2))
+		if (WarManager.Instance.IsAtWar(aCountry1, aCountry2))
 			relation |= RELATION_ENEMY_BIT;
 		return relation;
 	}
 
 	public bool IsLandProvince(int pid)
 	{
-		var province = _provinces[pid];
+		var province = Provinces[pid];
 		return pid > 1 && province.type != 0; // 0 is SEA
 	}
 
@@ -850,7 +878,7 @@ public partial class MapManager : Node
 	{
 		if (IndustryBuilding() != 0) // DEFAULT
 		{
-			GameState.Instance.reset_industry_building();
+			GameState.Instance.ResetIndustryBuilding();
 			ShowCountriesMap();
 		}
 		else
@@ -861,67 +889,67 @@ public partial class MapManager : Node
 
 	public void SelectCountryAt(int pid)
 	{
-		var province = _provinces[pid];
+		var province = Provinces[pid];
 		EmitSignal(SignalName.CountrySelected, province.GetFunctionalOwner());
 		ShowCountriesMap();
 	}
 
 	public void DeployAt(int pid)
 	{
-		var player_country_name = CountryData.NameOf(CountryManager.Instance.player_country);
-		var province = _provinces[pid];
-		var is_player_owned = province.GetFunctionalOwner() == player_country_name;
-		_SetDeploymentPID(is_player_owned, pid, player_country_name);
+		var playerCountryName = CountryData.NameOf(CountryManager.Instance.playerCountry);
+		var province = Provinces[pid];
+		var isPlayerOwned = province.GetFunctionalOwner() == playerCountryName;
+		_SetDeploymentPID(isPlayerOwned, pid, playerCountryName);
 	}
 
 	public void BuildAt(int pid)
 	{
-		if (EconomyManager.Instance.is_province_building(pid))
+		if (EconomyManager.Instance.IsProvinceBuilding(pid))
 			return;
 
-		var province = _provinces[pid];
-		var owner_name = province.GetFunctionalOwner();
+		var province = Provinces[pid];
+		var ownerName = province.GetFunctionalOwner();
 		var countries = CountryManager.Instance.countries;
 		var relation = GetRelativeCountryRelation(
-			countries.TryGetValue(owner_name, out var ownerValue) ? ownerValue.AsGodotObject() : null,
-			CountryManager.Instance.player_country);
+			countries.TryGetValue(ownerName, out var ownerValue) ? ownerValue.AsGodotObject() : null,
+			CountryManager.Instance.playerCountry);
 		// Only player and puppets (no neutral bit) can be built in.
-		var country_name = (relation & RELATION_NEUTRAL_BIT) == 0 ? owner_name : "";
-		if (country_name != "" && _ProvinceBuildIndustry(pid, country_name, IndustryBuilding()))
+		var countryName = (relation & RELATION_NEUTRAL_BIT) == 0 ? ownerName : "";
+		if (countryName != "" && _ProvinceBuildIndustry(pid, countryName, IndustryBuilding()))
 		{
 			_cleanup_interaction_state();
-			ShowIndustryCountry(country_name);
-			EmitSignal(SignalName.CountryClicked, country_name);
+			ShowIndustryCountry(countryName);
+			EmitSignal(SignalName.CountryClicked, countryName);
 		}
 		else
 		{
 			GD.Print("Action Failed: Cannot build in foreign territory.");
-			GameState.Instance.reset_industry_building();
+			GameState.Instance.ResetIndustryBuilding();
 			ShowCountriesMap();
 		}
 	}
 
 	// move this to CountryManager?
 	public void _SetDeploymentPID(
-		bool a_is_player_owned,
-		int a_pid,
-		string a_player_name
+		bool aIsPlayerOwned,
+		int aPid,
+		string aPlayerName
 	)
 	{
-		var province = _provinces[a_pid];
-		if (a_is_player_owned && province.city != "")
+		var province = Provinces[aPid];
+		if (aIsPlayerOwned && province.city != "")
 		{
-			EmitSignal(SignalName.CountryClicked, a_player_name);
-			CountryManager.Instance.player_country.Set("deploy_pid", a_pid);
+			EmitSignal(SignalName.CountryClicked, aPlayerName);
+			CountryManager.Instance.playerCountry.Set("deployPid", aPid);
 			GameState.Instance.interactionType = 0; // DEFAULT
 			_cleanup_interaction_state();
 		}
 	}
 
-	public bool _ProvinceBuildIndustry(int pid, string a_countryName, int type)
+	public bool _ProvinceBuildIndustry(int pid, string aCountryName, int type)
 	{
-		var province = _provinces[pid];
-		var country = CountryManager.Instance.GetCountry(a_countryName);
+		var province = Provinces[pid];
+		var country = CountryManager.Instance.GetCountry(aCountryName);
 
 		// 1. Safety Check: Is there already something there or currently building?
 		// Using your Enums: 0 = NO, 1 = BUILDING, 2 = BUILT
@@ -930,24 +958,24 @@ public partial class MapManager : Node
 			case 1: // FACTORY
 				if (province.buildings.Count >= 4)
 					return false;
-				EconomyManager.Instance.start_construction(pid, "Factory", 10, 150.0f, country);
+				EconomyManager.Instance.StartConstruction(pid, "Factory", 10, 150.0f, country);
 				break;
 			case 2: // PORT
-				var all_ports = true;
+				var allPorts = true;
 				foreach (var building in province.buildings)
 				{
 					if (building.type != "Port")
 					{
-						all_ports = false;
+						allPorts = false;
 						break;
 					}
 				}
-				if (province.buildings.Count >= 4 && all_ports)
+				if (province.buildings.Count >= 4 && allPorts)
 					return false;
 
 				// 3. Sea check for Ports
-				if (Array.IndexOf(GetProvincesNearSea(a_countryName), pid) >= 0)
-					EconomyManager.Instance.start_construction(pid, "Port", 10, 150.0f, country);
+				if (Array.IndexOf(GetProvincesNearSea(aCountryName), pid) >= 0)
+					EconomyManager.Instance.StartConstruction(pid, "Port", 10, 150.0f, country);
 				else
 				{
 					GD.Print("Action Failed: Port must be on a coast!");
@@ -967,15 +995,15 @@ public partial class MapManager : Node
 	public void _cleanup_interaction_state()
 	{
 		Input.SetDefaultCursorShape(Input.CursorShape.Arrow);
-		if (last_hovered_pid > 1)
+		if (lastHoveredPid > 1)
 		{
-			UpdateLookup(last_hovered_pid, original_color, original_color);
-			last_hovered_pid = -1;
+			UpdateLookup(lastHoveredPid, originalColor, originalColor);
+			lastHoveredPid = -1;
 		}
 	}
 
 	// To probe around and still register a click if we hit province/country border
-	public int GetProvinceWithRadius(Vector2 center, Sprite2D map_sprite, int radius)
+	public int GetProvinceWithRadius(Vector2 center, Sprite2D mapSprite, int radius)
 	{
 		var offsets = new Vector2[]
 		{
@@ -992,7 +1020,7 @@ public partial class MapManager : Node
 
 		foreach (var off in offsets)
 		{
-			var pid = GetProvinceAtPos(center + off, map_sprite);
+			var pid = GetProvinceAtPos(center + off, mapSprite);
 			if (pid > 1)
 				return pid;
 		}
@@ -1002,58 +1030,58 @@ public partial class MapManager : Node
 
 	public void UpdateLookup(int pid, Color colorMain, Color colorSecondary)
 	{
-		state_color_image.SetPixel(pid, 0, colorMain);
-		state_color_image.SetPixel(pid, 1, colorSecondary);
-		state_color_texture.Update(state_color_image);
+		stateColorImage.SetPixel(pid, 0, colorMain);
+		stateColorImage.SetPixel(pid, 1, colorSecondary);
+		stateColorTexture.Update(stateColorImage);
 	}
 
 	// Center = midpoint of first and last pixel seen in scan order (top-left-most, bottom-right-most).
 	private void _calculate_province_centroids(
-		List<int> a_first_pos,
-		List<int> a_last_pos,
-		List<int> a_pixel_count
+		List<int> aFirstPos,
+		List<int> aLastPos,
+		List<int> aPixelCount
 	)
 	{
-		for (var pid = 2; pid < a_pixel_count.Count; pid++)
+		for (var pid = 2; pid < aPixelCount.Count; pid++)
 		{
-			if (a_pixel_count[pid] <= 0)
+			if (aPixelCount[pid] <= 0)
 				continue;
 
 			var k = pid * 2;
 			var center = new Vector2(
-				(a_first_pos[k] + a_last_pos[k]) * 0.5f,
-				(a_first_pos[k + 1] + a_last_pos[k + 1]) * 0.5f);
+				(aFirstPos[k] + aLastPos[k]) * 0.5f,
+				(aFirstPos[k + 1] + aLastPos[k + 1]) * 0.5f);
 
-			province_centers[pid] = center;
+			provinceCenters[pid] = center;
 			// Graph point starts at the province's first scanned pixel. Move it to the center
 			// so SoiStar path costs use real province distances.
-			if (province_graph.HasPoint(pid))
-				province_graph.SetPointPosition(pid, center);
-			if (_provinces.TryGetValue(pid, out var province))
-				province.center = center;
+			if (provinceGraph.HasPoint(pid))
+				provinceGraph.SetPointPosition(pid, center);
+			if (Provinces.TryGetValue(pid, out var province))
+				province.center = center.ToCore();
 		}
 
-		GD.Print($"MapManager: Centroids calculated for {province_centers.Count} provinces.");
+		GD.Print($"MapManager: Centroids calculated for {provinceCenters.Count} provinces.");
 	}
 
-	private void _build_adjacency_list(Godot.Collections.Array a_progress)
+	private void _build_adjacency_list(Godot.Collections.Array aProgress)
 	{
-		province_graph.NeighborFilterEnabled = true;
-		province_graph.Clear();
+		provinceGraph.NeighborFilterEnabled = true;
+		provinceGraph.Clear();
 
 		var inc = 0.1f / (MAP_WIDTH * MAP_HEIGHT);
 
 		for (var i = 0; i < MAP_WIDTH * MAP_HEIGHT; i++)
 		{
-			a_progress[0] = a_progress[0].AsDouble() + inc;
+			aProgress[0] = aProgress[0].AsDouble() + inc;
 			var x = i % MAP_WIDTH;
 			var y = i / MAP_WIDTH;
 			var pid = _get_pid_fast(x, y);
 			if (pid <= 1)
 				continue;
 
-			if (!province_graph.HasPoint(pid))
-				province_graph.AddPoint(pid, new Vector2(x, y));
+			if (!provinceGraph.HasPoint(pid))
+				provinceGraph.AddPoint(pid, new Vector2(x, y));
 
 			// 4-directional neighbors
 			foreach (var d in ALL_DIRECTIONS)
@@ -1068,8 +1096,8 @@ public partial class MapManager : Node
 				// Normal adjacency (Land-to-Land)
 				if (neighbor > 0 && neighbor != pid)
 				{
-					province_graph.AddPoint(neighbor, new Vector2(nx, ny));
-					province_graph.ConnectPoints(pid, neighbor);
+					provinceGraph.AddPoint(neighbor, new Vector2(nx, ny));
+					provinceGraph.ConnectPoints(pid, neighbor);
 					continue;
 				}
 
@@ -1079,8 +1107,8 @@ public partial class MapManager : Node
 					var across = _scan_across_border(nx, ny, pid);
 					if (across > 0 && across != pid)
 					{
-						province_graph.AddPoint(across, new Vector2(nx, ny));
-						province_graph.ConnectPoints(pid, across);
+						provinceGraph.AddPoint(across, new Vector2(nx, ny));
+						provinceGraph.ConnectPoints(pid, across);
 					}
 				}
 			}
@@ -1113,39 +1141,39 @@ public partial class MapManager : Node
 	// Faster direct pid fetch
 	public int _get_pid_fast(int x, int y)
 	{
-		return (int)(id_map_image.GetPixel(x, y).ToRgba32() >> 8);
+		return (int)(idMapImage.GetPixel(x, y).ToRgba32() >> 8);
 	}
 
 	// --- Pathfinding (delegated to SoiStar) ---//
 
-	public Dictionary<Vector2I, long[]> path_cache = new();
+	public Dictionary<Vector2I, long[]> pathCache = new();
 
-	public long[] find_path(int start_pid, int end_pid, Godot.Collections.Array allowed_countries = null)
+	public long[] FindPath(int startPid, int endPid, Godot.Collections.Array allowedCountries = null)
 	{
-		if (start_pid == end_pid)
-			return new long[] { start_pid };
+		if (startPid == endPid)
+			return new long[] { startPid };
 
-		allowed_countries ??= new Godot.Collections.Array();
-		var use_cache = allowed_countries.Count == 0;
-		var cache_key = new Vector2I(start_pid, end_pid);
+		allowedCountries ??= new Godot.Collections.Array();
+		var useCache = allowedCountries.Count == 0;
+		var cacheKey = new Vector2I(startPid, endPid);
 
-		if (use_cache && path_cache.TryGetValue(cache_key, out var cached_path))
-			return (long[])cached_path.Clone();
+		if (useCache && pathCache.TryGetValue(cacheKey, out var cachedPath))
+			return (long[])cachedPath.Clone();
 
 		// Set context for SoiStar filtering
-		province_graph.context_allowed_countries.Clear();
-		foreach (var country in allowed_countries)
-			province_graph.context_allowed_countries.Add(country.AsString());
-		var pathResult = province_graph.GetIdPath(start_pid, end_pid);
-		province_graph.context_allowed_countries.Clear();
+		provinceGraph.contextAllowedCountries.Clear();
+		foreach (var country in allowedCountries)
+			provinceGraph.contextAllowedCountries.Add(country.AsString());
+		var pathResult = provinceGraph.GetIdPath(startPid, endPid);
+		provinceGraph.contextAllowedCountries.Clear();
 
 		var pathList = new List<long>();
 		foreach (var id in pathResult)
 			pathList.Add(id);
 		var path = pathList.ToArray();
 
-		if (use_cache && path.Length != 0)
-			path_cache[cache_key] = path;
+		if (useCache && path.Length != 0)
+			pathCache[cacheKey] = path;
 
 		return path;
 	}
@@ -1175,38 +1203,38 @@ public partial class MapManager : Node
 		return _gdp_gradient;
 	}
 
-	private Color _get_heatmap_color(int pop, float max_pop)
+	private Color _get_heatmap_color(int pop, float maxPop)
 	{
 		if (pop <= 0)
 			return new Color(0.1f, 0.1f, 0.15f, 1.0f);
-		var intensity = Mathf.Clamp(pop / max_pop, 0.0f, 1.0f);
+		var intensity = Mathf.Clamp(pop / maxPop, 0.0f, 1.0f);
 		return _get_population_gradient().Sample(intensity);
 	}
 
 	// soilad aneurysm time
 	public void _ShowFactionMap()
 	{
-		var faction_color = Colors.Gray;
-		if (_provinces.Count == 0)
+		var factionColor = Colors.Gray;
+		if (Provinces.Count == 0)
 			return;
 
-		var current_max_gdp = 1.0f;
-		foreach (var provinceVariant in _provinces.Values)
+		var currentMaxGdp = 1.0f;
+		foreach (var provinceVariant in Provinces.Values)
 		{
 			var province = provinceVariant;
-			if (province.gdp > current_max_gdp)
-				current_max_gdp = province.gdp;
+			if (province.gdp > currentMaxGdp)
+				currentMaxGdp = province.gdp;
 		}
 
 		var factions = FactionManager.Instance.factions;
-		foreach (var pid in _provinces.Keys)
+		foreach (var pid in Provinces.Keys)
 		{
 			if (pid <= 1)
 				continue;
 
-			var province = _provinces[pid];
+			var province = Provinces[pid];
 			var total = 0;
-			faction_color = Colors.Gray;
+			factionColor = Colors.Gray;
 			foreach (var factionKey in factions.Keys)
 			{
 				var faction = (FactionData)factions[factionKey];
@@ -1217,243 +1245,243 @@ public partial class MapManager : Node
 					if (member != null && member.polity == province.country)
 					{
 						total += 1;
-						faction_color = faction.color;
+						factionColor = faction.color.ToColor();
 						break;
 					}
 				}
 			}
-			state_color_image.SetPixel(pid, 0, faction_color / total);
-			state_color_image.SetPixel(pid, 1, faction_color / total);
+			stateColorImage.SetPixel(pid, 0, factionColor / total);
+			stateColorImage.SetPixel(pid, 1, factionColor / total);
 		}
 
-		state_color_texture.Update(state_color_image);
-		current_view = MapView.FACTION;
-		EmitSignal(SignalName.MapViewChanged, (int)current_view);
+		stateColorTexture.Update(stateColorImage);
+		currentView = MapView.FACTION;
+		EmitSignal(SignalName.MapViewChanged, (int)currentView);
 		GD.Print("MapManager: Faction View Updated");
 	}
 
 	private void _ShowPopulationMap()
 	{
-		if (_provinces.Count == 0)
+		if (Provinces.Count == 0)
 			return;
-		var current_max_pop = 1.0f;
-		foreach (var provinceVariant in _provinces.Values)
+		var currentMaxPop = 1.0f;
+		foreach (var provinceVariant in Provinces.Values)
 		{
 			var province = provinceVariant;
-			if (province.GetPopulation() > current_max_pop)
-				current_max_pop = province.GetPopulation();
+			if (province.GetPopulation() > currentMaxPop)
+				currentMaxPop = province.GetPopulation();
 		}
 
-		foreach (var pid in _provinces.Keys)
+		foreach (var pid in Provinces.Keys)
 		{
 			if (pid <= 1)
 				continue;
-			var province = _provinces[pid];
-			var color = _get_heatmap_color(province.GetPopulation(), current_max_pop);
-			state_color_image.SetPixel(pid, 0, color);
-			state_color_image.SetPixel(pid, 1, color);
+			var province = Provinces[pid];
+			var color = _get_heatmap_color(province.GetPopulation(), currentMaxPop);
+			stateColorImage.SetPixel(pid, 0, color);
+			stateColorImage.SetPixel(pid, 1, color);
 		}
 
-		state_color_texture.Update(state_color_image);
-		GD.Print("MapManager: Population View Updated. Max Pop found: ", current_max_pop);
+		stateColorTexture.Update(stateColorImage);
+		GD.Print("MapManager: Population View Updated. Max Pop found: ", currentMaxPop);
 	}
 
 	private void _ShowInfrastructureMap()
 	{
-		if (_provinces.Count == 0)
+		if (Provinces.Count == 0)
 			return;
 
-		var player = CountryManager.Instance.player_country;
-		var allowed = player == null ? new Godot.Collections.Array() : player.Call("get_all_allowed_countries").AsGodotArray();
-		var player_name = CountryData.NameOf(player);
+		var player = CountryManager.Instance.playerCountry;
+		var allowed = player == null ? new Godot.Collections.Array() : player.Call("GetAllAllowedCountries").AsGodotArray();
+		var playerName = CountryData.NameOf(player);
 		var countries = CountryManager.Instance.countries;
 
-		foreach (var pid in _provinces.Keys)
+		foreach (var pid in Provinces.Keys)
 		{
-			var province = _provinces[pid];
+			var province = Provinces[pid];
 			if (pid <= 1 || province.country == "Sea")
 				continue;
-			if (InteractionType() != 1 && player_name != province.country && !allowed.Contains(province.country))
+			if (InteractionType() != 1 && playerName != province.country && !allowed.Contains(province.country))
 			{
-				state_color_image.SetPixel(pid, 0, CountryColor(province.country, Colors.Black));
+				stateColorImage.SetPixel(pid, 0, CountryColor(province.country, Colors.Black));
 			}
 			else
 			{
 				var infra = province.infrastructure;
-				var country_color = countries.TryGetValue(province.country, out var colorValue)
-					? colorValue.AsGodotObject().Get("country_color").AsColor()
+				var countryColor = countries.TryGetValue(province.country, out var colorValue)
+					? colorValue.AsGodotObject().Get("countryColor").AsColor()
 					: Colors.White;
 				if (infra == 0)
-					state_color_image.SetPixel(pid, 0, country_color * 0.5f + Colors.White * 0.5f);
+					stateColorImage.SetPixel(pid, 0, countryColor * 0.5f + Colors.White * 0.5f);
 				else if (infra == province.maxInfrastructure)
-					state_color_image.SetPixel(pid, 0, country_color * 0.5f + Colors.Blue * 0.5f);
+					stateColorImage.SetPixel(pid, 0, countryColor * 0.5f + Colors.Blue * 0.5f);
 				else
-					state_color_image.SetPixel(pid, 0,
-						country_color * 0.5f + Colors.Yellow * 0.5f * ((float)infra / province.maxInfrastructure));
+					stateColorImage.SetPixel(pid, 0,
+						countryColor * 0.5f + Colors.Yellow * 0.5f * ((float)infra / province.maxInfrastructure));
 			}
 		}
 
-		state_color_texture.Update(state_color_image);
+		stateColorTexture.Update(stateColorImage);
 		GD.Print("MapManager: Infrastructure View Updated.");
 	}
 
 	private void _ShowEthnicMap()
 	{
-		if (_provinces.Count == 0)
+		if (Provinces.Count == 0)
 			return;
 
-		foreach (var pid in _provinces.Keys)
+		foreach (var pid in Provinces.Keys)
 		{
 			if (pid <= 1)
 				continue;
 
-			var province = _provinces[pid];
+			var province = Provinces[pid];
 			if (province.populations.Count <= 0)
 				continue;
-			var eth_name = province.populations[0].ethnicity; // Assuming this is the String name (e.g., "Igbo")
+			var ethName = province.populations[0].ethnicity; // Assuming this is the String name (e.g., "Igbo")
 
 			// Default to black or transparent if ethnicity not found
-			var display_color = Colors.Gray;
+			var displayColor = Colors.Gray;
 
-			if (ethnic_name_to_color.TryGetValue(eth_name, out var ethnicColor))
-				display_color = ethnicColor.AsColor();
+			if (ethnicNameToColor.TryGetValue(ethName, out var ethnicColor))
+				displayColor = ethnicColor.AsColor();
 
 			// Update the lookup texture
-			state_color_image.SetPixel(pid, 0, display_color);
-			state_color_image.SetPixel(pid, 1, display_color);
+			stateColorImage.SetPixel(pid, 0, displayColor);
+			stateColorImage.SetPixel(pid, 1, displayColor);
 		}
 
-		state_color_texture.Update(state_color_image);
+		stateColorTexture.Update(stateColorImage);
 		GD.Print("MapManager: Ethnic View Updated.");
 	}
 
-	private Color _get_gdp_heatmap_color(int gdp, float max_gdp)
+	private Color _get_gdp_heatmap_color(int gdp, float maxGdp)
 	{
 		if (gdp <= 0)
 			return new Color(0.1f, 0.1f, 0.1f);
-		var intensity = Mathf.Clamp(Mathf.Sqrt(gdp) / Mathf.Sqrt(max_gdp), 0.0f, 1.0f);
+		var intensity = Mathf.Clamp(Mathf.Sqrt(gdp) / Mathf.Sqrt(maxGdp), 0.0f, 1.0f);
 		return _get_gdp_gradient().Sample(intensity);
 	}
 
 	private void _ShowGDPMap()
 	{
-		if (_provinces.Count == 0)
+		if (Provinces.Count == 0)
 			return;
 
-		var current_max_gdp = 1.0f;
-		foreach (var provinceVariant in _provinces.Values)
+		var currentMaxGdp = 1.0f;
+		foreach (var provinceVariant in Provinces.Values)
 		{
 			var province = provinceVariant;
-			if (province.gdp > current_max_gdp)
-				current_max_gdp = province.gdp;
+			if (province.gdp > currentMaxGdp)
+				currentMaxGdp = province.gdp;
 		}
 
-		foreach (var pid in _provinces.Keys)
+		foreach (var pid in Provinces.Keys)
 		{
 			if (pid <= 1)
 				continue;
 
-			var province = _provinces[pid];
-			var color = _get_gdp_heatmap_color(province.gdp, current_max_gdp);
-			state_color_image.SetPixel(pid, 0, color);
-			state_color_image.SetPixel(pid, 1, color);
+			var province = Provinces[pid];
+			var color = _get_gdp_heatmap_color(province.gdp, currentMaxGdp);
+			stateColorImage.SetPixel(pid, 0, color);
+			stateColorImage.SetPixel(pid, 1, color);
 		}
 
-		state_color_texture.Update(state_color_image);
-		GD.Print("MapManager: GDP View Updated. Max GDP: ", current_max_gdp);
+		stateColorTexture.Update(stateColorImage);
+		GD.Print("MapManager: GDP View Updated. Max GDP: ", currentMaxGdp);
 	}
 
-	public Color GetCountryDisplayColor(string a_countryName)
+	public Color GetCountryDisplayColor(string aCountryName)
 	{
 		var countries = CountryManager.Instance.countries;
-		if (!countries.TryGetValue(a_countryName, out var countryValue) || countryValue.AsGodotObject() == null)
+		if (!countries.TryGetValue(aCountryName, out var countryValue) || countryValue.AsGodotObject() == null)
 			return Colors.Gray;
-		var country_data = countryValue.AsGodotObject();
-		var owner = country_data.Get("owner").AsString();
+		var countryData = countryValue.AsGodotObject();
+		var owner = countryData.Get("owner").AsString();
 		if (!countries.TryGetValue(owner, out var ownerValue) || ownerValue.AsGodotObject() == null)
-			return country_data.Get("country_color").AsColor();
-		var owner_data = ownerValue.AsGodotObject();
-		return (country_data.Get("country_color").AsColor() + 3 * owner_data.Get("country_color").AsColor()) * 0.25f;
+			return countryData.Get("countryColor").AsColor();
+		var ownerData = ownerValue.AsGodotObject();
+		return (countryData.Get("countryColor").AsColor() + 3 * ownerData.Get("countryColor").AsColor()) * 0.25f;
 	}
 
 	public void ShowCountriesMap()
 	{
-		state_color_image.SetPixel(0, 0, SEA_MAIN); // ID 0: Sea
-		state_color_image.SetPixel(1, 0, Colors.Black); // ID 1: Borders/Grid
+		stateColorImage.SetPixel(0, 0, SEA_MAIN); // ID 0: Sea
+		stateColorImage.SetPixel(1, 0, Colors.Black); // ID 1: Borders/Grid
 
-		foreach (var pid in _provinces.Keys)
+		foreach (var pid in Provinces.Keys)
 		{
 			if (pid <= 1)
 				continue;
 
-			var province = _provinces[pid];
-			state_color_image.SetPixel(pid, 0, GetCountryDisplayColor(province.country));
-			state_color_image.SetPixel(pid, 1, GetCountryDisplayColor(province.GetFunctionalOwner()));
+			var province = Provinces[pid];
+			stateColorImage.SetPixel(pid, 0, GetCountryDisplayColor(province.country));
+			stateColorImage.SetPixel(pid, 1, GetCountryDisplayColor(province.GetFunctionalOwner()));
 		}
 
-		state_color_texture.Update(state_color_image);
+		stateColorTexture.Update(stateColorImage);
 	}
 
 	private void _ShowResourcesMap()
 	{
-		state_color_image.SetPixel(0, 0, SEA_MAIN); // ID 0: Sea
-		state_color_image.SetPixel(1, 0, Colors.Black); // ID 1: Borders/Grid
+		stateColorImage.SetPixel(0, 0, SEA_MAIN); // ID 0: Sea
+		stateColorImage.SetPixel(1, 0, Colors.Black); // ID 1: Borders/Grid
 
-		foreach (var pid in _provinces.Keys)
+		foreach (var pid in Provinces.Keys)
 		{
 			if (pid <= 1)
 				continue;
 
-			var province = _provinces[pid];
-			state_color_image.SetPixel(pid, 0, GetCountryDisplayColor(province.country));
-			state_color_image.SetPixel(pid, 1, GetCountryDisplayColor(province.GetFunctionalOwner()));
+			var province = Provinces[pid];
+			stateColorImage.SetPixel(pid, 0, GetCountryDisplayColor(province.country));
+			stateColorImage.SetPixel(pid, 1, GetCountryDisplayColor(province.GetFunctionalOwner()));
 		}
 
-		state_color_texture.Update(state_color_image);
+		stateColorTexture.Update(stateColorImage);
 	}
 
 	public void _ShowBiomesMap()
 	{
-		state_color_image.SetPixel(0, 0, SEA_MAIN); // ID 0: Sea
-		state_color_image.SetPixel(1, 0, Colors.Black); // ID 1: Borders/Grid
+		stateColorImage.SetPixel(0, 0, SEA_MAIN); // ID 0: Sea
+		stateColorImage.SetPixel(1, 0, Colors.Black); // ID 1: Borders/Grid
 
-		foreach (var pid in _provinces.Keys)
+		foreach (var pid in Provinces.Keys)
 		{
 			if (pid <= 1)
 				continue;
 
-			var province = _provinces[pid];
+			var province = Provinces[pid];
 			var biomeColor = biomes.TryGetValue(province.biome, out var biomeValue)
-				? ((BiomeData)biomeValue.AsGodotObject()).color
+				? biomeValue.color.ToColor()
 				: Colors.AntiqueWhite;
 
-			state_color_image.SetPixel(pid, 0, biomeColor);
-			state_color_image.SetPixel(pid, 1, biomeColor);
+			stateColorImage.SetPixel(pid, 0, biomeColor);
+			stateColorImage.SetPixel(pid, 1, biomeColor);
 		}
 
-		state_color_texture.Update(state_color_image);
+		stateColorTexture.Update(stateColorImage);
 	}
 
 	public void ProvinceUpdated()
 	{
 		if (IndustryBuilding() != 0) // GDScript: if GameState.industry_building
-			ShowIndustryCountry(CountryData.NameOf(CountryManager.Instance.player_country));
+			ShowIndustryCountry(CountryData.NameOf(CountryManager.Instance.playerCountry));
 	}
 
-	public void ShowIndustryCountry(string country_name)
+	public void ShowIndustryCountry(string countryName)
 	{
-		if (!country_to_provinces.ContainsKey(country_name))
+		if (!countryToProvinces.ContainsKey(countryName))
 		{
-			GD.PushWarning("MapManager: Country " + country_name + " not found.");
+			GD.PushWarning("MapManager: Country " + countryName + " not found.");
 			return;
 		}
 
-		var provinces_near_sea = GetProvincesNearSea(country_name);
+		var provincesNearSea = GetProvincesNearSea(countryName);
 
-		foreach (var pidVariant in GetArray(country_to_provinces, country_name))
+		foreach (var pidVariant in GetArray(countryToProvinces, countryName))
 		{
 			var pid = pidVariant;
-			var province = _provinces[pid];
+			var province = Provinces[pid];
 			var color = Colors.White; // Default color
 
 			// TODO(sockmit2007): This whole section has to be reworked.
@@ -1461,53 +1489,53 @@ public partial class MapManager : Node
 				color = Colors.Yellow;
 			//elif province.factory == province.FACTORY_BUILT:
 			//	color = Color.GREEN
-			else if (EconomyManager.Instance.is_province_building(pid))
+			else if (EconomyManager.Instance.IsProvinceBuilding(pid))
 				color = Colors.Orange; // Show progress
 			//elif province.port == province.PORT_BUILT:
 			//	color = Color.BLUE
 			//elif province.port == province.PORT_BUILDING:
 			//	color = Color.CYAN # Show progress
-			else if (Array.IndexOf(provinces_near_sea, pid) >= 0)
+			else if (Array.IndexOf(provincesNearSea, pid) >= 0)
 				color = Colors.LightSkyBlue;
 
-			state_color_image.SetPixel(pid, 0, color);
-			state_color_image.SetPixel(pid, 1, color);
+			stateColorImage.SetPixel(pid, 0, color);
+			stateColorImage.SetPixel(pid, 1, color);
 		}
 
-		state_color_texture.Update(state_color_image);
+		stateColorTexture.Update(stateColorImage);
 	}
 
-	public void TransferOwnership(int pid, string new_owner_name)
+	public void TransferOwnership(int pid, string newOwnerName)
 	{
-		var province = _provinces[pid];
-		var old_owner_name = province.country;
+		var province = Provinces[pid];
+		var oldOwnerName = province.country;
 		var oldControllerName = province.GetFunctionalOwner();
 		var countries = CountryManager.Instance.countries;
 
-		if (EconomyManager.Instance.construction_queue.TryGetValue(pid, out var project))
-			project.AsGodotDictionary()["country"] = CountryManager.Instance.GetCountry(new_owner_name);
+		if (EconomyManager.Instance.constructionQueue.TryGetValue(pid, out var project))
+			project.AsGodotDictionary()["country"] = CountryManager.Instance.GetCountry(newOwnerName);
 
-		if (_provinces.ContainsKey(pid))
+		if (Provinces.ContainsKey(pid))
 		{
-			province.country = new_owner_name;
-			if (old_owner_name == oldControllerName && old_owner_name != "Sea")
+			province.country = newOwnerName;
+			if (oldOwnerName == oldControllerName && oldOwnerName != "Sea")
 			{
 				countries.TryGetValue(oldControllerName, out var oldControllerValue);
 				var oldCountry = oldControllerValue.AsGodotObject();
 				if (oldCountry != null)
 				{
-					oldCountry.Set("total_population", oldCountry.Get("total_population").AsInt32() - province.GetPopulation());
-					oldCountry.Set("factories_amount", oldCountry.Get("factories_amount").AsInt32() - province.GetFactories());
+					oldCountry.Set("totalPopulation", oldCountry.Get("totalPopulation").AsInt32() - province.GetPopulation());
+					oldCountry.Set("factoriesAmount", oldCountry.Get("factoriesAmount").AsInt32() - province.GetFactories());
 				}
 			}
-			if (province.city != "" && country_to_cities.TryGetValue(oldControllerName, out var oldCities))
+			if (province.city != "" && countryToCities.TryGetValue(oldControllerName, out var oldCities))
 				oldCities.Remove(pid);
 			if (province.city != "")
-				GetOrAddArray(country_to_cities, new_owner_name).Add(pid);
-			GetOrAddArray(allowed_pids, new_owner_name).Add(pid);
-			var newCountry = CountryManager.Instance.GetCountry(new_owner_name);
-			newCountry.Set("total_population", newCountry.Get("total_population").AsInt32() + province.GetPopulation());
-			newCountry.Set("factories_amount", newCountry.Get("factories_amount").AsInt32() + province.GetFactories());
+				GetOrAddArray(countryToCities, newOwnerName).Add(pid);
+			GetOrAddArray(allowedPids, newOwnerName).Add(pid);
+			var newCountry = CountryManager.Instance.GetCountry(newOwnerName);
+			newCountry.Set("totalPopulation", newCountry.Get("totalPopulation").AsInt32() + province.GetPopulation());
+			newCountry.Set("factoriesAmount", newCountry.Get("factoriesAmount").AsInt32() + province.GetFactories());
 		}
 		else
 		{
@@ -1515,50 +1543,50 @@ public partial class MapManager : Node
 			return;
 		}
 
-		if (country_to_occupied_provinces.TryGetValue(province.occupier, out var occupiedList))
+		if (countryToOccupiedProvinces.TryGetValue(province.occupier, out var occupiedList))
 			occupiedList.Remove(pid);
 
-		if (country_to_owned_provinces.TryGetValue(old_owner_name, out var ownedList))
+		if (countryToOwnedProvinces.TryGetValue(oldOwnerName, out var ownedList))
 			ownedList.Remove(pid);
 
-		if (country_to_rightful_provinces.TryGetValue(old_owner_name, out var rightfulList))
+		if (countryToRightfulProvinces.TryGetValue(oldOwnerName, out var rightfulList))
 			rightfulList.Remove(pid);
 
-		if (country_to_provinces.TryGetValue(oldControllerName, out var controllerList))
+		if (countryToProvinces.TryGetValue(oldControllerName, out var controllerList))
 			controllerList.Remove(pid);
 
-		if (!country_to_provinces.ContainsKey(new_owner_name))
-			country_to_provinces[new_owner_name] = new List<int>();
+		if (!countryToProvinces.ContainsKey(newOwnerName))
+			countryToProvinces[newOwnerName] = new List<int>();
 
-		if (!country_to_owned_provinces.ContainsKey(new_owner_name))
-			country_to_owned_provinces[new_owner_name] = new List<int>();
+		if (!countryToOwnedProvinces.ContainsKey(newOwnerName))
+			countryToOwnedProvinces[newOwnerName] = new List<int>();
 
-		if (!country_to_provinces[new_owner_name].Contains(pid))
-			country_to_provinces[new_owner_name].Add(pid);
+		if (!countryToProvinces[newOwnerName].Contains(pid))
+			countryToProvinces[newOwnerName].Add(pid);
 
-		if (!country_to_owned_provinces[new_owner_name].Contains(pid))
-			country_to_owned_provinces[new_owner_name].Add(pid);
+		if (!countryToOwnedProvinces[newOwnerName].Contains(pid))
+			countryToOwnedProvinces[newOwnerName].Add(pid);
 
 		province.occupier = "";
 
 		UpdateLookup(
 			pid,
-			CountryColor(new_owner_name, Colors.Gray),
-			CountryColor(new_owner_name, Colors.Gray));
-		EmitSignal(SignalName.ProvinceOwnershipChanged, pid, old_owner_name, new_owner_name);
+			CountryColor(newOwnerName, Colors.Gray),
+			CountryColor(newOwnerName, Colors.Gray));
+		EmitSignal(SignalName.ProvinceOwnershipChanged, pid, oldOwnerName, newOwnerName);
 	}
 
-	public void OccupyProvince(int pid, string new_owner_name)
+	public void OccupyProvince(int pid, string newOwnerName)
 	{
-		var province = _provinces[pid];
-		var old_owner_name = province.country;
+		var province = Provinces[pid];
+		var oldOwnerName = province.country;
 		var oldControllerName = province.GetFunctionalOwner();
 		var countries = CountryManager.Instance.countries;
 
-		if (_provinces.ContainsKey(pid))
+		if (Provinces.ContainsKey(pid))
 		{
-			province.occupier = new_owner_name;
-			if (province.city != "" && country_to_cities.TryGetValue(oldControllerName, out var oldCities))
+			province.occupier = newOwnerName;
+			if (province.city != "" && countryToCities.TryGetValue(oldControllerName, out var oldCities))
 				oldCities.Remove(pid);
 		}
 		else
@@ -1567,89 +1595,89 @@ public partial class MapManager : Node
 			return;
 		}
 
-		if (country_to_provinces.TryGetValue(oldControllerName, out var controllerList))
+		if (countryToProvinces.TryGetValue(oldControllerName, out var controllerList))
 			controllerList.Remove(pid);
 
-		if (country_to_occupied_provinces.TryGetValue(oldControllerName, out var occupiedOld))
+		if (countryToOccupiedProvinces.TryGetValue(oldControllerName, out var occupiedOld))
 			occupiedOld.Remove(pid);
 
-		if (!country_to_provinces.ContainsKey(new_owner_name))
-			country_to_provinces[new_owner_name] = new List<int>();
+		if (!countryToProvinces.ContainsKey(newOwnerName))
+			countryToProvinces[newOwnerName] = new List<int>();
 
-		if (!country_to_provinces[new_owner_name].Contains(pid))
-			country_to_provinces[new_owner_name].Add(pid);
+		if (!countryToProvinces[newOwnerName].Contains(pid))
+			countryToProvinces[newOwnerName].Add(pid);
 
 		if (province.city != "")
-			GetOrAddArray(country_to_cities, new_owner_name).Add(pid);
+			GetOrAddArray(countryToCities, newOwnerName).Add(pid);
 
-		if (province.occupier == old_owner_name)
+		if (province.occupier == oldOwnerName)
 		{
 			province.occupier = "";
-			var newCountry = CountryManager.Instance.GetCountry(new_owner_name);
-			newCountry.Set("total_population", newCountry.Get("total_population").AsInt32() + province.GetPopulation());
-			newCountry.Set("factories_amount", newCountry.Get("factories_amount").AsInt32() + province.GetFactories());
+			var newCountry = CountryManager.Instance.GetCountry(newOwnerName);
+			newCountry.Set("totalPopulation", newCountry.Get("totalPopulation").AsInt32() + province.GetPopulation());
+			newCountry.Set("factoriesAmount", newCountry.Get("factoriesAmount").AsInt32() + province.GetFactories());
 
 			// NOTE(soi): preserved from original: erase(pid), not erase(old_owner_name)
 		}
 		else
 		{
-			if (oldControllerName == old_owner_name && oldControllerName != "Sea")
+			if (oldControllerName == oldOwnerName && oldControllerName != "Sea")
 			{
-				var oldCountry = CountryManager.Instance.GetCountry(old_owner_name);
-				oldCountry.Set("total_population", oldCountry.Get("total_population").AsInt32() - province.GetPopulation());
-				oldCountry.Set("factories_amount", oldCountry.Get("factories_amount").AsInt32() - province.GetFactories());
+				var oldCountry = CountryManager.Instance.GetCountry(oldOwnerName);
+				oldCountry.Set("totalPopulation", oldCountry.Get("totalPopulation").AsInt32() - province.GetPopulation());
+				oldCountry.Set("factoriesAmount", oldCountry.Get("factoriesAmount").AsInt32() - province.GetFactories());
 			}
 
-			if (!country_to_rightful_provinces.ContainsKey(old_owner_name))
-				country_to_rightful_provinces[old_owner_name] = new List<int>();
+			if (!countryToRightfulProvinces.ContainsKey(oldOwnerName))
+				countryToRightfulProvinces[oldOwnerName] = new List<int>();
 
-			if (!country_to_rightful_provinces[old_owner_name].Contains(pid))
-				country_to_rightful_provinces[old_owner_name].Add(pid);
+			if (!countryToRightfulProvinces[oldOwnerName].Contains(pid))
+				countryToRightfulProvinces[oldOwnerName].Add(pid);
 
-			if (!country_to_occupied_provinces.ContainsKey(new_owner_name))
-				country_to_occupied_provinces[new_owner_name] = new List<int>();
+			if (!countryToOccupiedProvinces.ContainsKey(newOwnerName))
+				countryToOccupiedProvinces[newOwnerName] = new List<int>();
 
-			if (!country_to_occupied_provinces[new_owner_name].Contains(pid))
-				country_to_occupied_provinces[new_owner_name].Add(pid);
+			if (!countryToOccupiedProvinces[newOwnerName].Contains(pid))
+				countryToOccupiedProvinces[newOwnerName].Add(pid);
 		}
 
 		UpdateLookup(pid,
 			CountryColor(province.country, Colors.Gray),
 			CountryColor(province.GetFunctionalOwner(), Colors.Gray));
-		EmitSignal(SignalName.ProvinceOwnershipChanged, pid, oldControllerName, new_owner_name);
+		EmitSignal(SignalName.ProvinceOwnershipChanged, pid, oldControllerName, newOwnerName);
 	}
 
 	public void DeoccupyProvince(int pid)
 	{
-		var province = _provinces[pid];
-		var old_controller = province.GetFunctionalOwner();
+		var province = Provinces[pid];
+		var oldController = province.GetFunctionalOwner();
 
 		if (province.occupier != "")
 		{
-			if (province.city != "" && country_to_cities.TryGetValue(province.occupier, out var occupierCities))
+			if (province.city != "" && countryToCities.TryGetValue(province.occupier, out var occupierCities))
 				occupierCities.Remove(pid);
 			if (province.country != "Sea")
 			{
 				var country = CountryManager.Instance.GetCountry(province.country);
-				country.Set("total_population", country.Get("total_population").AsInt32() + province.GetPopulation());
-				country.Set("factories_amount", country.Get("factories_amount").AsInt32() + province.GetFactories());
+				country.Set("totalPopulation", country.Get("totalPopulation").AsInt32() + province.GetPopulation());
+				country.Set("factoriesAmount", country.Get("factoriesAmount").AsInt32() + province.GetFactories());
 				if (province.city != "")
-					GetOrAddArray(country_to_cities, province.country).Add(pid);
+					GetOrAddArray(countryToCities, province.country).Add(pid);
 			}
 
-			if (country_to_provinces.TryGetValue(province.occupier, out var occupierProvinces))
+			if (countryToProvinces.TryGetValue(province.occupier, out var occupierProvinces))
 				occupierProvinces.Remove(pid);
 
-			if (country_to_occupied_provinces.TryGetValue(province.occupier, out var occupierOccupied))
+			if (countryToOccupiedProvinces.TryGetValue(province.occupier, out var occupierOccupied))
 				occupierOccupied.Remove(pid);
 
 			// NOTE(soi): preserved from original: erase(pid), not erase(province.country)
 
-			if (!country_to_provinces.ContainsKey(province.country))
-				country_to_provinces[province.country] = new List<int>();
+			if (!countryToProvinces.ContainsKey(province.country))
+				countryToProvinces[province.country] = new List<int>();
 
-			if (!country_to_provinces[province.country].Contains(pid))
-				country_to_provinces[province.country].Add(pid);
+			if (!countryToProvinces[province.country].Contains(pid))
+				countryToProvinces[province.country].Add(pid);
 		}
 
 		province.occupier = "";
@@ -1657,7 +1685,7 @@ public partial class MapManager : Node
 		UpdateLookup(pid,
 			CountryColor(province.country, Colors.Gray),
 			CountryColor(province.GetFunctionalOwner(), Colors.Gray));
-		EmitSignal(SignalName.ProvinceOwnershipChanged, pid, old_controller, province.country);
+		EmitSignal(SignalName.ProvinceOwnershipChanged, pid, oldController, province.country);
 	}
 
 	private Vector3 _parse_color_string(string s)
@@ -1679,211 +1707,207 @@ public partial class MapManager : Node
 		return new Godot.Collections.Array();
 	}
 
-	public int[] GetProvincesNearSea(string country_name)
+	public int[] GetProvincesNearSea(string countryName)
 	{
-		var provinces_near_sea = new List<int>();
+		var provincesNearSea = new List<int>();
 
-		foreach (var pidVariant in GetArray(country_to_provinces, country_name))
+		foreach (var pidVariant in GetArray(countryToProvinces, countryName))
 		{
 			var pid = pidVariant;
-			foreach (var neighborIdVariant in province_graph.GetPointConnections(pid))
+			foreach (var neighborIdVariant in provinceGraph.GetPointConnections(pid))
 			{
-				var neighbor_id = (int)neighborIdVariant;
-				_provinces.TryGetValue(neighbor_id, out var neighbor_province);
+				var neighborId = (int)neighborIdVariant;
+				Provinces.TryGetValue(neighborId, out var neighborProvince);
 
-				if (neighbor_province != null && neighbor_province.type == 0) // Assuming 0 is SEA
+				if (neighborProvince != null && neighborProvince.type == 0) // Assuming 0 is SEA
 				{
-					provinces_near_sea.Add(pid);
+					provincesNearSea.Add(pid);
 					break;
 				}
 			}
 		}
 
-		return provinces_near_sea.ToArray();
+		return provincesNearSea.ToArray();
 	}
 
 	// Returns an array of province IDs that are on the border of a different country
-	public int[] GetBorderProvinces(string country_name)
+	public int[] GetBorderProvinces(string countryName)
 	{
-		var border_provinces = new List<int>();
+		var borderProvinces = new List<int>();
 
 		// Get all provinces owned by this country
-		foreach (var provIdVariant in GetArray(country_to_provinces, country_name))
+		foreach (var provIdVariant in GetArray(countryToProvinces, countryName))
 		{
-			var prov_id = provIdVariant;
-			_provinces.TryGetValue(prov_id, out var province_data);
+			var provId = provIdVariant;
+			Provinces.TryGetValue(provId, out var provinceData);
 
-			if (province_data == null)
+			if (provinceData == null)
 				continue;
 
 			// Province.cs currently has no `neighbors` field; fall back to graph connections.
 			var neighborIds = new Godot.Collections.Array();
-			foreach (var connection in province_graph.GetPointConnections(prov_id))
+			foreach (var connection in provinceGraph.GetPointConnections(provId))
 				neighborIds.Add(connection);
 
 			// Check neighbors of this province
 			foreach (var neighborIdVariant in neighborIds)
 			{
-				var neighbor_id = (int)neighborIdVariant;
+				var neighborId = (int)neighborIdVariant;
 				// If the neighbor is owned by someone else (and isn't sea/neutral)
-				if (_provinces.TryGetValue(neighbor_id, out var neighborProvince)
-					&& neighborProvince.GetFunctionalOwner() != country_name)
+				if (Provinces.TryGetValue(neighborId, out var neighborProvince)
+					&& neighborProvince.GetFunctionalOwner() != countryName)
 				{
-					border_provinces.Add(prov_id);
+					borderProvinces.Add(provId);
 					break; // Move to next province once we know this one is a border
 				}
 			}
 		}
 
-		return border_provinces.ToArray();
+		return borderProvinces.ToArray();
 	}
 
-	public Godot.Collections.Array<Godot.Collections.Dictionary> GetAllReleasables(string my_country)
+	public Godot.Collections.Array<Godot.Collections.Dictionary> GetAllReleasables(string myCountry)
 	{
 		var releasables = new Godot.Collections.Array<Godot.Collections.Dictionary>();
 
 		// 1. Get a list of all province IDs I currently own
-		var my_provinces = new List<int>();
-		foreach (var objVariant in _provinces.Values)
+		var myProvinces = new List<int>();
+		foreach (var objVariant in Provinces.Values)
 		{
 			var obj = objVariant;
 			// Using 'country' as per your Province resource
-			if (obj.country == my_country)
-				my_provinces.Add(obj.id);
+			if (obj.country == myCountry)
+				myProvinces.Add(obj.id);
 		}
 
 		// 2. Check every country in the registry
-		foreach (var potentialCountry in global_claims_registry.Keys)
+		foreach (var potentialCountry in globalClaimsRegistry.Keys)
 		{
-			var potential_country = potentialCountry;
-			if (potential_country == my_country)
+			if (potentialCountry == myCountry)
 				continue;
 
-			var required_provinces = global_claims_registry[potentialCountry];
+			var requiredProvinces = globalClaimsRegistry[potentialCountry];
 
-			var owned_provinces = new List<int>();
+			var ownedProvinces = new List<int>();
 
 			// 3. Verify I own every province they claim
-			foreach (var pIdVariant in required_provinces)
+			foreach (var pIdVariant in requiredProvinces)
 			{
-				var p_id = pIdVariant;
-				if (my_provinces.Contains(p_id))
-					owned_provinces.Add(p_id);
+				var pId = pIdVariant;
+				if (myProvinces.Contains(pId))
+					ownedProvinces.Add(pId);
 			}
 
 			// no province and country exitsts -> don care
 			// no province and country not exitsts -> don care
 			// province and country exitsts -> return
 			// province and country not exitsts -> release
-			if (owned_provinces.Count == 0)
+			if (ownedProvinces.Count == 0)
 				continue;
 
 			releasables.Add(new Godot.Collections.Dictionary
 			{
-				{ "country", potential_country },
-				{ "owned_provinces", owned_provinces.ToArray() },
+				{ "country", potentialCountry },
+				{ "owned_provinces", ownedProvinces.ToArray() },
 			});
 		}
 
 		return releasables;
 	}
 
-	public bool _country_exists_on_map(string c_name)
+	public bool _country_exists_on_map(string cName)
 	{
-		foreach (var objVariant in _provinces.Values)
+		foreach (var objVariant in Provinces.Values)
 		{
 			var obj = objVariant;
-			if (obj.country == c_name)
+			if (obj.country == cName)
 				return true;
 		}
 		return false;
 	}
 
-	public void ReleaseCountry(string a_countryName)
+	public void ReleaseCountry(string aCountryName)
 	{
-		CountryManager.Instance.add_country(new Godot.Collections.Dictionary { { "name", a_countryName } });
+		CountryManager.Instance.AddCountry(new Godot.Collections.Dictionary { { "name", aCountryName } });
 
-		foreach (var objVariant in _provinces.Values)
+		foreach (var objVariant in Provinces.Values)
 		{
 			var obj = objVariant;
-			if (Array.IndexOf(obj.claims, a_countryName) >= 0)
+			if (Array.IndexOf(obj.claims, aCountryName) >= 0)
 			{
 				foreach (var troopVariant in ProvinceTroops(obj.id))
 				{
-					var troop = troopVariant.AsGodotObject();
-					if (GodotObject.IsInstanceValid(troop))
-						TroopManager.Instance.RemoveTroop(troop as TroopData);
+					if (troopVariant is TroopData data)
+						TroopManager.Instance.RemoveTroop(data);
 				}
 
-				TransferOwnership(obj.id, a_countryName);
+				TransferOwnership(obj.id, aCountryName);
 			}
 		}
 
-		CountryManager.Instance.cleanup_empty_countries();
+		CountryManager.Instance.CleanupEmptyCountries();
 		ShowCountriesMap();
 	}
 
-	public void ReleasePuppet(string a_puppeter, string a_puppetee)
+	public void ReleasePuppet(string aPuppeter, string aPuppetee)
 	{
-		CountryManager.Instance.add_country(new Godot.Collections.Dictionary { { "name", a_puppetee } });
+		CountryManager.Instance.AddCountry(new Godot.Collections.Dictionary { { "name", aPuppetee } });
 
-		foreach (var objVariant in _provinces.Values)
+		foreach (var objVariant in Provinces.Values)
 		{
 			var obj = objVariant;
-			if (obj.claims.Length == 1 && obj.claims[0] == a_puppetee)
-				TransferOwnership(obj.id, a_puppetee);
+			if (obj.claims.Length == 1 && obj.claims[0] == aPuppetee)
+				TransferOwnership(obj.id, aPuppetee);
 		}
 
 		var countries = CountryManager.Instance.countries;
-		CountryManager.Instance.make_puppet(
-			countries.ContainsKey(a_puppeter) ? countries[a_puppeter].AsGodotObject() : null,
-			countries.ContainsKey(a_puppetee) ? countries[a_puppetee].AsGodotObject() : null);
-		CountryManager.Instance.cleanup_empty_countries();
+		CountryManager.Instance.MakePuppet(
+			countries.ContainsKey(aPuppeter) ? countries[aPuppeter].AsGodotObject() : null,
+			countries.ContainsKey(aPuppetee) ? countries[aPuppetee].AsGodotObject() : null);
+		CountryManager.Instance.CleanupEmptyCountries();
 		ShowCountriesMap();
 	}
 
-	public void InstantiateCountryFromClaims(Godot.Collections.Dictionary a_countryData)
+	public void InstantiateCountryFromClaims(Godot.Collections.Dictionary aCountryData)
 	{
-		CountryManager.Instance.add_country(a_countryData);
-		var name = a_countryData.ContainsKey("name") ? a_countryData["name"].AsString() : "";
+		CountryManager.Instance.AddCountry(aCountryData);
+		var name = aCountryData.ContainsKey("name") ? aCountryData["name"].AsString() : "";
 
-		foreach (var objVariant in _provinces.Values)
+		foreach (var objVariant in Provinces.Values)
 		{
 			var obj = objVariant;
 			if (Array.IndexOf(obj.claims, name) >= 0)
 			{
 				foreach (var troopVariant in ProvinceTroops(obj.id))
 				{
-					var troop = troopVariant.AsGodotObject();
-					if (GodotObject.IsInstanceValid(troop))
-						TroopManager.Instance.RemoveTroop(troop as TroopData);
+					if (troopVariant is TroopData data)
+						TroopManager.Instance.RemoveTroop(data);
 				}
 
 				TransferOwnership(obj.id, name);
 			}
 		}
 
-		CountryManager.Instance.cleanup_empty_countries();
+		CountryManager.Instance.CleanupEmptyCountries();
 		ShowCountriesMap();
 	}
 
-	public GodotObject InstantiateCountryFromProvinces(Godot.Collections.Dictionary a_countryData, int[] a_claims)
+	public GodotObject InstantiateCountryFromProvinces(Godot.Collections.Dictionary aCountryData, int[] aClaims)
 	{
-		var countryer = CountryManager.Instance.add_country(a_countryData);
-		var name = a_countryData.ContainsKey("name") ? a_countryData["name"].AsString() : "";
-		foreach (var pid in a_claims)
+		var countryer = CountryManager.Instance.AddCountry(aCountryData);
+		var name = aCountryData.ContainsKey("name") ? aCountryData["name"].AsString() : "";
+		foreach (var pid in aClaims)
 		{
 			foreach (var troopVariant in ProvinceTroops(pid))
 			{
-				var troop = troopVariant.AsGodotObject();
-				if (GodotObject.IsInstanceValid(troop))
-					TroopManager.Instance.RemoveTroop(troop as TroopData);
+				if (troopVariant is TroopData data)
+					TroopManager.Instance.RemoveTroop(data);
 			}
 
 			TransferOwnership(pid, name);
 		}
 
-		CountryManager.Instance.cleanup_empty_countries();
+		CountryManager.Instance.CleanupEmptyCountries();
 		ShowCountriesMap();
 		return countryer;
 	}
@@ -1891,7 +1915,7 @@ public partial class MapManager : Node
 	public Godot.Collections.Array<Godot.Collections.Dictionary> GetAllCities()
 	{
 		var pids = new Godot.Collections.Array<Godot.Collections.Dictionary>();
-		foreach (var objVariant in _provinces.Values)
+		foreach (var objVariant in Provinces.Values)
 		{
 			var obj = objVariant;
 			if (obj.city.Length > 0)
@@ -1906,67 +1930,67 @@ public partial class MapManager : Node
 		return pids;
 	}
 
-	public Godot.Collections.Array GetCitiesProvinceCountry(string country_name)
+	public Godot.Collections.Array GetCitiesProvinceCountry(string countryName)
 	{
 		var provinces = new Godot.Collections.Array();
-		foreach (var pidVariant in GetArray(country_to_provinces, country_name))
+		foreach (var pidVariant in GetArray(countryToProvinces, countryName))
 		{
 			var pid = pidVariant;
-			var province = _provinces[pid];
-			if (province.GetFunctionalOwner() == country_name && province.city.Length > 0)
+			var province = Provinces[pid];
+			if (province.GetFunctionalOwner() == countryName && province.city.Length > 0)
 				provinces.Add(pid);
 		}
 		return provinces;
 	}
 
 	// Returns provinces that specifically border a certain enemy
-	public int[] GetProvincesBorderingEnemies(string country_name, Godot.Collections.Array<string> enemies)
+	public int[] GetProvincesBorderingEnemies(string countryName, Godot.Collections.Array<string> enemies)
 	{
-		var specific_borders = new List<int>();
+		var specificBorders = new List<int>();
 
-		var enemy_dict = new Godot.Collections.Dictionary();
+		var enemyDict = new Godot.Collections.Dictionary();
 		foreach (var enemy in enemies)
-			enemy_dict[enemy] = true;
+			enemyDict[enemy] = true;
 
-		foreach (var provIdVariant in GetArray(country_to_provinces, country_name))
+		foreach (var provIdVariant in GetArray(countryToProvinces, countryName))
 		{
-			var prov_id = provIdVariant;
-			foreach (var neighborIdVariant in province_graph.GetPointConnections(prov_id))
+			var provId = provIdVariant;
+			foreach (var neighborIdVariant in provinceGraph.GetPointConnections(provId))
 			{
-				var neighbor_id = (int)neighborIdVariant;
-				var neighbor_prov = _provinces[neighbor_id];
-				var prov_owner = neighbor_prov.occupier != "" ? neighbor_prov.occupier : neighbor_prov.country;
-				if (enemy_dict.ContainsKey(prov_owner))
+				var neighborId = (int)neighborIdVariant;
+				var neighborProv = Provinces[neighborId];
+				var provOwner = neighborProv.occupier != "" ? neighborProv.occupier : neighborProv.country;
+				if (enemyDict.ContainsKey(provOwner))
 				{
-					specific_borders.Add(prov_id);
+					specificBorders.Add(provId);
 					break;
 				}
 			}
 		}
 
-		return specific_borders.ToArray();
+		return specificBorders.ToArray();
 	}
 
 	public void AnnexCountry(string annexer, string annexee)
 	{
 		//var playerobj = CountryManager.player_country
-		foreach (var troopVariant in TroopManager.Instance.get_troops_for_country(annexee))
+		foreach (var troopVariant in TroopManager.Instance.GetTroopsForCountry(annexee))
 		{
-			TroopManager.Instance.RemoveTroop(troopVariant.As<TroopData>());
+			TroopManager.Instance.RemoveTroop(troopVariant);
 		}
 
-		foreach (var pidVariant in GetArray(country_to_occupied_provinces, annexee))
+		foreach (var pidVariant in GetArray(countryToOccupiedProvinces, annexee))
 			DeoccupyProvince(pidVariant);
 
-		var provinces_to_transfer = GetArray(country_to_owned_provinces, annexee);
+		var provincesToTransfer = GetArray(countryToOwnedProvinces, annexee);
 
-		if (provinces_to_transfer.Count == 0)
+		if (provincesToTransfer.Count == 0)
 		{
 			GD.Print("MapManager: No provinces found for ", annexee);
 			return;
 		}
 
-		foreach (var pidVariant in provinces_to_transfer.ToArray())
+		foreach (var pidVariant in provincesToTransfer.ToArray())
 			TransferOwnership(pidVariant, annexer);
 
 		//playerobj.reset_manpower()
@@ -1975,14 +1999,14 @@ public partial class MapManager : Node
 
 	public void _BuildGlobalRegistry()
 	{
-		global_claims_registry.Clear();
-		foreach (var objVariant in _provinces.Values)
+		globalClaimsRegistry.Clear();
+		foreach (var objVariant in Provinces.Values)
 		{
 			var obj = objVariant;
-			foreach (var country_name in obj.claims)
+			foreach (var countryName in obj.claims)
 			{
-				if (!global_claims_registry.TryGetValue(country_name, out var claims))
-					global_claims_registry[country_name] = claims = new List<int>();
+				if (!globalClaimsRegistry.TryGetValue(countryName, out var claims))
+					globalClaimsRegistry[countryName] = claims = new List<int>();
 				claims.Add(obj.id);
 			}
 		}
@@ -1992,46 +2016,46 @@ public partial class MapManager : Node
 	{
 		var accesserName = CountryData.NameOf(accesser);
 		var accesseeName = CountryData.NameOf(accessee);
-		if (!allowed_pids.ContainsKey(accesserName))
-			allowed_pids[accesserName] = new List<int>();
-		foreach (var province in GetArray(country_to_provinces, accesseeName))
-			allowed_pids[accesserName].Add(province);
+		if (!allowedPids.ContainsKey(accesserName))
+			allowedPids[accesserName] = new List<int>();
+		foreach (var province in GetArray(countryToProvinces, accesseeName))
+			allowedPids[accesserName].Add(province);
 	}
 
 	public void UnallowPids(GodotObject unaccesser, GodotObject unaccessee)
 	{
 		var unaccesserName = CountryData.NameOf(unaccesser);
 		var unaccesseeName = CountryData.NameOf(unaccessee);
-		foreach (var province in GetArray(country_to_provinces, unaccesseeName))
+		foreach (var province in GetArray(countryToProvinces, unaccesseeName))
 		{
-			if (allowed_pids.TryGetValue(unaccesserName, out var accessList))
+			if (allowedPids.TryGetValue(unaccesserName, out var accessList))
 				accessList.Remove(province);
 		}
 	}
 
-	public void ChangeProvinceTypes(Godot.Collections.Array pids, int type, string country_name = "")
+	public void ChangeProvinceTypes(Godot.Collections.Array pids, int type, string countryName = "")
 	{
 		foreach (var pidVariant in pids)
 		{
 			var pid = pidVariant.AsInt32();
-			var province = _provinces[pid];
+			var province = Provinces[pid];
 			province.type = type;
-			province.country = country_name;
+			province.country = countryName;
 			GD.Print(province.type);
 			GD.Print(province.country);
 		}
-		var world = GameState.Instance.current_world;
+		var world = GameState.Instance.currentWorld;
 		if (world != null)
 		{
 			_SetTypeMap(
 				world.Get("mat").AsGodotObject() as Material,
-				world.Get("type_img").AsGodotObject() as Image);
+				world.Get("typeImg").AsGodotObject() as Image);
 		}
 	}
 
-	public void _SetTypeMap(Material mat, Image type_img)
+	public void _SetTypeMap(Material mat, Image typeImg)
 	{
-		var uncertain_pixels = new List<Vector2I>();
+		var uncertainPixels = new List<Vector2I>();
 
 		// --- PASS 1: Direct Mapping ---
 		for (var i = 0; i < MAP_HEIGHT * MAP_WIDTH; i++)
@@ -2039,19 +2063,19 @@ public partial class MapManager : Node
 			var x = i % MAP_WIDTH;
 			var y = i / MAP_WIDTH;
 			var pid = _get_pid_fast(x, y);
-			_provinces.TryGetValue(pid, out var province);
+			Provinces.TryGetValue(pid, out var province);
 
 			if (province != null)
-				type_img.SetPixel(x, y, new Color(province.type, province.type, province.type));
+				typeImg.SetPixel(x, y, new Color(province.type, province.type, province.type));
 			else
 				// It's a border (PID 1 or null). Mark as uncertain for now.
-				uncertain_pixels.Add(new Vector2I(x, y));
+				uncertainPixels.Add(new Vector2I(x, y));
 		}
 
 		// --- PASS 2: Intelligent Flood-Check ---
-		foreach (var pos in uncertain_pixels)
+		foreach (var pos in uncertainPixels)
 		{
-			var touches_land = false;
+			var touchesLand = false;
 			//var touches_sea = false
 
 			// Check 8-way neighbors (Radius 1 ONLY - very important)
@@ -2070,9 +2094,9 @@ public partial class MapManager : Node
 						var nid = _get_pid_fast(nx, ny);
 						if (nid > 1)
 						{
-							_provinces.TryGetValue(nid, out var n_prov);
-							if (n_prov != null && n_prov.type != 0)
-								touches_land = true;
+							Provinces.TryGetValue(nid, out var nProv);
+							if (nProv != null && nProv.type != 0)
+								touchesLand = true;
 							//else:
 							//	touches_sea = true
 						}
@@ -2080,13 +2104,13 @@ public partial class MapManager : Node
 				}
 			}
 
-			if (touches_land)
-				type_img.SetPixel(pos.X, pos.Y, new Color(1, 1, 1));
+			if (touchesLand)
+				typeImg.SetPixel(pos.X, pos.Y, new Color(1, 1, 1));
 			else
 				// If it only touches sea (or nothing), it's a Sea Grid/Open Water
-				type_img.SetPixel(pos.X, pos.Y, new Color(0, 0, 0));
+				typeImg.SetPixel(pos.X, pos.Y, new Color(0, 0, 0));
 		}
-		((ShaderMaterial)mat).SetShaderParameter("type_map", ImageTexture.CreateFromImage(type_img));
+		((ShaderMaterial)mat).SetShaderParameter("type_map", ImageTexture.CreateFromImage(typeImg));
 	}
 
 	public enum MapView
@@ -2101,19 +2125,19 @@ public partial class MapManager : Node
 		BIOMES,
 	}
 
-	public MapView current_view = MapView.COUNTRIES;
+	public MapView currentView = MapView.COUNTRIES;
 
 	public void CycleMapMode(bool shift)
 	{
 		var size = Enum.GetValues(typeof(MapView)).Length;
-		SetMapMode((MapView)(((int)current_view + (shift ? 1 : -1) + size) % size));
+		SetMapMode((MapView)(((int)currentView + (shift ? 1 : -1) + size) % size));
 	}
 
-	public void SetMapMode(MapView a_mapView)
+	public void SetMapMode(MapView aMapView)
 	{
-		current_view = a_mapView;
-		EmitSignal(SignalName.MapViewChanged, (int)current_view);
-		switch (a_mapView)
+		currentView = aMapView;
+		EmitSignal(SignalName.MapViewChanged, (int)currentView);
+		switch (aMapView)
 		{
 			case MapView.COUNTRIES:
 				ShowCountriesMap();
@@ -2152,14 +2176,14 @@ public partial class MapManager : Node
 
 	// --- Private helpers (not part of the GDScript surface) ---
 
-	private static Color CountryColor(string country_name, Color fallback)
-		=> CountryManager.Instance.GetCountryColor(country_name, fallback);
+	private static Color CountryColor(string countryName, Color fallback)
+		=> CountryManager.Instance.GetCountryColor(countryName, fallback);
 
 	private static int InteractionType()
 		=> (int)GameState.Instance.interactionType;
 
 	private static int IndustryBuilding()
-		=> (int)GameState.Instance.industry_building;
+		=> (int)GameState.Instance.industryBuilding;
 
 	private static void SwitchTooltip(int mode)
 	{
@@ -2180,10 +2204,10 @@ public partial class MapManager : Node
 		return list;
 	}
 
-	private static Godot.Collections.Array ProvinceTroops(int pid)
+	private static List<TroopData> ProvinceTroops(int pid)
 	{
-		var result = new Godot.Collections.Array();
-		if (TroopManager.Instance.troops_by_province.TryGetValue(pid, out var troops))
+		var result = new List<TroopData>();
+		if (TroopManager.Instance.troopsByProvince.TryGetValue(pid, out var troops))
 			foreach (var troop in troops)
 				result.Add(troop);
 		return result;

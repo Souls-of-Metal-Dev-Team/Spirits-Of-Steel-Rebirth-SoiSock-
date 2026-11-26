@@ -6,15 +6,15 @@ namespace Sosr;
 
 public partial class MapEditorUI : CanvasLayer
 {
-	[Export] public Sprite2D map_sprite;
+	[Export] public Sprite2D mapSprite;
 
 	public string selectedCountry = "";
 	public string selectedFaction = "";
 	public string selectedBiome = "";
 	public string selectedResource = "";
-	public int selected_pid = -1;
-	public int hovered_pid = -1;
-	private Color original_pid_color;
+	public int selectedPid = -1;
+	public int hoveredPid = -1;
+	private Color originalPidColor;
 
 	public List<int> multiSelectPID = new();
 	public Drag dragging = Drag.NONE;
@@ -50,13 +50,13 @@ public partial class MapEditorUI : CanvasLayer
 	[Export] public TabContainer leftSidebar;
 
 	[ExportCategory("Province")]
-	[Export] public Label status_label;
+	[Export] public Label statusLabel;
 	[Export] public LineEdit provinceName;
-	[Export] public LineEdit input_country;
+	[Export] public LineEdit inputCountry;
 	[Export] public LineEdit inputOccupier;
-	[Export] public LineEdit input_city;
-	[Export] public SpinBox input_gdp;
-	[Export] public TextEdit input_claims;
+	[Export] public LineEdit inputCity;
+	[Export] public SpinBox inputGdp;
+	[Export] public TextEdit inputClaims;
 	[Export] public VBoxContainer provincePopulationList;
 	[Export] public PanelContainer provincePopulationTemplate;
 	[Export] public VBoxContainer provinceResourcesList;
@@ -100,18 +100,18 @@ public partial class MapEditorUI : CanvasLayer
 
 	private static MapManager Map => MapManager.Instance;
 	private static CountryManager Countries => CountryManager.Instance;
-	private static Godot.Collections.Dictionary<string, FactionData> Factions => FactionManager.Instance.factions;
+	private static Dictionary<string, FactionData> Factions => FactionManager.Instance.factions;
 
-	private static Province Prov(int pid) => Map.province_objects[pid];
+	private static Province Prov(int pid) => Map.provinceObjects[pid];
 
 	private static Province ProvOrNull(int pid)
-		=> Map.province_objects.TryGetValue(pid, out var p) ? p : null;
+		=> Map.provinceObjects.TryGetValue(pid, out var p) ? p : null;
 
-	private static bool HasProv(int pid) => Map.province_objects.ContainsKey(pid);
+	private static bool HasProv(int pid) => Map.provinceObjects.ContainsKey(pid);
 
-	private static BiomeData Biome(string name) => Map.biomes[name].As<BiomeData>();
+	private static BiomeData Biome(string name) => Map.biomes[name];
 
-	private static ResourceData Resource(string name) => Map.resources[name].As<ResourceData>();
+	private static ResourceData Resource(string name) => Map.resources[name];
 
 	public override void _Ready()
 	{
@@ -120,9 +120,9 @@ public partial class MapEditorUI : CanvasLayer
 		SetupBiomesList();
 		SetupResourcesList();
 
-		input_claims.FocusExited += m_OnProvinceClaimsSubmitted;
+		inputClaims.FocusExited += MOnProvinceClaimsSubmitted;
 
-		map_sprite ??= GetNodeOrNull<Sprite2D>("../../MapContainer/CultureSprite");
+		mapSprite ??= GetNodeOrNull<Sprite2D>("../../MapContainer/CultureSprite");
 	}
 
 	private static bool ConsoleVisible()
@@ -140,7 +140,7 @@ public partial class MapEditorUI : CanvasLayer
 		{
 			_handle_hover(motion.Position);
 			if (dragging != Drag.NONE)
-				_handle_paint_selection(hovered_pid);
+				_handle_paint_selection(hoveredPid);
 		}
 
 		if (@event is InputEventMouseButton mouse)
@@ -158,7 +158,7 @@ public partial class MapEditorUI : CanvasLayer
 					if (currentTool == Tool.MULTI_SELECT || (currentMode == Mode.BIOME && currentTool == Tool.PAINT_PRIMARY))
 					{
 						dragging = drag;
-						_handle_paint_selection(hovered_pid);
+						_handle_paint_selection(hoveredPid);
 					}
 					_handle_click(mouse.Position, drag);
 				}
@@ -172,10 +172,10 @@ public partial class MapEditorUI : CanvasLayer
 		if (@event is InputEventKey { CtrlPressed: true, Keycode: Key.A, Pressed: true }
 			&& currentTool == Tool.MULTI_SELECT && multiSelectPID.Count == 1)
 		{
-			var owned = Map.country_to_owned_provinces[Prov(multiSelectPID[0]).country];
+			var owned = Map.countryToOwnedProvinces[Prov(multiSelectPID[0]).country];
 			foreach (var pid in owned)
 				AddToMultiSelect(pid, false);
-			update_multi_select_ui();
+			UpdateMultiSelectUi();
 		}
 	}
 
@@ -186,7 +186,7 @@ public partial class MapEditorUI : CanvasLayer
 		multiSelectPID.Add(pid);
 		Map.SetProvinceColor(pid, Colors.Cornsilk);
 		if (refresh)
-			update_multi_select_ui();
+			UpdateMultiSelectUi();
 		return true;
 	}
 
@@ -196,29 +196,29 @@ public partial class MapEditorUI : CanvasLayer
 			return false;
 		Map.ResetProvinceColor(pid);
 		if (refresh)
-			update_multi_select_ui();
+			UpdateMultiSelectUi();
 		return true;
 	}
 
-	private void _handle_hover(Vector2 screen_pos)
+	private void _handle_hover(Vector2 screenPos)
 	{
-		if (map_sprite == null)
+		if (mapSprite == null)
 			return;
-		var world_pos = GetViewport().GetCanvasTransform().AffineInverse() * screen_pos;
-		var pid = Map.GetProvinceWithRadius(world_pos, map_sprite, 5);
+		var worldPos = GetViewport().GetCanvasTransform().AffineInverse() * screenPos;
+		var pid = Map.GetProvinceWithRadius(worldPos, mapSprite, 5);
 
-		if (pid == hovered_pid)
+		if (pid == hoveredPid)
 			return;
 		_clear_hover();
 
 		if (pid > 1)
 		{
-			hovered_pid = pid;
-			if (!multiSelectPID.Contains(hovered_pid))
+			hoveredPid = pid;
+			if (!multiSelectPID.Contains(hoveredPid))
 			{
-				original_pid_color = Map.state_color_image.GetPixel(pid, 0);
-				Map.state_color_image.SetPixel(pid, 0, original_pid_color.Lightened(0.4f));
-				Map.state_color_texture.Update(Map.state_color_image);
+				originalPidColor = Map.stateColorImage.GetPixel(pid, 0);
+				Map.stateColorImage.SetPixel(pid, 0, originalPidColor.Lightened(0.4f));
+				Map.stateColorTexture.Update(Map.stateColorImage);
 			}
 			Input.SetDefaultCursorShape(Input.CursorShape.PointingHand);
 		}
@@ -226,12 +226,12 @@ public partial class MapEditorUI : CanvasLayer
 
 	private void _clear_hover()
 	{
-		if (hovered_pid <= 1)
+		if (hoveredPid <= 1)
 			return;
-		if (!multiSelectPID.Contains(hovered_pid))
-			Map.state_color_image.SetPixel(hovered_pid, 0, original_pid_color);
-		Map.state_color_texture.Update(Map.state_color_image);
-		hovered_pid = -1;
+		if (!multiSelectPID.Contains(hoveredPid))
+			Map.stateColorImage.SetPixel(hoveredPid, 0, originalPidColor);
+		Map.stateColorTexture.Update(Map.stateColorImage);
+		hoveredPid = -1;
 		Input.SetDefaultCursorShape(Input.CursorShape.Arrow);
 	}
 
@@ -243,35 +243,38 @@ public partial class MapEditorUI : CanvasLayer
 				if (!Map.biomes.ContainsKey(selectedBiome))
 					return;
 				var color = Biome(selectedBiome).color;
-				Prov(hovered_pid).biome = selectedBiome;
-				Map.SetProvinceColors(hovered_pid, color, color);
-				original_pid_color = color;
+				Prov(hoveredPid).biome = selectedBiome;
+				Map.SetProvinceColors(hoveredPid, color.ToColor(), color.ToColor());
+				originalPidColor = color.ToColor();
 				break;
 			case Drag.RIGHT:
-				Prov(hovered_pid).biome = "";
-				Map.SetProvinceColors(hovered_pid, Colors.AntiqueWhite, Colors.AntiqueWhite);
-				original_pid_color = Colors.AntiqueWhite;
+				Prov(hoveredPid).biome = "";
+				Map.SetProvinceColors(hoveredPid, Colors.AntiqueWhite, Colors.AntiqueWhite);
+				originalPidColor = Colors.AntiqueWhite;
 				break;
 		}
 	}
 
 	private void PaintOccupation(Drag button)
 	{
-		var prov = Prov(hovered_pid);
+		var prov = Prov(hoveredPid);
 		switch (button)
 		{
 			case Drag.LEFT:
 				if (prov.country != "Sea" && Countries.countries.ContainsKey(selectedCountry))
 				{
 					if (prov.country != selectedCountry)
-						Map.OccupyProvince(hovered_pid, selectedCountry);
+						ActionDispatcher.Instance.Submit(new OccupyProvinceAction
+						{
+							Issuer = selectedCountry, ProvinceId = hoveredPid, Occupier = selectedCountry,
+						});
 					else
-						Map.DeoccupyProvince(hovered_pid);
+						Map.DeoccupyProvince(hoveredPid);
 				}
 				break;
 			case Drag.RIGHT:
 				if (prov.occupier != "")
-					Map.DeoccupyProvince(hovered_pid);
+					Map.DeoccupyProvince(hoveredPid);
 				break;
 		}
 	}
@@ -301,17 +304,17 @@ public partial class MapEditorUI : CanvasLayer
 		}
 	}
 
-	private void _handle_click(Vector2 _screenPos, Drag a_button)
+	private void _handle_click(Vector2 _screenPos, Drag aButton)
 	{
 		GetViewport().GuiReleaseFocus();
 
-		if (hovered_pid <= 1)
+		if (hoveredPid <= 1)
 			return;
 
 		// Resource mode has no map interaction.
 		if (currentTool == Tool.NONE && currentMode != Mode.RESOURCE)
 		{
-			select_province(hovered_pid);
+			SelectProvince(hoveredPid);
 			return;
 		}
 
@@ -319,47 +322,50 @@ public partial class MapEditorUI : CanvasLayer
 		{
 			case Mode.PROVINCE:
 				if (currentTool == Tool.MULTI_SELECT)
-					MultiSelectProvince(hovered_pid);
+					MultiSelectProvince(hoveredPid);
 				break;
 			case Mode.FACTION:
 				if (currentTool == Tool.PAINT_PRIMARY)
-					PaintFaction(a_button);
+					PaintFaction(aButton);
 				break;
 			case Mode.POLITY:
 				switch (currentTool)
 				{
 					case Tool.PAINT_PRIMARY:
-						PaintOccupation(a_button);
+						PaintOccupation(aButton);
 						break;
 					case Tool.PAINT_SECONDARY:
-						if (Prov(hovered_pid).country != "Sea" && Countries.countries.ContainsKey(selectedCountry))
+						if (Prov(hoveredPid).country != "Sea" && Countries.countries.ContainsKey(selectedCountry))
 						{
-							Map.TransferOwnership(hovered_pid, selectedCountry);
-							original_pid_color = Countries.GetCountry(selectedCountry).country_color;
+							ActionDispatcher.Instance.Submit(new TransferProvinceAction
+							{
+								Issuer = selectedCountry, ProvinceId = hoveredPid, NewOwner = selectedCountry,
+							});
+							originalPidColor = Countries.GetCountry(selectedCountry).countryColor;
 						}
 						break;
 					case Tool.MULTI_SELECT:
-						if (a_button == Drag.RIGHT)
-							RemoveFromMultiSelect(hovered_pid);
-						else if (a_button == Drag.LEFT)
-							AddToMultiSelect(hovered_pid);
+						if (aButton == Drag.RIGHT)
+							RemoveFromMultiSelect(hoveredPid);
+						else if (aButton == Drag.LEFT)
+							AddToMultiSelect(hoveredPid);
 						break;
 				}
 				break;
 			case Mode.BIOME:
 				if (currentTool == Tool.PAINT_PRIMARY)
-					PaintBiome(a_button);
+					PaintBiome(aButton);
 				break;
 		}
 	}
 
-	private void PaintFaction(Drag a_button)
+	private void PaintFaction(Drag aButton)
 	{
-		var country = Prov(hovered_pid).country;
+		var country = Prov(hoveredPid).country;
 		if (country == "Sea" || !Factions.TryGetValue(selectedFaction, out var faction))
 			return;
 
-		switch (a_button)
+		switch (aButton)
 		{
 			case Drag.LEFT:
 				switch (faction.GetMemberStatus(country))
@@ -369,7 +375,7 @@ public partial class MapEditorUI : CanvasLayer
 						break;
 					case "":
 						faction.SetMemberStatus(country, "Member");
-						original_pid_color = faction.color;
+						originalPidColor = faction.color.ToColor();
 						break;
 				}
 				break;
@@ -382,18 +388,18 @@ public partial class MapEditorUI : CanvasLayer
 						break;
 					case "Member":
 						faction.KickMemberByName(country);
-						original_pid_color = Colors.Gray;
+						originalPidColor = Colors.Gray;
 						break;
 				}
 				break;
 		}
 	}
 
-	public static int IndexOfText(ItemList a_itemList, string a_text)
+	public static int IndexOfText(ItemList aItemList, string aText)
 	{
-		for (var i = 0; i < a_itemList.ItemCount; i++)
+		for (var i = 0; i < aItemList.ItemCount; i++)
 		{
-			if (a_itemList.GetItemText(i) == a_text)
+			if (aItemList.GetItemText(i) == aText)
 				return i;
 		}
 		return -1;
@@ -403,16 +409,16 @@ public partial class MapEditorUI : CanvasLayer
 	{
 		provinceName.Editable = true;
 		provinceName.Text = prov.name;
-		input_country.Editable = true;
-		input_country.Text = prov.country;
+		inputCountry.Editable = true;
+		inputCountry.Text = prov.country;
 		inputOccupier.Editable = true;
 		inputOccupier.Text = prov.occupier;
-		input_city.Editable = true;
-		input_city.Text = prov.city;
-		input_gdp.Editable = true;
-		input_gdp.Value = prov.gdp;
-		input_claims.Editable = true;
-		input_claims.Text = string.Join(", ", prov.claims);
+		inputCity.Editable = true;
+		inputCity.Text = prov.city;
+		inputGdp.Editable = true;
+		inputGdp.Value = prov.gdp;
+		inputClaims.Editable = true;
+		inputClaims.Text = string.Join(", ", prov.claims);
 	}
 
 	private void ClearProvinceLists()
@@ -442,10 +448,10 @@ public partial class MapEditorUI : CanvasLayer
 		};
 		var eth = entry.GetNode<LineEdit>("MarginContainer/HBoxContainer/InputEthName");
 		eth.Text = population.ethnicity;
-		eth.TextSubmitted += a_ethnicity => population.ethnicity = a_ethnicity;
+		eth.TextSubmitted += aEthnicity => population.ethnicity = aEthnicity;
 		var pop = entry.GetNode<Range>("MarginContainer/HBoxContainer/InputPop");
 		pop.Value = population.amount;
-		pop.ValueChanged += a_amount => population.amount = (int)a_amount;
+		pop.ValueChanged += aAmount => population.amount = (int)aAmount;
 		provincePopulationList.AddChild(entry);
 	}
 
@@ -460,14 +466,14 @@ public partial class MapEditorUI : CanvasLayer
 		};
 		var type = entry.GetNode<LineEdit>("MarginContainer/HBoxContainer/InputResource");
 		type.Text = resource.type;
-		type.TextSubmitted += a_type => resource.type = a_type;
+		type.TextSubmitted += aType => resource.type = aType;
 		var amount = entry.GetNode<Range>("MarginContainer/HBoxContainer/InputAmount");
 		amount.Value = resource.amount;
-		amount.ValueChanged += a_amount => resource.amount = (int)a_amount;
+		amount.ValueChanged += aAmount => resource.amount = (int)aAmount;
 		var quality = entry.GetNode<Range>("MarginContainer/HBoxContainer/InputQuality");
 		// The GDScript original showed resource.amount in the quality field.
 		quality.Value = resource.quality;
-		quality.ValueChanged += a_quality => resource.quality = (float)a_quality;
+		quality.ValueChanged += aQuality => resource.quality = (float)aQuality;
 		provinceResourcesList.AddChild(entry);
 	}
 
@@ -478,14 +484,14 @@ public partial class MapEditorUI : CanvasLayer
 		list.EmitSignal(ItemList.SignalName.ItemSelected, itemIndex);
 	}
 
-	public void select_province(int pid)
+	public void SelectProvince(int pid)
 	{
-		selected_pid = pid;
+		selectedPid = pid;
 		var prov = ProvOrNull(pid);
 		if (prov == null)
 			return;
 
-		status_label.Text = $"Selected PID: {pid}";
+		statusLabel.Text = $"Selected PID: {pid}";
 		SetProvinceFields(prov);
 		ClearProvinceLists();
 		FillProvinceLists(prov);
@@ -511,12 +517,12 @@ public partial class MapEditorUI : CanvasLayer
 		if (!RemoveFromMultiSelect(pid, false))
 			AddToMultiSelect(pid, false);
 
-		update_multi_select_ui();
+		UpdateMultiSelectUi();
 	}
 
-	public void update_multi_select_ui()
+	public void UpdateMultiSelectUi()
 	{
-		status_label.Text = $"Selected: {multiSelectPID.Count}";
+		statusLabel.Text = $"Selected: {multiSelectPID.Count}";
 		ClearProvinceLists();
 
 		switch (multiSelectPID.Count)
@@ -524,16 +530,16 @@ public partial class MapEditorUI : CanvasLayer
 			case 0:
 				provinceName.Editable = false;
 				provinceName.Text = "";
-				input_country.Editable = false;
-				input_country.Text = "";
+				inputCountry.Editable = false;
+				inputCountry.Text = "";
 				inputOccupier.Editable = false;
 				inputOccupier.Text = "";
-				input_city.Editable = false;
-				input_city.Text = "";
-				input_gdp.Editable = false;
-				input_gdp.Value = 0;
-				input_claims.Editable = false;
-				input_claims.Text = "";
+				inputCity.Editable = false;
+				inputCity.Text = "";
+				inputGdp.Editable = false;
+				inputGdp.Value = 0;
+				inputClaims.Editable = false;
+				inputClaims.Text = "";
 				break;
 			case 1:
 			{
@@ -568,16 +574,16 @@ public partial class MapEditorUI : CanvasLayer
 						break;
 				}
 
-				input_country.Editable = true;
-				input_country.Text = holdCountry ? prov.country : "...";
+				inputCountry.Editable = true;
+				inputCountry.Text = holdCountry ? prov.country : "...";
 				inputOccupier.Editable = true;
 				inputOccupier.Text = holdOccupier ? prov.occupier : "...";
-				input_city.Editable = false;
-				input_city.Text = "...";
-				input_gdp.Editable = true;
-				input_gdp.Value = holdGDP ? prov.gdp : 0;
-				input_claims.Editable = true;
-				input_claims.Text = holdClaims ? string.Join(", ", prov.claims) : "...";
+				inputCity.Editable = false;
+				inputCity.Text = "...";
+				inputGdp.Editable = true;
+				inputGdp.Value = holdGDP ? prov.gdp : 0;
+				inputClaims.Editable = true;
+				inputClaims.Text = holdClaims ? string.Join(", ", prov.claims) : "...";
 				break;
 			}
 		}
@@ -593,9 +599,9 @@ public partial class MapEditorUI : CanvasLayer
 		MapData.Instance.SaveMapData("user://");
 	}
 
-	public void m_OnTabContainerTabChanged(int tab)
+	public void MOnTabContainerTabChanged(int tab)
 	{
-		m_NoneTool();
+		MNoneTool();
 		currentMode = (Mode)tab;
 		leftSidebar.CurrentTab = tab;
 	}
@@ -612,9 +618,9 @@ public partial class MapEditorUI : CanvasLayer
 
 	public void SetupPolitiesList() => FillSorted(politiesItemList, Countries.countryNames);
 
-	public void SetupBiomesList() => FillSorted(biomesItemList, Map.biomes.Keys.Select(k => k.AsString()));
+	public void SetupBiomesList() => FillSorted(biomesItemList, Map.biomes.Keys);
 
-	public void SetupResourcesList() => FillSorted(resourcesItemList, Map.resources.Keys.Select(k => k.AsString()));
+	public void SetupResourcesList() => FillSorted(resourcesItemList, Map.resources.Keys);
 
 	private void AddFactionMemberEntry(FactionMember member, bool updateThroughFaction)
 	{
@@ -629,37 +635,37 @@ public partial class MapEditorUI : CanvasLayer
 		var status = memberEntry.GetNode<OptionButton>("HBoxContainer/OptionButton");
 		status.Select(FactionMember.GetIndex(member.status));
 		if (updateThroughFaction)
-			status.ItemSelected += a_index => Factions[selectedFaction].UpdateMemberStatus(member.polity, (int)a_index);
+			status.ItemSelected += aIndex => Factions[selectedFaction].UpdateMemberStatus(member.polity, (int)aIndex);
 		else
-			status.ItemSelected += a_index => member.status = FactionMember.GetString((int)a_index);
+			status.ItemSelected += aIndex => member.status = FactionMember.GetString((int)aIndex);
 		factionMemberList.AddChild(memberEntry);
 	}
 
-	public void m_OnFactionSelected(int index)
+	public void MOnFactionSelected(int index)
 	{
 		selectedFaction = factionsItemList.GetItemText(index);
 		var faction = Factions[selectedFaction];
 		factionName.Text = faction.name;
-		factionColor.Color = faction.color;
+		factionColor.Color = faction.color.ToColor();
 		foreach (var child in factionMemberList.GetChildren())
 			child.QueueFree();
 		foreach (var member in faction.members)
 			AddFactionMemberEntry(member, true);
 	}
 
-	public void m_OnPolitySelected(int index)
+	public void MOnPolitySelected(int index)
 	{
 		selectedCountry = politiesItemList.GetItemText(index);
 		var polity = Countries.GetCountry(selectedCountry);
-		polityPuppet.SetPressedNoSignal(polity.is_puppet);
+		polityPuppet.SetPressedNoSignal(polity.isPuppet);
 		polityOwner.Text = polity.owner;
-		polityInExile.SetPressedNoSignal(polity.is_exiled);
+		polityInExile.SetPressedNoSignal(polity.isExiled);
 		polityHost.Text = polity.host;
-		polityName.Text = polity.country_name;
-		polityColor.Color = polity.country_color;
+		polityName.Text = polity.countryName;
+		polityColor.Color = polity.countryColor;
 		polityMoney.SetValueNoSignal(polity.money);
-		polityPoliticalPower.SetValueNoSignal(polity.political_power);
-		polityWarSupport.SetValueNoSignal(polity.war_support);
+		polityPoliticalPower.SetValueNoSignal(polity.politicalPower);
+		polityWarSupport.SetValueNoSignal(polity.warSupport);
 		polityStability.SetValueNoSignal(polity.stability);
 		foreach (var child in polityPuppetList.GetChildren())
 			child.QueueFree();
@@ -677,92 +683,92 @@ public partial class MapEditorUI : CanvasLayer
 			var factionEntry = (PanelContainer)polityFactionTemplate.Duplicate();
 			factionEntry.Visible = true;
 			factionEntry.GetNode<LineEdit>("HBoxContainer/LineEdit").Text = faction;
-			var member = Factions[faction].members.FirstOrDefault(m => m.polity == polity.country_name);
+			var member = Factions[faction].members.FirstOrDefault(m => m.polity == polity.countryName);
 			if (member != null)
 				factionEntry.GetNode<OptionButton>("HBoxContainer/OptionButton").Select(FactionMember.GetIndex(member.status));
 			polityFactionList.AddChild(factionEntry);
 		}
 	}
 
-	public void m_OnBiomeSelected(int index)
+	public void MOnBiomeSelected(int index)
 	{
 		selectedBiome = biomesItemList.GetItemText(index);
 		var biome = Biome(selectedBiome);
 		biomeName.Text = biome.name;
-		biomeColor.Color = biome.color;
+		biomeColor.Color = biome.color.ToColor();
 	}
 
-	public void m_OnBiomeNameSubmitted(string new_text)
+	public void MOnBiomeNameSubmitted(string newText)
 	{
 		var biomes = Map.biomes;
-		if (!biomes.ContainsKey(selectedBiome) || biomes.ContainsKey(new_text))
+		if (!biomes.ContainsKey(selectedBiome) || biomes.ContainsKey(newText))
 			return;
 		var biome = Biome(selectedBiome);
-		biomes[new_text] = biome;
-		biome.name = new_text;
+		biomes[newText] = biome;
+		biome.name = newText;
 		biomes.Remove(selectedBiome);
-		foreach (var province in Map.province_objects.Values)
+		foreach (var province in Map.provinceObjects.Values)
 		{
 			if (province.biome == selectedBiome)
-				province.biome = new_text;
+				province.biome = newText;
 		}
-		selectedBiome = new_text;
+		selectedBiome = newText;
 	}
 
-	public void m_OnBiomeColorChanged(Color color)
+	public void MOnBiomeColorChanged(Color color)
 	{
 		if (Map.biomes.ContainsKey(selectedBiome))
-			Biome(selectedBiome).color = color;
+			Biome(selectedBiome).color = color.ToHex();
 	}
 
-	public void m_OnResourceSelected(int index)
+	public void MOnResourceSelected(int index)
 	{
 		selectedResource = resourcesItemList.GetItemText(index);
 		var resource = Resource(selectedResource);
 		resourceName.Text = resource.name;
-		resourceColor.Color = resource.color;
+		resourceColor.Color = resource.color.ToColor();
 		resourceIcon.Text = resource.icon;
 		resourceIconTexture.Texture = Map.GetResourceIcon(selectedResource);
 	}
 
-	public void m_OnResourceNameSubmitted(string new_text)
+	public void MOnResourceNameSubmitted(string newText)
 	{
 		var resources = Map.resources;
-		if (!resources.ContainsKey(selectedResource) || resources.ContainsKey(new_text))
+		if (!resources.ContainsKey(selectedResource) || resources.ContainsKey(newText))
 			return;
 		var resource = Resource(selectedResource);
-		resources[new_text] = resource;
-		resource.name = new_text;
+		resources[newText] = resource;
+		resource.name = newText;
 		resources.Remove(selectedResource);
-		foreach (var province in Map.province_objects.Values)
+		foreach (var province in Map.provinceObjects.Values)
 		{
 			foreach (var node in province.resources)
 			{
 				if (node.type == selectedResource)
-					node.type = new_text;
+					node.type = newText;
 			}
 		}
-		selectedResource = new_text;
+		selectedResource = newText;
 	}
 
-	public void m_OnResourceColorChanged(Color color)
+	public void MOnResourceColorChanged(Color color)
 	{
 		if (Map.resources.ContainsKey(selectedResource))
-			Resource(selectedResource).color = color;
+			Resource(selectedResource).color = color.ToHex();
 	}
 
-	public void m_OnResourceIconSubmitted(string new_text)
+	public void MOnResourceIconSubmitted(string newText)
 	{
 		if (!Map.resources.ContainsKey(selectedResource))
 			return;
-		Resource(selectedResource).icon = new_text;
+		Resource(selectedResource).icon = newText;
 		resourceIconTexture.Texture = Map.GetResourceIcon(selectedResource);
 	}
 
-	public void m_OnCitySubmitted(string new_text)
+	public void MOnCitySubmitted(string newText)
 	{
-		if (HasProv(selected_pid))
-			Prov(selected_pid).city = new_text;
+		if (HasProv(selectedPid))
+			Prov(selectedPid).city = newText;
 	}
 
 	// Pids the province fields apply to for the current tool.
@@ -771,8 +777,8 @@ public partial class MapEditorUI : CanvasLayer
 		switch (currentTool)
 		{
 			case Tool.NONE:
-				if (HasProv(selected_pid))
-					yield return selected_pid;
+				if (HasProv(selectedPid))
+					yield return selectedPid;
 				break;
 			case Tool.MULTI_SELECT:
 				foreach (var pid in multiSelectPID.ToList())
@@ -784,100 +790,106 @@ public partial class MapEditorUI : CanvasLayer
 		}
 	}
 
-	public void m_OnProvinceGDPChanged(float value)
+	public void MOnProvinceGDPChanged(float value)
 	{
 		foreach (var pid in EditedPids())
 			Prov(pid).gdp = (int)value;
 	}
 
-	public void m_OnColorChanged(Color color)
+	public void MOnColorChanged(Color color)
 	{
 		if (!Countries.countries.ContainsKey(selectedCountry))
 			return;
-		Countries.GetCountry(selectedCountry).country_color = color;
+		Countries.GetCountry(selectedCountry).countryColor = color;
 		// The GDScript original called a nonexistent `setCountryColor`.
 		Map.SetCountryColor(selectedCountry, color);
 	}
 
-	public void m_OnFactionColorChanged(Color color)
+	public void MOnFactionColorChanged(Color color)
 	{
 		if (Factions.TryGetValue(selectedFaction, out var faction))
-			faction.color = color;
+			faction.color = color.ToHex();
 	}
 
-	public void m_OnProvinceNameSubmitted(string new_text)
+	public void MOnProvinceNameSubmitted(string newText)
 	{
-		if (HasProv(selected_pid))
-			Prov(selected_pid).name = new_text;
+		if (HasProv(selectedPid))
+			Prov(selectedPid).name = newText;
 	}
 
-	public void m_OnProvinceClaimsSubmitted()
+	public void MOnProvinceClaimsSubmitted()
 	{
-		if (input_claims.Text == "...")
+		if (inputClaims.Text == "...")
 			return;
 
-		var final_claims = input_claims.Text.Split(",").Select(c => c.StripEdges()).ToArray();
+		var finalClaims = inputClaims.Text.Split(",").Select(c => c.StripEdges()).ToArray();
 		foreach (var pid in EditedPids())
-			Prov(pid).claims = final_claims;
+			Prov(pid).claims = finalClaims;
 	}
 
-	public void m_OnProvinceOwnerSubmitted(string new_text)
+	public void MOnProvinceOwnerSubmitted(string newText)
 	{
-		if (!Countries.countries.ContainsKey(new_text))
+		if (!Countries.countries.ContainsKey(newText))
 			return;
 		foreach (var pid in EditedPids())
-			Map.TransferOwnership(pid, new_text);
+			ActionDispatcher.Instance.Submit(new TransferProvinceAction
+			{
+				Issuer = newText, ProvinceId = pid, NewOwner = newText,
+			});
 	}
 
-	public void m_OnProvinceOccupierSubmitted(string new_text)
+	public void MOnProvinceOccupierSubmitted(string newText)
 	{
 		foreach (var pid in EditedPids())
 		{
-			if (string.IsNullOrEmpty(new_text))
+			if (string.IsNullOrEmpty(newText))
 				Map.DeoccupyProvince(pid);
 			else
-				Map.OccupyProvince(pid, new_text);
+				ActionDispatcher.Instance.Submit(new OccupyProvinceAction
+				{
+					Issuer = newText, ProvinceId = pid, Occupier = newText,
+				});
 		}
 	}
 
-	public void m_OnPolityNameSubmitted(string new_text)
+	public void MOnPolityNameSubmitted(string newText)
 	{
 		if (!Countries.countries.ContainsKey(selectedCountry))
 			return;
-		Countries.RenameCountry(selectedCountry, new_text);
-		selectedCountry = new_text;
+		Countries.RenameCountry(selectedCountry, newText);
+		selectedCountry = newText;
 	}
 
-	public void m_OnPolityOwnerSubmitted(string new_text)
+	public void MOnPolityOwnerSubmitted(string newText)
 	{
 		var polity = Countries.GetCountry(selectedCountry);
 		if (polity == null)
 			return;
 		if (Countries.countries.ContainsKey(polity.owner))
-			Countries.release_puppet(Countries.GetCountry(polity.owner), polity);
-		if (Countries.countries.ContainsKey(new_text))
-			Countries.make_puppet(Countries.GetCountry(new_text), polity);
+			Countries.ReleasePuppet(Countries.GetCountry(polity.owner), polity);
+		if (Countries.countries.ContainsKey(newText))
+			Countries.MakePuppet(Countries.GetCountry(newText), polity);
 	}
 
-	public void m_OnPolityMoneyChanged(float value)
+	public void MOnPolityMoneyChanged(float value)
 	{
 		if (Countries.GetCountry(selectedCountry) is { } polity)
 			polity.money = value;
 	}
 
-	public void m_OnPolityPoliticalPowerChanged(float value)
+	public void MOnPolityPoliticalPowerChanged(float value)
 	{
 		if (Countries.GetCountry(selectedCountry) is { } polity)
-			polity.political_power = value;
+			polity.politicalPower = value;
 	}
 
-	public void m_OnPolityWarSupportChanged(float value)
+	public void MOnPolityWarSupportChanged(float value)
 	{
 		if (Countries.GetCountry(selectedCountry) is { } polity)
-			polity.war_support = value;
+			polity.warSupport = value;
 	}
 
-	public void m_OnPolityStabilityChanged(float value)
+	public void MOnPolityStabilityChanged(float value)
 	{
 		if (Countries.GetCountry(selectedCountry) is { } polity)
 			polity.stability = value;
@@ -892,41 +904,41 @@ public partial class MapEditorUI : CanvasLayer
 		multiSelectPID.Clear();
 	}
 
-	public void m_NoneTool()
+	public void MNoneTool()
 	{
 		EndMultiSelect();
 		currentTool = Tool.NONE;
 	}
 
-	public void m_PaintOwnerTool()
+	public void MPaintOwnerTool()
 	{
 		EndMultiSelect();
 		Map.ShowCountriesMap();
 		currentTool = Tool.PAINT_SECONDARY;
 	}
 
-	public void m_PaintOccupationTool()
+	public void MPaintOccupationTool()
 	{
 		EndMultiSelect();
 		Map.ShowCountriesMap();
 		currentTool = Tool.PAINT_PRIMARY;
 	}
 
-	public void m_PaintFactionTool()
+	public void MPaintFactionTool()
 	{
 		EndMultiSelect();
 		Map._ShowFactionMap();
 		currentTool = Tool.PAINT_PRIMARY;
 	}
 
-	public void m_PaintBiomeTool()
+	public void MPaintBiomeTool()
 	{
 		EndMultiSelect();
 		Map._ShowBiomesMap();
 		currentTool = Tool.PAINT_PRIMARY;
 	}
 
-	public void m_MultiSelectTool()
+	public void MMultiSelectTool()
 	{
 		currentTool = Tool.MULTI_SELECT;
 	}
@@ -939,8 +951,8 @@ public partial class MapEditorUI : CanvasLayer
 
 	public void AddProvincePopulation()
 	{
-		var prov = Prov(selected_pid);
-		var population = PopulationData.FromDict(new Godot.Collections.Dictionary
+		var prov = Prov(selectedPid);
+		var population = PopulationData.FromDict(new Dictionary<string, object?>
 		{
 			{ "ethnicity", "Unknown" },
 			{ "amount", 1 },
@@ -951,8 +963,8 @@ public partial class MapEditorUI : CanvasLayer
 
 	public void AddProvinceResource()
 	{
-		var prov = Prov(selected_pid);
-		var resource = ResourceNode.FromDict(new Godot.Collections.Dictionary { { "type", "Unknown" } });
+		var prov = Prov(selectedPid);
+		var resource = ResourceNode.FromDict(new Dictionary<string, object?> { { "type", "Unknown" } });
 		prov.resources.Add(resource);
 		AddResourceEntry(prov, resource);
 	}

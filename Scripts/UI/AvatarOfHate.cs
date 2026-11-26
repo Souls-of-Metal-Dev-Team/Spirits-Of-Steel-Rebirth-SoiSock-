@@ -4,7 +4,7 @@ namespace Sosr;
 
 public partial class AvatarOfHate : Control
 {
-	private int m_politburo = 0;
+	private int mPolitburo = 0;
 	[Export] public bool sankara = false;
 	[Export] public Godot.Collections.Array<Texture> ussr = new();
 	// Usually a TextureRect, but scenes also point it at this node itself (a TextureRect
@@ -21,21 +21,21 @@ public partial class AvatarOfHate : Control
 	{
 		if (ussr.Count <= 0)
 			ussr.Add(AvatarTexture);
-		AvatarTexture = ussr[m_politburo];
+		AvatarTexture = ussr[mPolitburo];
 	}
 
 	public void OnTimerTimeout()
 	{
 		if (ussr.Count == 0)
 			return;
-		m_politburo = sankara ? GD.RandRange(0, ussr.Count - 1) : (m_politburo + 1) % ussr.Count;
-		AvatarTexture = ussr[m_politburo];
+		mPolitburo = sankara ? GD.RandRange(0, ussr.Count - 1) : (mPolitburo + 1) % ussr.Count;
+		AvatarTexture = ussr[mPolitburo];
 	}
 
 	public void ForceReset()
 	{
-		m_politburo = 0;
+		mPolitburo = 0;
 		if (ussr.Count > 0)
-			AvatarTexture = ussr[m_politburo];
+			AvatarTexture = ussr[mPolitburo];
 	}
 }

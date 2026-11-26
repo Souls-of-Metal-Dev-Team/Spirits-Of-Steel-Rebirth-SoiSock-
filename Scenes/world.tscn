@@ -13,14 +13,14 @@
 
 [node name="World" type="Node2D" unique_id=431820296]
 script = ExtResource("1_go701")
-map_shader = ExtResource("3_k7acu")
+mapShader = ExtResource("3_k7acu")
 
 [node name="TroopSelection" type="Node2D" parent="." unique_id=905291779]
 script = ExtResource("6_5ukr8")
 
 [node name="ui_game" parent="." unique_id=4700273 node_paths=PackedStringArray("governmentUI") instance=ExtResource("2_fo5ed")]
 governmentUI = NodePath("../GovernmentUI")
-slide_duration = null
+slideDuration = null
 
 [node name="DecisionTreeUI" parent="." unique_id=739202993 instance=ExtResource("14_x8y2v")]
 visible = false

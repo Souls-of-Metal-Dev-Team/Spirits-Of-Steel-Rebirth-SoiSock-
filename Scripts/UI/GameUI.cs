@@ -12,7 +12,7 @@ namespace Sosr;
 public partial class GameUI : CanvasLayer
 {
 	// Emitted when a click couldn't be processed (so likely sea or border)
-	[Signal] public delegate void close_sidemenuEventHandler();
+	[Signal] public delegate void CloseSidemenuEventHandler();
 
 	// ── Enums ─────────────────────────────────────────────
 	public enum Context { PLAYER, ENEMY, NEUTRAL, PUPPET, ALLY, SELECT }
@@ -23,41 +23,41 @@ public partial class GameUI : CanvasLayer
 	// ── Top Bar Nodes ─────────────────────────────────────
 	[ExportGroup("Top Bar")]
 	[Export] public HBoxContainer topbar;
-	[Export] public TextureRect nation_flag;
-	[Export] public Label label_date;
-	[Export] public PanelContainer radios_panel;
+	[Export] public TextureRect nationFlag;
+	[Export] public Label labelDate;
+	[Export] public PanelContainer radiosPanel;
 
 	[ExportSubgroup("Stats Labels")]
-	[Export] public Label label_pp;
-	[Export] public Label label_manpower;
-	[Export] public Label label_money;
-	[Export] public Label label_industry;
-	[Export] public Label label_stability;
-	[Export] public Label label_war_support;
-	[Export] public Label label_world_tension;
+	[Export] public Label labelPp;
+	[Export] public Label labelManpower;
+	[Export] public Label labelMoney;
+	[Export] public Label labelIndustry;
+	[Export] public Label labelStability;
+	[Export] public Label labelWarSupport;
+	[Export] public Label labelWorldTension;
 
-	[Export] public HBoxContainer notif_box;
+	[Export] public HBoxContainer notifBox;
 
 	// ── Speed Controls ────────────────────────────────────
 	[ExportSubgroup("Speed Controls")]
 	[Export] public Button plus;
 	[Export] public Button minus;
-	[Export] public ProgressBar progress_bar;
+	[Export] public ProgressBar progressBar;
 
 	// ── Side Menu Nodes ───────────────────────────────────
 	[ExportGroup("Side Menu")]
 	[Export] public Control sidemenu;
 	// NOTE(soi): relations already hv the flag so ehhh
-	[Export] public Sprite2D sidemenu_pointer;
-	[Export] public Button play_btn;
-	[Export] public Label sidemenu_country_label;
-	[Export] public TabContainer sidemenu_context;
-	[Export] public VBoxContainer sidemenu_trooplist;
-	[Export] public VBoxContainer sidemenu_buildings;
-	[Export] public AvatarOfHate sidemenu_leader_portrait;
-	[Export] public OptionButton building_dropdown;
+	[Export] public Sprite2D sidemenuPointer;
+	[Export] public Button playBtn;
+	[Export] public Label sidemenuCountryLabel;
+	[Export] public TabContainer sidemenuContext;
+	[Export] public VBoxContainer sidemenuTrooplist;
+	[Export] public VBoxContainer sidemenuBuildings;
+	[Export] public AvatarOfHate sidemenuLeaderPortrait;
+	[Export] public OptionButton buildingDropdown;
 
-	[Export] public HBoxContainer relations_hbox;
+	[Export] public HBoxContainer relationsHbox;
 	[Export] public TextureRect flag1;
 	[Export] public TextureRect flag2;
 	[Export] public TextureRect owner1;
@@ -65,50 +65,50 @@ public partial class GameUI : CanvasLayer
 	[Export] public Label relation1;
 	[Export] public Label relation2;
 
-	[Export] public VBoxContainer factions_box;
+	[Export] public VBoxContainer factionsBox;
 
-	[Export] public PanelContainer faction_prompt;
-	[Export] public Label military_access_label;
+	[Export] public PanelContainer factionPrompt;
+	[Export] public Label militaryAccessLabel;
 	[Export] public TextureRect puppetBadge;
 	[Export] public TextureRect warBadge;
 	[Export] public Color FALSE_COLOR = new(0.254f, 0.254f, 0.254f, 1.0f);
 	[Export] public Color PUPPET_COLOR = new(1.0f, 1.0f, 1.0f, 1.0f);
 	[Export] public Color WAR_COLOR = new(1.0f, 0.0f, 0.0f, 1.0f);
 
-	[Export] public VBoxContainer accepted_cultures;
-	[Export] public VBoxContainer unaccepted_cultures;
-	[Export] public VBoxContainer select_player_stat;
+	[Export] public VBoxContainer acceptedCultures;
+	[Export] public VBoxContainer unacceptedCultures;
+	[Export] public VBoxContainer selectPlayerStat;
 
-	private readonly PackedScene action_scene = GD.Load<PackedScene>("res://Scenes/action.tscn");
+	private readonly PackedScene actionScene = GD.Load<PackedScene>("res://Scenes/action.tscn");
 
-	[Export] public VBoxContainer radio_list;
-	[Export] public Label now_playing;
-	[Export] public TabBar map_tabs;
+	[Export] public VBoxContainer radioList;
+	[Export] public Label nowPlaying;
+	[Export] public TabBar mapTabs;
 
-	[Export] public Line2D sewage_graph;
-	[Export] public Line2D population_graph;
-	[Export] public Line2D water_graph;
-	[Export] public Line2D power_graph;
+	[Export] public Line2D sewageGraph;
+	[Export] public Line2D populationGraph;
+	[Export] public Line2D waterGraph;
+	[Export] public Line2D powerGraph;
 
 	// --- MilitaryExtraPanel ---
 	[ExportGroup("Military Extra")]
-	[Export] public Control military_extra_panel;
+	[Export] public Control militaryExtraPanel;
 
-	[Export] public SpinBox input_division;
-	[Export] public Button button_train;
-	[Export] public OptionButton division_type;
+	[Export] public SpinBox inputDivision;
+	[Export] public Button buttonTrain;
+	[Export] public OptionButton divisionType;
 
-	[Export] public Label div_type;
-	[Export] public Label div_stats;
+	[Export] public Label divType;
+	[Export] public Label divStats;
 	[Export] public Label costs;
 	[Export] public Label manpower;
 
-	[Export] public PanelContainer troop_container;
-	[Export] public VBoxContainer troop_list_parent;
+	[Export] public PanelContainer troopContainer;
+	[Export] public VBoxContainer troopListParent;
 
 	// --- BuildingDesigner ---
 	[ExportGroup("Building Designer")]
-	[Export] public PanelContainer building_designer;
+	[Export] public PanelContainer buildingDesigner;
 
 	// --- Logistics ---
 	[ExportGroup("Logistics")]
@@ -117,35 +117,35 @@ public partial class GameUI : CanvasLayer
 	[Export] public GovernmentUI governmentUI;
 
 	// --- State ---
-	public string division_type_selected = "infantry";
-	public CountryData selected_country = null;
+	public string divisionTypeSelected = "infantry";
+	public CountryData selectedCountry = null;
 
 	// Animation State
-	[Export] public float slide_duration = 0.2f;
-	public bool is_open = false;
-	private Vector2 pos_open = Vector2.Zero;
-	private Vector2 pos_closed = Vector2.Zero;
+	[Export] public float slideDuration = 0.2f;
+	public bool isOpen = false;
+	private Vector2 posOpen = Vector2.Zero;
+	private Vector2 posClosed = Vector2.Zero;
 
 	private bool economyUpdate = false;
 
 	// Navigation State
-	public Context current_context = Context.SELECT;
-	public Category current_category = Category.GENERAL;
+	public Context currentContext = Context.SELECT;
+	public Category currentCategory = Category.GENERAL;
 
-	private readonly record struct ActionCost(int cost, bool can_afford);
+	private readonly record struct ActionCost(int cost, bool canAfford);
 
 	private static ActionCost Free(CountryData _p, CountryData _s) => new(0, true);
 
 	// Keyed by the name of the method a side-menu button's `pressed` signal is connected to.
-	private readonly Dictionary<string, Func<CountryData, CountryData, ActionCost>> action_costs;
+	private readonly Dictionary<string, Func<CountryData, CountryData, ActionCost>> actionCosts;
 
-	private readonly Dictionary<string, Button> all_notifs = new();
+	private readonly Dictionary<string, Button> allNotifs = new();
 
-	private readonly FontFile custom_font =
+	private readonly FontFile customFont =
 		GD.Load<FontFile>("res://font/Google_Sans/GoogleSans-VariableFont_GRAD,opsz,wght.ttf");
 
 	// Read by TroopSelection when moving troops.
-	public Godot.Collections.Array<DivisionData> selected_division_objects = new();
+	public List<DivisionData> selectedDivisionObjects = new();
 	private readonly PackedScene DIVISION_CARD_SCENE = GD.Load<PackedScene>("res://Scenes/DivisionItem.tscn");
 
 	private static CountryData Player => CountryManager.Instance.Player;
@@ -155,19 +155,19 @@ public partial class GameUI : CanvasLayer
 
 	public GameUI()
 	{
-		action_costs = new()
+		actionCosts = new()
 		{
-			["_declare_war"] = (player, _) => new(50, player.war_support > 0.5),
-			["_request_access"] = (player, selected) => new(25, player.get_relation_with(selected.country_name) > 70),
+			["_declare_war"] = (player, _) => new(50, player.warSupport > 0.5),
+			["_request_access"] = (player, selected) => new(25, player.GetRelationWith(selected.countryName) > 70),
 			["_force_puppet"] = (player, selected) => new(150, player.gdp > 1000 * selected.gdp),
 			["_release_puppet"] = (_, _) => new(50, true),
 			["improve_stability"] = (player, _) => new((int)(50 * (1.0 + player.stability)), true),
-			["_improve_relations"] = (player, _) => new(player.ideology_name == "liberal" ? 40 : 50, true),
+			["_improve_relations"] = (player, _) => new(player.ideologyName == "liberal" ? 40 : 50, true),
 			["_propose_peace"] = Free,
 			["_launch_nuke"] = (_, _) => new(250, true),
-			["_form_alliance"] = (player, selected) => new(100, player.ideology_name == selected.ideology_name),
-			["_demand_tribute"] = (player, selected) => new(75, player.ideology_name == selected.ideology_name),
-			["_trade_deal"] = (player, selected) => new(25, player.ideology_name == selected.ideology_name),
+			["_form_alliance"] = (player, selected) => new(100, player.ideologyName == selected.ideologyName),
+			["_demand_tribute"] = (player, selected) => new(75, player.ideologyName == selected.ideologyName),
+			["_trade_deal"] = (player, selected) => new(25, player.ideologyName == selected.ideologyName),
 			["open_research_tree"] = Free,
 			["open_decisions_tree"] = Free,
 			["_open_faction"] = Free,
@@ -181,33 +181,33 @@ public partial class GameUI : CanvasLayer
 
 	private static ActionCost _get_invite_faction_cost(CountryData player, CountryData selected)
 	{
-		var member = FactionManager.Instance.get_faction_member(player.country_name);
-		return new(0, player.get_relation_with(selected.country_name) > 120 && member != null && member.status == "Leader");
+		var member = FactionManager.Instance.GetFactionMember(player.countryName);
+		return new(0, player.GetRelationWith(selected.countryName) > 120 && member != null && member.status == "Leader");
 	}
 
 	public override void _EnterTree()
 	{
-		GameState.Instance.game_ui = this;
+		GameState.Instance.gameUi = this;
 	}
 
 	public override void _Ready()
 	{
-		set_tooltips_of_tabcontainers();
+		SetTooltipsOfTabcontainers();
 
-		sidemenu_context.CurrentTab = (int)Context.SELECT;
+		sidemenuContext.CurrentTab = (int)Context.SELECT;
 		foreach (var template in DivisionTemplates.Instance.TEMPLATES.Keys)
 		{
 			var name = template.AsString();
-			division_type.AddIconItem(
-				GD.Load<Texture2D>($"res://starts/{GameState.Instance.current_start}/assets/division_icons/{name}.svg"),
+			divisionType.AddIconItem(
+				GD.Load<Texture2D>($"res://starts/{GameState.Instance.currentStart}/assets/division_icons/{name}.svg"),
 				name.Capitalize());
 		}
 
-		pos_open = sidemenu.Position;
-		pos_closed = new Vector2(pos_open.X - sidemenu.CustomMinimumSize.X, pos_open.Y);
-		sidemenu.Position = pos_closed;
+		posOpen = sidemenu.Position;
+		posClosed = new Vector2(posOpen.X - sidemenu.CustomMinimumSize.X, posOpen.Y);
+		sidemenu.Position = posClosed;
 
-		GameState.Instance.game_ui = this;
+		GameState.Instance.gameUi = this;
 
 		var map = MapManager.Instance;
 		map.CountryClicked += _on_province_clicked;
@@ -219,10 +219,10 @@ public partial class GameUI : CanvasLayer
 		MusicManager.Instance.TrackChanged += _on_track_changed;
 		EconomyManager.Instance.ConstructionStarted += _on_construction_changed;
 		EconomyManager.Instance.ConstructionFinished += _on_construction_changed;
-		if (TroopManager.Instance.troop_selection is TroopSelection selection)
+		if (TroopManager.Instance.troopSelection is TroopSelection selection)
 			selection.SelectionChanged += _on_troop_selection_changed;
 
-		var clock = GameState.Instance.current_world?.clock;
+		var clock = GameState.Instance.currentWorld?.clock;
 		if (clock != null)
 		{
 			clock.HourPassed += _on_hour_passed;
@@ -236,14 +236,14 @@ public partial class GameUI : CanvasLayer
 
 		_update_flag();
 		updateProgressBar();
-		update_division_menu();
+		UpdateDivisionMenu();
 
 		if (clock != null)
 		{
 			clock.HourPassed += _on_time_passed;
-			plus.Pressed += clock.increase_speed;
-			minus.Pressed += clock.decrease_speed;
-			label_date.Text = clock.get_datetime_string();
+			plus.Pressed += clock.IncreaseSpeed;
+			minus.Pressed += clock.DecreaseSpeed;
+			labelDate.Text = clock.GetDatetimeString();
 		}
 		else
 		{
@@ -253,7 +253,7 @@ public partial class GameUI : CanvasLayer
 		// NOTE(soi): its soiladin time
 		BuildRadioList();
 
-		var compass = (Control)sidemenu_pointer.GetParent();
+		var compass = (Control)sidemenuPointer.GetParent();
 		compass.MouseFilter = Control.MouseFilterEnum.Pass;
 		compass.GuiInput += _on_compass_gui_input;
 	}
@@ -276,22 +276,22 @@ public partial class GameUI : CanvasLayer
 
 	private void BuildRadioList()
 	{
-		const string default_music_path = "res://assets/music/";
-		const string custom_music_path = "res://radios/";
+		const string defaultMusicPath = "res://assets/music/";
+		const string customMusicPath = "res://radios/";
 		var music = MusicManager.Instance;
-		foreach (var radioKey in music.music_map[(int)MusicManager.MUSIC.MAIN_THEME].AsGodotDictionary().Keys)
+		foreach (var radioKey in music.musicMap[(int)MusicManager.MUSIC.MAIN_THEME].AsGodotDictionary().Keys)
 		{
 			var radio = radioKey.AsString();
-			var music_path = ResourceLoader.Exists(default_music_path + radio + "/thumbnail.png")
-				? default_music_path
-				: custom_music_path;
+			var musicPath = ResourceLoader.Exists(defaultMusicPath + radio + "/thumbnail.png")
+				? defaultMusicPath
+				: customMusicPath;
 			var entry = new Button
 			{
 				Text = "\n\n\n" + radio,
-				Icon = GD.Load<Texture2D>(music_path + radio + "/thumbnail.png"),
+				Icon = GD.Load<Texture2D>(musicPath + radio + "/thumbnail.png"),
 				ExpandIcon = true,
 			};
-			entry.SetMeta("radio_name", radio);
+			entry.SetMeta("radioName", radio);
 			entry.Pressed += () =>
 			{
 				if (music.radios.Contains(radio))
@@ -299,12 +299,12 @@ public partial class GameUI : CanvasLayer
 				else
 					music.radios.Add(radio);
 				_update_radio_visuals();
-				music.update_interactive_playlists();
+				music.UpdateInteractivePlaylists();
 				// Restart current track so the player picks up the updated playlist
-				music.current_track_type = -1;
-				music.play_music(music.last_track_type);
+				music.currentTrackType = -1;
+				music.PlayMusic(music.lastTrackType);
 			};
-			radio_list.AddChild(entry);
+			radioList.AddChild(entry);
 			entry.UseParentMaterial = true;
 		}
 
@@ -320,7 +320,7 @@ public partial class GameUI : CanvasLayer
 		player.IdeologyChanged += _update_flag;
 	}
 
-	public void set_tooltips_of_tabcontainers()
+	public void SetTooltipsOfTabcontainers()
 	{
 		var tabs = GetNode<TabContainer>("%PlayerTabs");
 		tabs.SetTabTooltip(0, "Diplomacy");
@@ -331,7 +331,7 @@ public partial class GameUI : CanvasLayer
 
 	private void _on_compass_gui_input(InputEvent @event)
 	{
-		if (!(DebugMode && selected_country != null))
+		if (!(DebugMode && selectedCountry != null))
 			return;
 
 		if (@event is InputEventMouseButton { ButtonIndex: MouseButton.Left } button)
@@ -341,32 +341,32 @@ public partial class GameUI : CanvasLayer
 			_update_ideology_from_mouse(motion.Position, false);
 	}
 
-	private void _update_ideology_from_mouse(Vector2 local_pos, bool do_save)
+	private void _update_ideology_from_mouse(Vector2 localPos, bool doSave)
 	{
-		if (selected_country == null)
+		if (selectedCountry == null)
 			return;
 
-		var ideology_x = Mathf.Remap(Mathf.Clamp(local_pos.X, 3, 97), 3, 97, -100, 100);
-		var ideology_y = Mathf.Remap(Mathf.Clamp(local_pos.Y, 3, 97), 3, 97, -100, 100);
+		var ideologyX = Mathf.Remap(Mathf.Clamp(localPos.X, 3, 97), 3, 97, -100, 100);
+		var ideologyY = Mathf.Remap(Mathf.Clamp(localPos.Y, 3, 97), 3, 97, -100, 100);
 
-		selected_country.ideology = new Vector2(ideology_x, ideology_y);
+		selectedCountry.ideology = new Vector2(ideologyX, ideologyY);
 		DoUpdateSidemenuVisuals();
 
-		if (do_save && DebugMode)
-			MapData.Instance.SaveMapData("user://map_data.json");
+		if (doSave && DebugMode)
+			MapData.Instance.SaveMapData("user://");
 	}
 
 	private void _update_radio_visuals()
 	{
 		var radios = MusicManager.Instance.radios;
-		foreach (var node in radio_list.GetChildren())
+		foreach (var node in radioList.GetChildren())
 		{
 			if (node is not Control child)
 				continue;
-			var radio_name = child.GetMeta("radio_name", "").AsString();
-			if (radio_name == "")
+			var radioName = child.GetMeta("radioName", "").AsString();
+			if (radioName == "")
 				continue;
-			child.Modulate = radios.Contains(radio_name) ? Colors.White : new Color(0.5f, 0.5f, 0.5f);
+			child.Modulate = radios.Contains(radioName) ? Colors.White : new Color(0.5f, 0.5f, 0.5f);
 		}
 	}
 
@@ -386,64 +386,64 @@ public partial class GameUI : CanvasLayer
 
 	private void PlacePointer(CountryData country)
 	{
-		sidemenu_pointer.Position = new Vector2(
+		sidemenuPointer.Position = new Vector2(
 			Mathf.Remap(country.ideology.X, -100, 100, 3, 97),
 			Mathf.Remap(country.ideology.Y, -100, 100, 3, 97));
 	}
 
 	public void DoUpdateSidemenuVisuals()
 	{
-		sidemenu_country_label.Text =
-			$"{selected_country.ideology_name.Capitalize()} {selected_country.display_name.Capitalize()}";
+		sidemenuCountryLabel.Text =
+			$"{selectedCountry.ideologyName.Capitalize()} {selectedCountry.displayName.Capitalize()}";
 
-		foreach (var entry in factions_box.GetChildren())
+		foreach (var entry in factionsBox.GetChildren())
 			entry.QueueFree();
 
 		var factions = FactionManager.Instance.factions;
-		foreach (var faction in selected_country.factions)
+		foreach (var faction in selectedCountry.factions)
 		{
-			var faction_entry = new Label
+			var factionEntry = new Label
 			{
 				Text = faction.Capitalize(),
 				MouseFilter = Control.MouseFilterEnum.Pass,
 				TooltipText = string.Concat(factions[faction].members.Select(x => $"\n{x.polity.Capitalize()}: ({x.status})")),
 			};
-			factions_box.AddChild(faction_entry);
+			factionsBox.AddChild(factionEntry);
 		}
 
-		puppetBadge.Modulate = selected_country.is_puppet ? PUPPET_COLOR : FALSE_COLOR;
-		warBadge.Modulate = selected_country.is_at_war ? WAR_COLOR : FALSE_COLOR;
+		puppetBadge.Modulate = selectedCountry.isPuppet ? PUPPET_COLOR : FALSE_COLOR;
+		warBadge.Modulate = selectedCountry.IsAtWar ? WAR_COLOR : FALSE_COLOR;
 
 		if (GameState.Instance.interactionType == InteractionType.SELECT_COUNTRY)
 		{
-			foreach (var stat in select_player_stat.GetChildren())
+			foreach (var stat in selectPlayerStat.GetChildren())
 				stat.QueueFree();
 			foreach (var stat in SELECT_STATS)
 			{
-				var stat_label = new Label
+				var statLabel = new Label
 				{
-					Text = $"{stat.Capitalize()}: {selected_country.Get(stat).ToString().Capitalize()}",
+					Text = $"{stat.Capitalize()}: {selectedCountry.Get(stat).ToString().Capitalize()}",
 				};
-				select_player_stat.AddChild(stat_label);
+				selectPlayerStat.AddChild(statLabel);
 			}
 
-			nation_flag.Texture = TroopManager.Instance.get_flag(selected_country.country_name, selected_country.ideology_name);
-			play_btn.Text = $"Play as {selected_country.country_name.Capitalize()}";
+			nationFlag.Texture = TroopManager.Instance.GetFlag(selectedCountry.countryName, selectedCountry.ideologyName);
+			playBtn.Text = $"Play as {selectedCountry.countryName.Capitalize()}";
 
 			MapManager.Instance.ShowCountriesMap();
 		}
 
-		if (selected_country.governmentPositions.TryGetValue("Leader", out var leaders) && leaders.Count > 0)
+		if (selectedCountry.governmentPositions.TryGetValue("Leader", out var leaders) && leaders.Count > 0)
 		{
 			var figures = MapManager.Instance.significantFigures;
-			sidemenu_leader_portrait.ussr.Clear();
-			foreach (var I_leader in leaders)
-				sidemenu_leader_portrait.ussr.Add(ImportantFigure.GetPortrait(figures.TryGetValue(I_leader, out var f) ? f : null));
-			sidemenu_leader_portrait.ForceReset();
-			sidemenu_leader_portrait.TooltipText = figures[leaders[0]].GetDisplayString();
+			sidemenuLeaderPortrait.ussr.Clear();
+			foreach (var iLeader in leaders)
+				sidemenuLeaderPortrait.ussr.Add(ImportantFigureHost.GetPortrait(figures.TryGetValue(iLeader, out var f) ? f : null));
+			sidemenuLeaderPortrait.ForceReset();
+			sidemenuLeaderPortrait.TooltipText = figures[leaders[0]].GetDisplayString();
 		}
 
-		PlacePointer(selected_country);
+		PlacePointer(selectedCountry);
 
 		_update_relations_visuals();
 		sidemenuLatch = false;
@@ -451,7 +451,7 @@ public partial class GameUI : CanvasLayer
 
 	private void _on_selected_country_ideology_changed()
 	{
-		if (selected_country != null)
+		if (selectedCountry != null)
 			_update_sidemenu_visuals();
 	}
 
@@ -461,49 +461,49 @@ public partial class GameUI : CanvasLayer
 		_connect_player_training();
 
 		_update_flag();
-		update_topbar_stats();
-		update_cultures();
+		UpdateTopbarStats();
+		UpdateCultures();
 	}
 
-	private void SelectCountry(string country_name)
+	private void SelectCountry(string countryName)
 	{
-		if (selected_country != null)
-			selected_country.IdeologyChanged -= _on_selected_country_ideology_changed;
-		selected_country = CountryManager.Instance.GetCountry(country_name);
-		selected_country.IdeologyChanged += _on_selected_country_ideology_changed;
+		if (selectedCountry != null)
+			selectedCountry.IdeologyChanged -= _on_selected_country_ideology_changed;
+		selectedCountry = CountryManager.Instance.GetCountry(countryName);
+		selectedCountry.IdeologyChanged += _on_selected_country_ideology_changed;
 	}
 
-	public void _on_province_clicked(string country_name)
+	public void _on_province_clicked(string countryName)
 	{
-		SelectCountry(country_name);
+		SelectCountry(countryName);
 		_update_sidemenu_visuals();
 
 		var state = GameState.Instance;
-		if (state.interactionType != InteractionType.BUILD_PROVINCE && state.industry_building != IndustryType.DEFAULT)
+		if (state.interactionType != InteractionType.BUILD_PROVINCE && state.industryBuilding != IndustryType.DEFAULT)
 			return;
 
 		var player = Player;
-		var new_context = Context.NEUTRAL;
-		if (country_name == player.country_name)
-			new_context = Context.PLAYER;
-		else if (WarManager.Instance.is_at_war(player, selected_country))
-			new_context = Context.ENEMY;
-		else if (player.puppets.Contains(selected_country.country_name))
-			new_context = Context.PUPPET;
-		else if (FactionManager.Instance.in_faction(player, selected_country))
-			new_context = Context.ALLY;
+		var newContext = Context.NEUTRAL;
+		if (countryName == player.countryName)
+			newContext = Context.PLAYER;
+		else if (WarManager.Instance.IsAtWar(player, selectedCountry))
+			newContext = Context.ENEMY;
+		else if (player.puppets.Contains(selectedCountry.countryName))
+			newContext = Context.PUPPET;
+		else if (FactionManager.Instance.InFaction(player, selectedCountry))
+			newContext = Context.ALLY;
 
-		var allowed = player.get_all_allowed_countries();
-		relations_hbox.TooltipText = "Military Access: " + (allowed.Contains(selected_country.country_name) ? "Yes" : "No");
+		var allowed = player.GetAllAllowedCountries();
+		relationsHbox.TooltipText = "Military Access: " + (allowed.Contains(selectedCountry.countryName) ? "Yes" : "No");
 
-		sidemenu_context.CurrentTab = (int)new_context;
+		sidemenuContext.CurrentTab = (int)newContext;
 		OpenSideMenu();
 		_update_context_actions_visuals();
 	}
 
 	public void ToggleSideMenu()
 	{
-		if (is_open)
+		if (isOpen)
 			CloseSideMenu();
 		else
 			OpenSideMenu();
@@ -511,71 +511,71 @@ public partial class GameUI : CanvasLayer
 
 	public void ChangeContextCategory(Context context = Context.PLAYER, Category category = Category.GENERAL)
 	{
-		current_context = context;
-		current_category = category;
+		currentContext = context;
+		currentCategory = category;
 
-		sidemenu_context.CurrentTab = (int)context;
-		sidemenu_context.GetChild<TabContainer>((int)context).CurrentTab = (int)category;
+		sidemenuContext.CurrentTab = (int)context;
+		sidemenuContext.GetChild<TabContainer>((int)context).CurrentTab = (int)category;
 	}
 
 	public void OpenSideMenu()
 	{
 		var state = GameState.Instance;
-		if (state.interactionType == InteractionType.DEPLOY_PROVINCE || state.industry_building != IndustryType.DEFAULT)
+		if (state.interactionType == InteractionType.DEPLOY_PROVINCE || state.industryBuilding != IndustryType.DEFAULT)
 			return;
-		military_extra_panel.Visible = true;
+		militaryExtraPanel.Visible = true;
 
-		if (selected_country != null)
-			PlacePointer(selected_country);
+		if (selectedCountry != null)
+			PlacePointer(selectedCountry);
 
 		_update_relations_visuals();
 
-		if (!is_open)
+		if (!isOpen)
 		{
-			MusicManager.Instance.play_sfx((int)SFX.OPEN_MENU);
-			slide_in();
+			MusicManager.Instance.PlaySfx((int)SFX.OPEN_MENU);
+			SlideIn();
 		}
 
 		_update_context_actions_visuals();
-		update_economy_menu();
+		UpdateEconomyMenu();
 	}
 
 	private void _update_relations_visuals()
 	{
-		if (current_category != Category.GENERAL)
+		if (currentCategory != Category.GENERAL)
 			return;
 
 		var player = Player;
-		var target = selected_country;
+		var target = selectedCountry;
 		var troops = TroopManager.Instance;
 
 		if (player == null || target == null || player == target)
 		{
-			relations_hbox.Visible = false;
+			relationsHbox.Visible = false;
 			return;
 		}
 
-		relations_hbox.Visible = true;
+		relationsHbox.Visible = true;
 
 		// FAR LEFT: Target Flag
-		flag1.Texture = troops.get_flag(target.country_name, target.ideology_name);
-		owner1.Visible = target.is_puppet;
-		if (target.is_puppet)
-			owner1.Texture = troops.get_flag(target.owner, target.owner);
+		flag1.Texture = troops.GetFlag(target.countryName, target.ideologyName);
+		owner1.Visible = target.isPuppet;
+		if (target.isPuppet)
+			owner1.Texture = troops.GetFlag(target.owner, target.owner);
 
 		// CENTER: Dual Opinions
-		relation1.Text = target.get_relation_with(player.country_name).ToString();
-		relation2.Text = player.get_relation_with(target.country_name).ToString();
+		relation1.Text = target.GetRelationWith(player.countryName).ToString();
+		relation2.Text = player.GetRelationWith(target.countryName).ToString();
 
 		// FAR RIGHT: Player Flag
-		flag2.Texture = troops.get_flag(player.country_name, player.ideology_name);
-		owner2.Visible = player.is_puppet;
-		if (player.is_puppet)
-			owner2.Texture = troops.get_flag(player.owner, player.owner);
+		flag2.Texture = troops.GetFlag(player.countryName, player.ideologyName);
+		owner2.Visible = player.isPuppet;
+		if (player.isPuppet)
+			owner2.Texture = troops.GetFlag(player.owner, player.owner);
 	}
 
 	private bool contextLatch = false;
-	private readonly List<(Button btn, string method, string base_text)> _actions_list_cache = new();
+	private readonly List<(Button btn, string method, string baseText)> _actions_list_cache = new();
 	private bool _actions_list_cached = false;
 
 	private void _update_context_actions_visuals()
@@ -603,38 +603,38 @@ public partial class GameUI : CanvasLayer
 		if (!_actions_list_cached)
 		{
 			_actions_list_cache.Clear();
-			foreach (var context_node in sidemenu_context.GetChildren())
+			foreach (var contextNode in sidemenuContext.GetChildren())
 			{
-				var actions_list = context_node.FindChild("ActionsList", true, false);
-				if (actions_list == null)
+				var actionsList = contextNode.FindChild("ActionsList", true, false);
+				if (actionsList == null)
 					continue;
-				foreach (var child in actions_list.GetChildren())
+				foreach (var child in actionsList.GetChildren())
 				{
 					if (child is not Button button)
 						continue;
 					var method = ConnectedMethod(button);
-					if (method != "" && action_costs.ContainsKey(method))
+					if (method != "" && actionCosts.ContainsKey(method))
 						_actions_list_cache.Add((button, method, button.Text.Split(" (")[0]));
 				}
 			}
 			_actions_list_cached = true;
 		}
 
-		if (selected_country == null)
+		if (selectedCountry == null)
 		{
 			contextLatch = false;
 			return;
 		}
 
 		var player = Player;
-		foreach (var (child, method, base_text) in _actions_list_cache)
+		foreach (var (child, method, baseText) in _actions_list_cache)
 		{
 			if (!GodotObject.IsInstanceValid(child))
 				continue;
 
-			var cost_data = action_costs[method](player, selected_country);
-			child.Disabled = !cost_data.can_afford;
-			child.Text = base_text + (cost_data.cost > 0 ? $" ({cost_data.cost} PP)" : "");
+			var costData = actionCosts[method](player, selectedCountry);
+			child.Disabled = !costData.canAfford;
+			child.Text = baseText + (costData.cost > 0 ? $" ({costData.cost} PP)" : "");
 
 			// Visual feedback for disabled buttons
 			child.Modulate = child.Disabled ? new Color(1.0f, 0.5f, 0.5f, 0.7f) : Colors.White;
@@ -643,35 +643,35 @@ public partial class GameUI : CanvasLayer
 		contextLatch = false;
 	}
 
-	public void _on_tab_changed(int new_category_index)
+	public void _on_tab_changed(int newCategoryIndex)
 	{
-		current_category = (Category)new_category_index;
-		MusicManager.Instance.play_sfx((int)SFX.HOVERED);
+		currentCategory = (Category)newCategoryIndex;
+		MusicManager.Instance.PlaySfx((int)SFX.HOVERED);
 	}
 
 	public void _on_menu_button_button_up(int _menu_index)
 	{
-		current_category = (Category)_menu_index;
+		currentCategory = (Category)_menu_index;
 		var player = Player;
-		if (player == null || current_context != Context.PLAYER)
+		if (player == null || currentContext != Context.PLAYER)
 			return;
 
 		var map = MapManager.Instance;
 		if (_menu_index == (int)Category.ECONOMY)
 		{
-			map.ShowIndustryCountry(player.country_name);
-			var designs = EconomyManager.Instance.building_designs;
-			if (!designs.ContainsKey(player.country_name))
-				designs[player.country_name] = new Godot.Collections.Dictionary();
-			building_dropdown.Clear();
-			building_dropdown.AddItem("Infrastructure");
-			foreach (var buildingTemplateName in designs[player.country_name].Keys)
-				building_dropdown.AddItem(buildingTemplateName.AsString());
+			map.ShowIndustryCountry(player.countryName);
+			var designs = EconomyManager.Instance.buildingDesigns;
+			if (!designs.ContainsKey(player.countryName))
+				designs[player.countryName] = new Godot.Collections.Dictionary();
+			buildingDropdown.Clear();
+			buildingDropdown.AddItem("Infrastructure");
+			foreach (var buildingTemplateName in designs[player.countryName].Keys)
+				buildingDropdown.AddItem(buildingTemplateName.AsString());
 		}
 		else
 		{
-			map.SetCountryColor(player.country_name, Colors.Transparent);
-			GameState.Instance.industry_building = IndustryType.DEFAULT;
+			map.SetCountryColor(player.countryName, Colors.Transparent);
+			GameState.Instance.industryBuilding = IndustryType.DEFAULT;
 			GameState.Instance.interactionType = InteractionType.DEFAULT;
 			map.ShowCountriesMap();
 		}
@@ -680,86 +680,86 @@ public partial class GameUI : CanvasLayer
 	// NOTE(Z21): Some of the things here are outdated and not used and overall bad way to do things ngl
 	private void _build_trooplist()
 	{
-		foreach (var child in sidemenu_trooplist.GetChildren())
+		foreach (var child in sidemenuTrooplist.GetChildren())
 			child.QueueFree();
 
 		var player = Player;
 
-		foreach (var troop in player.ongoing_training)
+		foreach (var troop in player.ongoingTraining)
 		{
-			var btn = action_scene.Instantiate<ActionRow>();
-			sidemenu_trooplist.AddChild(btn);
-			btn.setup_training(troop);
+			var btn = actionScene.Instantiate<ActionRow>();
+			sidemenuTrooplist.AddChild(btn);
+			btn.SetupTraining(troop);
 			// CountryData.TrainingFinished rebuilds this list (see _connect_player_training)
 		}
 
 		// Ready to Deploy
-		foreach (var troop in player.ready_troops)
+		foreach (var troop in player.readyTroops)
 		{
-			var btn = action_scene.Instantiate<ActionRow>();
-			sidemenu_trooplist.AddChild(btn);
-			btn.setup_ready(troop, () => deploy_troop(troop));
+			var btn = actionScene.Instantiate<ActionRow>();
+			sidemenuTrooplist.AddChild(btn);
+			btn.SetupReady(troop, () => DeployTroop(troop));
 		}
 	}
 
 	//NOTE(Sockmit2007): Soilad is literally Hitler for this one.
 
-	private static void ShiftGraph(Line2D graph, float newest_y)
+	private static void ShiftGraph(Line2D graph, float newestY)
 	{
 		var points = graph.Points;
 		if (points.Length == 0)
 			return;
 		for (var i = 0; i < points.Length - 1; i++)
 			points[i] = points[i + 1] with { X = points[i + 1].X - 79 };
-		points[^1] = new Vector2(316, 236 - newest_y);
+		points[^1] = new Vector2(316, 236 - newestY);
 		graph.Points = points;
 	}
 
-	public void update_topbar_stats()
+	public void UpdateTopbarStats()
 	{
 		var player = Player;
 		if (player == null)
 			return;
-		label_pp.Text = ((int)Math.Floor(player.political_power)).ToString();
-		label_stability.Text = $"{Math.Round(player.stability * 100)}%";
-		label_manpower.Text = format_number(player.manpower);
-		label_money.Text = format_number(player.money);
-		label_industry.Text = player.factories_amount.ToString();
-		label_war_support.Text = $"{player.war_support * 100}%";
-		label_world_tension.Text = $"{Math.Round(MapManager.Instance.world_tension * 100)}%";
+		labelPp.Text = ((int)Math.Floor(player.politicalPower)).ToString();
+		labelStability.Text = $"{Math.Round(player.stability * 100)}%";
+		labelManpower.Text = FormatNumber(player.manpower);
+		labelMoney.Text = FormatNumber(player.money);
+		labelIndustry.Text = player.factoriesAmount.ToString();
+		labelWarSupport.Text = $"{player.warSupport * 100}%";
+		labelWorldTension.Text = $"{Math.Round(MapManager.Instance.worldTension * 100)}%";
 
-		ShiftGraph(population_graph, player.total_population * 0.00001f);
-		ShiftGraph(sewage_graph, player.total_sewage);
-		ShiftGraph(power_graph, player.total_power);
-		ShiftGraph(water_graph, player.total_water);
+		ShiftGraph(populationGraph, player.totalPopulation * 0.00001f);
+		ShiftGraph(sewageGraph, player.totalSewage);
+		ShiftGraph(powerGraph, player.totalPower);
+		ShiftGraph(waterGraph, player.totalWater);
 
 		_update_notifications();
 	}
 
 	private void _on_hour_passed()
 	{
-		update_topbar_stats();
-		update_division_menu();
-		if (is_open)
+		UpdateTopbarStats();
+		UpdateDivisionMenu();
+		if (isOpen)
 			_update_context_actions_visuals();
 	}
 
 	// Construction progress and training countdowns only change once per day.
 	private void _on_day_passed()
 	{
-		if (is_open)
-			update_economy_menu();
-		foreach (var row in sidemenu_trooplist.GetChildren())
+		if (isOpen)
+			UpdateEconomyMenu();
+		foreach (var row in sidemenuTrooplist.GetChildren())
 		{
 			if (row is ActionRow action && !action.IsQueuedForDeletion())
-				action.refresh_ui();
+				action.RefreshUi();
 		}
 	}
 
 	private void _on_construction_changed(int _pid, GodotObject country)
 	{
 		if (country == Player)
-			update_economy_menu();
+			UpdateEconomyMenu();
 	}
 
 	// Tracks which country TrainingFinished is connected on, so a player switch moves it.
@@ -777,19 +777,19 @@ public partial class GameUI : CanvasLayer
 	private void _on_map_view_changed(int view)
 	{
 		// Setting current_tab emits tab_changed, which calls SetMapMode again. Only set it if it differs.
-		if (map_tabs.CurrentTab != view)
-			map_tabs.CurrentTab = view;
+		if (mapTabs.CurrentTab != view)
+			mapTabs.CurrentTab = view;
 	}
 
-	private void _on_country_selected(string country_name)
+	private void _on_country_selected(string countryName)
 	{
-		SelectCountry(country_name);
+		SelectCountry(countryName);
 		DoUpdateSidemenuVisuals();
 	}
 
 	private void _on_sidemenu_close_requested()
 	{
-		if (is_open)
+		if (isOpen)
 			CloseSideMenu();
 	}
 
@@ -799,56 +799,57 @@ public partial class GameUI : CanvasLayer
 		{
 			// NOTE(soi): This swtiches the sidemenu while its closing instead of swithcing after its out of view
 			ChangeContextCategory(Context.PLAYER, Category.GENERAL);
-			selected_country = Player;
+			selectedCountry = Player;
 			DoUpdateSidemenuVisuals();
 		}
 		ToggleSideMenu();
 	}
 
-	private void _on_track_changed(string track_name)
+	private void _on_track_changed(string trackName)
 	{
-		if (now_playing != null)
-			now_playing.Text = track_name;
+		if (nowPlaying != null)
+			nowPlaying.Text = trackName;
 	}
 
-	private void _on_troop_selection_changed(Godot.Collections.Array troops)
+	private void _on_troop_selection_changed()
 	{
+		var troops = (TroopManager.Instance.troopSelection as TroopSelection)?.selectedTroops ?? new List<TroopData>();
 		if (troops.Count == 0)
 		{
-			selected_division_objects.Clear();
-			close_troop_container();
+			selectedDivisionObjects.Clear();
+			CloseTroopContainer();
 		}
 		else
 		{
-			make_troop_container(troops.Select(t => t.As<TroopData>()).ToList());
+			MakeTroopContainer(troops);
 		}
 	}
 
-	public static string format_number(double value)
+	public static string FormatNumber(double value)
 	{
-		var abs_val = Math.Abs(value);
-		var sign_str = value < 0 ? "-" : "";
-		if (abs_val >= 1_000_000_000)
-			return sign_str + $"{abs_val * 0.000000001:F2}B";
-		if (abs_val >= 1_000_000)
-			return sign_str + $"{abs_val * 0.000001:F2}M";
-		if (abs_val >= 1_000)
-			return sign_str + $"{abs_val * 0.001:F1}K";
-		return sign_str + ((long)Math.Floor(abs_val)).ToString();
+		var absVal = Math.Abs(value);
+		var signStr = value < 0 ? "-" : "";
+		if (absVal >= 1_000_000_000)
+			return signStr + $"{absVal * 0.000000001:F2}B";
+		if (absVal >= 1_000_000)
+			return signStr + $"{absVal * 0.000001:F2}M";
+		if (absVal >= 1_000)
+			return signStr + $"{absVal * 0.001:F1}K";
+		return signStr + ((long)Math.Floor(absVal)).ToString();
 	}
 
 	private void _on_time_passed()
 	{
-		label_date.Text = GameState.Instance.current_world.clock.get_datetime_string();
+		labelDate.Text = GameState.Instance.currentWorld.clock.GetDatetimeString();
 	}
 
 	public void updateProgressBar()
 	{
-		var clock = GameState.Instance.current_world.clock;
-		progress_bar.Value = clock.time_scale / clock.max_speed * 100.0;
-		if (progress_bar.GetThemeStylebox("background") is StyleBoxFlat bg_style)
-			bg_style.BorderColor = clock.paused ? Colors.DarkRed : Colors.DarkCyan;
-		label_date.AddThemeColorOverride("font_color", clock.paused ? Colors.Gray : Colors.White);
+		var clock = GameState.Instance.currentWorld.clock;
+		progressBar.Value = clock.timeScale / clock.maxSpeed * 100.0;
+		if (progressBar.GetThemeStylebox("background") is StyleBoxFlat bgStyle)
+			bgStyle.BorderColor = clock.paused ? Colors.DarkRed : Colors.DarkCyan;
+		labelDate.AddThemeColorOverride("font_color", clock.paused ? Colors.Gray : Colors.White);
 	}
 
 	private void _update_flag()
@@ -856,34 +857,34 @@ public partial class GameUI : CanvasLayer
 		var player = Player;
 		if (player == null)
 			return;
-		nation_flag.Texture = TroopManager.Instance.get_flag(player.country_name, player.ideology_name);
+		nationFlag.Texture = TroopManager.Instance.GetFlag(player.countryName, player.ideologyName);
 	}
 
 	public void CloseSideMenu()
 	{
-		if (is_open)
-			MusicManager.Instance.play_sfx((int)SFX.CLOSE_MENU);
-		GameState.Instance.reset_industry_building();
-		slide_out();
-		military_extra_panel.Visible = false;
+		if (isOpen)
+			MusicManager.Instance.PlaySfx((int)SFX.CLOSE_MENU);
+		GameState.Instance.ResetIndustryBuilding();
+		SlideOut();
+		militaryExtraPanel.Visible = false;
 	}
 
-	public void slide_in()
+	public void SlideIn()
 	{
-		if (is_open)
+		if (isOpen)
 			return;
-		is_open = true;
+		isOpen = true;
 		CreateTween().SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out)
-			.TweenProperty(sidemenu, "position", pos_open, slide_duration);
+			.TweenProperty(sidemenu, "position", posOpen, slideDuration);
 	}
 
-	public void slide_out()
+	public void SlideOut()
 	{
-		if (!is_open)
+		if (!isOpen)
 			return;
-		is_open = false;
+		isOpen = false;
 		CreateTween().SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.In)
-			.TweenProperty(sidemenu, "position", pos_closed, slide_duration);
+			.TweenProperty(sidemenu, "position", posClosed, slideDuration);
 	}
 
 	public void _choose_deploy_city()
@@ -895,10 +896,10 @@ public partial class GameUI : CanvasLayer
 	private bool TryPay(string action)
 	{
 		var player = Player;
-		var cost = action_costs[action](player, selected_country).cost;
-		if (player.political_power < cost)
+		var cost = actionCosts[action](player, selectedCountry).cost;
+		if (player.politicalPower < cost)
 			return false;
-		player.political_power -= cost;
+		player.politicalPower -= cost;
 		return true;
 	}
 
@@ -908,51 +909,53 @@ public partial class GameUI : CanvasLayer
 			return;
 
 		var player = Player;
-		var wars = WarManager.Instance;
-		wars.declare_war(player, selected_country);
+		var dispatcher = ActionDispatcher.Instance;
+		var issuer = player.countryName;
+		var target = selectedCountry.countryName;
+		dispatcher.Submit(new DeclareWarAction { Issuer = issuer, Warer = issuer, Waree = target });
 
-		if (!string.IsNullOrEmpty(selected_country.owner))
-			wars.declare_war(player, CountryManager.Instance.GetCountry(selected_country.owner));
-		foreach (var puppet in selected_country.puppets)
-			wars.declare_war(player, CountryManager.Instance.GetCountry(puppet));
+		if (!string.IsNullOrEmpty(selectedCountry.owner))
+			dispatcher.Submit(new DeclareWarAction { Issuer = issuer, Warer = issuer, Waree = selectedCountry.owner });
+		foreach (var puppet in selectedCountry.puppets)
+			dispatcher.Submit(new DeclareWarAction { Issuer = issuer, Warer = issuer, Waree = puppet });
 
 		OpenSideMenu();
 	}
 
 	public void _conscript(Godot.Collections.Dictionary _data)
 	{
-		Player.train_troops(1, "infantry");
-		update_topbar_stats();
+		Player.TrainTroops(1, "infantry");
+		UpdateTopbarStats();
 	}
 
-	public void deploy_troop(ReadyTroop troop)
+	public void DeployTroop(ReadyTroop troop)
 	{
-		Player.deploy_ready_troop(troop, Player.deploy_pid);
+		Player.DeployReadyTroop(troop, Player.deployPid);
 		_build_trooplist();
 	}
 
-	public void improve_stability()
+	public void ImproveStability()
 	{
 		if (!TryPay("improve_stability"))
 			return;
 		Player.stability += 0.02;
-		update_topbar_stats();
+		UpdateTopbarStats();
 		_update_context_actions_visuals();
 	}
 
 	public void _on_building_selected(int index)
 	{
-		GameState.Instance.industry_building = index switch
+		GameState.Instance.industryBuilding = index switch
 		{
 			0 => IndustryType.FACTORY,
 			1 => IndustryType.PORT,
 			2 => IndustryType.INFRASTRUCTURE,
 			_ => IndustryType.DEFAULT,
 		};
-		update_economy_menu();
+		UpdateEconomyMenu();
 	}
 
-	public void update_economy_menu()
+	public void UpdateEconomyMenu()
 	{
 		if (!economyUpdate)
 		{
@@ -966,10 +969,10 @@ public partial class GameUI : CanvasLayer
 		var player = Player;
 		if (player != null)
 		{
-			var playerProvinces = MapManager.Instance.country_to_owned_provinces[player.country_name];
-			foreach (var child in sidemenu_buildings.GetChildren())
+			var playerProvinces = MapManager.Instance.countryToOwnedProvinces[player.countryName];
+			foreach (var child in sidemenuBuildings.GetChildren())
 				child.QueueFree();
-			foreach (var (pid, construction) in EconomyManager.Instance.construction_queue)
+			foreach (var (pid, construction) in EconomyManager.Instance.constructionQueue)
 			{
 				if (!playerProvinces.Contains(pid.AsInt32()))
 					continue;
@@ -981,7 +984,7 @@ public partial class GameUI : CanvasLayer
 					UseParentMaterial = true,
 				};
 				entry.AddChild(new Label { Text = data["type"].AsString(), UseParentMaterial = true });
-				sidemenu_buildings.AddChild(entry);
+				sidemenuBuildings.AddChild(entry);
 			}
 		}
 		economyUpdate = false;
@@ -991,8 +994,8 @@ public partial class GameUI : CanvasLayer
 	{
 		if (!TryPay("_request_access"))
 			return;
-		Player.allowedCountries.Add(selected_country.country_name);
-		MapManager.Instance.AllowPids(Player, selected_country);
+		Player.allowedCountries.Add(selectedCountry.countryName);
+		MapManager.Instance.AllowPids(Player, selectedCountry);
 		_update_context_actions_visuals();
 	}
 
@@ -1000,7 +1003,7 @@ public partial class GameUI : CanvasLayer
 	{
 		if (!TryPay("_force_puppet"))
 			return;
-		CountryManager.Instance.make_puppet(Player, selected_country);
+		CountryManager.Instance.MakePuppet(Player, selectedCountry);
 		_update_context_actions_visuals();
 		CloseSideMenu();
 	}
@@ -1009,7 +1012,7 @@ public partial class GameUI : CanvasLayer
 	{
 		if (!TryPay("_release_puppet"))
 			return;
-		CountryManager.Instance.release_puppet(Player, selected_country);
+		CountryManager.Instance.ReleasePuppet(Player, selectedCountry);
 		_update_context_actions_visuals();
 		CloseSideMenu();
 	}
@@ -1030,19 +1033,19 @@ public partial class GameUI : CanvasLayer
 
 	public void _trade_deal() => GD.Print("Trading...");
 
-	public void open_research_tree() => GD.Print("Opening Research");
+	public void OpenResearchTree() => GD.Print("Opening Research");
 
-	public void open_decisions_tree()
+	public void OpenDecisionsTree()
 	{
 		(GetTree().Root.FindChild("DecisionTreeUI", true, false) as DecisionTreeUI)?.OpenMenu();
 	}
 
 	public void _open_faction()
 	{
-		faction_prompt.Visible = !faction_prompt.Visible;
+		factionPrompt.Visible = !factionPrompt.Visible;
 	}
 
-	public void open_manage_country()
+	public void OpenManageCountry()
 	{
 		if (logistics.Visible)
 			logistics.CloseMenu();
@@ -1053,18 +1056,18 @@ public partial class GameUI : CanvasLayer
 	// NOTE(Z21): Everything below is made by a Clanker. I am way too lazy for UI stuff
 	// NOTE(soi): DAMM YOU Z21
 
-	public void make_troop_container(List<TroopData> selected_troops)
+	public void MakeTroopContainer(List<TroopData> selectedTroops)
 	{
-		troop_container.Visible = true;
-		foreach (var child in troop_list_parent.GetChildren())
+		troopContainer.Visible = true;
+		foreach (var child in troopListParent.GetChildren())
 			child.QueueFree();
 
-		foreach (var troop in selected_troops)
+		foreach (var troop in selectedTroops)
 		{
 			// Group divisions by type, keeping first-seen order: {"infantry": [div1, div2], "tank": [div3]}
 			var groups = new Dictionary<string, Godot.Collections.Array>();
 			var order = new List<string>();
-			foreach (var div in troop.stored_divisions)
+			foreach (var div in troop.storedDivisions)
 			{
 				if (!groups.TryGetValue(div.type, out var list))
 				{
@@ -1072,178 +1075,189 @@ public partial class GameUI : CanvasLayer
 					groups[div.type] = list;
 					order.Add(div.type);
 				}
-				list.Add(div);
+				list.Add(VariantState.ToVariant(div.ToDict()));
 			}
 
 			// Draw one card per type
 			foreach (var type in order)
 			{
-				var divisions_of_type = groups[type];
+				var divisionsOfType = groups[type];
 				var card = DIVISION_CARD_SCENE.Instantiate<DivisionItem>();
-				troop_list_parent.AddChild(card);
+				troopListParent.AddChild(card);
 
-				var first = divisions_of_type[0].As<DivisionData>();
-				card.setup_grouped(troop, type, divisions_of_type, selected_division_objects.Contains(first));
+				var groupDivisions = divisionsOfType
+					.Select(d => DivisionData.FromDict(d.AsGodotDictionary().AsState())).ToList();
+				card.SetupGrouped(troop, type, groupDivisions, selectedDivisionObjects.Contains(groupDivisions[0]));
 				card.Clicked += _on_group_clicked;
 			}
 		}
 	}
 
-	private void _on_group_clicked(GodotObject card_object, Variant data)
+	private void _on_group_clicked(GodotObject cardObject)
 	{
-		var card_node = (DivisionItem)card_object;
-		var divs_in_group = data.AsGodotArray().Select(d => d.As<DivisionData>()).ToList();
+		var cardNode = (DivisionItem)cardObject;
+		var divsInGroup = cardNode.groupDivisions ?? new List<DivisionData>();
 
 		// Check the first div to see if we are selecting or deselecting the group
-		var is_already_selected = selected_division_objects.Contains(divs_in_group[0]);
+		var isAlreadySelected = selectedDivisionObjects.Contains(divsInGroup[0]);
 
-		foreach (var div in divs_in_group)
+		foreach (var div in divsInGroup)
 		{
-			if (is_already_selected)
-				selected_division_objects.Remove(div);
-			else if (!selected_division_objects.Contains(div))
-				selected_division_objects.Add(div);
+			if (isAlreadySelected)
+				selectedDivisionObjects.Remove(div);
+			else if (!selectedDivisionObjects.Contains(div))
+				selectedDivisionObjects.Add(div);
 		}
 
 		// Toggle the card's visual state
-		card_node.is_selected = !is_already_selected;
-		card_node.update_visuals();
+		cardNode.isSelected = !isAlreadySelected;
+		cardNode.UpdateVisuals();
 	}
 
-	public void close_troop_container()
+	public void CloseTroopContainer()
 	{
-		troop_container.Visible = false;
+		troopContainer.Visible = false;
 	}
 
 	// --- Main Update Logic ---
-	public void update_division_menu()
+	public void UpdateDivisionMenu()
 	{
 		var templates = DivisionTemplates.Instance.TEMPLATES;
-		if (!templates.TryGetValue(division_type_selected, out var statsVariant))
+		if (!templates.TryGetValue(divisionTypeSelected, out var statsVariant))
 			return;
 		var stats = statsVariant.AsGodotDictionary();
-		var stat_manpower = stats["manpower"].AsInt32();
-		var stat_cost = stats["cost"].AsDouble();
+		var statManpower = stats["manpower"].AsInt32();
+		var statCost = stats["cost"].AsDouble();
 
 		var player = Player;
 		if (player != null)
 		{
-			var max_manpower_divs = stat_manpower > 0 ? (double)player.manpower / stat_manpower : 999;
-			var unit_cost = stat_cost * player.divCostMod;
-			var max_money_divs = unit_cost > 0 ? player.money / unit_cost : 999;
+			var maxManpowerDivs = statManpower > 0 ? (double)player.manpower / statManpower : 999;
+			var unitCost = statCost * player.divCostMod;
+			var maxMoneyDivs = unitCost > 0 ? player.money / unitCost : 999;
 
-			input_division.MaxValue = Math.Max(1, Math.Floor(Math.Min(max_manpower_divs, max_money_divs)));
+			inputDivision.MaxValue = Math.Max(1, Math.Floor(Math.Min(maxManpowerDivs, maxMoneyDivs)));
 		}
 
-		var count = (int)Math.Ceiling(input_division.Value);
+		var count = (int)Math.Ceiling(inputDivision.Value);
 
-		div_type.Text = division_type_selected.Capitalize();
-		div_stats.Text = $"{stats["attack"]}\n{stats["defense"]}\n{stats["hp"]}";
+		divType.Text = divisionTypeSelected.Capitalize();
+		divStats.Text = $"{stats["attack"]}\n{stats["defense"]}\n{stats["hp"]}";
 
-		var total_manpower = stat_manpower * count;
-		manpower.Text = format_number(total_manpower);
+		var totalManpower = statManpower * count;
+		manpower.Text = FormatNumber(totalManpower);
 
 		if (player != null)
 		{
-			costs.Text = format_number(stat_cost * count * player.divCostMod);
+			costs.Text = FormatNumber(statCost * count * player.divCostMod);
 
 			// Check Affordability & Update Button State & Visuals
-			button_train.Disabled = player.manpower < total_manpower;
+			buttonTrain.Disabled = player.manpower < totalManpower;
 		}
 	}
 
 	public void _on_button_train_troops()
 	{
-		if (Player.train_troops(Math.Max(1, (int)Math.Ceiling(input_division.Value)), division_type_selected))
+		if (Player.TrainTroops(Math.Max(1, (int)Math.Ceiling(inputDivision.Value)), divisionTypeSelected))
 			_build_trooplist();
-		update_division_menu();
+		UpdateDivisionMenu();
 	}
 
 	public void _on_division_type_button(string type)
 	{
-		division_type_selected = type;
-		update_division_menu();
+		divisionTypeSelected = type;
+		UpdateDivisionMenu();
 	}
 
 	public void _on_division_type_selected(int index)
 	{
-		division_type_selected = DivisionTemplates.Instance.TEMPLATES.Keys.ElementAt(index).AsString();
-		update_division_menu();
+		divisionTypeSelected = DivisionTemplates.Instance.TEMPLATES.Keys.ElementAt(index).AsString();
+		UpdateDivisionMenu();
 	}
 
 	public void _on_input_division_text_changed(float _value)
 	{
-		update_division_menu();
+		UpdateDivisionMenu();
 	}
 
 	public void _on_music_pressed()
 	{
-		radios_panel.Visible = !radios_panel.Visible;
+		radiosPanel.Visible = !radiosPanel.Visible;
 		SettingsManager.Instance.settings.Save(SettingsManager.Instance.SETTINGS_FILE);
 	}
 
 	public void _on_create_faction_pressed()
 	{
-		var name_edit = faction_prompt.GetNode<TextEdit>("VBoxContainer/HBoxContainer/TextEdit");
-		var color_picker = faction_prompt.GetNode<ColorPicker>("VBoxContainer/ColorPicker");
-		FactionManager.Instance.create_faction(Player.country_name, name_edit.Text, color_picker.Color);
-		name_edit.Text = "";
-		color_picker.Color = Colors.White;
-		faction_prompt.Visible = !faction_prompt.Visible;
+		var nameEdit = factionPrompt.GetNode<TextEdit>("VBoxContainer/HBoxContainer/TextEdit");
+		var colorPicker = factionPrompt.GetNode<ColorPicker>("VBoxContainer/ColorPicker");
+		FactionManager.Instance.CreateFaction(Player.countryName, nameEdit.Text, colorPicker.Color);
+		nameEdit.Text = "";
+		colorPicker.Color = Colors.White;
+		factionPrompt.Visible = !factionPrompt.Visible;
 	}
 
 	public void _on_invite_faction_pressed()
 	{
-		FactionManager.Instance.invite_faction(Player, selected_country);
+		FactionManager.Instance.InviteFaction(Player, selectedCountry);
 	}
 
 	public void _on_kick_faction_pressed()
 	{
-		FactionManager.Instance.kick_faction(Player, selected_country);
+		FactionManager.Instance.KickFaction(Player, selectedCountry);
 	}
 
 	public void _on_steal_manpower_pressed()
 	{
-		if (selected_country.total_population <= 0)
+		if (selectedCountry.totalPopulation <= 0)
 			return;
-		Player.total_population += 1_000;
-		selected_country.total_population -= 1_000;
+		Player.totalPopulation += 1_000;
+		selectedCountry.totalPopulation -= 1_000;
 		Player.UpdateManpowerPool();
-		selected_country.UpdateManpowerPool();
+		selectedCountry.UpdateManpowerPool();
 	}
 
 	public void _on_steal_money_pressed()
 	{
-		if (selected_country.money <= 0)
+		if (selectedCountry.money <= 0)
 			return;
 		Player.money += 1_000;
-		selected_country.money -= 1_000;
+		selectedCountry.money -= 1_000;
 	}
 
 	public void _on_annex_country_pressed()
 	{
-		MapManager.Instance.AnnexCountry(Player.country_name, selected_country.country_name);
+		ActionDispatcher.Instance.Submit(new AnnexAction
+		{
+			Issuer = Player.countryName,
+			Annexer = Player.countryName,
+			Annexee = selectedCountry.countryName,
+		});
 	}
 
 	public void _on_call_to_arms_pressed()
 	{
-		WarManager.Instance.call_to_arms(Player, selected_country);
+		ActionDispatcher.Instance.Submit(new CallToArmsAction
+		{
+			Issuer = Player.countryName,
+			Caller = Player.countryName,
+			Target = selectedCountry.countryName,
+		});
 	}
 
-	public void update_cultures()
+	public void UpdateCultures()
 	{
-		foreach (var child in accepted_cultures.GetChildren())
+		foreach (var child in acceptedCultures.GetChildren())
 			child.QueueFree();
 
-		foreach (var culture in Player.accepted_cultures)
+		foreach (var culture in Player.acceptedCultures)
 		{
-			accepted_cultures.AddChild(new Button { Text = culture.ToString(), UseParentMaterial = true });
+			acceptedCultures.AddChild(new Button { Text = culture.ToString(), UseParentMaterial = true });
 		}
 	}
 
 	public void _on_next_song_pressed()
 	{
-		MusicManager.Instance.skip_track();
+		MusicManager.Instance.SkipTrack();
 	}
 
 	public void _on_pause_pressed()
@@ -1251,9 +1265,9 @@ public partial class GameUI : CanvasLayer
 		MusicManager.Instance._toggle_pause();
 	}
 
-	public void add_notif(string type, string tooltip)
+	public void AddNotif(string type, string tooltip)
 	{
-		if (all_notifs.ContainsKey(type))
+		if (allNotifs.ContainsKey(type))
 			return;
 		var notif = new Button
 		{
@@ -1268,20 +1282,20 @@ public partial class GameUI : CanvasLayer
 			switch (type)
 			{
 				case "decision":
-					open_decisions_tree();
+					OpenDecisionsTree();
 					break;
 				case "plan":
-					open_manage_country();
+					OpenManageCountry();
 					break;
 			}
 		};
-		notif_box.AddChild(notif);
-		all_notifs[type] = notif;
+		notifBox.AddChild(notif);
+		allNotifs[type] = notif;
 	}
 
-	public void remove_notif(string type)
+	public void RemoveNotif(string type)
 	{
-		if (!all_notifs.Remove(type, out var notif))
+		if (!allNotifs.Remove(type, out var notif))
 			return;
 		if (GodotObject.IsInstanceValid(notif))
 			notif.QueueFree();
@@ -1290,9 +1304,9 @@ public partial class GameUI : CanvasLayer
 	private void SetNotif(bool active, string type, string tooltip)
 	{
 		if (active)
-			add_notif(type, tooltip);
+			AddNotif(type, tooltip);
 		else
-			remove_notif(type);
+			RemoveNotif(type);
 	}
 
 	private void _update_notifications()
@@ -1302,16 +1316,16 @@ public partial class GameUI : CanvasLayer
 			return;
 
 		SetNotif(player.stability < 0.5, "stability", "Low Stability");
-		SetNotif(player.war_support < 0.5, "war_support", "Low War Support");
-		SetNotif(player.political_power < 0, "political_power", "Political Crisis");
+		SetNotif(player.warSupport < 0.5, "war_support", "Low War Support");
+		SetNotif(player.politicalPower < 0, "political_power", "Political Crisis");
 		SetNotif(player.money < 0, "money_icon", "Financial Crisis");
-		SetNotif(DecisionManager.Instance.has_available_decisions(player), "decision", "Decision Available");
-		SetNotif(PlansManager.Instance.has_available_plans(player), "plan", "Plan Available");
+		SetNotif(DecisionManager.Instance.HasAvailableDecisions(player), "decision", "Decision Available");
+		SetNotif(PlansManager.Instance.HasAvailablePlans(player), "plan", "Plan Available");
 	}
 
 	public void _on_deploy_all_pressed()
 	{
-		foreach (var troop in sidemenu_trooplist.GetChildren())
+		foreach (var troop in sidemenuTrooplist.GetChildren())
 			troop.EmitSignal(ActionRow.SignalName.pressed);
 	}
 
@@ -1322,19 +1336,19 @@ public partial class GameUI : CanvasLayer
 
 	public void _on_building_designer_pressed()
 	{
-		building_designer.Visible = !building_designer.Visible;
+		buildingDesigner.Visible = !buildingDesigner.Visible;
 	}
 
-	public void m_OnGovernmentPressed()
+	public void MOnGovernmentPressed()
 	{
 		governmentUI.OpenMenu(Player);
 	}
 
 	public void _on_play_as_pressed()
 	{
-		CountryManager.Instance.set_player_country(selected_country.country_name);
+		CountryManager.Instance.SetPlayerCountry(selectedCountry.countryName);
 		GameState.Instance.interactionType = InteractionType.DEFAULT;
 		ChangeContextCategory(Context.PLAYER, Category.GENERAL);
-		_on_province_clicked(Player.country_name);
+		_on_province_clicked(Player.countryName);
 	}
 }

@@ -6,61 +6,61 @@ public partial class Settings : Control
 {
 	private readonly PackedScene SAVE_ENTRY_SCENE = GD.Load<PackedScene>("res://Scenes/SaveEntry.tscn");
 
-	[Export] public VBoxContainer save_list;
-	[Export] public TextEdit line_edit;
+	[Export] public VBoxContainer saveList;
+	[Export] public TextEdit lineEdit;
 	[Export] public Button saveButton;
 
 	private enum Section { SAVE, AUDIO, GRAPHICS, EXIT }
 
-	[Export] public TabContainer tab_container;
-	[Export] public Button save_settings;
-	[Export] public GridContainer graphics_path;
+	[Export] public TabContainer tabContainer;
+	[Export] public Button saveSettings;
+	[Export] public GridContainer graphicsPath;
 
 	[ExportGroup("Audio")]
-	[Export] public HSlider sfx_slider;
-	[Export] public HSlider music_slider;
+	[Export] public HSlider sfxSlider;
+	[Export] public HSlider musicSlider;
 
 	[ExportGroup("UI")]
-	[Export] public HSlider ui_upper_slider;
-	[Export] public HSlider ui_lower_slider;
-	[Export] public HSlider ui_dirt_slider;
+	[Export] public HSlider uiUpperSlider;
+	[Export] public HSlider uiLowerSlider;
+	[Export] public HSlider uiDirtSlider;
 
 	[ExportGroup("Map Effects")]
-	[Export] public HSlider scanlines_slider;
-	[Export] public HSlider vignette_lower_slider;
-	[Export] public HSlider vignette_upper_slider;
+	[Export] public HSlider scanlinesSlider;
+	[Export] public HSlider vignetteLowerSlider;
+	[Export] public HSlider vignetteUpperSlider;
 	[Export] public HSlider provinceBorderThicknessSlider;
-	[Export] public HSlider province_borders_slider;
-	[Export] public HSlider daynight_contrast_slider;
-	[Export] public HSlider daynight_smoothness_slider;
-	[Export] public HSlider clouds_slider;
-	[Export] public HSlider edgeness_slider;
+	[Export] public HSlider provinceBordersSlider;
+	[Export] public HSlider daynightContrastSlider;
+	[Export] public HSlider daynightSmoothnessSlider;
+	[Export] public HSlider cloudsSlider;
+	[Export] public HSlider edgenessSlider;
 
-	[Export] public CheckButton map_effects_btn;
-	[Export] public CheckButton debug_mode_btn;
+	[Export] public CheckButton mapEffectsBtn;
+	[Export] public CheckButton debugModeBtn;
 
 	private static ConfigFile Config => SettingsManager.Instance.settings;
 
 	private void _initialize_ui_values()
 	{
 		var s = Config;
-		sfx_slider.Value = s.GetValue("Sound", "sfx_volume").AsDouble();
-		music_slider.Value = s.GetValue("Sound", "music_volume").AsDouble();
-		scanlines_slider.Value = s.GetValue("Graphics", "scanlines").AsDouble();
-		vignette_lower_slider.Value = s.GetValue("Graphics", "vignette_lower").AsDouble();
-		vignette_upper_slider.Value = s.GetValue("Graphics", "vignette_upper").AsDouble();
-		map_effects_btn.ButtonPressed = s.GetValue("Graphics", "map_effects").AsDouble() > 0.0;
-		graphics_path.Visible = map_effects_btn.ButtonPressed;
+		sfxSlider.Value = s.GetValue("Sound", "sfx_volume").AsDouble();
+		musicSlider.Value = s.GetValue("Sound", "music_volume").AsDouble();
+		scanlinesSlider.Value = s.GetValue("Graphics", "scanlines").AsDouble();
+		vignetteLowerSlider.Value = s.GetValue("Graphics", "vignette_lower").AsDouble();
+		vignetteUpperSlider.Value = s.GetValue("Graphics", "vignette_upper").AsDouble();
+		mapEffectsBtn.ButtonPressed = s.GetValue("Graphics", "map_effects").AsDouble() > 0.0;
+		graphicsPath.Visible = mapEffectsBtn.ButtonPressed;
 		provinceBorderThicknessSlider.Value = s.GetValue("Graphics", "provinceBorderThickness").AsDouble();
-		province_borders_slider.Value = s.GetValue("Graphics", "province_borders").AsDouble();
-		ui_upper_slider.Value = s.GetValue("Graphics", "ui_upper").AsDouble();
-		ui_lower_slider.Value = s.GetValue("Graphics", "ui_lower").AsDouble();
-		ui_dirt_slider.Value = s.GetValue("Graphics", "ui_dirt").AsDouble();
-		daynight_contrast_slider.Value = s.GetValue("Graphics", "daynight_contrast").AsDouble();
-		daynight_smoothness_slider.Value = s.GetValue("Graphics", "daynight_smoothness").AsDouble();
-		clouds_slider.Value = s.GetValue("Graphics", "clouds").AsDouble();
-		edgeness_slider.Value = s.GetValue("Graphics", "clouds_edgeness").AsDouble();
-		debug_mode_btn.ButtonPressed = s.GetValue("Developer Options", "debug_mode").AsBool();
+		provinceBordersSlider.Value = s.GetValue("Graphics", "province_borders").AsDouble();
+		uiUpperSlider.Value = s.GetValue("Graphics", "ui_upper").AsDouble();
+		uiLowerSlider.Value = s.GetValue("Graphics", "ui_lower").AsDouble();
+		uiDirtSlider.Value = s.GetValue("Graphics", "ui_dirt").AsDouble();
+		daynightContrastSlider.Value = s.GetValue("Graphics", "daynight_contrast").AsDouble();
+		daynightSmoothnessSlider.Value = s.GetValue("Graphics", "daynight_smoothness").AsDouble();
+		cloudsSlider.Value = s.GetValue("Graphics", "clouds").AsDouble();
+		edgenessSlider.Value = s.GetValue("Graphics", "clouds_edgeness").AsDouble();
+		debugModeBtn.ButtonPressed = s.GetValue("Developer Options", "debug_mode").AsBool();
 	}
 
 	// Set a value in the ConfigFile, optionally apply it, then persist.
@@ -69,7 +69,7 @@ public partial class Settings : Control
 		var manager = SettingsManager.Instance;
 		manager.settings.SetValue(section, key, value);
 		if (apply)
-			manager.apply_settings(manager.settings);
+			manager.ApplySettings(manager.settings);
 		manager.settings.Save(manager.SETTINGS_FILE);
 	}
 
@@ -96,37 +96,37 @@ public partial class Settings : Control
 
 	private void _refresh_saves()
 	{
-		if (save_list == null)
+		if (saveList == null)
 			return;
-		foreach (var n in save_list.GetChildren())
+		foreach (var n in saveList.GetChildren())
 			n.QueueFree();
 
-		const string path = "res://saves/";
+		const string path = "user://saves/";
 		if (!DirAccess.DirExistsAbsolute(path))
 			DirAccess.MakeDirRecursiveAbsolute(path);
 
 		var files = DirAccess.GetFilesAt(path);
-		var found_any = false;
+		var foundAny = false;
 
 		GD.Print("Settings UI: Scanning for saves in: ", ProjectSettings.GlobalizePath(path));
 
-		foreach (var file_name in files)
+		foreach (var fileName in files)
 		{
-			if (!file_name.EndsWith(".json"))
+			if (!fileName.EndsWith(".json"))
 				continue;
 			// Skip empty names or hidden system files
-			if (file_name == ".json" || file_name.StartsWith("."))
+			if (fileName == ".json" || fileName.StartsWith("."))
 				continue;
 
-			found_any = true;
-			_add_save_row(save_list, file_name.Replace(".json", ""), path + file_name);
+			foundAny = true;
+			_add_save_row(saveList, fileName.Replace(".json", ""), path + fileName);
 		}
 
-		if (!found_any)
+		if (!foundAny)
 		{
 			GD.Print("Settings UI: No JSON saves found.");
 			var lbl = new Label { Text = "No save files found.", Modulate = new Color(0.5f, 0.5f, 0.5f) };
-			save_list.AddChild(lbl);
+			saveList.AddChild(lbl);
 		}
 	}
 
@@ -134,55 +134,56 @@ public partial class Settings : Control
 
 	public void _on_music_changed(float value) => _set_setting("Sound", "music_volume", value);
 
-	private void _add_save_row(Node parent, string save_name, string file_path)
+	private void _add_save_row(Node parent, string saveName, string filePath)
 	{
 		// Validate scenario path before allowing load
-		var scenario_exists = true;
-		var scenario_path = "";
+		var scenarioExists = true;
+		var scenarioPath = "";
 
 		// Release the parsed save now instead of leaving it to the .NET finalizer.
-		using var data = MapData.Instance.LoadJSON(file_path);
+		using var data = MapData.Instance.LoadJSON(filePath);
 		if (data.VariantType == Variant.Type.Dictionary)
 		{
 			using var dict = data.AsGodotDictionary();
-			scenario_path = dict.TryGetValue("scenario_path", out var sp)
+			scenarioPath = dict.TryGetValue("scenario_path", out var sp)
 				? sp.AsString()
 				: "res://starts/ModernDay/map_data.json";
-			if (!FileAccess.FileExists(scenario_path))
-				scenario_exists = false;
+			if (!FileAccess.FileExists(scenarioPath))
+				scenarioExists = false;
 		}
 
 		var entry = SAVE_ENTRY_SCENE.Instantiate<SaveEntry>();
 		parent.AddChild(entry);
-		entry.Setup(save_name, scenario_exists, scenario_path);
-		entry.load_requested += _on_save_load_requested;
-		entry.delete_requested += _on_save_delete_requested;
+		entry.Setup(saveName, scenarioExists, scenarioPath);
+		entry.LoadRequested += _on_save_LoadRequested;
+		entry.DeleteRequested += _on_save_DeleteRequested;
 	}
 
-	private void _on_save_load_requested(string save_name)
+	private void _on_save_LoadRequested(string saveName)
 	{
-		var world = GameState.Instance.current_world;
-		if (world != null)
+		var world = GameState.Instance.currentWorld;
+		// current_world is never null and stays set while the cached world sits out of the tree.
+		if (world != null && world.IsInsideTree())
 		{
-			world.load_game(save_name);
+			world.LoadGame(saveName);
 		}
 		else
 		{
 			// We are in the Main Menu
-			GameState.Instance.pending_load_save = save_name;
-			SceneManager.Instance.switch_to(SceneManager.TypeWorld);
+			GameState.Instance.pendingLoadSave = saveName;
+			SceneManager.Instance.SwitchTo(SceneManager.TypeWorld);
 		}
 	}
 
-	private void _on_save_delete_requested(string save_name)
+	private void _on_save_DeleteRequested(string saveName)
 	{
-		DirAccess.RemoveAbsolute("res://saves/" + save_name + ".json");
+		DirAccess.RemoveAbsolute("user://saves/" + saveName + ".json");
 		_refresh_saves();
 	}
 
 	public void _on_save_game_pressed()
 	{
-		GameState.Instance.current_world.SaveGame(line_edit.Text.StripEdges());
+		GameState.Instance.currentWorld.SaveGame(lineEdit.Text.StripEdges());
 		_refresh_saves();
 	}
 
@@ -194,12 +195,12 @@ public partial class Settings : Control
 
 	public void _on_map_effects_pressed()
 	{
-		var enabled = map_effects_btn.ButtonPressed;
-		graphics_path.Visible = enabled;
+		var enabled = mapEffectsBtn.ButtonPressed;
+		graphicsPath.Visible = enabled;
 		_set_setting("Graphics", "map_effects", enabled ? 1.0 : 0.0);
 	}
 
-	public void m_OnProvinceBorderThicknessChanged(float value) => _set_setting("Graphics", "provinceBorderThickness", value);
+	public void MOnProvinceBorderThicknessChanged(float value) => _set_setting("Graphics", "provinceBorderThickness", value);
 
 	public void _on_province_borders_changed(float value) => _set_setting("Graphics", "province_borders", value);
 
@@ -238,25 +239,25 @@ public partial class Settings : Control
 	public void _on_exit_start_pressed()
 	{
 		KeyboardManager.Instance.settings.Visible = false;
-		SceneManager.Instance.switch_to(SceneManager.TypeMenu);
+		SceneManager.Instance.SwitchTo(SceneManager.TypeMenu);
 	}
 
 	public void _on_tab_container_tab_changed(int tab)
 	{
-		save_settings.Visible = !(tab == (int)Section.EXIT || tab == (int)Section.SAVE);
+		saveSettings.Visible = !(tab == (int)Section.EXIT || tab == (int)Section.SAVE);
 	}
 
 	private void _update_tabs_visibility()
 	{
-		if (tab_container != null)
+		if (tabContainer != null)
 		{
-			var is_menu = SceneManager.Instance._current_type == SceneManager.TypeMenu;
-			tab_container.SetTabHidden((int)Section.EXIT, is_menu);
+			var isMenu = SceneManager.Instance._current_type == SceneManager.TypeMenu;
+			tabContainer.SetTabHidden((int)Section.EXIT, isMenu);
 		}
 	}
 
-	public void m_OnTextEditTextChanged()
+	public void MOnTextEditTextChanged()
 	{
-		saveButton.Disabled = line_edit.Text.Length == 0;
+		saveButton.Disabled = lineEdit.Text.Length == 0;
 	}
 }

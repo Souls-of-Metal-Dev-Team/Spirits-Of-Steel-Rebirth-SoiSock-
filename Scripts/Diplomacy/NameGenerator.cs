@@ -143,7 +143,7 @@ public partial class NameGenerator : RefCounted
 		var total = 0f;
 		foreach (var weight in aOptions.Values)
 			total += weight;
-		var choice = (float)GD.RandRange(0.0, total);
+		var choice = (float)SimRandom.Shared.RandRange(0.0, total);
 		foreach (var option in aOptions)
 		{
 			choice -= option.Value;

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 using Sosr;
 
@@ -23,36 +24,56 @@ public partial class GameState : Node
 		INFRASTRUCTURE,
 	}
 
-	public World current_world = new World();
-	public string current_start = "";
+	public ulong SimSeed
+	{
+		get => SimRandom.Shared.State;
+		set => SimRandom.Shared.Reset(value);
+	}
+
+	// Simulation state hub. Managers operate on these collections; rendering reads signals.
+	public Dictionary<int, Province> Provinces => ProvinceManager.Instance.Provinces;
+	public Godot.Collections.Dictionary Countries => CountryManager.Instance.countries;
+	public List<TroopData> Troops => TroopManager.Instance.troops;
+	public Dictionary<string, HashSet<string>> Wars => WarManager.Instance.wars;
+
+	public World currentWorld = new World();
+	public string currentStart = "";
 	// var current_scenario_path: String (unused in the GDScript original)
 
-	public Godot.Collections.Dictionary clock_cache = new Godot.Collections.Dictionary();
+	public Godot.Collections.Dictionary clockCache = new Godot.Collections.Dictionary();
 
 	// var choosing_deploy_city := false
 	// var selectingCountry: bool = true
 
-	public InteractionType interactionType = InteractionType.SELECT_COUNTRY;
+	public InteractionType interactionType
+	{
+		get => PlayerController.Instance.InteractionMode;
+		set => PlayerController.Instance.InteractionMode = value;
+	}
 
-	public IndustryType industry_building = IndustryType.FACTORY;
+	public IndustryType industryBuilding
+	{
+		get => PlayerController.Instance.Industry;
+		set => PlayerController.Instance.Industry = value;
+	}
 	public bool instabuild = false;
 
-	public GameUI game_ui = null;
+	public GameUI gameUi = null;
 
-	public bool decision_menu_open = false;
-	public bool in_peace_process = false;
+	public bool decisionMenuOpen = false;
+	public bool inPeaceProcess = false;
 	public bool lostTerritory = false;
 
 	[Export] public bool showingTooltip = false;
 	[Export] public Tooltip tooltip = null;
 
-	public void reset_industry_building()
+	public void ResetIndustryBuilding()
 	{
-		industry_building = IndustryType.FACTORY;
+		industryBuilding = IndustryType.FACTORY;
 		interactionType = InteractionType.DEFAULT;
 		MapManager.Instance.ShowCountriesMap();
 	}
 
-	public bool is_loading_game = false;
-	public string pending_load_save = "";
+	public bool isLoadingGame = false;
+	public string pendingLoadSave = "";
 }

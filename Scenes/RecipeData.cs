@@ -3,20 +3,20 @@ using System;
 
 [GlobalClass] public partial class RecipeData : Node
 {
-	[Export] public string resource_produced;
-	[Export] public string[] resources_required;
+	[Export] public string resourceProduced;
+	[Export] public string[] resourcesRequired;
 
-	public static RecipeData FromDict(Godot.Collections.Dictionary<string, Godot.Variant> a_data) {
+	public static RecipeData FromDict(Godot.Collections.Dictionary<string, Godot.Variant> aData) {
 		RecipeData recipe = new RecipeData();
-		recipe.resource_produced  = (string)a_data["resource_produced"];  //, out "");
-		recipe.resources_required = (string[])a_data["resources_required"];//, out new string[] );
+		recipe.resourceProduced  = (string)aData["resource_produced"];  //, out "");
+		recipe.resourcesRequired = (string[])aData["resources_required"];//, out new string[] );
 		return recipe;
 	}
 
 	public Godot.Collections.Dictionary<string, Godot.Variant> ToDict() {
 		return new Godot.Collections.Dictionary<string, Godot.Variant>(){
-			{"resource_produced", resource_produced},
-			{"resources_required", resources_required},
+			{"resource_produced", resourceProduced},
+			{"resources_required", resourcesRequired},
 		};
 	}
 }

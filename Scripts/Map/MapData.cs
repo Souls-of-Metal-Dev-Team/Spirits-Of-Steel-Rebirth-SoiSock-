@@ -10,22 +10,25 @@ public partial class MapData : Node
 	public static MapData Instance => Autoload.Get<MapData>("MapData");
 
 	// NOTE(soi): 0 clue what we could even need these for
-	public Image id_map_image;
-	public Godot.Collections.Dictionary adjacency_list = new();
-	public Godot.Collections.Dictionary province_centers = new();
+	public Image idMapImage;
+	public Godot.Collections.Dictionary adjacencyList = new();
+	public Godot.Collections.Dictionary provinceCenters = new();
 
-	public Godot.Collections.Dictionary province_to_country = new();
-	public Godot.Collections.Dictionary country_to_provinces = new();
-	public int max_province_id;
-	public Godot.Collections.Dictionary province_objects = new();
+	public Godot.Collections.Dictionary provinceToCountry = new();
+	public Godot.Collections.Dictionary countryToProvinces = new();
+	public int maxProvinceId;
+	public Godot.Collections.Dictionary provinceObjects = new();
 
 	// Keys shared by a scenario's start state and a unified game-state save.
 	public Godot.Collections.Array<string> STATE_KEYS = new()
 	{
 		"clock", "resources", "biomes", "buildings", "provinces",
 		"polities", "ideologies", "factions", "wars",
-		"original_territories", "scheduled_events",
+		"original_territories", "scheduled_events", "significant_figures",
 	};
+
+	// Start folder of the last LoadMapData, so World.DoSetup can tell when a different start was picked.
+	public string loadedStart = "";
 
 	private static Godot.Collections.Dictionary AsDict(Variant value)
 	{
@@ -80,21 +83,21 @@ public partial class MapData : Node
 	}
 
 	// scenario_path may be a folder (res://starts/Name) or the map_data.json file.
-	public string ScenarioDirFromPath(string a_scenario_path)
+	public string ScenarioDirFromPath(string aScenarioPath)
 	{
-		if (a_scenario_path.EndsWith(".json"))
-			return a_scenario_path.GetBaseDir();
-		return a_scenario_path.TrimSuffix("/");
+		if (aScenarioPath.EndsWith(".json"))
+			return aScenarioPath.GetBaseDir();
+		return aScenarioPath.TrimSuffix("/");
 	}
 
 	// Build the start state in the same shape as World.SaveGame's save_data.
-	public Godot.Collections.Dictionary LoadStartState(string a_start_dir)
+	public Godot.Collections.Dictionary LoadStartState(string aStartDir)
 	{
 		var paths = new Godot.Collections.Dictionary
 		{
-			{ "map_data", $"{a_start_dir}/map_data.json" },
-			{ "provinces", $"{a_start_dir}/provinces.json" },
-			{ "scenario_data", $"{a_start_dir}/scenario_data.json" },
+			{ "map_data", $"{aStartDir}/map_data.json" },
+			{ "provinces", $"{aStartDir}/provinces.json" },
+			{ "scenario_data", $"{aStartDir}/scenario_data.json" },
 		};
 		foreach (var key in paths.Keys)
 		{
@@ -105,73 +108,60 @@ public partial class MapData : Node
 			}
 		}
 
-		var map_data = AsDict(LoadJSON(paths["map_data"].AsString()));
+		var mapData = AsDict(LoadJSON(paths["map_data"].AsString()));
 		var provinces = AsDict(LoadJSON(paths["provinces"].AsString()));
-		var scenario_data = AsDict(LoadJSON(paths["scenario_data"].AsString()));
+		var scenarioData = AsDict(LoadJSON(paths["scenario_data"].AsString()));
 
-		var combined = new Godot.Collections.Dictionary();
-		MergeInto(combined, map_data, true);
-		combined["provinces"] = provinces;
-		MergeInto(combined, scenario_data, true);
-
-		var state = new Godot.Collections.Dictionary();
-		foreach (var key in STATE_KEYS)
-		{
-			if (combined.ContainsKey(key))
-				state[key] = combined[key];
-		}
-		return state;
+		return VariantState.ToVariant(SaveService.BuildStartState(
+			mapData.AsState(), provinces.AsState(), scenarioData.AsState()));
 	}
 
 	// Resolve a save file into a full game state. Diff saves are merged with their start.
-	public Godot.Collections.Dictionary LoadSaveState(string a_save_path)
+	public Godot.Collections.Dictionary LoadSaveState(string aSavePath)
 	{
-		var save_json = LoadJSON(a_save_path);
-		if (save_json.VariantType != Variant.Type.Dictionary)
+		var saveJson = LoadJSON(aSavePath);
+		if (saveJson.VariantType != Variant.Type.Dictionary)
 		{
-			GD.PushError("MapData: Failed to parse save: " + a_save_path);
+			GD.PushError("MapData: Failed to parse save: " + aSavePath);
 			return new Godot.Collections.Dictionary();
 		}
 
-		var save_dict = save_json.AsGodotDictionary();
-		if (!save_dict.ContainsKey("diff"))
+		var saveDict = saveJson.AsGodotDictionary();
+		if (!saveDict.ContainsKey("diff"))
 		{
 			// Legacy full-state save.
-			return save_dict;
+			return saveDict;
 		}
 
-		var scenario_path = save_dict.ContainsKey("scenario_path")
-			? save_dict["scenario_path"].AsString()
+		var scenarioPath = saveDict.ContainsKey("scenario_path")
+			? saveDict["scenario_path"].AsString()
 			: "";
-		if (scenario_path == "")
+		if (scenarioPath == "")
 		{
-			GD.PushError("MapData: Diff save missing scenario_path: " + a_save_path);
+			GD.PushError("MapData: Diff save missing scenario_path: " + aSavePath);
 			return new Godot.Collections.Dictionary();
 		}
 
-		var state_diff = save_dict["diff"];
-		if (state_diff.VariantType != Variant.Type.Dictionary)
+		if (saveDict["diff"].VariantType != Variant.Type.Dictionary)
 		{
-			GD.PushError("MapData: Invalid diff in save: " + a_save_path);
+			GD.PushError("MapData: Invalid diff in save: " + aSavePath);
 			return new Godot.Collections.Dictionary();
 		}
 
-		var start_state = LoadStartState(ScenarioDirFromPath(scenario_path));
-		if (start_state.Count == 0)
+		var startState = LoadStartState(ScenarioDirFromPath(scenarioPath));
+		if (startState.Count == 0)
 			return new Godot.Collections.Dictionary();
 
-		var state = SettingsManager.Instance.merge(start_state, state_diff.AsGodotDictionary());
-		state["scenario_path"] = scenario_path;
-		return state;
+		return VariantState.ToVariant(SaveService.ApplySave(startState.AsState(), saveDict.AsState()));
 	}
 
 	public void SaveMapData(string path)
 	{
-		var fig_dicts = new Godot.Collections.Array<Godot.Collections.Dictionary>();
+		var figDicts = new Godot.Collections.Array<Godot.Collections.Dictionary>();
 		foreach (var figure in MapManager.Instance.significantFigures.Values)
-			fig_dicts.Add(figure.ToDict());
+			figDicts.Add(VariantState.ToVariant(figure.ToDict()));
 
-		var export_map_data = new Godot.Collections.Dictionary
+		var exportMapData = new Godot.Collections.Dictionary
 		{
 			{ "ideologies", IdeologyManager.Instance.ideologies },
 			{ "buildings", MapManager.Instance.SaveBuildingData() },
@@ -180,23 +170,23 @@ public partial class MapData : Node
 			{ "clock", ClockDict() },
 		};
 
-		var export_scenario = new Godot.Collections.Dictionary
+		var exportScenario = new Godot.Collections.Dictionary
 		{
-			{ "significant_figures", fig_dicts },
+			{ "significant_figures", figDicts },
 			{ "polities", CountryManager.Instance.SaveCountries() },
 			{ "factions", FactionManager.Instance.SaveFactions() },
 		};
 
-		var export_province = MapManager.Instance.SaveProvinces();
+		var exportProvince = MapManager.Instance.SaveProvinces();
 
-		SaveJSON(path + "map_data.json", export_map_data);
-		SaveJSON(path + "provinces.json", export_province);
-		SaveJSON(path + "scenario_data.json", export_scenario);
+		SaveJSON(path + "map_data.json", exportMapData);
+		SaveJSON(path + "provinces.json", exportProvince);
+		SaveJSON(path + "scenario_data.json", exportScenario);
 	}
 
 	private static Godot.Collections.Dictionary ClockDict()
 	{
-		var clock = GameState.Instance.current_world?.clock;
+		var clock = GameState.Instance.currentWorld?.clock;
 		return GodotObject.IsInstanceValid(clock)
 			? clock.ToDict()
 			: new Godot.Collections.Dictionary();
@@ -211,93 +201,99 @@ public partial class MapData : Node
 		}
 	}
 
-	public void LoadMapData(string a_start_path, Godot.Collections.Array a_percent = null, Godot.Collections.Dictionary a_state_override = null)
+	public void LoadMapData(string aStartPath, Godot.Collections.Array aPercent = null, Godot.Collections.Dictionary aStateOverride = null)
 	{
-		a_percent ??= new Godot.Collections.Array { 0 };
-		a_state_override ??= new Godot.Collections.Dictionary();
+		aPercent ??= new Godot.Collections.Array { 0 };
+		aStateOverride ??= new Godot.Collections.Dictionary();
+		loadedStart = aStartPath;
+		if (aStateOverride.ContainsKey("sim_seed") &&
+			ulong.TryParse(aStateOverride["sim_seed"].AsString(), out var simSeed))
+			GameState.Instance.SimSeed = simSeed;
 
-		var map_data = AsDict(LoadJSON($"{a_start_path}/map_data.json"));
-		var provinces = AsDict(LoadJSON($"{a_start_path}/provinces.json"));
-		var scenario_data = AsDict(LoadJSON($"{a_start_path}/scenario_data.json"));
+		var mapData = AsDict(LoadJSON($"{aStartPath}/map_data.json"));
+		var provinces = AsDict(LoadJSON($"{aStartPath}/provinces.json"));
+		var scenarioData = AsDict(LoadJSON($"{aStartPath}/scenario_data.json"));
 
 		// Loading a save: keep the start's static data (regions, decisions, flags, ...)
 		// but replace every dynamic section with the saved state.
-		if (a_state_override.Count > 0)
+		if (aStateOverride.Count > 0)
 		{
 			foreach (var key in new Godot.Collections.Array<string>
 				{
 					"biomes", "resources", "buildings", "ideologies", "clock", "wars", "original_territories",
 				})
 			{
-				if (a_state_override.ContainsKey(key))
-					map_data[key] = a_state_override[key];
+				if (aStateOverride.ContainsKey(key))
+					mapData[key] = aStateOverride[key];
 			}
-			if (a_state_override.ContainsKey("provinces"))
-				provinces = AsDict(a_state_override["provinces"]);
-			if (a_state_override.ContainsKey("polities"))
-				scenario_data["polities"] = a_state_override["polities"];
-			if (a_state_override.ContainsKey("factions"))
-				scenario_data["factions"] = a_state_override["factions"];
+			if (aStateOverride.ContainsKey("provinces"))
+				provinces = AsDict(aStateOverride["provinces"]);
+			if (aStateOverride.ContainsKey("polities"))
+				scenarioData["polities"] = aStateOverride["polities"];
+			if (aStateOverride.ContainsKey("factions"))
+				scenarioData["factions"] = aStateOverride["factions"];
+			if (aStateOverride.ContainsKey("significant_figures"))
+				scenarioData["significant_figures"] = aStateOverride["significant_figures"];
 		}
 
 		// print(map_data)
 		// print(provinces)
 		// print(scenario_data)
 
-		var regions_tex = GD.Load<Texture2D>($"{a_start_path}/regions.png");
-		GD.Print($"{a_start_path}/regions.png");
+		var regionsTex = GD.Load<Texture2D>($"{aStartPath}/regions.png");
+		GD.Print($"{aStartPath}/regions.png");
 
 		// GameState.current_start = a_text
-		a_percent[0] = 0.01;
-		EconomyManager.Instance.initialize(a_start_path + "/building_functions.json");
-		a_percent[0] = 0.02;
-		PlansManager.Instance.load_plans_from_path(a_start_path + "plans.json");
-		a_percent[0] = 0.06;
-		EventManager.Instance.load_super_events(a_start_path + "superevents.json");
-		a_percent[0] = 0.18;
+		aPercent[0] = 0.01;
+		EconomyManager.Instance.initialize(aStartPath + "/building_functions.json");
+		aPercent[0] = 0.02;
+		PlansManager.Instance.LoadPlansFromPath(aStartPath + "/plans.json");
+		aPercent[0] = 0.06;
+		EventManager.Instance.LoadSuperEvents(aStartPath + "/superevents.json");
+		aPercent[0] = 0.18;
 
-		Variant b_data = new Godot.Collections.Array();
-		if (map_data.ContainsKey("biomes"))
-			b_data = map_data["biomes"];
-		MapManager.Instance.LoadBiomes(b_data.AsGodotArray());
+		Variant bData = new Godot.Collections.Array();
+		if (mapData.ContainsKey("biomes"))
+			bData = mapData["biomes"];
+		MapManager.Instance.LoadBiomes(bData.AsGodotArray());
 
-		Variant r_data = new Godot.Collections.Array();
-		if (map_data.ContainsKey("resources"))
-			r_data = map_data["resources"];
-		MapManager.Instance.LoadResources(r_data.AsGodotArray());
+		Variant rData = new Godot.Collections.Array();
+		if (mapData.ContainsKey("resources"))
+			rData = mapData["resources"];
+		MapManager.Instance.LoadResources(rData.AsGodotArray());
 
 		Variant buildingData = new Godot.Collections.Dictionary();
-		if (map_data.ContainsKey("buildings"))
-			buildingData = map_data["buildings"];
+		if (mapData.ContainsKey("buildings"))
+			buildingData = mapData["buildings"];
 		if (buildingData.VariantType != Variant.Type.Dictionary)
 			buildingData = new Godot.Collections.Dictionary();
 		EconomyManager.Instance.LoadBuildings(buildingData.AsGodotDictionary());
 
 		Variant ideologyData = new Godot.Collections.Dictionary();
-		if (map_data.ContainsKey("ideologies"))
-			ideologyData = map_data["ideologies"];
+		if (mapData.ContainsKey("ideologies"))
+			ideologyData = mapData["ideologies"];
 		IdeologyManager.Instance.Initialize(ideologyData.AsGodotDictionary());
-		a_percent[0] = 0.3;
+		aPercent[0] = 0.3;
 
-		DecisionManager.Instance.load_decisions_from_path($"{a_start_path}/decisions/");
-		a_percent[0] = 0.2;
-		TroopManager.Instance.set_custom_flag_path($"{a_start_path}/flags/");
-		a_percent[0] = 0.12;
+		DecisionManager.Instance.LoadDecisionsFromPath($"{aStartPath}/decisions/");
+		aPercent[0] = 0.2;
+		TroopManager.Instance.SetCustomFlagPath($"{aStartPath}/flags/");
+		aPercent[0] = 0.12;
 		Variant polities = new Godot.Collections.Array();
-		if (scenario_data.ContainsKey("polities"))
-			polities = scenario_data["polities"];
-		CountryManager.Instance.initialize_countries(polities.AsGodotArray());
-		a_percent[0] = 0.75;
-		MapManager.Instance.LoadProvinces((CompressedTexture2D)regions_tex, provinces, a_percent);
-		a_percent[0] = 0.6;
+		if (scenarioData.ContainsKey("polities"))
+			polities = scenarioData["polities"];
+		CountryManager.Instance.InitializeCountries(polities.AsGodotArray());
+		aPercent[0] = 0.75;
+		MapManager.Instance.LoadProvinces((CompressedTexture2D)regionsTex, provinces, aPercent);
+		aPercent[0] = 0.6;
 
 		// Restore Clock
-		var clock = GameState.Instance.current_world?.clock;
+		var clock = GameState.Instance.currentWorld?.clock;
 		if (GodotObject.IsInstanceValid(clock))
 		{
-			if (map_data.ContainsKey("clock"))
+			if (mapData.ContainsKey("clock"))
 			{
-				clock.Call("FromDict", map_data["clock"]);
+				clock.Call("FromDict", mapData["clock"]);
 			}
 			else
 			{
@@ -311,39 +307,40 @@ public partial class MapData : Node
 		}
 
 		Variant wars = new Godot.Collections.Array();
-		if (map_data.ContainsKey("wars"))
-			wars = map_data["wars"];
-		WarManager.Instance.load_wars(wars.AsGodotArray());
+		if (mapData.ContainsKey("wars"))
+			wars = mapData["wars"];
+		WarManager.Instance.LoadWars(wars.AsGodotArray());
 
 		Variant originalTerritories = new Godot.Collections.Dictionary();
-		if (map_data.ContainsKey("original_territories"))
-			originalTerritories = map_data["original_territories"];
-		WarManager.Instance.load_original_territories(originalTerritories.AsGodotDictionary());
-		WarManager.Instance.check_for_new_battles();
+		if (mapData.ContainsKey("original_territories"))
+			originalTerritories = mapData["original_territories"];
+		WarManager.Instance.LoadOriginalTerritories(originalTerritories.AsGodotDictionary());
+		WarManager.Instance.CheckForNewBattles();
 
 		MapManager.Instance.BuildLookupTexture();
-		a_percent[0] = 0.85;
+		aPercent[0] = 0.85;
 		Variant factions = new Godot.Collections.Array();
-		if (scenario_data.ContainsKey("factions"))
-			factions = scenario_data["factions"];
+		if (scenarioData.ContainsKey("factions"))
+			factions = scenarioData["factions"];
 		FactionManager.Instance.Initialize(factions.AsGodotArray());
-		a_percent[0] = 0.9;
+		aPercent[0] = 0.9;
 
 		Variant significantFigureData = new Godot.Collections.Array();
-		if (scenario_data.ContainsKey("significant_figures"))
-			significantFigureData = scenario_data["significant_figures"];
+		if (scenarioData.ContainsKey("significant_figures"))
+			significantFigureData = scenarioData["significant_figures"];
 
 		var significantFigures = MapManager.Instance.significantFigures;
+		significantFigures.Clear();
 		foreach (var figVariant in AsArray(significantFigureData))
 		{
 			var fig = figVariant.AsGodotDictionary();
-			significantFigures[fig["name"].AsString()] = ImportantFigure.FromDict(fig);
+			significantFigures[fig["name"].AsString()] = ImportantFigure.FromDict(fig.AsState());
 		}
-		CountryManager.Instance.generate_missing_leaders();
-		CountryManager.Instance.cleanup_empty_countries();
+		CountryManager.Instance.GenerateMissingLeaders();
+		CountryManager.Instance.CleanupEmptyCountries();
 
-		if (a_state_override.ContainsKey("scheduled_events"))
-			EventManager.Instance.load_events(a_state_override["scheduled_events"].AsGodotArray());
+		if (aStateOverride.ContainsKey("scheduled_events"))
+			EventManager.Instance.LoadEvents(aStateOverride["scheduled_events"].AsGodotArray());
 
 		Autoload.Get("Console")?.Call("add_command_autocomplete_list", "tag", new Godot.Collections.Array(CountryManager.Instance.countries.Keys));
 	}

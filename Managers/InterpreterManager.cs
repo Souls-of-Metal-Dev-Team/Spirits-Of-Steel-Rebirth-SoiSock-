@@ -60,7 +60,7 @@ public partial class InterpreterManager : Node
 
 	// Parameter names per function, shown as placeholder text in the decision editor.
 	// Variadic functions repeat their last name for extra args.
-	public Godot.Collections.Dictionary param_names = new()
+	public Godot.Collections.Dictionary paramNames = new()
 	{
 		{ "return", new Godot.Collections.Array { "value" } },
 		{ "and", new Godot.Collections.Array { "condition" } },
@@ -156,17 +156,17 @@ public partial class InterpreterManager : Node
 		return left.AsString() + right.AsString();
 	}
 
-	public string get_param_name(string func_name, int index)
+	public string GetParamName(string funcName, int index)
 	{
-		var names = param_names.ContainsKey(func_name)
-			? param_names[func_name].AsGodotArray()
+		var names = paramNames.ContainsKey(funcName)
+			? paramNames[funcName].AsGodotArray()
 			: new Godot.Collections.Array();
 		if (names.Count == 0)
 			return "";
 		return names[Math.Min(index, names.Count - 1)].AsString();
 	}
 
-	public Variant get_variable(Variant variable)
+	public Variant GetVariable(Variant variable)
 	{
 		if (variable.VariantType != Variant.Type.String)
 			return variable;
@@ -175,9 +175,9 @@ public partial class InterpreterManager : Node
 		switch (variable.AsString())
 		{
 			case "player":
-				return CountryManager.Instance.player_country.Get("country_name");
+				return CountryManager.Instance.playerCountry.Get("countryName");
 			case "current_date":
-				return GameState.Instance.current_world.Get("clock").AsGodotObject().Call("get_date_string");
+				return GameState.Instance.currentWorld.Get("clock").AsGodotObject().Call("GetDateString");
 			case "null":
 				return new Variant();
 			default:
@@ -185,7 +185,7 @@ public partial class InterpreterManager : Node
 		}
 	}
 
-	public void get_element(Variant element, Node grid, GodotObject country = null)
+	public void GetElement(Variant element, Node grid, GodotObject country = null)
 	{
 		if (element.VariantType == Variant.Type.Nil)
 			return;
@@ -196,7 +196,7 @@ public partial class InterpreterManager : Node
 		{
 			var textValue = elementDict["text"];
 			if (textValue.VariantType == Variant.Type.Array)
-				text = Str(get_function(textValue));
+				text = Str(GetFunction(textValue));
 			else if (textValue.VariantType == Variant.Type.String)
 				text = textValue.AsString();
 		}
@@ -212,7 +212,7 @@ public partial class InterpreterManager : Node
 				entry.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
 
 				var tr1 = new TextureRect();
-				tr1.Texture = TroopManager.Instance.get_flag(elementDict["country1"].AsString());
+				tr1.Texture = TroopManager.Instance.GetFlag(elementDict["country1"].AsString());
 				tr1.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
 				tr1.StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered;
 				tr1.CustomMinimumSize = new Vector2(80, 50);
@@ -223,7 +223,7 @@ public partial class InterpreterManager : Node
 				entry.AddChild(spacer);
 
 				var tr2 = new TextureRect();
-				tr2.Texture = TroopManager.Instance.get_flag(elementDict["country2"].AsString());
+				tr2.Texture = TroopManager.Instance.GetFlag(elementDict["country2"].AsString());
 				tr2.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
 				tr2.StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered;
 				tr2.CustomMinimumSize = new Vector2(80, 50);
@@ -242,7 +242,7 @@ public partial class InterpreterManager : Node
 				var entry = new Button();
 				entry.Text = text;
 
-				if (!get_function(condition, country).AsBool())
+				if (!GetFunction(condition, country).AsBool())
 					entry.Disabled = true;
 
 				entry.SetMeta("condition", condition);
@@ -253,18 +253,18 @@ public partial class InterpreterManager : Node
 				var capturedCountry = country;
 				entry.Pressed += () =>
 				{
-					if (get_function(capturedCondition, capturedCountry).AsBool())
-						get_function(capturedFinished, capturedCountry);
+					if (GetFunction(capturedCondition, capturedCountry).AsBool())
+						GetFunction(capturedFinished, capturedCountry);
 				};
 				grid.AddChild(entry);
 				entry.Material = (grid as CanvasItem)?.Material;
-				entry.TooltipText = $"Condition - {format_functions(condition)}\nFinished - {format_functions(finished)}";
+				entry.TooltipText = $"Condition - {FormatFunctions(condition)}\nFinished - {FormatFunctions(finished)}";
 				break;
 			}
 			case "image":
 			{
 				var entry = new TextureRect();
-				var startFolder = PlansManager.Instance.current_start_folder;
+				var startFolder = PlansManager.Instance.currentStartFolder;
 				entry.Texture = GD.Load<Texture2D>(startFolder + "assets/plans/" + elementDict["path"].AsString());
 				entry.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
 				entry.StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered;
@@ -289,20 +289,20 @@ public partial class InterpreterManager : Node
 		}
 	}
 
-	public Variant get_function(Variant block, GodotObject country = null)
+	public Variant GetFunction(Variant block, GodotObject country = null)
 	{
 		if (!block.AsBool())
 			return new Variant();
 
 		if (country == null)
-			country = CountryManager.Instance.player_country;
+			country = CountryManager.Instance.playerCountry;
 
 		// Handle multiple functions (Recusive Array Support)
 		if (block.VariantType == Variant.Type.Array)
 		{
 			var lastResult = new Variant();
 			foreach (var item in block.AsGodotArray())
-				lastResult = get_function(item, country);
+				lastResult = GetFunction(item, country);
 			return lastResult;
 		}
 
@@ -316,9 +316,9 @@ public partial class InterpreterManager : Node
 		// match statement
 		if (blockDict.ContainsKey("match"))
 		{
-			var matchVal = Str(get_function(blockDict["match"], country));
+			var matchVal = Str(GetFunction(blockDict["match"], country));
 			if (matchVal != "match") // Prevent collision with 'match' key itself
-				result = get_function(GetOrDefault(blockDict, matchVal, new Godot.Collections.Dictionary()), country);
+				result = GetFunction(GetOrDefault(blockDict, matchVal, new Godot.Collections.Dictionary()), country);
 		}
 
 		// for loop
@@ -333,7 +333,7 @@ public partial class InterpreterManager : Node
 				foreach (var item in inValues.AsGodotArray())
 				{
 					heap[varName] = item;
-					result = get_function(GetOrDefault(blockDict, "do", new Godot.Collections.Dictionary()), country);
+					result = GetFunction(GetOrDefault(blockDict, "do", new Godot.Collections.Dictionary()), country);
 				}
 			}
 			if (hadPrev)
@@ -348,9 +348,9 @@ public partial class InterpreterManager : Node
 		{
 			Variant arg;
 			if (rawArg.VariantType == Variant.Type.Dictionary || rawArg.VariantType == Variant.Type.Array)
-				arg = get_function(rawArg, country);
+				arg = GetFunction(rawArg, country);
 			else
-				arg = get_variable(rawArg);
+				arg = GetVariable(rawArg);
 			evaledArgs.Add(arg);
 		}
 
@@ -405,7 +405,7 @@ public partial class InterpreterManager : Node
 					result = VariantCompare(evaledArgs[0], evaledArgs[1]) < 0;
 				break;
 			case "probability":
-				result = (long)(GD.Randi() % (ulong)Math.Max(1L, evaledArgs[0].AsInt64())) != 0;
+				result = (long)(SimRandom.Shared.NextUInt() % (ulong)Math.Max(1L, evaledArgs[0].AsInt64())) != 0;
 				break;
 			case "get":
 				if (evaledArgs.Count >= 2)
@@ -437,7 +437,7 @@ public partial class InterpreterManager : Node
 					// Figures are ImportantFigure objects; set the named property on one.
 					var figures = MapManager.Instance.significantFigures;
 					if (figures.TryGetValue(evaledArgs[0].AsString(), out var figure))
-						figure.Set(evaledArgs[1].AsString(), evaledArgs[2]);
+						SetFigureAttr(figure, evaledArgs[1].AsString(), evaledArgs[2]);
 				}
 				break;
 			// Math stuff**
@@ -448,29 +448,25 @@ public partial class InterpreterManager : Node
 			// Country stuff
 			case "is_at_war":
 				if (evaledArgs.Count >= 2)
-					result = WarManager.Instance.is_at_war_names(evaledArgs[0].AsString(), evaledArgs[1].AsString());
+					result = WarManager.Instance.IsAtWarNames(evaledArgs[0].AsString(), evaledArgs[1].AsString());
 				break;
 			case "army_level_up":
-				country.Set("army_level", country.Get("army_level").AsInt64() + 1);
-				result = country.Get("army_level");
+				country.Set("armyLevel", country.Get("armyLevel").AsInt64() + 1);
+				result = country.Get("armyLevel");
 				break;
 			case "build_factory":
-				country.Set("factories_amount", country.Get("factories_amount").AsInt64() + (evaledArgs.Count > 0 ? evaledArgs[0].AsInt64() : 1));
-				result = country.Get("factories_amount");
+				country.Set("factoriesAmount", country.Get("factoriesAmount").AsInt64() + (evaledArgs.Count > 0 ? evaledArgs[0].AsInt64() : 1));
+				result = country.Get("factoriesAmount");
 				break;
 			case "declare_war":
 				if (evaledArgs.Count >= 2)
 				{
-					var countries = CountryManager.Instance.countries;
-					var attacker = countries.ContainsKey(evaledArgs[0]) ? countries[evaledArgs[0]].AsGodotObject() : null;
-					var defender = countries.ContainsKey(evaledArgs[1]) ? countries[evaledArgs[1]].AsGodotObject() : null;
-					if (attacker != null && defender != null)
+					var attackerName = evaledArgs[0].AsString();
+					var defenderName = evaledArgs[1].AsString();
+					result = ActionDispatcher.Instance.Submit(new DeclareWarAction
 					{
-						WarManager.Instance.declare_war(attacker, defender);
-						result = true;
-					}
-					else
-						result = false;
+						Issuer = attackerName, Warer = attackerName, Waree = defenderName,
+					});
 				}
 				break;
 			case "release":
@@ -487,7 +483,7 @@ public partial class InterpreterManager : Node
 					if (CountryManager.Instance.countries.ContainsKey(countryName))
 					{
 						GD.Print("player country now " + countryName);
-						CountryManager.Instance.set_player_country(countryName);
+						CountryManager.Instance.SetPlayerCountry(countryName);
 					}
 					GD.Print("Unknown country: " + countryName);
 					result = true;
@@ -496,15 +492,18 @@ public partial class InterpreterManager : Node
 			case "annex":
 				if (evaledArgs.Count >= 2)
 				{
-					MapManager.Instance.AnnexCountry(evaledArgs[0].AsString(), evaledArgs[1].AsString());
-					result = true;
+					var annexerName = evaledArgs[0].AsString();
+					result = ActionDispatcher.Instance.Submit(new AnnexAction
+					{
+						Issuer = annexerName, Annexer = annexerName, Annexee = evaledArgs[1].AsString(),
+					});
 				}
 				break;
 			case "add_ideology_drift":
 			{
 				var countryObj = CountryManager.Instance.countries[evaledArgs[0]].AsGodotObject();
 				var driftTargets = countryObj.Get("driftTargets").AsGodotDictionary();
-				driftTargets[args[1]] = IdeologyDriftTarget.FromDict(args[2].AsGodotDictionary());
+				driftTargets[args[1]] = VariantState.ToVariant(IdeologyDriftTarget.FromDict(args[2].AsGodotDictionary().AsState()).ToDict());
 				result = driftTargets;
 				break;
 			}
@@ -512,7 +511,7 @@ public partial class InterpreterManager : Node
 				if (evaledArgs.Count >= 2)
 				{
 					var countries = CountryManager.Instance.countries;
-					CountryManager.Instance.make_puppet(countries[evaledArgs[0]].AsGodotObject(), countries[evaledArgs[1]].AsGodotObject());
+					CountryManager.Instance.MakePuppet(countries[evaledArgs[0]].AsGodotObject(), countries[evaledArgs[1]].AsGodotObject());
 					result = true;
 				}
 				break;
@@ -520,7 +519,7 @@ public partial class InterpreterManager : Node
 				if (evaledArgs.Count >= 2)
 				{
 					var countries = CountryManager.Instance.countries;
-					CountryManager.Instance.release_puppet(countries[evaledArgs[0]].AsGodotObject(), countries[evaledArgs[1]].AsGodotObject());
+					CountryManager.Instance.ReleasePuppet(countries[evaledArgs[0]].AsGodotObject(), countries[evaledArgs[1]].AsGodotObject());
 					result = true;
 				}
 				break;
@@ -530,7 +529,7 @@ public partial class InterpreterManager : Node
 					var i = 1;
 					var provinceOwner = evaledArgs[0];
 					var allOwned = true;
-					var provinceObjects = MapManager.Instance.province_objects;
+					var provinceObjects = MapManager.Instance.provinceObjects;
 					while (i < evaledArgs.Count)
 					{
 						var province = provinceObjects[(int)evaledArgs[i].AsInt64()];
@@ -547,7 +546,7 @@ public partial class InterpreterManager : Node
 			case "add_plans":
 			{
 				var plans = PlansManager.Instance.plans;
-				var countryName = country.Get("country_name").AsString();
+				var countryName = country.Get("countryName").AsString();
 				if (!plans.ContainsKey(countryName))
 					plans[countryName] = new Godot.Collections.Array();
 				plans[countryName].AsGodotArray().Add(evaledArgs[0]);
@@ -556,7 +555,7 @@ public partial class InterpreterManager : Node
 			case "remove_plan":
 			{
 				var plans = PlansManager.Instance.plans;
-				var countryName = country.Get("country_name").AsString();
+				var countryName = country.Get("countryName").AsString();
 				var countryPlans = plans[countryName].AsGodotArray();
 				var index = -1;
 				for (var i = 0; i < countryPlans.Count; i++)
@@ -574,14 +573,14 @@ public partial class InterpreterManager : Node
 			case "event":
 				if (evaledArgs.Count > 0 && evaledArgs[0].VariantType == Variant.Type.Dictionary)
 				{
-					EventManager.Instance.show_alert(evaledArgs[0].AsGodotDictionary());
+					EventManager.Instance.ShowAlert(evaledArgs[0].AsGodotDictionary());
 					result = true;
 				}
 				break;
 			case "schedule_event":
 				if (evaledArgs.Count >= 2 && evaledArgs[1].VariantType == Variant.Type.Dictionary)
 				{
-					EventManager.Instance.schedule_event(evaledArgs[0].AsInt32(), evaledArgs[1].AsGodotDictionary());
+					EventManager.Instance.ScheduleEvent(evaledArgs[0].AsInt32(), evaledArgs[1].AsGodotDictionary());
 					result = true;
 				}
 				break;
@@ -592,7 +591,7 @@ public partial class InterpreterManager : Node
 					var inviter = countries.ContainsKey(evaledArgs[0]) ? countries[evaledArgs[0]].AsGodotObject() : null;
 					var invitee = countries.ContainsKey(evaledArgs[1]) ? countries[evaledArgs[1]].AsGodotObject() : null;
 					if (inviter != null && invitee != null)
-						FactionManager.Instance.invite_faction(inviter, invitee);
+						FactionManager.Instance.InviteFaction(inviter, invitee);
 				}
 				break;
 			case "change_province_types":
@@ -616,7 +615,7 @@ public partial class InterpreterManager : Node
 		return result;
 	}
 
-	public void refresh_buttons(Node container)
+	public void RefreshButtons(Node container)
 	{
 		foreach (Node child in container.GetChildren())
 		{
@@ -624,15 +623,15 @@ public partial class InterpreterManager : Node
 			{
 				var condition = button.GetMeta("condition");
 				var country = button.GetMeta("country_context").AsGodotObject();
-				button.Disabled = !get_function(condition, country).AsBool();
+				button.Disabled = !GetFunction(condition, country).AsBool();
 			}
 
 			// Recurse
-			refresh_buttons(child);
+			RefreshButtons(child);
 		}
 	}
 
-	public string format_functions(Variant expression, string indent = "", bool no_bullet = false)
+	public string FormatFunctions(Variant expression, string indent = "", bool noBullet = false)
 	{
 		Godot.Collections.Array funcs;
 		if (expression.VariantType == Variant.Type.Array)
@@ -652,23 +651,23 @@ public partial class InterpreterManager : Node
 			// Handle 'for' loop
 			if (function.ContainsKey("for"))
 			{
-				formatted += indent + (no_bullet ? "" : "• ") + "For each " + (Str(function["for"])).Capitalize();
+				formatted += indent + (noBullet ? "" : "• ") + "For each " + (Str(function["for"])).Capitalize();
 				formatted += " in " + Str(GetOrDefault(function, "in", new Godot.Collections.Array())) + ":\n";
-				formatted += format_functions(GetOrDefault(function, "do", new Godot.Collections.Dictionary()), indent + "  ") + "\n";
+				formatted += FormatFunctions(GetOrDefault(function, "do", new Godot.Collections.Dictionary()), indent + "  ") + "\n";
 				continue;
 			}
 
 			// Handle 'match' statement
 			if (function.ContainsKey("match"))
 			{
-				var matchHeader = format_functions(function["match"], "", true).Trim();
-				formatted += indent + (no_bullet ? "" : "• ") + "Match " + matchHeader + ":\n";
+				var matchHeader = FormatFunctions(function["match"], "", true).Trim();
+				formatted += indent + (noBullet ? "" : "• ") + "Match " + matchHeader + ":\n";
 				foreach (var key in function.Keys)
 				{
 					if (key.VariantType == Variant.Type.String && (key.AsString() == "match" || key.AsString() == "func" || key.AsString() == "args" || key.AsString() == "store"))
 						continue;
 					formatted += indent + "  - " + (Str(key)).Capitalize() + ":\n";
-					formatted += format_functions(function[key], indent + "    ") + "\n";
+					formatted += FormatFunctions(function[key], indent + "    ") + "\n";
 				}
 				continue;
 			}
@@ -683,7 +682,7 @@ public partial class InterpreterManager : Node
 				else
 					args = new Godot.Collections.Array { argsVariant };
 
-				formatted += indent + (no_bullet ? "" : "• ") + funcName.Capitalize();
+				formatted += indent + (noBullet ? "" : "• ") + funcName.Capitalize();
 
 				// Check if args contain nested functions (like in 'and', 'or', 'all', 'any')
 				var nestedFound = false;
@@ -699,7 +698,7 @@ public partial class InterpreterManager : Node
 				if (nestedFound)
 				{
 					formatted += ":\n";
-					formatted += format_functions(args, indent + "  ") + "\n";
+					formatted += FormatFunctions(args, indent + "  ") + "\n";
 				}
 				else
 				{
@@ -711,7 +710,7 @@ public partial class InterpreterManager : Node
 						var shouldLookupProv = funcName == "has_pids" || funcName == "annex" || funcName == "release";
 						if (shouldLookupProv && isNumber)
 						{
-							var provinceObjects = MapManager.Instance.province_objects;
+							var provinceObjects = MapManager.Instance.provinceObjects;
 							var pid = (int)arg.AsInt64();
 							if (provinceObjects.TryGetValue(pid, out var prov))
 							{
@@ -771,5 +770,16 @@ public partial class InterpreterManager : Node
 			return expression;
 		}
 		return expression;
+	}
+
+	private static void SetFigureAttr(ImportantFigure figure, string key, Variant value)
+	{
+		switch (key)
+		{
+			case "name": figure.name = value.AsString(); break;
+			case "legitimacy": figure.legitimacy = value.AsInt32(); break;
+			case "occupation": figure.occupation = value.AsString(); break;
+			case "status": figure.status = (ImportantFigure.Status)value.AsInt32(); break;
+		}
 	}
 }

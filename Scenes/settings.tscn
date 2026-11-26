@@ -54,35 +54,35 @@ content_margin_right = 14.0
 content_margin_bottom = 14.0
 bg_color = Color(0.08627451, 0.08627451, 0.08627451, 1)
 
-[node name="Settings" type="PanelContainer" unique_id=1223466696 node_paths=PackedStringArray("save_list", "line_edit", "saveButton", "tab_container", "save_settings", "graphics_path", "sfx_slider", "music_slider", "ui_upper_slider", "ui_lower_slider", "ui_dirt_slider", "scanlines_slider", "vignette_lower_slider", "vignette_upper_slider", "provinceBorderThicknessSlider", "province_borders_slider", "daynight_contrast_slider", "daynight_smoothness_slider", "clouds_slider", "edgeness_slider", "map_effects_btn", "debug_mode_btn")]
+[node name="Settings" type="PanelContainer" unique_id=1223466696 node_paths=PackedStringArray("saveList", "lineEdit", "saveButton", "tabContainer", "saveSettings", "graphicsPath", "sfxSlider", "musicSlider", "uiUpperSlider", "uiLowerSlider", "uiDirtSlider", "scanlinesSlider", "vignetteLowerSlider", "vignetteUpperSlider", "provinceBorderThicknessSlider", "provinceBordersSlider", "daynightContrastSlider", "daynightSmoothnessSlider", "cloudsSlider", "edgenessSlider", "mapEffectsBtn", "debugModeBtn")]
 material = ExtResource("1_lhmql")
 use_parent_material = true
 offset_right = 1051.0
 offset_bottom = 805.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_6kysc")
 script = ExtResource("1_aaqfp")
-save_list = NodePath("VBoxContainer/TabContainer/Saves/VBoxContainer/ScrollContainer/savelist")
-line_edit = NodePath("VBoxContainer/TabContainer/Saves/VBoxContainer/HBoxContainer/TextEdit")
+saveList = NodePath("VBoxContainer/TabContainer/Saves/VBoxContainer/ScrollContainer/savelist")
+lineEdit = NodePath("VBoxContainer/TabContainer/Saves/VBoxContainer/HBoxContainer/TextEdit")
 saveButton = NodePath("VBoxContainer/TabContainer/Saves/VBoxContainer/HBoxContainer/SaveGame")
-tab_container = NodePath("VBoxContainer/TabContainer")
-save_settings = NodePath("VBoxContainer/SaveSettings")
-graphics_path = NodePath("VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/MapEffectOptions")
-sfx_slider = NodePath("VBoxContainer/TabContainer/Audio/GridContainer/SFX")
-music_slider = NodePath("VBoxContainer/TabContainer/Audio/GridContainer/Music")
-ui_upper_slider = NodePath("VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/UIEffectOptions/Highlight2")
-ui_lower_slider = NodePath("VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/UIEffectOptions/Shadow2")
-ui_dirt_slider = NodePath("VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/UIEffectOptions/Dirt2")
-scanlines_slider = NodePath("VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/MapEffectOptions/ScanLines2")
-vignette_lower_slider = NodePath("VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/MapEffectOptions/Lower2")
-vignette_upper_slider = NodePath("VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/MapEffectOptions/Upper2")
+tabContainer = NodePath("VBoxContainer/TabContainer")
+saveSettings = NodePath("VBoxContainer/SaveSettings")
+graphicsPath = NodePath("VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/MapEffectOptions")
+sfxSlider = NodePath("VBoxContainer/TabContainer/Audio/GridContainer/SFX")
+musicSlider = NodePath("VBoxContainer/TabContainer/Audio/GridContainer/Music")
+uiUpperSlider = NodePath("VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/UIEffectOptions/Highlight2")
+uiLowerSlider = NodePath("VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/UIEffectOptions/Shadow2")
+uiDirtSlider = NodePath("VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/UIEffectOptions/Dirt2")
+scanlinesSlider = NodePath("VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/MapEffectOptions/ScanLines2")
+vignetteLowerSlider = NodePath("VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/MapEffectOptions/Lower2")
+vignetteUpperSlider = NodePath("VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/MapEffectOptions/Upper2")
 provinceBorderThicknessSlider = NodePath("VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/MapEffectOptions/BorderThickness2")
-province_borders_slider = NodePath("VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/MapEffectOptions/Borders2")
-daynight_contrast_slider = NodePath("VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/MapEffectOptions/Contrast2")
-daynight_smoothness_slider = NodePath("VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/MapEffectOptions/Smoothness2")
-clouds_slider = NodePath("VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/MapEffectOptions/Clouds2")
-edgeness_slider = NodePath("VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/MapEffectOptions/Edgeness2")
-map_effects_btn = NodePath("VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/MapEffects")
-debug_mode_btn = NodePath("VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/DebugMode")
+provinceBordersSlider = NodePath("VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/MapEffectOptions/Borders2")
+daynightContrastSlider = NodePath("VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/MapEffectOptions/Contrast2")
+daynightSmoothnessSlider = NodePath("VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/MapEffectOptions/Smoothness2")
+cloudsSlider = NodePath("VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/MapEffectOptions/Clouds2")
+edgenessSlider = NodePath("VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/MapEffectOptions/Edgeness2")
+mapEffectsBtn = NodePath("VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/MapEffects")
+debugModeBtn = NodePath("VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/DebugMode")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=349122838]
 use_parent_material = true

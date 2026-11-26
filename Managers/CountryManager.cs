@@ -18,15 +18,19 @@ public partial class CountryManager : Node
 
 	public Godot.Collections.Dictionary countries = new();
 	public string[] countryNames = [];
-	public GodotObject player_country = CountryData.FromDict(new Godot.Collections.Dictionary { { "name", "Sea" } });
+	public GodotObject playerCountry
+	{
+		get => PlayerController.Instance.Country;
+		set => PlayerController.Instance.Country = value;
+	}
 
-	public CountryData Player => player_country as CountryData;
+	public CountryData Player => playerCountry as CountryData;
 
-	public CountryData GetCountry(string a_name)
-		=> countries.TryGetValue(a_name, out var value) ? value.As<CountryData>() : null;
+	public CountryData GetCountry(string aName)
+		=> countries.TryGetValue(aName, out var value) ? value.As<CountryData>() : null;
 
-	public Godot.Collections.Array<ReleasableData> Releasables = new();
-	public Godot.Collections.Dictionary dead_countries = new();
+	public List<ReleasableData> Releasables = new();
+	public Godot.Collections.Dictionary deadCountries = new();
 
 	public bool cleanupLock = false;
 
@@ -35,36 +39,36 @@ public partial class CountryManager : Node
 		foreach (var cName in countryNames)
 		{
 			if (countries.TryGetValue(cName, out var value))
-				value.AsGodotObject().Call("process_hour");
+				value.As<CountryData>().ProcessHour();
 		}
 	}
 
 	public void _on_day_passed()
 	{
-		EconomyManager.Instance.process_economy_day();
+		EconomyManager.Instance.ProcessEconomyDay();
 
 		foreach (var cName in countryNames)
 		{
 			if (countries.TryGetValue(cName, out var value))
-				value.AsGodotObject().Call("process_day");
+				value.As<CountryData>().ProcessDay();
 		}
 
-		EventManager.Instance.check_super_events();
+		EventManager.Instance.CheckSuperEvents();
 	}
 
-	public void initialize_countries(Godot.Collections.Array a_countriesData)
+	public void InitializeCountries(Godot.Collections.Array aCountriesData)
 	{
 		// Clear existing data before adding
 		countries.Clear();
 		countryNames = [];
-		dead_countries.Clear();
+		deadCountries.Clear();
 		// player_country = null
 
-		if (GameState.Instance.is_loading_game)
+		if (GameState.Instance.isLoadingGame)
 			GD.Print("CountryManager: Initializing from save data...");
 
-		foreach (var countryVariant in a_countriesData)
-			add_country(countryVariant.AsGodotDictionary());
+		foreach (var countryVariant in aCountriesData)
+			AddCountry(countryVariant.AsGodotDictionary());
 
 		foreach (var cName in countryNames)
 		{
@@ -72,7 +76,7 @@ public partial class CountryManager : Node
 				continue;
 
 			var country = countryValue.AsGodotObject();
-			country.Call("update_relations");
+			country.Call("UpdateRelations");
 			foreach (var puppetedVariant in country.Get("puppets").AsGodotArray())
 			{
 				var puppeted = puppetedVariant.AsString();
@@ -103,7 +107,7 @@ public partial class CountryManager : Node
 
 	public void _ensure_country_has_leader(GodotObject country)
 	{
-		var countryName = country.Get("country_name").AsString();
+		var countryName = country.Get("countryName").AsString();
 		var positions = country.Get("governmentPositions").AsGodotDictionary();
 		var leaders = positions.ContainsKey("Leader")
 			? AsStringArray(positions["Leader"])
@@ -111,7 +115,7 @@ public partial class CountryManager : Node
 		if (leaders.Count > 0)
 			return;
 
-		var newFigure = ImportantFigure.FromRandom(countryName);
+		var newFigure = ImportantFigureHost.FromRandom(countryName);
 		newFigure.occupation = "Leader";
 		MapManager.Instance.significantFigures[newFigure.name] = newFigure;
 
@@ -125,7 +129,7 @@ public partial class CountryManager : Node
 		GD.Print($"CountryManager: Assigned random leader {newFigure.name} to {countryName}");
 	}
 
-	public void generate_missing_leaders()
+	public void GenerateMissingLeaders()
 	{
 		foreach (var cName in countryNames)
 		{
@@ -143,49 +147,49 @@ public partial class CountryManager : Node
 		var polities = new Godot.Collections.Array();
 		foreach (var value in countries.Values)
 			polities.Add(value.AsGodotObject().Call("ToDict").AsGodotDictionary());
-		foreach (var value in dead_countries.Values)
+		foreach (var value in deadCountries.Values)
 			polities.Add(value.AsGodotObject().Call("ToDict").AsGodotDictionary());
 		return polities;
 	}
 
-	public Color GetCountryColor(string a_country, Color a_defaultColor)
+	public Color GetCountryColor(string aCountry, Color aDefaultColor)
 	{
-		return countries.TryGetValue(a_country, out var value)
-			? value.AsGodotObject().Get("country_color").AsColor()
-			: a_defaultColor;
+		return countries.TryGetValue(aCountry, out var value)
+			? value.AsGodotObject().Get("countryColor").AsColor()
+			: aDefaultColor;
 	}
 
 	// GDScript call sites use both arities. Godot 4.3+ supports overloads by argument count.
-	public Color GetCountryColor(string a_country) => GetCountryColor(a_country, Colors.Black);
+	public Color GetCountryColor(string aCountry) => GetCountryColor(aCountry, Colors.Black);
 
-	public void set_player_country(string country_name)
+	public void SetPlayerCountry(string countryName)
 	{
-		if (!countries.TryGetValue(country_name, out var value))
+		if (!countries.TryGetValue(countryName, out var value))
 		{
-			GD.PushError($"CountryManager: Requested non-existent country '{country_name}'");
+			GD.PushError($"CountryManager: Requested non-existent country '{countryName}'");
 			return;
 		}
 
 		var country = value.AsGodotObject();
 		if (country == null || !GodotObject.IsInstanceValid(country))
 		{
-			GD.PushError($"CountryManager: Requested non-existent country '{country_name}'");
+			GD.PushError($"CountryManager: Requested non-existent country '{countryName}'");
 			return;
 		}
 
-		if (player_country != null && GodotObject.IsInstanceValid(player_country))
-			player_country.Set("is_player", false);
+		if (playerCountry != null && GodotObject.IsInstanceValid(playerCountry))
+			playerCountry.Set("isPlayer", false);
 
-		player_country = country;
-		player_country.Set("is_player", true);
+		playerCountry = country;
+		playerCountry.Set("isPlayer", true);
 
-		GD.Print("Player is now playing as: ", country_name);
+		GD.Print("Player is now playing as: ", countryName);
 		EmitSignal(SignalName.PlayerCountryChanged);
 	}
 
-	public GodotObject add_country(Godot.Collections.Dictionary a_countryData)
+	public GodotObject AddCountry(Godot.Collections.Dictionary aCountryData)
 	{
-		var tempName = a_countryData["name"].AsString();
+		var tempName = aCountryData["name"].AsString();
 		if (tempName == "Sea")
 			return null;
 
@@ -196,38 +200,38 @@ public partial class CountryManager : Node
 			return countries[tempName].AsGodotObject();
 		}
 
-		if (dead_countries.ContainsKey(tempName))
+		if (deadCountries.ContainsKey(tempName))
 		{
-			var revived = dead_countries[tempName].AsGodotObject();
-			dead_countries.Remove(tempName);
+			var revived = deadCountries[tempName].AsGodotObject();
+			deadCountries.Remove(tempName);
 			countries[tempName] = revived;
 			AppendCountryName(tempName);
-			if (revived.Get("is_player").AsBool())
-				player_country = revived;
+			if (revived.Get("isPlayer").AsBool())
+				playerCountry = revived;
 			GD.Print($"CountryManager: Revived country '{tempName}'.");
 			return revived;
 		}
 
 		// 3. If flag exists, create and store the country
-		var newCountry = CountryData.FromDict(a_countryData);
+		var newCountry = CountryData.FromDict(aCountryData);
 		countries[tempName] = newCountry;
 		AppendCountryName(tempName);
 
-		if (newCountry.Get("is_player").AsBool())
-			player_country = newCountry;
+		if (newCountry.Get("isPlayer").AsBool())
+			playerCountry = newCountry;
 
 		return newCountry;
 	}
 
 	// HELPER FUNCTIONS ==========================================
 
-	public int get_country_population(string country_name)
+	public int GetCountryPopulation(string countryName)
 	{
-		var countryToProvinces = MapManager.Instance.country_to_provinces;
-		if (!countryToProvinces.TryGetValue(country_name, out var pids))
+		var countryToProvinces = MapManager.Instance.countryToProvinces;
+		if (!countryToProvinces.TryGetValue(countryName, out var pids))
 			return 0;
 
-		var provinceObjects = MapManager.Instance.province_objects;
+		var provinceObjects = MapManager.Instance.provinceObjects;
 		var totalPop = 0;
 		foreach (var pid in pids)
 		{
@@ -237,13 +241,13 @@ public partial class CountryManager : Node
 		return totalPop;
 	}
 
-	public int get_country_gdp(string country_name)
+	public int GetCountryGdp(string countryName)
 	{
-		var countryToProvinces = MapManager.Instance.country_to_provinces;
-		if (!countryToProvinces.TryGetValue(country_name, out var pids))
+		var countryToProvinces = MapManager.Instance.countryToProvinces;
+		if (!countryToProvinces.TryGetValue(countryName, out var pids))
 			return 0;
 
-		var provinceObjects = MapManager.Instance.province_objects;
+		var provinceObjects = MapManager.Instance.provinceObjects;
 		var totalGdp = 0;
 		foreach (var pid in pids)
 		{
@@ -253,13 +257,13 @@ public partial class CountryManager : Node
 		return totalGdp;
 	}
 
-	public int get_factories_amount(string country_name)
+	public int GetFactoriesAmount(string countryName)
 	{
-		var countryToProvinces = MapManager.Instance.country_to_provinces;
-		if (!countryToProvinces.TryGetValue(country_name, out var pids))
+		var countryToProvinces = MapManager.Instance.countryToProvinces;
+		if (!countryToProvinces.TryGetValue(countryName, out var pids))
 			return 0;
 
-		var provinceObjects = MapManager.Instance.province_objects;
+		var provinceObjects = MapManager.Instance.provinceObjects;
 		var factoryCount = 0;
 		foreach (var pid in pids)
 		{
@@ -276,21 +280,21 @@ public partial class CountryManager : Node
 	}
 
 	// NOTE(pol): We should keep track of the manpower used instead of recalculating.
-	public static int get_country_used_manpower(GodotObject country_obj)
+	public static int GetCountryUsedManpower(GodotObject countryObj)
 	{
 		var totalUsed = 0;
 		var toUse = new Dictionary<string, double>();
 
 		// 2. Ongoing Training (Already using templates, but cleaned up)
-		foreach (var trainingVariant in country_obj.Get("ongoing_training").AsGodotArray())
+		foreach (var trainingVariant in countryObj.Get("ongoingTraining").AsGodotArray())
 		{
 			var training = trainingVariant.AsGodotObject();
-			var type = training.Get("division_type").AsString();
-			toUse[type] = toUse.GetValueOrDefault(type) + training.Get("divisions_count").AsInt32();
+			var type = training.Get("divisionType").AsString();
+			toUse[type] = toUse.GetValueOrDefault(type) + training.Get("divisionsCount").AsInt32();
 		}
 
 		// 3. Troops in the "Ready" queue (deployment pool)
-		foreach (var batchVariant in country_obj.Get("ready_troops").AsGodotArray())
+		foreach (var batchVariant in countryObj.Get("readyTroops").AsGodotArray())
 		{
 			var batch = batchVariant.AsGodotObject();
 			var type = batch.Get("division").AsGodotObject().Get("type").AsString();
@@ -301,14 +305,13 @@ public partial class CountryManager : Node
 			totalUsed += (int)(entry.Value * _get_manpower_from_template(entry.Key));
 
 		// 1. Active Troops on the field
-		var troops = TroopManager.Instance.get_troops_for_country(country_obj.Get("country_name").AsString());
+		var troops = TroopManager.Instance.GetTroopsForCountry(countryObj.Get("countryName").AsString());
 		foreach (var troopVariant in troops)
 		{
-			var troop = troopVariant.AsGodotObject();
-			foreach (var divVariant in troop.Get("stored_divisions").AsGodotArray())
+			var troop = troopVariant;
+			foreach (var div in troop.storedDivisions)
 			{
-				var div = divVariant.AsGodotObject();
-				totalUsed += (int)(div.Get("hp").AsDouble() * div.Get("manpowerPerHP").AsDouble());
+				totalUsed += (int)(div.hp * div.manpowerPerHP);
 			}
 		}
 
@@ -322,18 +325,18 @@ public partial class CountryManager : Node
 		var template = templates.ContainsKey(type)
 			? templates[type]
 			: templates["infantry"];
-		return template["manpower"].AsInt32();
+		return template.Get("manpower").Int();
 	}
 
-	public void cleanup_empty_countries()
+	public void CleanupEmptyCountries()
 	{
 		var toRemove = new List<string>();
 
 		foreach (var cName in countryNames)
 		{
-			var countryToProvinces = MapManager.Instance.country_to_provinces;
+			var countryToProvinces = MapManager.Instance.countryToProvinces;
 			var noProvinces = !countryToProvinces.TryGetValue(cName, out var pids) || pids.Count == 0;
-			if (noProvinces && !countries[cName].AsGodotObject().Get("is_exiled").AsBool())
+			if (noProvinces && !countries[cName].AsGodotObject().Get("isExiled").AsBool())
 				toRemove.Add(cName);
 		}
 
@@ -342,7 +345,7 @@ public partial class CountryManager : Node
 			GD.Print($"CountryManager: Removing '{cName}' (No provinces found).");
 			// So here, we offer options: Government In Exile, or Dissolution
 			var country = countries[cName].AsGodotObject();
-			if (country.Get("is_player").AsBool())
+			if (country.Get("isPlayer").AsBool())
 			{
 				// Uh oh.
 				EmitSignal(SignalName.PlayerEliminated, country);
@@ -350,28 +353,28 @@ public partial class CountryManager : Node
 			else
 			{
 				var deleting = country;
-				dead_countries[cName] = deleting;
+				deadCountries[cName] = deleting;
 				//CountryManager.Releasables.append(ReleasableData.FromDict({}))
 				var owner = deleting.Get("owner").AsString();
 				if (Array.IndexOf(countryNames, owner) >= 0 && countries.TryGetValue(owner, out var ownerValue))
-					release_puppet(ownerValue.AsGodotObject(), deleting);
+					ReleasePuppet(ownerValue.AsGodotObject(), deleting);
 
 				foreach (var puppetVariant in deleting.Get("puppets").AsGodotArray().Duplicate())
 				{
 					var puppet = puppetVariant.AsString();
 					if (countries.TryGetValue(puppet, out var puppetValue))
-						release_puppet(deleting, puppetValue.AsGodotObject());
+						ReleasePuppet(deleting, puppetValue.AsGodotObject());
 				}
 
-				FactionManager.Instance.clear_faction(deleting);
+				FactionManager.Instance.ClearFaction(deleting);
 
 				var map = MapManager.Instance;
 				foreach (var lookup in new[]
 				{
-					map.country_to_provinces,
-					map.country_to_occupied_provinces,
-					map.country_to_rightful_provinces,
-					map.country_to_owned_provinces,
+					map.countryToProvinces,
+					map.countryToOccupiedProvinces,
+					map.countryToRightfulProvinces,
+					map.countryToOwnedProvinces,
 				})
 				{
 					lookup.Remove(cName);
@@ -385,70 +388,70 @@ public partial class CountryManager : Node
 
 	public void InformPuppet(GodotObject puppeter, GodotObject puppetee)
 	{
-		var puppeteerName = puppeter.Get("country_name").AsString();
-		var puppeteeName = puppetee.Get("country_name").AsString();
+		var puppeteerName = puppeter.Get("countryName").AsString();
+		var puppeteeName = puppetee.Get("countryName").AsString();
 		puppeter.Get("allowedCountries").AsGodotArray().Add(puppeteeName);
 		puppetee.Get("allowedCountries").AsGodotArray().Add(puppeteerName);
-		puppetee.Set("is_puppet", true);
+		puppetee.Set("isPuppet", true);
 		puppetee.Set("owner", puppeteerName);
 		puppetee.Set("ideology", puppeter.Get("ideology"));
 		puppetee.Get("relations").AsGodotDictionary()[puppeteerName] = 200;
 	}
 
-	public void make_puppet(GodotObject puppeter, GodotObject puppetee)
+	public void MakePuppet(GodotObject puppeter, GodotObject puppetee)
 	{
-		var puppeteerName = puppeter.Get("country_name").AsString();
-		var puppeteeName = puppetee.Get("country_name").AsString();
+		var puppeteerName = puppeter.Get("countryName").AsString();
+		var puppeteeName = puppetee.Get("countryName").AsString();
 		puppeter.Get("puppets").AsGodotArray().Add(puppeteeName);
 		puppeter.Get("allowedCountries").AsGodotArray().Add(puppeteeName);
 		puppetee.Get("allowedCountries").AsGodotArray().Add(puppeteerName);
 		MapManager.Instance.AllowPids(puppeter, puppetee);
 		MapManager.Instance.AllowPids(puppetee, puppeter);
-		puppetee.Set("is_puppet", true);
+		puppetee.Set("isPuppet", true);
 		puppetee.Set("owner", puppeteerName);
 		puppetee.Set("ideology", puppeter.Get("ideology"));
 		puppetee.Get("relations").AsGodotDictionary()[puppeteerName] = 200;
-		FactionManager.Instance.clear_faction(puppetee);
+		FactionManager.Instance.ClearFaction(puppetee);
 		puppetee.Set("factions", puppeter.Get("factions"));
-		FactionManager.Instance.invite_faction(puppeter, puppetee);
+		FactionManager.Instance.InviteFaction(puppeter, puppetee);
 		MapManager.Instance.ShowCountriesMap();
 	}
 
-	public void release_puppet(GodotObject puppeter, GodotObject puppetee)
+	public void ReleasePuppet(GodotObject puppeter, GodotObject puppetee)
 	{
-		var puppeteerName = puppeter.Get("country_name").AsString();
-		var puppeteeName = puppetee.Get("country_name").AsString();
+		var puppeteerName = puppeter.Get("countryName").AsString();
+		var puppeteeName = puppetee.Get("countryName").AsString();
 		MapManager.Instance.UnallowPids(puppeter, puppetee);
 		puppeter.Get("puppets").AsGodotArray().Remove(puppeteeName);
 		puppeter.Get("allowedCountries").AsGodotArray().Remove(puppeteeName);
 		puppetee.Get("allowedCountries").AsGodotArray().Remove(puppeteerName);
-		puppetee.Set("is_puppet", false);
+		puppetee.Set("isPuppet", false);
 		puppetee.Set("owner", "");
 		puppetee.Set("factions", new Godot.Collections.Array());
 		MapManager.Instance.ShowCountriesMap();
 	}
 
-	public void MakeHost(GodotObject a_host, GodotObject a_hosted)
+	public void MakeHost(GodotObject aHost, GodotObject aHosted)
 	{
-		var hostName = a_host.Get("country_name").AsString();
-		var hostedName = a_hosted.Get("country_name").AsString();
-		a_host.Get("hostedGovernments").AsGodotArray().Add(hostedName);
-		a_host.Get("allowedCountries").AsGodotArray().Add(hostedName);
-		a_hosted.Get("allowedCountries").AsGodotArray().Add(hostName);
-		a_hosted.Set("is_exiled", true);
-		a_hosted.Set("host", hostName);
+		var hostName = aHost.Get("countryName").AsString();
+		var hostedName = aHosted.Get("countryName").AsString();
+		aHost.Get("hostedGovernments").AsGodotArray().Add(hostedName);
+		aHost.Get("allowedCountries").AsGodotArray().Add(hostedName);
+		aHosted.Get("allowedCountries").AsGodotArray().Add(hostName);
+		aHosted.Set("isExiled", true);
+		aHosted.Set("host", hostName);
 		MapManager.Instance.ShowCountriesMap();
 	}
 
-	public void FreeHost(GodotObject a_host, GodotObject a_hosted)
+	public void FreeHost(GodotObject aHost, GodotObject aHosted)
 	{
-		var hostName = a_host.Get("country_name").AsString();
-		var hostedName = a_hosted.Get("country_name").AsString();
-		a_host.Get("puppets").AsGodotArray().Remove(hostedName);
-		a_host.Get("allowedCountries").AsGodotArray().Remove(hostedName);
-		a_hosted.Get("allowedCountries").AsGodotArray().Remove(hostName);
-		a_hosted.Set("is_exiled", false);
-		a_hosted.Set("host", "");
+		var hostName = aHost.Get("countryName").AsString();
+		var hostedName = aHosted.Get("countryName").AsString();
+		aHost.Get("puppets").AsGodotArray().Remove(hostedName);
+		aHost.Get("allowedCountries").AsGodotArray().Remove(hostedName);
+		aHosted.Get("allowedCountries").AsGodotArray().Remove(hostName);
+		aHosted.Set("isExiled", false);
+		aHosted.Set("host", "");
 		MapManager.Instance.ShowCountriesMap();
 	}
 

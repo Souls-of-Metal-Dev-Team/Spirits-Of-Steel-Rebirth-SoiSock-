@@ -1,0 +1,20 @@
+{
+	"factions": [],
+	"polities": [
+		{
+			"color": "#FF0F0A",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 0,
+			"name": "Placeholder",
+			"political_power": 0,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		}
+	],
+	"significant_figures": []
+}

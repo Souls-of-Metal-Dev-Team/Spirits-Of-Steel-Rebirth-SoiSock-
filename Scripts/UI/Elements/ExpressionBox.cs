@@ -18,55 +18,55 @@ public partial class ExpressionBox : PanelContainer
 
 	private static readonly string[] VARIADIC_FUNCTIONS = ["any", "all", "and", "or", "has_pids"];
 
-	public int expression_type = 0;
-	public bool is_child = false;
+	public int expressionType = 0;
+	public bool isChild = false;
 
-	[Export] public TabContainer expression_tabs;
+	[Export] public TabContainer expressionTabs;
 
 	[ExportGroup("Variable")]
-	[Export] public TextEdit value_edit;
+	[Export] public TextEdit valueEdit;
 
 	[ExportGroup("Array")]
-	[Export] public VBoxContainer items_box;
+	[Export] public VBoxContainer itemsBox;
 
 	[ExportGroup("Event")]
 	[Export] public VBoxContainer pairs;
 
 	[ExportGroup("Function")]
-	[Export] public OptionButton func_options;
-	[Export] public VBoxContainer args_box;
+	[Export] public OptionButton funcOptions;
+	[Export] public VBoxContainer argsBox;
 
 	[ExportGroup("Loop")]
-	[Export] public TextEdit for_edit;
-	[Export] public VBoxContainer iter_element_box;
-	[Export] public VBoxContainer do_box;
+	[Export] public TextEdit forEdit;
+	[Export] public VBoxContainer iterElementBox;
+	[Export] public VBoxContainer doBox;
 
 	[ExportGroup("Match")]
-	[Export] public Container match_expression;
+	[Export] public Container matchExpression;
 	[Export] public VBoxContainer cases;
 
 	[ExportGroup("Element")]
-	[Export] public TabContainer element_tabs;
+	[Export] public TabContainer elementTabs;
 
 	[ExportSubgroup("Paragraph")]
-	[Export] public Container paragraph_text;
+	[Export] public Container paragraphText;
 
 	[ExportSubgroup("Button")]
-	[Export] public Container button_text;
-	[Export] public Container button_condition;
-	[Export] public Container button_finished;
+	[Export] public Container buttonText;
+	[Export] public Container buttonCondition;
+	[Export] public Container buttonFinished;
 
 	[ExportSubgroup("Image")]
-	[Export] public Container image_path;
+	[Export] public Container imagePath;
 
 	[ExportSubgroup("Header")]
-	[Export] public Container country1_name;
-	[Export] public Container country2_name;
+	[Export] public Container country1Name;
+	[Export] public Container country2Name;
 
 	[ExportGroup("IdeologyDrift")]
-	[Export] public SpinBox drift_amount;
-	[Export] public SpinBox final_x;
-	[Export] public SpinBox final_y;
+	[Export] public SpinBox driftAmount;
+	[Export] public SpinBox finalX;
+	[Export] public SpinBox finalY;
 
 	private void EmitChanged() => EmitSignal(SignalName.changed);
 
@@ -84,13 +84,13 @@ public partial class ExpressionBox : PanelContainer
 
 	public Variant ToDict()
 	{
-		switch ((ET)expression_tabs.CurrentTab)
+		switch ((ET)expressionTabs.CurrentTab)
 		{
 			case ET.Variable:
-				return value_edit.Text.IsValidFloat() ? value_edit.Text.ToFloat() : value_edit.Text;
+				return valueEdit.Text.IsValidFloat() ? valueEdit.Text.ToFloat() : valueEdit.Text;
 
 			case ET.List:
-				return ChildDicts(items_box);
+				return ChildDicts(itemsBox);
 
 			case ET.Event:
 			{
@@ -103,48 +103,48 @@ public partial class ExpressionBox : PanelContainer
 			case ET.Function:
 				return new GDict
 				{
-					{ "func", func_options.Text },
-					{ "args", ChildDicts(args_box) },
+					{ "func", funcOptions.Text },
+					{ "args", ChildDicts(argsBox) },
 				};
 
 			case ET.Loop:
 			{
-				Variant in_val = ChildDicts(iter_element_box);
-				if (iter_element_box.GetChildCount() == 1)
+				Variant inVal = ChildDicts(iterElementBox);
+				if (iterElementBox.GetChildCount() == 1)
 				{
-					var first = (ExpressionBox)iter_element_box.GetChild(0);
-					if (first.expression_type == (int)ET.List)
+					var first = (ExpressionBox)iterElementBox.GetChild(0);
+					if (first.expressionType == (int)ET.List)
 					{
-						in_val = first.ToDict();
+						inVal = first.ToDict();
 					}
-					else if (first.expression_type == (int)ET.Variable)
+					else if (first.expressionType == (int)ET.Variable)
 					{
 						var txt = first.ToDict().ToString();
 						if (txt.StartsWith("[") && txt.EndsWith("]"))
 						{
 							var parsed = Json.ParseString(txt);
 							if (parsed.VariantType == Variant.Type.Array)
-								in_val = parsed;
+								inVal = parsed;
 						}
 						else if (txt.Contains(','))
 						{
-							in_val = txt.Split(",").Select(s => s.StripEdges()).ToArray();
+							inVal = txt.Split(",").Select(s => s.StripEdges()).ToArray();
 						}
 					}
 				}
 				return new GDict
 				{
-					{ "for", for_edit.Text },
-					{ "in", in_val },
-					{ "do", ChildDicts(do_box) },
+					{ "for", forEdit.Text },
+					{ "in", inVal },
+					{ "do", ChildDicts(doBox) },
 				};
 			}
 
 			case ET.Match:
 			{
 				var fish = new GDict();
-				if (match_expression.GetChildCount() > 0)
-					fish["match"] = FirstChildDict(match_expression);
+				if (matchExpression.GetChildCount() > 0)
+					fish["match"] = FirstChildDict(matchExpression);
 
 				foreach (var c in cases.GetChildren())
 					fish.Merge(((Case)c).ToDict());
@@ -152,34 +152,34 @@ public partial class ExpressionBox : PanelContainer
 			}
 
 			case ET.Element:
-				switch ((ElementTypes)element_tabs.CurrentTab)
+				switch ((ElementTypes)elementTabs.CurrentTab)
 				{
 					case ElementTypes.Paragraph:
 						return new GDict
 						{
 							{ "type", "paragraph" },
-							{ "text", FirstChildDict(paragraph_text) },
+							{ "text", FirstChildDict(paragraphText) },
 						};
 					case ElementTypes.Button:
 						return new GDict
 						{
 							{ "type", "button" },
-							{ "text", FirstChildDict(button_text) },
-							{ "condition", FirstChildDict(button_condition) },
-							{ "finished", FirstChildDict(button_finished) },
+							{ "text", FirstChildDict(buttonText) },
+							{ "condition", FirstChildDict(buttonCondition) },
+							{ "finished", FirstChildDict(buttonFinished) },
 						};
 					case ElementTypes.Image:
 						return new GDict
 						{
 							{ "type", "image" },
-							{ "text", FirstChildDict(image_path) },
+							{ "text", FirstChildDict(imagePath) },
 						};
 					case ElementTypes.Header:
 						return new GDict
 						{
 							{ "type", "country_header" },
-							{ "country1", FirstChildDict(country1_name) },
-							{ "country2", FirstChildDict(country2_name) },
+							{ "country1", FirstChildDict(country1Name) },
+							{ "country2", FirstChildDict(country2Name) },
 						};
 				}
 				break;
@@ -187,8 +187,8 @@ public partial class ExpressionBox : PanelContainer
 			case ET.IdeologyDrift:
 				return new GDict
 				{
-					{ "drift_amount", drift_amount.Value },
-					{ "final_position", new GArray { final_x.Value, final_y.Value } },
+					{ "drift_amount", driftAmount.Value },
+					{ "final_position", new GArray { finalX.Value, finalY.Value } },
 				};
 		}
 		return new Variant();
@@ -199,7 +199,7 @@ public partial class ExpressionBox : PanelContainer
 		var box = Instantiate();
 		if (box == null)
 			return null;
-		box.is_child = _is_child;
+		box.isChild = _is_child;
 		FromDictInPlace(box, data);
 		return box;
 	}
@@ -220,21 +220,21 @@ public partial class ExpressionBox : PanelContainer
 	{
 		if (box == null)
 			return;
-		box.setup_ui();
+		box.SetupUi();
 
 		if (data.VariantType == Variant.Type.Array)
 		{
-			box.expression_tabs.CurrentTab = (int)ET.List;
+			box.expressionTabs.CurrentTab = (int)ET.List;
 			foreach (var item in data.AsGodotArray())
-				box.AddChildExpression(box.items_box, item);
+				box.AddChildExpression(box.itemsBox, item);
 			return;
 		}
 
 		if (data.VariantType != Variant.Type.Dictionary)
 		{
-			box.expression_tabs.CurrentTab = (int)ET.Variable;
-			if (box.value_edit != null)
-				box.value_edit.Text = data.ToString();
+			box.expressionTabs.CurrentTab = (int)ET.Variable;
+			if (box.valueEdit != null)
+				box.valueEdit.Text = data.ToString();
 			return;
 		}
 
@@ -243,35 +243,35 @@ public partial class ExpressionBox : PanelContainer
 
 		if (dict.ContainsKey("func"))
 		{
-			box.expression_tabs.CurrentTab = (int)ET.Function;
-			var func_name = dict["func"].AsString();
-			for (var i = 0; i < box.func_options.ItemCount; i++)
+			box.expressionTabs.CurrentTab = (int)ET.Function;
+			var funcName = dict["func"].AsString();
+			for (var i = 0; i < box.funcOptions.ItemCount; i++)
 			{
-				if (box.func_options.GetItemText(i) == func_name)
+				if (box.funcOptions.GetItemText(i) == funcName)
 				{
-					box.func_options.Select(i);
+					box.funcOptions.Select(i);
 					break;
 				}
 			}
 
 			foreach (var arg in AsList(dict["args"]))
-				box.AddChildExpression(box.args_box, arg);
+				box.AddChildExpression(box.argsBox, arg);
 			box._update_add_args_button();
 			box._update_arg_placeholders();
 		}
 		else if (dict.ContainsKey("for"))
 		{
-			box.expression_tabs.CurrentTab = (int)ET.Loop;
-			if (box.for_edit != null)
-				box.for_edit.Text = dict["for"].AsString();
-			box.AddChildExpression(box.iter_element_box, dict["in"]);
+			box.expressionTabs.CurrentTab = (int)ET.Loop;
+			if (box.forEdit != null)
+				box.forEdit.Text = dict["for"].AsString();
+			box.AddChildExpression(box.iterElementBox, dict["in"]);
 			foreach (var item in AsList(dict["do"]))
-				box.AddChildExpression(box.do_box, item);
+				box.AddChildExpression(box.doBox, item);
 		}
 		else if (dict.ContainsKey("match"))
 		{
-			box.expression_tabs.CurrentTab = (int)ET.Match;
-			box.AddChildExpression(box.match_expression, dict["match"]);
+			box.expressionTabs.CurrentTab = (int)ET.Match;
+			box.AddChildExpression(box.matchExpression, dict["match"]);
 
 			foreach (var (key, value) in dict)
 			{
@@ -282,103 +282,103 @@ public partial class ExpressionBox : PanelContainer
 		}
 		else if (dict.ContainsKey("event"))
 		{
-			box.expression_tabs.CurrentTab = (int)ET.Event;
+			box.expressionTabs.CurrentTab = (int)ET.Event;
 			foreach (var (key, value) in dict)
 				box._on_add_pair_pressed().FromDict(new GDict { { key, value } });
 		}
 		else if (dict.ContainsKey("type"))
 		{
-			box.expression_tabs.CurrentTab = (int)ET.Element;
+			box.expressionTabs.CurrentTab = (int)ET.Element;
 			box._on_expression_type_tab_selected((int)ET.Element);
 			switch (dict["type"].AsString())
 			{
 				case "paragraph":
-					box.element_tabs.CurrentTab = (int)ElementTypes.Paragraph;
-					FromDictInPlace(box.paragraph_text.GetChild<ExpressionBox>(0), dict["text"]);
+					box.elementTabs.CurrentTab = (int)ElementTypes.Paragraph;
+					FromDictInPlace(box.paragraphText.GetChild<ExpressionBox>(0), dict["text"]);
 					break;
 				case "button":
-					box.element_tabs.CurrentTab = (int)ElementTypes.Button;
-					FromDictInPlace(box.button_text.GetChild<ExpressionBox>(0), dict["text"]);
-					FromDictInPlace(box.button_condition.GetChild<ExpressionBox>(0),
+					box.elementTabs.CurrentTab = (int)ElementTypes.Button;
+					FromDictInPlace(box.buttonText.GetChild<ExpressionBox>(0), dict["text"]);
+					FromDictInPlace(box.buttonCondition.GetChild<ExpressionBox>(0),
 						dict.TryGetValue("condition", out var condition) ? condition : dummy);
-					FromDictInPlace(box.button_finished.GetChild<ExpressionBox>(0),
+					FromDictInPlace(box.buttonFinished.GetChild<ExpressionBox>(0),
 						dict.TryGetValue("finished", out var finished) ? finished : dummy);
 					break;
 				case "image":
-					box.element_tabs.CurrentTab = (int)ElementTypes.Image;
-					FromDictInPlace(box.image_path.GetChild<ExpressionBox>(0), dict["text"]);
+					box.elementTabs.CurrentTab = (int)ElementTypes.Image;
+					FromDictInPlace(box.imagePath.GetChild<ExpressionBox>(0), dict["text"]);
 					break;
 				case "country_header":
-					box.element_tabs.CurrentTab = (int)ElementTypes.Header;
-					FromDictInPlace(box.country1_name.GetChild<ExpressionBox>(0), dict["country1"]);
-					FromDictInPlace(box.country2_name.GetChild<ExpressionBox>(0), dict["country2"]);
+					box.elementTabs.CurrentTab = (int)ElementTypes.Header;
+					FromDictInPlace(box.country1Name.GetChild<ExpressionBox>(0), dict["country1"]);
+					FromDictInPlace(box.country2Name.GetChild<ExpressionBox>(0), dict["country2"]);
 					break;
 			}
 		}
 		else if (dict.ContainsKey("drift_amount"))
 		{
-			box.expression_tabs.CurrentTab = (int)ET.IdeologyDrift;
+			box.expressionTabs.CurrentTab = (int)ET.IdeologyDrift;
 			box._on_expression_type_tab_selected((int)ET.IdeologyDrift);
-			box.drift_amount.Value = dict["drift_amount"].AsDouble();
-			var final_position = dict["final_position"].AsGodotArray();
-			box.final_x.Value = final_position[0].AsDouble();
-			box.final_y.Value = final_position[1].AsDouble();
+			box.driftAmount.Value = dict["drift_amount"].AsDouble();
+			var finalPosition = dict["final_position"].AsGodotArray();
+			box.finalX.Value = finalPosition[0].AsDouble();
+			box.finalY.Value = finalPosition[1].AsDouble();
 		}
 	}
 
-	public void setup_ui()
+	public void SetupUi()
 	{
-		if (func_options.ItemCount == 0)
+		if (funcOptions.ItemCount == 0)
 		{
 			foreach (var function in InterpreterManager.Instance.functions.Keys)
-				func_options.AddItem(function.AsString());
+				funcOptions.AddItem(function.AsString());
 		}
 
-		expression_tabs.SetTabHidden((int)ET.Close, !is_child);
+		expressionTabs.SetTabHidden((int)ET.Close, !isChild);
 	}
 
 	public override void _Ready()
 	{
-		setup_ui();
+		SetupUi();
 
 		// Connect change signals
-		expression_tabs.TabSelected += _ => EmitChanged();
-		func_options.ItemSelected += index => _on_func_selected((int)index);
-		if (value_edit != null)
-			value_edit.TextChanged += EmitChanged;
-		if (for_edit != null)
-			for_edit.TextChanged += EmitChanged;
-		if (args_box != null)
+		expressionTabs.TabSelected += _ => EmitChanged();
+		funcOptions.ItemSelected += index => _on_func_selected((int)index);
+		if (valueEdit != null)
+			valueEdit.TextChanged += EmitChanged;
+		if (forEdit != null)
+			forEdit.TextChanged += EmitChanged;
+		if (argsBox != null)
 		{
-			args_box.ChildEnteredTree += _ => _update_add_args_button();
-			args_box.ChildExitingTree += _ => Callable.From(_update_add_args_button).CallDeferred();
+			argsBox.ChildEnteredTree += _ => _update_add_args_button();
+			argsBox.ChildExitingTree += _ => Callable.From(_update_add_args_button).CallDeferred();
 		}
 	}
 
 	private string SelectedFunction
-		=> func_options.Selected != -1 ? func_options.GetItemText(func_options.Selected) : "";
+		=> funcOptions.Selected != -1 ? funcOptions.GetItemText(funcOptions.Selected) : "";
 
 	public void _update_add_args_button()
 	{
-		var func_name = SelectedFunction;
-		var is_variadic = VARIADIC_FUNCTIONS.Contains(func_name);
+		var funcName = SelectedFunction;
+		var isVariadic = VARIADIC_FUNCTIONS.Contains(funcName);
 		var functions = InterpreterManager.Instance.functions;
-		var expected_args = functions.TryGetValue(func_name, out var args) ? args.AsGodotArray().Count : 0;
+		var expectedArgs = functions.TryGetValue(funcName, out var args) ? args.AsGodotArray().Count : 0;
 
-		if (args_box.GetParent().GetNodeOrNull<Button>("AddArgs/AddArgsButton") is { } add_args_btn)
-			add_args_btn.Disabled = !is_variadic && args_box.GetChildCount() >= expected_args;
+		if (argsBox.GetParent().GetNodeOrNull<Button>("AddArgs/AddArgsButton") is { } addArgsBtn)
+			addArgsBtn.Disabled = !isVariadic && argsBox.GetChildCount() >= expectedArgs;
 	}
 
 	public void _update_arg_placeholders()
 	{
-		var func_name = SelectedFunction;
+		var funcName = SelectedFunction;
 		var index = 0;
-		foreach (var child in args_box.GetChildren())
+		foreach (var child in argsBox.GetChildren())
 		{
 			if (child.IsQueuedForDeletion())
 				continue;
-			if (child is ExpressionBox box && box.value_edit != null)
-				box.value_edit.PlaceholderText = InterpreterManager.Instance.get_param_name(func_name, index);
+			if (child is ExpressionBox box && box.valueEdit != null)
+				box.valueEdit.PlaceholderText = InterpreterManager.Instance.GetParamName(funcName, index);
 			index++;
 		}
 	}
@@ -388,7 +388,7 @@ public partial class ExpressionBox : PanelContainer
 		if (box.GetChildCount() > 0)
 			return;
 		var expr = Instantiate();
-		expr.expression_tabs.CurrentTab = (int)ET.Variable;
+		expr.expressionTabs.CurrentTab = (int)ET.Variable;
 		expr.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
 		expr.SizeFlagsVertical = Control.SizeFlags.ExpandFill;
 		box.AddChild(expr);
@@ -402,31 +402,31 @@ public partial class ExpressionBox : PanelContainer
 				QueueFree();
 				break;
 			case ET.Match:
-				_add_inital_expression(match_expression);
+				_add_inital_expression(matchExpression);
 				break;
 			case ET.Element:
-				_add_inital_expression(paragraph_text);
-				_add_inital_expression(button_text);
-				_add_inital_expression(button_condition);
-				_add_inital_expression(button_finished);
-				_add_inital_expression(country1_name);
-				_add_inital_expression(country2_name);
-				_add_inital_expression(image_path);
+				_add_inital_expression(paragraphText);
+				_add_inital_expression(buttonText);
+				_add_inital_expression(buttonCondition);
+				_add_inital_expression(buttonFinished);
+				_add_inital_expression(country1Name);
+				_add_inital_expression(country2Name);
+				_add_inital_expression(imagePath);
 				break;
 			default:
-				expression_type = (int)tab;
+				expressionType = (int)tab;
 				break;
 		}
 		EmitChanged();
 	}
 
-	public ExpressionBox add_expression(Node container)
+	public ExpressionBox AddExpression(Node container)
 	{
 		var expr = Instantiate();
 		if (expr == null)
 			return null;
 
-		expr.is_child = true;
+		expr.isChild = true;
 		container.AddChild(expr);
 		expr.changed += EmitChanged;
 		EmitChanged();
@@ -435,21 +435,21 @@ public partial class ExpressionBox : PanelContainer
 
 	private void _on_func_selected(int index)
 	{
-		var func_name = func_options.GetItemText(index);
+		var funcName = funcOptions.GetItemText(index);
 		var functions = InterpreterManager.Instance.functions;
-		if (functions.TryGetValue(func_name, out var arg_types))
+		if (functions.TryGetValue(funcName, out var argTypes))
 		{
 			// Clear existing args
-			foreach (var child in args_box.GetChildren())
+			foreach (var child in argsBox.GetChildren())
 				child.QueueFree();
 
 			// Auto-fill
-			foreach (var type in arg_types.AsGodotArray())
+			foreach (var type in argTypes.AsGodotArray())
 			{
-				var expr = add_expression(args_box);
+				var expr = AddExpression(argsBox);
 				if (expr == null)
 					continue;
-				expr.expression_tabs.CurrentTab = type.AsInt32();
+				expr.expressionTabs.CurrentTab = type.AsInt32();
 				expr._on_expression_type_tab_selected(type.AsInt32());
 			}
 		}
@@ -461,15 +461,15 @@ public partial class ExpressionBox : PanelContainer
 
 	public void _on_add_args_button_pressed()
 	{
-		add_expression(args_box);
+		AddExpression(argsBox);
 		_update_arg_placeholders();
 	}
 
-	public void _on_add_match_pressed() => add_expression(match_expression);
+	public void _on_add_match_pressed() => AddExpression(matchExpression);
 
-	public void _on_add_iter_element_button_pressed() => add_expression(iter_element_box);
+	public void _on_add_iter_element_button_pressed() => AddExpression(iterElementBox);
 
-	public void _on_add_do_button_pressed() => add_expression(do_box);
+	public void _on_add_do_button_pressed() => AddExpression(doBox);
 
 	public Case _on_add_case_pressed()
 	{
@@ -489,5 +489,5 @@ public partial class ExpressionBox : PanelContainer
 		return pair;
 	}
 
-	public void _on_add_item_button_pressed() => add_expression(items_box);
+	public void _on_add_item_button_pressed() => AddExpression(itemsBox);
 }

@@ -194,7 +194,7 @@ theme_override_fonts/font = ExtResource("4_yhxw7")
 theme_override_font_sizes/font_size = 161
 text = "Spirits Of Steel"
 
-[node name="PanelContainer" type="PanelContainer" parent="." unique_id=964712662 node_paths=PackedStringArray("StartsUI", "CreditsUI")]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=964712662 node_paths=PackedStringArray("startsUI", "creditsUI")]
 material = ExtResource("5_yhxw7")
 anchors_preset = 9
 anchor_bottom = 1.0
@@ -264,13 +264,13 @@ grow_vertical = 2
 tabs_visible = false
 deselect_enabled = true
 
-[node name="Starts" type="PanelContainer" parent="TabContainer" unique_id=1804048672 node_paths=PackedStringArray("start_entry")]
+[node name="Starts" type="PanelContainer" parent="TabContainer" unique_id=1804048672 node_paths=PackedStringArray("startEntry")]
 visible = false
 use_parent_material = true
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_vr1f0")
 script = ExtResource("14_8dnnj")
-start_entry = NodePath("ScrollContainer/HFlowContainer")
+startEntry = NodePath("ScrollContainer/HFlowContainer")
 metadata/_tab_index = 0
 
 [node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/Starts" unique_id=356775520]

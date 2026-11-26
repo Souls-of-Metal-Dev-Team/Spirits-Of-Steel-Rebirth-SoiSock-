@@ -1,0 +1,3625 @@
+{
+	"factions": [],
+	"polities": [
+		{
+			"accepted_cultures": [
+				"Inuit",
+				"Canada",
+				"Quebecs"
+			],
+			"color": "#C35C6D",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Canada",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Greenlandish",
+				"Danish"
+			],
+			"color": "#99745D",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Denmark",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Russians",
+				"Evenkis",
+				"Nenets",
+				"Yakuts",
+				"Chukoktans",
+				"Komi",
+				"Finnish",
+				"Evens",
+				"Berlarussians",
+				"Mari",
+				"Tartars",
+				"Balkarsk",
+				"Chuvash",
+				"Mordvins",
+				"Tuvans",
+				"Mongols",
+				"Altayns",
+				"Udegens",
+				"Kalmykians",
+				"Dagestani",
+				"Checnyians"
+			],
+			"color": "#FF0000",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Soviet Union",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Russians",
+				"Evenkis",
+				"Nenets",
+				"Yakuts",
+				"Chukoktans",
+				"Komi",
+				"Finnish",
+				"Evens",
+				"Berlarussians",
+				"Mari",
+				"Tartars",
+				"Balkarsk",
+				"Chuvash",
+				"Mordvins",
+				"Tuvans",
+				"Mongols",
+				"Altayns",
+				"Udegens",
+				"Kalmykians",
+				"Dagestani",
+				"Checnyians"
+			],
+			"color": "#386038",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Russia",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Norway"
+			],
+			"color": "#6F4747",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Norway",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Anglo-americans"
+			],
+			"color": "#1485ED",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "United_states",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Finnish"
+			],
+			"color": "#C2C6D7",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Finland",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Sweden"
+			],
+			"color": "#2484F7",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Sweden",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Icelandish"
+			],
+			"color": "#445171",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Iceland",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Estonia"
+			],
+			"color": "#3287AF",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Estonia",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Scottish",
+				"English",
+				"Ireland",
+				"Welish",
+				"Spaniards",
+				"Montserrat",
+				"Indian-ocean"
+			],
+			"color": "#C8385D",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "United_kingdom",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Latvia",
+				"Lithuanian"
+			],
+			"color": "#4B4DBA",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Latvia",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Lithuanian",
+				"Berlarussians"
+			],
+			"color": "#DBDB77",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Lithuania",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Berlarussians"
+			],
+			"color": "#C7D5E0",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Belarus",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Ireland"
+			],
+			"color": "#509F5A",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Ireland",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Russians",
+				"Khazaks"
+			],
+			"color": "#58A1C1",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Kazakhstan",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Germans"
+			],
+			"color": "#49484D",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Germany",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Poles"
+			],
+			"color": "#C55C6A",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Poland",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Dutch"
+			],
+			"color": "#C78749",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Netherlands",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Russians",
+				"Mongols",
+				"Han-chinise",
+				"East-turks",
+				"Koreans",
+				"Tajiks",
+				"Tibet",
+				"Yunnans",
+				"Thai"
+			],
+			"color": "#A7575A",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "China",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Ukranian",
+				"Carpanthian-russ",
+				"Russians"
+			],
+			"color": "#34588A",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Ukraine",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Mongols"
+			],
+			"color": "#A38E4B",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Mongolia",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Dutch",
+				"France"
+			],
+			"color": "#C1AB08",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Belgium",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"France",
+				"",
+				"Guadeloupe",
+				"French-guyanese",
+				"Mayotte",
+				"French-polynesian",
+				"New-caledonia",
+				"Reunion-creole",
+				"French-antartic"
+			],
+			"color": "#3D75E8",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "France",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Czech"
+			],
+			"color": "#36A79C",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Czechia",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"France"
+			],
+			"color": "#55E4E9",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Luxembourg",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Slovaks"
+			],
+			"color": "#795C9F",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Slovakia",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Germans"
+			],
+			"color": "#A8AEC6",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Austria",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Hungarians"
+			],
+			"color": "#4E7D73",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Hungary",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Romanian",
+				"Gagauz-turks"
+			],
+			"color": "#866E52",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Moldova",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Romanian",
+				"Hungarians"
+			],
+			"color": "#D7C448",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Romania",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Romanian",
+				"Russians"
+			],
+			"color": "#2A1618",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Transnistria",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Germans",
+				"Romanch",
+				"France",
+				"Italians"
+			],
+			"color": "#E00505",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Switzerland",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Liechtenstein"
+			],
+			"color": "#575A7F",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Liechtenstein",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Germans",
+				"Italians",
+				"France"
+			],
+			"color": "#437F3F",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Italy",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Slovenes"
+			],
+			"color": "#4F6F96",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Slovenia",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Croat"
+			],
+			"color": "#2A2D60",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Croatia",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Serbs",
+				"Bulgarians"
+			],
+			"color": "#9A6867",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Serbia",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Serbs",
+				"Bosnia-and-herzegovina"
+			],
+			"color": "#DFC087",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Bosnia_and_herzegovina",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Uzebeks"
+			],
+			"color": "#CACEFD",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Uzbekistan",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Japanase"
+			],
+			"color": "#FFC9B2",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Japan",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Bulgarians"
+			],
+			"color": "#339B00",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Bulgaria",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Spaniards",
+				"Basque",
+				"Catalonians",
+				"Portugese",
+				"Canary-islander"
+			],
+			"color": "#F2CD5E",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Spain",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"San-marino"
+			],
+			"color": "#62B0C6",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "San_marino",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Monaco"
+			],
+			"color": "#EDA2BA",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Monaco",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Russians"
+			],
+			"color": "#3F1F2D",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Abkhazia",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Serbs"
+			],
+			"color": "#FC7279",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Montenegro",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Albanians"
+			],
+			"color": "#768EBA",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Kosovo",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Georgia"
+			],
+			"color": "#EFE4E8",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Georgia",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Kirghiz"
+			],
+			"color": "#F43D6F",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Kyrgyzstan",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Andorra"
+			],
+			"color": "#C90001",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Andorra",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Russians"
+			],
+			"color": "#C29657",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "South_ossetia",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Turkmen",
+				"Uzebeks"
+			],
+			"color": "#BD8C6E",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Turkmenistan",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Koreans"
+			],
+			"color": "#F50C37",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "North_korea",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Albanians"
+			],
+			"color": "#952D66",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Albania",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Macedonians",
+				"Albanians"
+			],
+			"color": "#CA9576",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "North_macedonia",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Azerbis"
+			],
+			"color": "#728CD9",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Azerbaijan",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Portugese"
+			],
+			"color": "#277446",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Portugal",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Turks",
+				"Kurds",
+				"Arab"
+			],
+			"color": "#A63443",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Turkey",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Vatican-city"
+			],
+			"color": "#C4B582",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Vatican_city",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Hellenics"
+			],
+			"color": "#5DB5E3",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Greece",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Armenia"
+			],
+			"color": "#F6A286",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Armenia",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Tajiks"
+			],
+			"color": "#6D9482",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Tajikistan",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Persians",
+				"Azerbis",
+				"Kurds",
+				"Turkmen",
+				"Lurs",
+				"Arab",
+				"Balochs"
+			],
+			"color": "#5A8F7B",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Iran",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Tajiks",
+				"Hazara",
+				"Pashtuns",
+				"Balochs"
+			],
+			"color": "#716B79",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Afghanistan",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Koreans"
+			],
+			"color": "#5E76BE",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "South_korea",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab"
+			],
+			"color": "#B9566A",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Tunisia",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Kurds",
+				"Assyrians",
+				"Arab"
+			],
+			"color": "#B27263",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Iraq",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Kurds",
+				"Arab"
+			],
+			"color": "#374E5C",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Syria",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Kashmiri",
+				"Chitrall",
+				"Pashtu",
+				"",
+				"Punjabs",
+				"Saeaikis",
+				"Balochs",
+				"Saraikis"
+			],
+			"color": "#002917",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Pakistan",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab",
+				""
+			],
+			"color": "#0A2B24",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Algeria",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab",
+				"",
+				"Western-sahara"
+			],
+			"color": "#9B4A59",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Morocco",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Malta"
+			],
+			"color": "#D9D9D9",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Malta",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Turks"
+			],
+			"color": "#5C4D32",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Turkish_cyprus",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Ladakashi",
+				"Kashmiri",
+				"Kinnauris",
+				"Bbagris",
+				"",
+				"Saraikis",
+				"Adi",
+				"Kaurais",
+				"Marwais",
+				"Chakma",
+				"Sikinn",
+				"Tada",
+				"Awashis",
+				"Kannaujis",
+				"Maithils",
+				"Bengal",
+				"Bundelis",
+				"Magahis",
+				"Gukarati",
+				"Baghelis",
+				"Mizo",
+				"Chhattisgrahiya",
+				"Bhils",
+				"Nimads",
+				"Odia",
+				"Marathi",
+				"Gond",
+				"Teiugu",
+				"Kannada",
+				"Tami",
+				"Malayali",
+				"India"
+			],
+			"color": "#D0A36C",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "India",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Hellenics"
+			],
+			"color": "#DEB51B",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Cyprus",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Lebanon"
+			],
+			"color": "#549C8B",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Lebanon",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab",
+				""
+			],
+			"color": "#2A7054",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Libya",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Israel"
+			],
+			"color": "#4569D9",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Israel",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab"
+			],
+			"color": "#E3989C",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Jordan",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Mexican"
+			],
+			"color": "#689752",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Mexico",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab"
+			],
+			"color": "#ABBE98",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Saudi_arabia",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab"
+			],
+			"color": "#564857",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Palestine",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab"
+			],
+			"color": "#AFA358",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Egypt",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Nepali"
+			],
+			"color": "#003893",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Nepal",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab"
+			],
+			"color": "#5A402A",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Kuwait",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Bhutanese"
+			],
+			"color": "#79645F",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Bhutan",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Myammar"
+			],
+			"color": "#3B714F",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Myanmar",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Western-sahara"
+			],
+			"color": "#C5AE78",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Western_sahara",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				""
+			],
+			"color": "#2A6F53",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Mauritania",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab"
+			],
+			"color": "#3A414B",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Bahrain",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Bengal"
+			],
+			"color": "#002A30",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Bangladesh",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab"
+			],
+			"color": "#6F2373",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Qatar",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab"
+			],
+			"color": "#815458",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Oman",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Han-chinise"
+			],
+			"color": "#5B4D5C",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Taiwan",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Mali-amazigh",
+				"Fulani",
+				"Malinke",
+				"Nenets",
+				"Bomu"
+			],
+			"color": "#9E8A57",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Mali",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab"
+			],
+			"color": "#279678",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "United_arab_emirates",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Tuareg",
+				"Kanura",
+				"Hausa",
+				"Nenets"
+			],
+			"color": "#26584D",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Niger",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Cuba"
+			],
+			"color": "#9744B0",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Cuba",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab",
+				"Muslims-cristian-minotiry"
+			],
+			"color": "#BBAA7E",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Chad",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab",
+				"Beja",
+				"Koalib-tagoi",
+				"Moro-bamgetu",
+				"Sudan-dago",
+				"Shilluk"
+			],
+			"color": "#0C3827",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Sudan",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Vietnam"
+			],
+			"color": "#C6BE75",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Vietnam",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Lao"
+			],
+			"color": "#594D3F",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Laos",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Myammar",
+				"Thai",
+				"Lao",
+				"Cambodia",
+				"Malaya"
+			],
+			"color": "#142D4C",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Thailand",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Haiti"
+			],
+			"color": "#A5746F",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Haiti",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Dominican-republic"
+			],
+			"color": "#728877",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Dominican_republic",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Belize"
+			],
+			"color": "#823214",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Belize",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab"
+			],
+			"color": "#4E3235",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Yemen",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Jamaica"
+			],
+			"color": "#8BDC0A",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Jamaica",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Filipino"
+			],
+			"color": "#7255A6",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Philippines",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Guatemala"
+			],
+			"color": "#48306D",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Guatemala",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Eritrea"
+			],
+			"color": "#CE8CA2",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Eritrea",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Cabo-verde"
+			],
+			"color": "#CE2027",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Cabo_verde",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"St-kitts-and-nevis"
+			],
+			"color": "#3B3800",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "St_kitts_and_nevis",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Serer",
+				"Nenets",
+				"Senagal-wolofia",
+				"Diola"
+			],
+			"color": "#B8757C",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Senegal",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Honduras"
+			],
+			"color": "#99B04A",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Honduras",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Peuls",
+				"Marka",
+				"Burkina-faso-mossi",
+				"Senofu"
+			],
+			"color": "#CA6E7B",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Burkina_faso",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"El-salvadoreans"
+			],
+			"color": "#9F88C6",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "El_salvador",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Nicaragua"
+			],
+			"color": "#91B2BE",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Nicaragua",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Tigrayans",
+				"",
+				"Amharas",
+				"Somalia",
+				"Comoros",
+				"Aaris"
+			],
+			"color": "#30477B",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Ethiopia",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Cambodia"
+			],
+			"color": "#E2B490",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Cambodia",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Dominica"
+			],
+			"color": "#7670B2",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Dominica",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Hausa-&-fulani",
+				"Yaruba",
+				"Igbo"
+			],
+			"color": "#C27A6B",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Nigeria",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Gambia"
+			],
+			"color": "#44355C",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Gambia",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Barbados"
+			],
+			"color": "#FCD116",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Barbados",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"St-lucia"
+			],
+			"color": "#5DB7E6",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "St_lucia",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Guinea-bissau"
+			],
+			"color": "#DABD81",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Guinea_bissau",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"",
+				"Malinke",
+				"Soussou",
+				"Kpelle"
+			],
+			"color": "#205A4E",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Guinea",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Venezuelans",
+				"Colombia"
+			],
+			"color": "#DEBB5B",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Colombia",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Venezuelans"
+			],
+			"color": "#C86496",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Venezuela",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Grenada"
+			],
+			"color": "#007B5F",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Grenada",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Benin"
+			],
+			"color": "#DBC478",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Benin",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Djibouti"
+			],
+			"color": "#D7141A",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Djibouti",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Mbum",
+				"Bamileke",
+				"Bantu"
+			],
+			"color": "#185E61",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Cameroon",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Berta",
+				"Bande",
+				"Dinka",
+				"Berti",
+				"South-sudan--nuer",
+				"Azande",
+				"Bari"
+			],
+			"color": "#D4BF6E",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "South_sudan",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Somalia"
+			],
+			"color": "#6683AB",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Somalia",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Somalia"
+			],
+			"color": "#55AB70",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Somaliland",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Costa-rica"
+			],
+			"color": "#A78C2A",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Costa_rica",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"",
+				"Togo"
+			],
+			"color": "#153323",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Togo",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Maldives"
+			],
+			"color": "#929BA2",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Maldives",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Ghana"
+			],
+			"color": "#A24A58",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Ghana",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"",
+				"Central-african-republic",
+				"Gbaya",
+				"Nzakara"
+			],
+			"color": "#A64D63",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Central_african_republic",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Trinidad-and-tobago"
+			],
+			"color": "#F05A27",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Trinidad_and_tobago",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Ivory-coast-mande",
+				"Voltaiqe",
+				"Krou",
+				"Akan"
+			],
+			"color": "#D1996A",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Ivory_coast",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Sierra-leone-mende",
+				"Sherbor"
+			],
+			"color": "#729FBE",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Sierra_leone",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Panama"
+			],
+			"color": "#3C3558",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Panama",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Sri-lankan"
+			],
+			"color": "#564B39",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Sri_lanka",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				""
+			],
+			"color": "#513D76",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Liberia",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Guyanans"
+			],
+			"color": "#B49678",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Guyana",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Palau"
+			],
+			"color": "#FFC90E",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Palau",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Nauru",
+				"Maldives"
+			],
+			"color": "#292F85",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Nauru",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Malaya"
+			],
+			"color": "#C56064",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Malaysia",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Surinamians"
+			],
+			"color": "#803754",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Suriname",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Acio",
+				"Javanese",
+				"Batak",
+				"Tobelo",
+				"Malau",
+				"Mihanasa",
+				"Kaili",
+				"Gorontalo",
+				"Minangkabau",
+				"",
+				"Papuans",
+				"Banjarese",
+				"Indonesia",
+				"Rejang",
+				"Tolaki",
+				"Javaenese",
+				"Batanese",
+				"Atoni",
+				"Mollucans"
+			],
+			"color": "#DDBEC4",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Indonesia",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Brazilian-natives",
+				"Brazilians",
+				"Colombia",
+				"Uruguay"
+			],
+			"color": "#4C913F",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Brazil",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Zande",
+				"Gbaya",
+				"",
+				"Komo-birra",
+				"Mongo",
+				"Lega",
+				"Kongo",
+				"Katanga",
+				"Lunda"
+			],
+			"color": "#416893",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Dr_congo",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Mili-hmitic",
+				"Kamba",
+				"Somalia",
+				"Nilotic",
+				"Kenya-bantu"
+			],
+			"color": "#833640",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Kenya",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Brunei"
+			],
+			"color": "#3C6E55",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Brunei",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Uganda-bantu",
+				"",
+				"Uganda"
+			],
+			"color": "#92824F",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Uganda",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Equatorial-guinea"
+			],
+			"color": "#5090AB",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Equatorial_guinea",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Sangha",
+				"Makaa",
+				"Mbere-nzabi",
+				"Teke"
+			],
+			"color": "#D16C78",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Congo",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Fang",
+				"Bakote",
+				"Okande",
+				"Omiene",
+				"Eshira"
+			],
+			"color": "#DCBF7B",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Gabon",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Han-chinise"
+			],
+			"color": "#4D4986",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Singapore",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Trinida-and-tobago-equador"
+			],
+			"color": "#F99262",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Ecuador",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Sao-tome-and-principe"
+			],
+			"color": "#12AD2B",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Sao_tome_and_principe",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Peru"
+			],
+			"color": "#C4BDCC",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Peru",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Rwanda"
+			],
+			"color": "#1D3841",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Rwanda",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Sukuma",
+				"",
+				"Fipa",
+				"Rufiji",
+				"Turu",
+				"Chhattisgrahiya",
+				"Ngoni",
+				"Makonde"
+			],
+			"color": "#678792",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Tanzania",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Burundi"
+			],
+			"color": "#9A4BA0",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Burundi",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Angan",
+				"Osapminlk",
+				"Papuans"
+			],
+			"color": "#2B385A",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Papua_new_guinea",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"",
+				"Lunda",
+				"Angola-kimbudu"
+			],
+			"color": "#2C1823",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Angola",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Seychelles"
+			],
+			"color": "#A11E24",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Seychelles",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Solomon-islands"
+			],
+			"color": "#E20C0C",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Solomon_islands",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Zambia-mamba",
+				"Luyana",
+				"Tonga"
+			],
+			"color": "#22562F",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Zambia",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"East-timor"
+			],
+			"color": "#28AA4C",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "East_timor",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Tuvalu"
+			],
+			"color": "#ED1C24",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Tuvalu",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Tumbuka",
+				"Malawi-chewa"
+			],
+			"color": "#A15468",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Malawi",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Brazilians",
+				"Bolivia"
+			],
+			"color": "#CCA66C",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Bolivia",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Makonde",
+				"Loka-lomwe",
+				"Maravi",
+				"Xona-karanga",
+				"Mozambiue-tsonnga"
+			],
+			"color": "#0E363E",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Mozambique",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Australia"
+			],
+			"color": "#398F61",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Australia",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"",
+				"Madagascar"
+			],
+			"color": "#2C8C04",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Madagascar",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Vanuatu"
+			],
+			"color": "#EDA720",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Vanuatu",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Shona",
+				"Northen-ndebele",
+				"Makonde",
+				"Tswa"
+			],
+			"color": "#AD585D",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Zimbabwe",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Fiji"
+			],
+			"color": "#8F4952",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Fiji",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Namibia-himba",
+				"",
+				"Lozi",
+				"Nama"
+			],
+			"color": "#C1D9A7",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Namibia",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Niue"
+			],
+			"color": "#B97A57",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Niue",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Chile"
+			],
+			"color": "#9B656B",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Chile",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Botswana",
+				"",
+				"Kqalaqai"
+			],
+			"color": "#889DBC",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Botswana",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Paraguay"
+			],
+			"color": "#3971E4",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Paraguay",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Mauritius"
+			],
+			"color": "#B39500",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Mauritius",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Tonga"
+			],
+			"color": "#FF7578",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Tonga",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Argentina"
+			],
+			"color": "#919DEC",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Argentina",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"North-sotho",
+				"Sesotho",
+				"Swasi",
+				"Tsawna",
+				"Afrikaan",
+				"Zulu",
+				"Xhosa"
+			],
+			"color": "#D2A56C",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "South_africa",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Eswatini"
+			],
+			"color": "#575F86",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Eswatini",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Lesotho"
+			],
+			"color": "#00BEF0",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Lesotho",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Uruguay"
+			],
+			"color": "#AEC09C",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "Uruguay",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"New-zealand"
+			],
+			"color": "#DAD1E9",
+			"flag": "",
+			"ideology": [
+				0,
+				0
+			],
+			"money": 100000,
+			"name": "New_zealand",
+			"political_power": 500,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		}
+	],
+	"significant_figures": []
+}

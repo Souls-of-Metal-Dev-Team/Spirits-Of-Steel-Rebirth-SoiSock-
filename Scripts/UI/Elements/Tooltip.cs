@@ -44,16 +44,16 @@ public partial class Tooltip : PanelContainer
 
 	private void _clamp_to_viewport(Vector2 target)
 	{
-		var vp_size = GetViewportRect().Size;
+		var vpSize = GetViewportRect().Size;
 		Position = new Vector2(
-			Mathf.Clamp(target.X, 0.0f, Mathf.Max(0.0f, vp_size.X - Size.X)),
-			Mathf.Clamp(target.Y, 0.0f, Mathf.Max(0.0f, vp_size.Y - Size.Y)));
+			Mathf.Clamp(target.X, 0.0f, Mathf.Max(0.0f, vpSize.X - Size.X)),
+			Mathf.Clamp(target.Y, 0.0f, Mathf.Max(0.0f, vpSize.Y - Size.Y)));
 	}
 
-	public void SwitchTooltip(int a_mode)
+	public void SwitchTooltip(int aMode)
 	{
 		var map = MapManager.Instance;
-		switch (a_mode)
+		switch (aMode)
 		{
 			case -1:
 				shouldBeVisible = false;
@@ -63,7 +63,7 @@ public partial class Tooltip : PanelContainer
 				tabs.CurrentTab = 0;
 				foreach (var resource in resourcesList.GetChildren())
 					resource.QueueFree();
-				var prov = map.province_objects[map.current_hovered_pid];
+				var prov = map.provinceObjects[map.currentHoveredPid];
 				foreach (var resource in prov.resources)
 				{
 					var resourceBop = (HBoxContainer)resourceTemplate.Duplicate();
@@ -79,17 +79,17 @@ public partial class Tooltip : PanelContainer
 			case 1:
 			{
 				tabs.CurrentTab = 1;
-				var prov = map.province_objects[map.current_hovered_pid];
+				var prov = map.provinceObjects[map.currentHoveredPid];
 				provinceName.Text = prov.name;
 				provinceDescription.Text = prov.city;
 				provinceInfrastructure.Text = $"{prov.infrastructure}/{prov.maxInfrastructure}";
-				provinceConstructionIcon.Visible = EconomyManager.Instance.construction_queue.ContainsKey(map.current_hovered_pid);
+				provinceConstructionIcon.Visible = EconomyManager.Instance.constructionQueue.ContainsKey(map.currentHoveredPid);
 				provinceOccupiedIcon.Visible = !string.IsNullOrEmpty(prov.occupier);
 				provinceDestroyedIcon.Visible = false;
-				var fmt_claims = "";
+				var fmtClaims = "";
 				foreach (var claim in prov.claims)
-					fmt_claims += claim + "\n";
-				provinceClaims.Text = fmt_claims;
+					fmtClaims += claim + "\n";
+				provinceClaims.Text = fmtClaims;
 				_ShowAfterLayout();
 				break;
 			}

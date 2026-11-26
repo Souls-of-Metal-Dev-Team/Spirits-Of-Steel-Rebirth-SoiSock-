@@ -9,33 +9,33 @@ public partial class IdeologyManager : Node
 	public static IdeologyManager Instance => Autoload.Get<IdeologyManager>("IdeologyManager");
 
 	public Godot.Collections.Dictionary ideologies = new Godot.Collections.Dictionary();
-	public Godot.Collections.Array ideology_names = new Godot.Collections.Array();
+	public Godot.Collections.Array ideologyNames = new Godot.Collections.Array();
 
-	public void Initialize(Godot.Collections.Dictionary a_ideologyData)
+	public void Initialize(Godot.Collections.Dictionary aIdeologyData)
 	{
-		ideologies = a_ideologyData;
-		ideology_names = new Godot.Collections.Array();
+		ideologies = aIdeologyData;
+		ideologyNames = new Godot.Collections.Array();
 		foreach (var key in ideologies.Keys)
-			ideology_names.Add(key);
+			ideologyNames.Add(key);
 
 		// GDScript sort_custom uses a stable insertion sort with a strict '<' comparison.
-		for (var i = 1; i < ideology_names.Count; i++)
+		for (var i = 1; i < ideologyNames.Count; i++)
 		{
-			var key = ideology_names[i];
+			var key = ideologyNames[i];
 			var keyArea = _area(ideologies[key].AsGodotDictionary()["region"]);
 			var j = i - 1;
-			while (j >= 0 && _area(ideologies[ideology_names[j]].AsGodotDictionary()["region"]) > keyArea)
+			while (j >= 0 && _area(ideologies[ideologyNames[j]].AsGodotDictionary()["region"]) > keyArea)
 			{
-				ideology_names[j + 1] = ideology_names[j];
+				ideologyNames[j + 1] = ideologyNames[j];
 				j--;
 			}
-			ideology_names[j + 1] = key;
+			ideologyNames[j + 1] = key;
 		}
 	}
 
-	public string get_ideology_name(Vector2 coords)
+	public string GetIdeologyName(Vector2 coords)
 	{
-		foreach (var ideology in ideology_names)
+		foreach (var ideology in ideologyNames)
 		{
 			var region = ideologies[ideology].AsGodotDictionary()["region"].AsGodotArray();
 			var lowerBound = region[0].AsGodotArray();

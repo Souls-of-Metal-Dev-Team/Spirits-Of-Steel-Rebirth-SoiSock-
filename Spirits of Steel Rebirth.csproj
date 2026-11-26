@@ -7,4 +7,9 @@
     <!-- UI text uses string interpolation; keep number formatting locale-independent like GDScript. -->
     <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
+  <ItemGroup>
+    <!-- Core and Tests are their own projects; keep the default glob from compiling them here. -->
+    <Compile Remove="Core/**;Tests/**" />
+    <ProjectReference Include="Core/Sosr.Core.csproj" />
+  </ItemGroup>
 </Project>

@@ -5,31 +5,31 @@ namespace Sosr;
 
 public partial class Starts : Control
 {
-	public Variant starts_folder;
+	public Variant startsFolder;
 	private readonly PackedScene _startEntryScene = GD.Load<PackedScene>("res://Scenes/Start.tscn");
 
-	[Export] public HFlowContainer start_entry;
+	[Export] public HFlowContainer startEntry;
 
 	public override void _Ready()
 	{
 		if (OS.HasFeature("standalone"))
 		{
-			var exe_dir = OS.GetExecutablePath().GetBaseDir();
-			starts_folder = exe_dir + "starts";
+			var exeDir = OS.GetExecutablePath().GetBaseDir();
+			startsFolder = exeDir + "starts";
 		}
 		else
 		{
-			starts_folder = "res://starts/";
+			startsFolder = "res://starts/";
 		}
 
-		var starts_dir = DirAccess.Open(starts_folder.AsString());
-		foreach (var start in starts_dir.GetDirectories())
+		var startsDir = DirAccess.Open(startsFolder.AsString());
+		foreach (var start in startsDir.GetDirectories())
 		{
 			var entry = _startEntryScene.Instantiate<Node>();
-			start_entry.AddChild(entry);
+			startEntry.AddChild(entry);
 			entry.Call("setup", start,
-				starts_folder.AsString() + start + "/thumbnail.png",
-				starts_folder.AsString() + start + "/map_data.json");
+				startsFolder.AsString() + start + "/thumbnail.png",
+				startsFolder.AsString() + start + "/map_data.json");
 			GD.Print(start);
 		}
 		//print(start_entry.get_children())

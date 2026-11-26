@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 using Sosr;
 
@@ -7,16 +8,16 @@ public partial class FactionManager : Node
 {
 	public static FactionManager Instance => Autoload.Get<FactionManager>("FactionManager");
 
-	public Godot.Collections.Dictionary<string, FactionData> factions = new Godot.Collections.Dictionary<string, FactionData>();
+	public Dictionary<string, FactionData> factions = new();
 
-	public void Initialize(Godot.Collections.Array a_factionData)
+	public void Initialize(Godot.Collections.Array aFactionData)
 	{
 		factions.Clear();
-		foreach (var factionDataVariant in a_factionData)
+		foreach (var factionDataVariant in aFactionData)
 		{
 			var factionData = factionDataVariant.AsGodotDictionary();
 			var name = factionData["name"].AsString();
-			factions[name] = FactionData.FromDict(factionData);
+			factions[name] = FactionData.FromDict(factionData.AsState());
 			foreach (var member in factions[name].members)
 			{
 				var country = GetCountry(member.polity);
@@ -30,20 +31,20 @@ public partial class FactionManager : Node
 	{
 		var factionsArray = new Godot.Collections.Array();
 		foreach (var faction in factions.Keys)
-			factionsArray.Add(factions[faction].ToDict());
+			factionsArray.Add(VariantState.ToVariant(factions[faction].ToDict()));
 		return factionsArray;
 	}
 
-	public void create_faction(string a_leader, string a_name, Color a_color)
+	public void CreateFaction(string aLeader, string aName, Color aColor)
 	{
-		var members = new Godot.Collections.Array<FactionMember> { FactionMember.FromValues(a_leader, "Leader") };
-		factions[a_name] = FactionData.FromValues(a_name, a_color, members);
-		CountryManager.Instance.GetCountry(a_leader).factions.Add(a_name);
+		var members = new List<FactionMember> { FactionMember.FromValues(aLeader, "Leader") };
+		factions[aName] = FactionData.FromValues(aName, aColor.ToHex(), members);
+		CountryManager.Instance.GetCountry(aLeader).factions.Add(aName);
 	}
 
-	public void clear_faction(GodotObject country)
+	public void ClearFaction(GodotObject country)
 	{
-		var countryName = country.Get("country_name").AsString();
+		var countryName = country.Get("countryName").AsString();
 		var countryFactions = country.Get("factions").AsGodotArray();
 		var countryFactionsCopy = countryFactions.Duplicate();
 		foreach (var factionVariant in countryFactionsCopy)
@@ -62,13 +63,13 @@ public partial class FactionManager : Node
 		}
 	}
 
-	public void invite_faction(GodotObject inviter, GodotObject invitee)
+	public void InviteFaction(GodotObject inviter, GodotObject invitee)
 	{
 		MapManager.Instance.AllowPids(inviter, invitee);
 		MapManager.Instance.AllowPids(invitee, inviter);
 		// NOTE(soi): we should add an option to choose which faction to invite to
-		var inviterName = inviter.Get("country_name").AsString();
-		var inviteeName = invitee.Get("country_name").AsString();
+		var inviterName = inviter.Get("countryName").AsString();
+		var inviteeName = invitee.Get("countryName").AsString();
 		var inviterFactionsCopy = inviter.Get("factions").AsGodotArray().Duplicate();
 		var inviteeFactions = invitee.Get("factions").AsGodotArray();
 		foreach (var factionVariant in inviterFactionsCopy)
@@ -89,7 +90,7 @@ public partial class FactionManager : Node
 		}
 	}
 
-	public bool in_faction(GodotObject inviter, GodotObject invitee)
+	public bool InFaction(GodotObject inviter, GodotObject invitee)
 	{
 		var inviterFactions = inviter.Get("factions").AsGodotArray();
 		foreach (var faction in invitee.Get("factions").AsGodotArray())
@@ -100,11 +101,11 @@ public partial class FactionManager : Node
 		return false;
 	}
 
-	public void kick_faction(GodotObject kicker, GodotObject kickee)
+	public void KickFaction(GodotObject kicker, GodotObject kickee)
 	{
 		MapManager.Instance.UnallowPids(kicker, kickee);
-		var kickerName = kicker.Get("country_name").AsString();
-		var kickeeName = kickee.Get("country_name").AsString();
+		var kickerName = kicker.Get("countryName").AsString();
+		var kickeeName = kickee.Get("countryName").AsString();
 		var kickeeFactions = kickee.Get("factions").AsGodotArray();
 		foreach (var factionVariant in kicker.Get("factions").AsGodotArray())
 		{
@@ -136,13 +137,13 @@ public partial class FactionManager : Node
 		}
 	}
 
-	public void dissolve_faction(GodotObject dissolver, string faction_name)
+	public void DissolveFaction(GodotObject dissolver, string factionName)
 	{
-		if (!factions.ContainsKey(faction_name))
+		if (!factions.ContainsKey(factionName))
 			return;
 
-		var factionData = factions[faction_name];
-		var dissolverName = dissolver.Get("country_name").AsString();
+		var factionData = factions[factionName];
+		var dissolverName = dissolver.Get("countryName").AsString();
 		var dissolverIndex = FindMemberIndex(factionData.members, dissolverName);
 
 		if (dissolverIndex != -1 && factionData.members[dissolverIndex].status == "Leader")
@@ -151,15 +152,15 @@ public partial class FactionManager : Node
 			{
 				var memberCountry = GetCountry(member.polity);
 				if (memberCountry != null)
-					memberCountry.Get("factions").AsGodotArray().Remove(faction_name);
+					memberCountry.Get("factions").AsGodotArray().Remove(factionName);
 			}
-			factions.Remove(faction_name);
+			factions.Remove(factionName);
 		}
 	}
 
-	public FactionMember get_faction_member(string country_name)
+	public FactionMember GetFactionMember(string countryName)
 	{
-		var country = GetCountry(country_name);
+		var country = GetCountry(countryName);
 		if (country == null)
 			return null;
 
@@ -174,20 +175,20 @@ public partial class FactionManager : Node
 				continue;
 
 			var factionData = factions[factionName];
-			var index = FindMemberIndex(factionData.members, country_name);
+			var index = FindMemberIndex(factionData.members, countryName);
 			if (index != -1)
 				return factionData.members[index];
 		}
 		return null;
 	}
 
-	public void update_member_status(string faction_name, string member_name, int status)
+	public void UpdateMemberStatus(string factionName, string memberName, int status)
 	{
-		if (!factions.ContainsKey(faction_name))
+		if (!factions.ContainsKey(factionName))
 			return;
 
-		var factionData = factions[faction_name];
-		var index = FindMemberIndex(factionData.members, member_name);
+		var factionData = factions[factionName];
+		var index = FindMemberIndex(factionData.members, memberName);
 		if (index != -1)
 			factionData.members[index].status = FactionMember.GetString(status);
 	}
@@ -197,7 +198,7 @@ public partial class FactionManager : Node
 		return CountryManager.Instance.GetCountry(countryName);
 	}
 
-	private static int FindMemberIndex(Godot.Collections.Array<FactionMember> members, string polity)
+	private static int FindMemberIndex(List<FactionMember> members, string polity)
 	{
 		for (var i = 0; i < members.Count; i++)
 		{

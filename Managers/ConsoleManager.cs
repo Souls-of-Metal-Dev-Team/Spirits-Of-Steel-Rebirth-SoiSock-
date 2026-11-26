@@ -65,7 +65,7 @@ public partial class ConsoleManager : Node
 		// Register(console, "play", Callable.From((string a) => _play_country(a)), new[] { "country_name" }, 1, "Change player country");
 		Register(console, "tag", Callable.From((string a) => _play_country(a)), new[] { "country_name" }, 1, "Change player country");
 		Register(console, "drew_durnil_mode", Callable.From(_drew_durnil_mode), Array.Empty<string>(), 0, "Lets u spectate the map");
-		Register(console, "access", Callable.From((string a, string b) => m_AddAccess(a, b)), new[] { "accesser", "accessee" }, 1, "Add military access to a country");
+		Register(console, "access", Callable.From((string a, string b) => MAddAccess(a, b)), new[] { "accesser", "accessee" }, 1, "Add military access to a country");
 		Register(console, "puppet", Callable.From((string a) => _puppet_country(a)), new[] { "country_name" }, 1, "Change player country");
 		Register(console, "invite", Callable.From((string a) => _invite_country(a)), new[] { "country_name" }, 1, "Change player country");
 		Register(console, "debug_decisions", Callable.From(_debug_decisions), Array.Empty<string>(), 0, "Lets u do any focus and does it instantly");
@@ -73,7 +73,7 @@ public partial class ConsoleManager : Node
 		Register(console, "reload_decisions", Callable.From(_reload_decisions), Array.Empty<string>(), 0, "Reloads all the decision trees");
 		Register(console, "instabuild", Callable.From(_instabuild), Array.Empty<string>(), 0, "Toggles instant construction");
 
-		Register(console, "gates_of_hell", Callable.From(m_GatesOfHell), Array.Empty<string>(), 0, "Start armageddon");
+		Register(console, "gates_of_hell", Callable.From(MGatesOfHell), Array.Empty<string>(), 0, "Start armageddon");
 		Register(console, "start_war", Callable.From((string a, string b) => _start_war(a, b)), new[] { "a", "b" }, 2, "Start a war between 2 countries");
 		Register(console, "annex", Callable.From((string a, string b) => _annex(a, b)), new[] { "annexer", "annexee" }, 2, "Annex Country for Player");
 		Register(console, "pp", Callable.From((string a) => _add_pp(a)), new[] { "amount" }, 1, "Add Poltical power to player");
@@ -84,12 +84,12 @@ public partial class ConsoleManager : Node
 		Register(console, "release", Callable.From((string a) => _release_country(a)), new[] { "country" }, 1, "Releases a country based on all its claims; the country must exist, to create a new country, look to instantiate_country");
 		Register(console, "releasables", Callable.From((string a) => _show_releasables_country(a)), new[] { "country" }, 1, "Shows the releasables of a country");
 		Register(console, "cta", Callable.From((string a, string b) => _call_to_arms(a, b)), new[] { "caller", "target" }, 2, "Call a country to arms");
-		Register(console, "editor", Callable.From(m_Editor), Array.Empty<string>(), 0, "Swap Editor");
+		Register(console, "editor", Callable.From(MEditor), Array.Empty<string>(), 0, "Swap Editor");
 		Register(console, "sink_rise", Callable.From((string a, string b, string c) => _sink_rise(a, b, c)), new[] { "pid", "type", "country_name" }, 3, "sink/rise province");
-		Register(console, "random_figure", Callable.From((string a, string b) => m_RandomFigure(a, b)), new[] { "country", "budget" }, 2, "Add a randomly generated significant figure to a country.");
-		Register(console, "start_revolution", Callable.From((string a, string b, string c) => m_StartRevolution(a, b, c)), new[] { "pid", "name", "count" }, 3, "Start a revolution.");
-		Register(console, "start_rebellion", Callable.From((string a, string b) => m_StartRebellion(a, b)), new[] { "country", "count" }, 2, "Start a multi front rebellion.");
-		Register(console, "partition_country", Callable.From((string a, string b) => m_PartitionCountry(a, b)), new[] { "country", "count" }, 2, "Evenly partition a country into X parts.");
+		Register(console, "random_figure", Callable.From((string a, string b) => MRandomFigure(a, b)), new[] { "country", "budget" }, 2, "Add a randomly generated significant figure to a country.");
+		Register(console, "start_revolution", Callable.From((string a, string b, string c) => MStartRevolution(a, b, c)), new[] { "pid", "name", "count" }, 3, "Start a revolution.");
+		Register(console, "start_rebellion", Callable.From((string a, string b) => MStartRebellion(a, b)), new[] { "country", "count" }, 2, "Start a multi front rebellion.");
+		Register(console, "partition_country", Callable.From((string a, string b) => MPartitionCountry(a, b)), new[] { "country", "count" }, 2, "Evenly partition a country into X parts.");
 		Register(console, "set_attr", Callable.From((string a, string b, string c) => _set_attr(a, b, c)), new[] { "country", "attr", "val" }, 3, "Sets the atribute of a country");
 
 		var names = CountryManager.Instance.countryNames;
@@ -105,43 +105,42 @@ public partial class ConsoleManager : Node
 		console.Call("add_command", name, function, (Godot.Collections.Array)argArray, required, description);
 	}
 
-	public void m_GatesOfHell()
+	public void MGatesOfHell()
 	{
 		var names = CountryManager.Instance.countryNames;
 		var sizer = names.Length;
 		for (var countryA = 0; countryA < sizer; countryA++)
 		{
 			for (var countryB = countryA; countryB < sizer; countryB++)
-				m_StartWarSilent(names[countryA], names[countryB]);
+				MStartWarSilent(names[countryA], names[countryB]);
 		}
 	}
 
-	public void m_Editor()
+	public void MEditor()
 	{
 		var currentType = SceneType();
 		GD.Print($"Current Scene: {currentType}");
 		if (currentType == 1) // SceneSwitcher.Type.WORLD
-			SceneManager.Instance.switch_to(2); // EDITOR
+			SceneManager.Instance.SwitchTo(2); // EDITOR
 		else if (currentType == 2) // SceneSwitcher.Type.EDITOR
-			SceneManager.Instance.switch_to(1); // WORLD
+			SceneManager.Instance.SwitchTo(1); // WORLD
 	}
 
-	public void m_StartRebellion(string a_country, string a_count)
+	public void MStartRebellion(string aCountry, string aCount)
 	{
-		var parentCountry = CountryRequired(a_country);
-		var cityIds = MapArray("country_to_cities", a_country).Duplicate();
-		var numRebels = Mathf.Min(ParseInt(a_count), cityIds.Count);
+		var cityIds = MapArray("country_to_cities", aCountry).Duplicate();
+		var numRebels = Mathf.Min(ParseInt(aCount), cityIds.Count);
 
 		if (numRebels <= 0)
 		{
-			ConsoleLine("No cities found in " + a_country + " to start rebellion.");
+			ConsoleLine("No cities found in " + aCountry + " to start rebellion.");
 			return;
 		}
 
 		var seeds = new Godot.Collections.Array<int>();
 		var names = new Godot.Collections.Array<string>();
 
-		cityIds.Shuffle();
+		SimRandom.Shared.Shuffle(cityIds);
 		for (var i = 0; i < numRebels; i++)
 		{
 			var cityId = (int)cityIds[cityIds.Count - 1].AsInt64();
@@ -151,58 +150,58 @@ public partial class ConsoleManager : Node
 			var cityName = ProvinceAt(cityId)?.city ?? "";
 			// Bare `name` in the GDScript original resolved to Node.name.
 			var nodeName = Name.ToString();
-			switch ((int)(GD.Randi() % 3u))
+			switch ((int)(SimRandom.Shared.NextUInt() % 3u))
 			{
 				case 0:
-					cityName = prefixes.PickRandom() + "_" + nodeName;
+					cityName = SimRandom.Shared.Pick(prefixes) + "_" + nodeName;
 					break;
 				case 1:
-					cityName = prefixes.PickRandom() + "_" + nodeName + "_" + suffixes.PickRandom();
+					cityName = SimRandom.Shared.Pick(prefixes) + "_" + nodeName + "_" + SimRandom.Shared.Pick(suffixes);
 					break;
 				case 2:
-					cityName = nodeName + "_" + suffixes.PickRandom();
+					cityName = nodeName + "_" + SimRandom.Shared.Pick(suffixes);
 					break;
 			}
 			names.Add(cityName);
 		}
 
-		var totalProvinces = MapArray("country_to_provinces", a_country).Count;
+		var totalProvinces = MapArray("country_to_provinces", aCountry).Count;
 		var targetPerRebel = totalProvinces / (numRebels + 1);
 
 		var rebels = MultiFill(seeds, names, targetPerRebel * numRebels);
 
 		foreach (var rebel in rebels)
-			WarManager.Instance.declare_war(parentCountry, rebel);
+			SubmitWar(aCountry, rebel.countryName);
 
 		for (var i = 0; i < rebels.Count; i++)
 		{
 			for (var j = i + 1; j < rebels.Count; j++)
-				WarManager.Instance.declare_war(rebels[i], rebels[j]);
+				SubmitWar(rebels[i].countryName, rebels[j].countryName);
 		}
 	}
 
-	public void m_PartitionCountry(string a_country, string a_count)
+	public void MPartitionCountry(string aCountry, string aCount)
 	{
-		if (!CountryManager.Instance.countries.ContainsKey(a_country))
+		if (!CountryManager.Instance.countries.ContainsKey(aCountry))
 		{
-			ConsoleLine("Unknown country: " + a_country);
+			ConsoleLine("Unknown country: " + aCountry);
 			return;
 		}
 
-		var numParts = ParseInt(a_count);
+		var numParts = ParseInt(aCount);
 		if (numParts <= 1)
 		{
 			ConsoleLine("Parts must be > 1");
 			return;
 		}
 
-		var countryProvinces = MapArray("country_to_provinces", a_country);
-		var cityIds = MapArray("country_to_cities", a_country).Duplicate();
+		var countryProvinces = MapArray("country_to_provinces", aCountry);
+		var cityIds = MapArray("country_to_cities", aCountry).Duplicate();
 
 		var seeds = new Godot.Collections.Array<int>();
 		var names = new Godot.Collections.Array<string>();
 
-		cityIds.Shuffle();
+		SimRandom.Shared.Shuffle(cityIds);
 		while (seeds.Count < numParts && cityIds.Count > 0)
 		{
 			var last = cityIds.Count - 1;
@@ -213,7 +212,7 @@ public partial class ConsoleManager : Node
 		if (seeds.Count < numParts)
 		{
 			var available = countryProvinces.Duplicate();
-			available.Shuffle();
+			SimRandom.Shared.Shuffle(available);
 			while (seeds.Count < numParts && available.Count > 0)
 			{
 				var last = available.Count - 1;
@@ -225,47 +224,47 @@ public partial class ConsoleManager : Node
 		}
 
 		for (var i = 0; i < seeds.Count; i++)
-			names.Add(a_country + "_" + (i + 1).ToString(CultureInfo.InvariantCulture));
+			names.Add(aCountry + "_" + (i + 1).ToString(CultureInfo.InvariantCulture));
 
 		MultiFill(seeds, names, countryProvinces.Count);
 	}
 
-	public void m_StartRevolution(string a_pid, string a_name, string a_count)
+	public void MStartRevolution(string aPid, string aName, string aCount)
 	{
-		var pid = ParseInt(a_pid);
+		var pid = ParseInt(aPid);
 		var country = ProvinceAt(pid)?.country ?? "";
-		QuickFill(pid, a_name, ParseInt(a_count));
-		var rebel = CountryRequired(a_name);
+		QuickFill(pid, aName, ParseInt(aCount));
+		var rebel = CountryRequired(aName);
 		var original = CountryRequired(country);
-		WarManager.Instance.declare_war(rebel, original);
+		SubmitWar(aName, country);
 		MapManager.Instance.AllowPids(rebel, original);
 	}
 
-	public CountryData QuickFill(int a_pid, string a_name, int a_count)
+	public CountryData QuickFill(int aPid, string aName, int aCount)
 	{
 		var results = MultiFill(
-			new Godot.Collections.Array<int> { a_pid },
-			new Godot.Collections.Array<string> { a_name },
-			a_count
+			new Godot.Collections.Array<int> { aPid },
+			new Godot.Collections.Array<string> { aName },
+			aCount
 		);
 		return results.Count > 0 ? results[0] : null;
 	}
 
-	public Godot.Collections.Array<CountryData> MultiFill(Godot.Collections.Array<int> a_seeds, Godot.Collections.Array<string> a_names, int a_total_count)
+	public Godot.Collections.Array<CountryData> MultiFill(Godot.Collections.Array<int> aSeeds, Godot.Collections.Array<string> aNames, int aTotalCount)
 	{
-		if (a_seeds.Count == 0)
+		if (aSeeds.Count == 0)
 			return new Godot.Collections.Array<CountryData>();
 
-		var parentCountryName = ProvinceAt(a_seeds[0])?.country ?? "";
+		var parentCountryName = ProvinceAt(aSeeds[0])?.country ?? "";
 		var results = new Godot.Collections.Array<CountryData>();
 
 		var assignments = new Godot.Collections.Array();
 		var frontiers = new Godot.Collections.Array();
 		var allTaken = new Godot.Collections.Dictionary();
 
-		for (var i = 0; i < a_seeds.Count; i++)
+		for (var i = 0; i < aSeeds.Count; i++)
 		{
-			var seed = a_seeds[i];
+			var seed = aSeeds[i];
 			var assignment = new Godot.Collections.Array();
 			assignment.Add(seed);
 			assignments.Add(assignment);
@@ -280,15 +279,15 @@ public partial class ConsoleManager : Node
 			frontiers.Add(frontier);
 		}
 
-		var remainingCount = a_total_count - a_seeds.Count;
-		var tries = a_total_count * 2;
+		var remainingCount = aTotalCount - aSeeds.Count;
+		var tries = aTotalCount * 2;
 
 		while (remainingCount > 0 && tries > 0)
 		{
 			tries -= 1;
 			var expandedAny = false;
 
-			for (var i = 0; i < a_seeds.Count; i++)
+			for (var i = 0; i < aSeeds.Count; i++)
 			{
 				if (remainingCount <= 0)
 					break;
@@ -297,7 +296,7 @@ public partial class ConsoleManager : Node
 				if (frontier.Count == 0)
 					continue;
 
-				var choiceIdx = (int)(GD.Randi() % (uint)frontier.Count);
+				var choiceIdx = (int)(SimRandom.Shared.NextUInt() % (uint)frontier.Count);
 				var choice = (int)frontier[choiceIdx].AsInt64();
 				frontier.RemoveAt(choiceIdx);
 
@@ -321,12 +320,12 @@ public partial class ConsoleManager : Node
 		}
 
 		// Instantiate countries
-		for (var i = 0; i < a_seeds.Count; i++)
+		for (var i = 0; i < aSeeds.Count; i++)
 		{
-			var color = new Color((float)GD.Randf(), (float)GD.Randf(), (float)GD.Randf()).ToHtml(false).ToUpperInvariant();
+			var color = new Color((float)SimRandom.Shared.NextDouble(), (float)SimRandom.Shared.NextDouble(), (float)SimRandom.Shared.NextDouble()).ToHtml(false).ToUpperInvariant();
 			var countryData = new Godot.Collections.Dictionary
 			{
-				{ "name", a_names[i] },
+				{ "name", aNames[i] },
 				{ "color", "#" + color },
 				{ "money", 10000 },
 				{ "ideology", new Godot.Collections.Array { 0, 0 } },
@@ -349,9 +348,9 @@ public partial class ConsoleManager : Node
 		return results;
 	}
 
-	public void m_RandomFigure(string country, string budget)
+	public void MRandomFigure(string country, string budget)
 	{
-		var figure = ImportantFigure.FromRandom(country, ParseInt(budget));
+		var figure = ImportantFigureHost.FromRandom(country, ParseInt(budget));
 		var message = $"{country} {figure.name}";
 		ConsoleInfo(message);
 		GD.Print(message);
@@ -383,7 +382,7 @@ public partial class ConsoleManager : Node
 		var player = Player();
 		if (player == null)
 			return;
-		player.Set("political_power", player.Get("political_power").AsDouble() + ParseFloat(amount));
+		player.Set("politicalPower", player.Get("politicalPower").AsDouble() + ParseFloat(amount));
 	}
 
 	public void _set_ideology(string x, string y)
@@ -414,100 +413,106 @@ public partial class ConsoleManager : Node
 	{
 		if (CountryManager.Instance.countries.ContainsKey(annexee))
 		{
-			MapManager.Instance.AnnexCountry(annexer, annexee);
-			CountryManager.Instance.cleanup_empty_countries();
+			ActionDispatcher.Instance.Submit(new AnnexAction
+			{
+				Issuer = annexer, Annexer = annexer, Annexee = annexee,
+			});
+			CountryManager.Instance.CleanupEmptyCountries();
 			return;
 		}
 
 		ConsoleLine("Unknown country: " + annexee);
 	}
 
-	public void _play_country(string country_name)
+	public void _play_country(string countryName)
 	{
-		if (CountryManager.Instance.countries.ContainsKey(country_name))
+		if (CountryManager.Instance.countries.ContainsKey(countryName))
 		{
-			CountryManager.Instance.set_player_country(country_name);
+			CountryManager.Instance.SetPlayerCountry(countryName);
 			return;
 		}
 
-		ConsoleLine("Unknown country: " + country_name);
+		ConsoleLine("Unknown country: " + countryName);
 	}
 
-	public void _start_war(string country_name1, string country_name2)
+	public void _start_war(string countryName1, string countryName2)
 	{
-		var country1 = CountryOrNull(country_name1);
-		var country2 = CountryOrNull(country_name2);
+		var country1 = CountryOrNull(countryName1);
+		var country2 = CountryOrNull(countryName2);
 
 		if (country1 != null && country2 != null)
 		{
-			WarManager.Instance.declare_war(country1, country2);
+			SubmitWar(countryName1, countryName2);
 			return;
 		}
 
 		if (country1 == null)
-			ConsoleLine("Unknown country: " + country_name1);
+			ConsoleLine("Unknown country: " + countryName1);
 		if (country2 == null)
-			ConsoleLine("Unknown country: " + country_name2);
+			ConsoleLine("Unknown country: " + countryName2);
 	}
 
-	public void m_AddAccess(string country_name1, string country_name2)
+	public void MAddAccess(string countryName1, string countryName2)
 	{
-		var country1 = CountryOrNull(country_name1);
+		var country1 = CountryOrNull(countryName1);
 
 		if (country1 != null)
 		{
 			var allowed = country1.Get("allowedCountries").AsGodotArray();
-			if (allowed != null && !allowed.Contains(country_name2))
+			if (allowed != null && !allowed.Contains(countryName2))
 			{
-				allowed.Add(country_name2);
+				allowed.Add(countryName2);
 				return;
 			}
 		}
 
 		if (country1 == null)
-			ConsoleLine("Unknown country: " + country_name1);
-		if (!CountryManager.Instance.countries.ContainsKey(country_name2))
-			ConsoleLine("Unknown country: " + country_name2);
+			ConsoleLine("Unknown country: " + countryName1);
+		if (!CountryManager.Instance.countries.ContainsKey(countryName2))
+			ConsoleLine("Unknown country: " + countryName2);
 	}
 
-	public void m_StartWarSilent(string country_name1, string country_name2)
+	public void MStartWarSilent(string countryName1, string countryName2)
 	{
-		var country1 = CountryOrNull(country_name1);
-		var country2 = CountryOrNull(country_name2);
+		var country1 = CountryOrNull(countryName1);
+		var country2 = CountryOrNull(countryName2);
 
 		if (country1 != null && country2 != null)
 		{
-			WarManager.Instance.declare_war(country1, country2, true);
+			SubmitWar(countryName1, countryName2, true);
 			return;
 		}
 
 		if (country1 == null)
-			ConsoleLine("Unknown country: " + country_name1);
+			ConsoleLine("Unknown country: " + countryName1);
 		if (country2 == null)
-			ConsoleLine("Unknown country: " + country_name2);
+			ConsoleLine("Unknown country: " + countryName2);
 	}
 
-	public void _call_to_arms(string caller_name, string target_name)
+	public void _call_to_arms(string callerName, string targetName)
 	{
-		var caller = CountryOrNull(caller_name);
-		var target = CountryOrNull(target_name);
+		var caller = CountryOrNull(callerName);
+		var target = CountryOrNull(targetName);
 
 		if (caller != null && target != null)
 		{
-			WarManager.Instance.call_to_arms(caller, target);
+			ActionDispatcher.Instance.Submit(new CallToArmsAction
+			{
+				Issuer = callerName, Caller = callerName, Target = targetName,
+			});
 			return;
 		}
 
 		if (caller == null)
-			ConsoleLine("Unknown country: " + caller_name);
+			ConsoleLine("Unknown country: " + callerName);
 		if (target == null)
-			ConsoleLine("Unknown country: " + target_name);
+			ConsoleLine("Unknown country: " + targetName);
 	}
 
 	public void _reload_decisions()
 	{
 		// C# DecisionManager exposes the formerly-private loader as load_decisions_from_path.
-		DecisionManager.Instance.load_decisions_from_path("res://starts/" + GameState.Instance.current_start + "/decisions/");
+		DecisionManager.Instance.LoadDecisionsFromPath("res://starts/" + GameState.Instance.currentStart + "/decisions/");
 	}
 
 	public void _debug_decisions()
@@ -518,21 +523,21 @@ public partial class ConsoleManager : Node
 		settings?.Call("set_value", "Developer Options", "debug_mode", value);
 	}
 
-	public void _puppet_country(string country_name)
+	public void _puppet_country(string countryName)
 	{
-		CountryManager.Instance.make_puppet(Player(), CountryRequired(country_name));
+		CountryManager.Instance.MakePuppet(Player(), CountryRequired(countryName));
 	}
 
-	public void _invite_country(string country_name)
+	public void _invite_country(string countryName)
 	{
-		FactionManager.Instance.invite_faction(Player(), CountryRequired(country_name));
+		FactionManager.Instance.InviteFaction(Player(), CountryRequired(countryName));
 	}
 
 	public void _drew_durnil_mode()
 	{
 		var player = Player();
 		if (player != null)
-			player.Set("is_player", false);
+			player.Set("isPlayer", false);
 	}
 
 	public void _instabuild()
@@ -542,10 +547,10 @@ public partial class ConsoleManager : Node
 		ConsoleLine("Instabuild: " + (value ? "true" : "false"));
 	}
 
-	public void _sink_rise(string pid, string type, string country_name)
+	public void _sink_rise(string pid, string type, string countryName)
 	{
 		GD.Print("skibidi");
-		MapManager.Instance.ChangeProvinceTypes(new Godot.Collections.Array { ParseInt(pid) }, ParseInt(type), country_name);
+		MapManager.Instance.ChangeProvinceTypes(new Godot.Collections.Array { ParseInt(pid) }, ParseInt(type), countryName);
 	}
 
 	public void _set_attr(string country, string attr, Variant val)
@@ -565,7 +570,13 @@ public partial class ConsoleManager : Node
 
 	private static void ConsoleInfo(string text) => GameConsole.Info(text);
 
-	private static GodotObject Player() => CountryManager.Instance.player_country;
+	private static void SubmitWar(string warer, string waree, bool silent = false) =>
+		ActionDispatcher.Instance.Submit(new DeclareWarAction
+		{
+			Issuer = warer, Warer = warer, Waree = waree, Silent = silent,
+		});
+
+	private static GodotObject Player() => CountryManager.Instance.playerCountry;
 
 	private static GodotObject CountryOrNull(string name)
 	{
@@ -580,8 +591,8 @@ public partial class ConsoleManager : Node
 		var map = MapManager.Instance;
 		List<int> ids = property switch
 		{
-			"country_to_cities" when map.country_to_cities.TryGetValue(key, out var cities) => cities,
-			"country_to_provinces" when map.country_to_provinces.TryGetValue(key, out var provinces) => provinces,
+			"country_to_cities" when map.countryToCities.TryGetValue(key, out var cities) => cities,
+			"country_to_provinces" when map.countryToProvinces.TryGetValue(key, out var provinces) => provinces,
 			_ => null
 		};
 		var result = new Godot.Collections.Array();
@@ -593,13 +604,13 @@ public partial class ConsoleManager : Node
 
 	private static Province ProvinceAt(int pid)
 	{
-		var provinces = MapManager.Instance.province_objects;
+		var provinces = MapManager.Instance.provinceObjects;
 		return provinces.TryGetValue(pid, out var province) ? province : null;
 	}
 
 	private static Godot.Collections.Array<int> Neighbors(int pid)
 	{
-		var graph = MapManager.Instance.province_graph;
+		var graph = MapManager.Instance.provinceGraph;
 		var result = new Godot.Collections.Array<int>();
 		if (graph == null || !GodotObject.IsInstanceValid(graph))
 			return result;

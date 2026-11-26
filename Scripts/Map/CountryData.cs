@@ -4,38 +4,29 @@ using Godot;
 
 namespace Sosr;
 
-// Small surface used by CountryAI.cs. Keep the GDScript member names; the AI
-// port was written against them and uses the type name ProcessDay.
-public abstract partial class ProcessDay : RefCounted
-{
-    [Export] public string country_name = "Sea";
-    [Export] public double money = 0.0;
-    [Export] public int factories_amount = 0;
-    [Export] public int manpower = 0;
-    [Export] public int mobilized = 0;
-    [Export] public bool is_puppet = false;
-    [Export] public string owner = "";
-    [Export] public Godot.Collections.Array<string> puppets = [];
-    [Export] public Godot.Collections.Array<string> factions = [];
-    [Export] public Godot.Collections.Array<ReadyTroop> ready_troops = [];
-
-    public abstract Vector2 ideology { get; set; }
-    public abstract int get_relation_with(string other_country_name);
-    public abstract bool train_troops(int count, string type = "infantry");
-}
-
 [GlobalClass]
-public partial class CountryData : ProcessDay
+public partial class CountryData : RefCounted
 {
     static CountryData SEA_COUNTRY_DATA = new();
 
+    [Export] public string countryName = "Sea";
+    [Export] public double money = 0.0;
+    [Export] public int factoriesAmount = 0;
+    [Export] public int manpower = 0;
+    [Export] public int mobilized = 0;
+    [Export] public bool isPuppet = false;
+    [Export] public string owner = "";
+    [Export] public Godot.Collections.Array<string> puppets = [];
+    [Export] public Godot.Collections.Array<string> factions = [];
+    public List<ReadyTroop> readyTroops = new();
+
     // Country name of any country object, or "" for null.
-    public static string NameOf(GodotObject a_country)
-        => a_country == null ? "" : a_country.Get("country_name").AsString();
+    public static string NameOf(GodotObject aCountry)
+        => aCountry == null ? "" : aCountry.Get("countryName").AsString();
 
-    [Export] public double economy_law_penalty = 0.0; // 0.10 means 10% income loss
+    [Export] public double economyLawPenalty = 0.0; // 0.10 means 10% income loss
 
-    Godot.Collections.Dictionary army_composition_cache = new() {
+    Godot.Collections.Dictionary armyCompositionCache = new() {
         { "infantry", 0 },
         { "tank", 0 },
         { "artillery", 0 },
@@ -44,49 +35,47 @@ public partial class CountryData : ProcessDay
     //region --- Configuration & Constants ---
     const double MANPOWER_RECOVERY_PER_YEAR = 0.10;
     const double MANPOWER_RECOVERY_PER_DAY = MANPOWER_RECOVERY_PER_YEAR / 365.0;
-    [Export] public double military_size_ratio = 0.005;
+    [Export] public double militarySizeRatio = 0.005;
     const int BASE_ARMY_COST = 20;
     //endregion
 
     //region --- Properties ---
-    [Export] public string display_name = "Sea";
+    [Export] public string displayName = "Sea";
     [Export] public string capital = "";
-    [Export] public Godot.Color country_color = new Godot.Color(1, 1, 1);
-    [Export] public bool is_player = false;
-    [Export] public bool is_exiled = false;
-    CountryAI ai_controller = null;
+    [Export] public Godot.Color countryColor = new Godot.Color(1, 1, 1);
+    [Export] public bool isPlayer = false;
+    [Export] public bool isExiled = false;
+    CountryAI aiController = null;
 
     [Export] public Godot.Collections.Dictionary<string, int> relations = new();
 
-    double factory_port_daily_cost = 0.2; // The less the better. It's percentage based
+    double factoryPortDailyCost = 0.2; // The less the better. It's percentage based
 
     // Economy
     [Export] public int gdp = 0;
     [Export] public double income = 0.0;
-    [Export] public int factory_income = 100;
-    [Export] public double hourly_money_income = 0.0;
+    [Export] public int factoryIncome = 100;
+    [Export] public double hourlyMoneyIncome = 0.0;
     [Export] public double divCostMod = 1.0;
 
     [Signal] public delegate void TrainingFinishedEventHandler();
     [Signal] public delegate void IdeologyChangedEventHandler();
 
     // Politics
-    [Export] public Godot.Collections.Dictionary<string, IdeologyDriftTarget> driftTargets = new();
-    [Export] public double political_power = 5000.0;
-    [Export] public double base_daily_pp_gain = 0.04;
-    [Export] public double daily_pp_gain = 0.04;
-    [Export] public double base_stability = 0.5;
+    public Dictionary<string, IdeologyDriftTarget> driftTargets = new();
+    [Export] public double politicalPower = 5000.0;
+    [Export] public double baseDailyPpGain = 0.04;
+    [Export] public double dailyPpGain = 0.04;
+    [Export] public double baseStability = 0.5;
     [Export] public double stability = 0.5;
-    [Export] public double base_war_support = 0.5;
-    [Export] public double war_support = 0.5;
-    [Export] public string ideology_name = "neutral";
-    private Vector2 _ideology = new Vector2(
-        GD.RandRange(-100, 100),
-        GD.RandRange(-100, 100)
-    );
+    [Export] public double baseWarSupport = 0.5;
+    [Export] public double warSupport = 0.5;
+    [Export] public string ideologyName = "neutral";
+    // Randomized in FromDict; autoloads are not reachable during field initialization.
+    private Vector2 _ideology = Vector2.Zero;
 
     [Export]
-    public override Vector2 ideology
+    public Vector2 ideology
     {
         get => _ideology;
         set
@@ -98,59 +87,52 @@ public partial class CountryData : ProcessDay
     }
 
     // Population & Manpower
-    [Export] public int total_population = 0;
-    [Export] public int total_power = 1000;
-    [Export] public int total_water = 1000;
-    [Export] public int total_sewage = 1000;
+    [Export] public int totalPopulation = 0;
+    [Export] public int totalPower = 1000;
+    [Export] public int totalWater = 1000;
+    [Export] public int totalSewage = 1000;
 
     // Military State
-    [Export] public int army_level = 1;
-    [Export] public double army_cost = 0.0;
-    [Export] public double troop_speed_modifier = 1.0;
+    [Export] public int armyLevel = 1;
+    [Export] public double armyCost = 0.0;
+    [Export] public double troopSpeedModifier = 1.0;
     [Export] public double troopSpeedExtra = 1.0;
     [Export] public double troopAttackAdd = 0.0;
     [Export] public double troopAttackMod = 1.0;
     [Export] public double troopDefendAdd = 0.0;
     [Export] public double troopDefendMod = 1.0;
-    [Export] public double attacker_attack_mitigation = 1.0;
-    [Export] public double defender_attack_mitigation = 1.0;
+    [Export] public double attackerAttackMitigation = 1.0;
+    [Export] public double defenderAttackMitigation = 1.0;
 
     // Deployment & Training State
     [Export] public Godot.Collections.Array<string> allowedCountries = [];
-    [Export] public Godot.Collections.Array<Variant> accepted_cultures = [];
+    [Export] public Godot.Collections.Array<Variant> acceptedCultures = [];
     [Export] public Godot.Collections.Array<Variant> hostedGovernments = [];
     [Export] public string host = "";
-    [Export] public Godot.Collections.Array<string> finished_decisions = [];
-    public Godot.Collections.Array<TroopTraining> ongoing_training = [];
-    [Export] public int deploy_pid = -1;
-    [Export] public Godot.Collections.Array<Variant> pre_war_provinces = [];
+    [Export] public Godot.Collections.Array<string> finishedDecisions = [];
+    public List<TroopTraining> ongoingTraining = new();
+    [Export] public int deployPid = -1;
+    [Export] public Godot.Collections.Array<Variant> preWarProvinces = [];
 
     // for optimization
-    [Export] public bool is_at_war = false;
-    [Export] public bool war_dirty = true;
+    [Export] public bool IsAtWar = false;
+    [Export] public bool warDirty = true;
     [Export] public bool _is_loading = false;
     [Export] public bool dirty = true;
-    [Export] public bool dirty_manpower = true;
+    [Export] public bool dirtyManpower = true;
     [Export] public Godot.Collections.Array enemies = [];
     [Export] public Godot.Collections.Array<string> figures = [];
     [Export]
-    public Godot.Collections.Dictionary<string, Godot.Collections.Array<string>> government_positions = new() {
+    public Godot.Collections.Dictionary<string, Godot.Collections.Array<string>> governmentPositions = new() {
         { "Leader", new Godot.Collections.Array<string>() }
     };
-    // GDScript UI code still uses the old GDScript spelling.
-    [Export]
-    public Godot.Collections.Dictionary<string, Godot.Collections.Array<string>> governmentPositions
-    {
-        get => government_positions;
-        set => government_positions = value;
-    }
-    [Export] public Godot.Collections.Array<Variant> cached_garrison_hubs = [];
+    [Export] public Godot.Collections.Array<Variant> cachedGarrisonHubs = [];
     //endregion
 
     public CountryData()
     {
-        ai_controller = new CountryAI();
-        ai_controller.init(this);
+        aiController = new CountryAI();
+        aiController.init(this);
     }
 
     //region --- Save / Load ---
@@ -158,54 +140,63 @@ public partial class CountryData : ProcessDay
     {
         return new Godot.Collections.Dictionary
         {
-            { "name", country_name },
-            { "display_name", display_name },
+            { "name", countryName },
+            { "display_name", displayName },
             { "capital", capital },
-            { "color", "#" + country_color.ToHtml(false).ToUpperInvariant() },
+            { "color", "#" + countryColor.ToHtml(false).ToUpperInvariant() },
             { "money", money },
             { "ideology", new Godot.Collections.Array { ideology.X, ideology.Y } },
-            { "political_power", political_power },
-            { "stability", base_stability },
-            { "war_support", base_war_support },
+            { "political_power", politicalPower },
+            { "stability", baseStability },
+            { "war_support", baseWarSupport },
             { "puppets", puppets },
-            { "accepted_cultures", accepted_cultures },
+            { "accepted_cultures", acceptedCultures },
             { "hostedGovernments", hostedGovernments },
             { "figures", figures },
-            { "government_positions", government_positions },
-            { "is_player", is_player },
-            { "finished_decisions", finished_decisions },
+            { "government_positions", governmentPositions },
+            { "is_player", isPlayer },
+            { "finished_decisions", finishedDecisions },
         };
     }
 
-    public static CountryData FromDict(Godot.Collections.Dictionary a_data)
+    public static CountryData FromDict(Godot.Collections.Dictionary aData)
     {
         var country = new CountryData();
 
-        country.country_name = a_data.ContainsKey("name") ? a_data["name"].AsString() : "Sea";
-        country.display_name = a_data.ContainsKey("display_name")
-            ? a_data["display_name"].AsString()
-            : country.country_name;
-        country.capital = a_data.ContainsKey("capital") ? a_data["capital"].AsString() : "";
-        country.country_color = Color.FromHtml(a_data.ContainsKey("color") ? a_data["color"].AsString() : "#FFFFFF");
-        country.money = a_data.ContainsKey("money") ? a_data["money"].AsDouble() : 0.0;
+        country.countryName = aData.ContainsKey("name") ? aData["name"].AsString() : "Sea";
+        country.displayName = aData.ContainsKey("display_name")
+            ? aData["display_name"].AsString()
+            : country.countryName;
+        country.capital = aData.ContainsKey("capital") ? aData["capital"].AsString() : "";
+        country.countryColor = Color.FromHtml(aData.ContainsKey("color") ? aData["color"].AsString() : "#FFFFFF");
+        country.money = aData.ContainsKey("money") ? aData["money"].AsDouble() : 0.0;
 
-        var ideologyArray = a_data.ContainsKey("ideology") ? a_data["ideology"].AsGodotArray() : new Godot.Collections.Array { 0, 0 };
-        country.ideology = new Vector2(ideologyArray[0].AsSingle(), ideologyArray[1].AsSingle());
-
-        country.political_power = a_data.ContainsKey("political_power") ? a_data["political_power"].AsDouble() : 5000.0;
-        country.base_stability = a_data.ContainsKey("stability") ? a_data["stability"].AsDouble() : 0.5;
-        country.base_war_support = a_data.ContainsKey("war_support") ? a_data["war_support"].AsDouble() : 0.5;
-        country.puppets = StringArray(a_data, "puppets");
-        country.accepted_cultures = VariantArray(a_data, "accepted_cultures");
-        country.hostedGovernments = VariantArray(a_data,
-            a_data.ContainsKey("hostedGovernments") ? "hostedGovernments" : "hosted_governments");
-        country.allowedCountries.Add(country.country_name);
-        country.allowedCountries.Add("Sea");
-        country.figures = StringArray(a_data, "figures");
-
-        if (a_data.ContainsKey("government_positions"))
+        if (aData.ContainsKey("ideology"))
         {
-            var positions = a_data["government_positions"].AsGodotDictionary();
+            var ideologyArray = aData["ideology"].AsGodotArray();
+            country.ideology = new Vector2(ideologyArray[0].AsSingle(), ideologyArray[1].AsSingle());
+        }
+        else
+        {
+            country.ideology = new Vector2(
+                SimRandom.Shared.RandRange(-100, 100),
+                SimRandom.Shared.RandRange(-100, 100));
+        }
+
+        country.politicalPower = aData.ContainsKey("political_power") ? aData["political_power"].AsDouble() : 5000.0;
+        country.baseStability = aData.ContainsKey("stability") ? aData["stability"].AsDouble() : 0.5;
+        country.baseWarSupport = aData.ContainsKey("war_support") ? aData["war_support"].AsDouble() : 0.5;
+        country.puppets = StringArray(aData, "puppets");
+        country.acceptedCultures = VariantArray(aData, "accepted_cultures");
+        country.hostedGovernments = VariantArray(aData,
+            aData.ContainsKey("hostedGovernments") ? "hostedGovernments" : "hosted_governments");
+        country.allowedCountries.Add(country.countryName);
+        country.allowedCountries.Add("Sea");
+        country.figures = StringArray(aData, "figures");
+
+        if (aData.ContainsKey("government_positions"))
+        {
+            var positions = aData["government_positions"].AsGodotDictionary();
             foreach (var key in positions.Keys)
             {
                 var position = key.AsString();
@@ -216,23 +207,23 @@ public partial class CountryData : ProcessDay
                 else
                     foreach (var name in value.AsGodotArray())
                         names.Add(name.AsString());
-                country.government_positions[position] = names;
+                country.governmentPositions[position] = names;
             }
         }
 
-        country.is_player = a_data.ContainsKey("is_player") && a_data["is_player"].AsBool();
-        if (a_data.ContainsKey("finished_decisions"))
+        country.isPlayer = aData.ContainsKey("is_player") && aData["is_player"].AsBool();
+        if (aData.ContainsKey("finished_decisions"))
         {
-            foreach (var idVariant in a_data["finished_decisions"].AsGodotArray())
+            foreach (var idVariant in aData["finished_decisions"].AsGodotArray())
             {
                 var id = idVariant.AsString();
-                country.finished_decisions.Add(id);
+                country.finishedDecisions.Add(id);
                 country.SetMeta("finished_" + id, true);
             }
         }
 
-        country.stability = country.base_stability;
-        country.war_support = country.base_war_support;
+        country.stability = country.baseStability;
+        country.warSupport = country.baseWarSupport;
         return country;
     }
 
@@ -258,9 +249,9 @@ public partial class CountryData : ProcessDay
     //region --- Cabinet ---
     public void InitializeCabinet()
     {
-        foreach (var position in government_positions.Keys)
+        foreach (var position in governmentPositions.Keys)
         {
-            if (!government_positions.TryGetValue(position, out var names))
+            if (!governmentPositions.TryGetValue(position, out var names))
                 continue;
 
             foreach (var figureName in names)
@@ -272,36 +263,36 @@ public partial class CountryData : ProcessDay
         }
     }
 
-    public void RemoveGovernmentPositionFigure(string a_position, string a_figure)
+    public void RemoveGovernmentPositionFigure(string aPosition, string aFigure)
     {
-        var figure = GetFigure(a_figure);
+        var figure = GetFigure(aFigure);
         if (figure == null)
             return;
 
         ApplySkills(figure.skills, false);
         figure.occupation = "";
-        if (government_positions.ContainsKey(a_position))
-            government_positions[a_position].Remove(figure.name);
+        if (governmentPositions.ContainsKey(aPosition))
+            governmentPositions[aPosition].Remove(figure.name);
     }
 
-    public void RemoveGovernmentPositions(string a_position)
+    public void RemoveGovernmentPositions(string aPosition)
     {
-        if (!government_positions.ContainsKey(a_position))
+        if (!governmentPositions.ContainsKey(aPosition))
             return;
 
-        var names = new List<string>(government_positions[a_position]);
+        var names = new List<string>(governmentPositions[aPosition]);
         foreach (var figureName in names)
-            RemoveGovernmentPositionFigure(a_position, figureName);
+            RemoveGovernmentPositionFigure(aPosition, figureName);
     }
 
-    public void SetGovernmentPosition(string a_position, ImportantFigure a_figure)
+    public void SetGovernmentPosition(string aPosition, ImportantFigure aFigure)
     {
-        RemoveGovernmentPositionFigure(a_figure.occupation, a_figure.name);
-        if (!government_positions.ContainsKey(a_position))
-            government_positions[a_position] = new Godot.Collections.Array<string>();
-        government_positions[a_position].Add(a_figure.name);
-        ApplySkills(a_figure.skills, true);
-        a_figure.occupation = a_position;
+        RemoveGovernmentPositionFigure(aFigure.occupation, aFigure.name);
+        if (!governmentPositions.ContainsKey(aPosition))
+            governmentPositions[aPosition] = new Godot.Collections.Array<string>();
+        governmentPositions[aPosition].Add(aFigure.name);
+        ApplySkills(aFigure.skills, true);
+        aFigure.occupation = aPosition;
     }
 
     private static ImportantFigure GetFigure(string figureName)
@@ -312,12 +303,12 @@ public partial class CountryData : ProcessDay
         return figuresDict[figureName] as ImportantFigure;
     }
 
-    private void ApplySkills(Godot.Collections.Dictionary skills, bool add)
+    private void ApplySkills(Dictionary<string, object?> skills, bool add)
     {
         foreach (var key in skills.Keys)
         {
-            var skill = key.AsString();
-            var value = skills[key].AsDouble();
+            var skill = key;
+            var value = skills[key].Double();
             if (value == 0.0)
                 continue;
 
@@ -327,10 +318,10 @@ public partial class CountryData : ProcessDay
                     stability += add ? value : -value;
                     break;
                 case "warSupport":
-                    war_support += add ? value : -value;
+                    warSupport += add ? value : -value;
                     break;
                 case "dailyPPGain":
-                    daily_pp_gain += add ? value : -value;
+                    dailyPpGain += add ? value : -value;
                     break;
                 case "divCostMod":
                     divCostMod = add ? divCostMod * value : divCostMod / value;
@@ -351,10 +342,10 @@ public partial class CountryData : ProcessDay
                     troopDefendMod = add ? troopDefendMod * value : troopDefendMod / value;
                     break;
                 case "attackerAttackMitigation":
-                    attacker_attack_mitigation = add ? attacker_attack_mitigation * value : attacker_attack_mitigation / value;
+                    attackerAttackMitigation = add ? attackerAttackMitigation * value : attackerAttackMitigation / value;
                     break;
                 case "defenderAttackMitigation":
-                    defender_attack_mitigation = add ? defender_attack_mitigation * value : defender_attack_mitigation / value;
+                    defenderAttackMitigation = add ? defenderAttackMitigation * value : defenderAttackMitigation / value;
                     break;
             }
         }
@@ -380,65 +371,58 @@ public partial class CountryData : ProcessDay
         }
         return combined;
     }
-
-    public Godot.Collections.Array<string> get_all_allowed_countries() => GetAllAllowedCountries();
-
-    public void ProcessHour()
+public void ProcessHour()
     {
         if (_is_loading)
             return;
 
-        political_power += daily_pp_gain;
+        politicalPower += dailyPpGain;
 
-        hourly_money_income = ((gdp * 0.0000228310502) + (factories_amount * factory_income)) * (1.0 - economy_law_penalty);
-        army_cost = CalculateArmyUpkeep();
-        income = hourly_money_income - army_cost;
+        hourlyMoneyIncome = ((gdp * 0.0000228310502) + (factoriesAmount * factoryIncome)) * (1.0 - economyLawPenalty);
+        armyCost = CalculateArmyUpkeep();
+        income = hourlyMoneyIncome - armyCost;
         money += income;
-        troop_speed_modifier = 1.0 + (army_level * 0.1) + troopSpeedExtra;
+        troopSpeedModifier = 1.0 + (armyLevel * 0.1) + troopSpeedExtra;
 
         UpdateManpowerPool();
         _ProcessReinforcements();
 
-        if (dirty_manpower && !dirty)
+        if (dirtyManpower && !dirty)
             UpdateManpowerPool();
 
-        if (war_dirty)
+        if (warDirty)
             UpdateIsAtWar();
 
-        if (!is_player)
-            ai_controller.ThinkHour();
+        if (!isPlayer)
+            aiController.ThinkHour();
     }
-
-    public void process_hour() => ProcessHour();
 
     public void ProcessDay()
     {
         if (_is_loading)
             return;
 
-        var moveAmount = Vector2.Zero;
+        var moveAmount = Vec2.Zero;
         foreach (var ideaTarget in driftTargets.Values)
-            moveAmount += ideology.DirectionTo(ideaTarget.finalPosition) * ideaTarget.driftAmount;
-        ideology += moveAmount;
+            moveAmount += (ideology.DirectionTo(ideaTarget.finalPosition.ToGodot()) * ideaTarget.driftAmount).ToCore();
+        ideology += moveAmount.ToGodot();
 
         _RefreshEconomicStats();
         _ProcessTraining();
-        ((DecisionManager)DecisionManager.Instance).process_country_day(this);
+        ((DecisionManager)DecisionManager.Instance).ProcessCountryDay(this);
 
-        if (!is_player)
-            ai_controller.ThinkDay();
+        if (!isPlayer)
+            aiController.ThinkDay();
     }
-
-    public void process_day() => ProcessDay();
 
     private void _RefreshEconomicStats()
     {
         if (!dirty)
             return;
 
-        total_population = CountryManager.Instance.get_country_population(country_name);
-        factories_amount = CountryManager.Instance.get_factories_amount(country_name);
-        gdp = (int)(CountryManager.Instance.get_country_gdp(country_name) * total_population * 0.000001);
+        totalPopulation = CountryManager.Instance.GetCountryPopulation(countryName);
+        factoriesAmount = CountryManager.Instance.GetFactoriesAmount(countryName);
+        gdp = (int)(CountryManager.Instance.GetCountryGdp(countryName) * totalPopulation * 0.000001);
 
         UpdateManpowerPool();
         dirty = false;
@@ -451,17 +435,15 @@ public partial class CountryData : ProcessDay
         var manager = IdeologyManager.Instance as IdeologyManager;
         if (manager == null)
         {
-            ideology_name = "neutral";
+            ideologyName = "neutral";
             return;
         }
-        ideology_name = manager.get_ideology_name(ideology);
+        ideologyName = manager.GetIdeologyName(ideology);
     }
-
-    public void refresh_ideology_name() => RefreshIdeologyName();
-    //endregion
+//endregion
 
     //region --- Military Management ---
-    public override bool train_troops(int count, string type = "infantry")
+    public bool TrainTroops(int count, string type = "infantry")
     {
         if (!DivisionData.TEMPLATES.ContainsKey(type))
         {
@@ -470,59 +452,59 @@ public partial class CountryData : ProcessDay
         }
 
         var template = DivisionData.TEMPLATES[type];
-        var totalManpowerNeeded = count * template["manpower"].AsInt32();
+        var totalManpowerNeeded = count * template.Get("manpower").Int();
 
-        if (manpower < totalManpowerNeeded || money < count * template["cost"].AsDouble() * divCostMod)
+        if (manpower < totalManpowerNeeded || money < count * template.Get("cost").Double() * divCostMod)
             return false;
 
         manpower -= totalManpowerNeeded;
         mobilized += totalManpowerNeeded;
 
-        ongoing_training.Add(TroopTraining.FromValues(
+        ongoingTraining.Add(TroopTraining.FromValues(
             count,
             type,
-            template["days"].AsInt32(),
-            template["cost"].AsDouble()));
+            template.Get("days").Int(),
+            template.Get("cost").Double()));
         return true;
     }
 
     private void _ProcessTraining()
     {
-        for (var i = ongoing_training.Count - 1; i >= 0; i--)
+        for (var i = ongoingTraining.Count - 1; i >= 0; i--)
         {
-            var training = ongoing_training[i];
-            var batchDailyCost = training.divisions_count * training.daily_cost * divCostMod;
+            var training = ongoingTraining[i];
+            var batchDailyCost = training.divisionsCount * training.dailyCost * divCostMod;
 
             if (money >= batchDailyCost)
             {
                 money -= batchDailyCost;
-                training.days_left -= 1;
+                training.daysLeft -= 1;
             }
 
-            if (training.days_left <= 0)
+            if (training.daysLeft <= 0)
             {
                 _GraduateTroops(training);
-                ongoing_training.RemoveAt(i);
+                ongoingTraining.RemoveAt(i);
             }
         }
     }
 
     private void _GraduateTroops(TroopTraining training)
     {
-        ready_troops.Add(ReadyTroop.FromValues(
-            DivisionData.create_division(training.division_type),
-            training.divisions_count));
+        readyTroops.Add(ReadyTroop.FromValues(
+            DivisionData.CreateDivision(training.divisionType),
+            training.divisionsCount));
         EmitSignal(SignalName.TrainingFinished);
     }
 
     public void UpdateManpowerPool()
     {
-        var maxAllowedManpower = (int)(total_population * military_size_ratio);
+        var maxAllowedManpower = (int)(totalPopulation * militarySizeRatio);
         var totalMobilized = manpower + mobilized;
 
         if (totalMobilized < maxAllowedManpower)
         {
-            var dailyGrowth = Math.Max(1, (int)(total_population * 0.0001));
+            var dailyGrowth = Math.Max(1, (int)(totalPopulation * 0.0001));
             manpower += dailyGrowth;
 
             if (totalMobilized > maxAllowedManpower)
@@ -530,37 +512,34 @@ public partial class CountryData : ProcessDay
         }
 
         manpower = Math.Max(0, manpower);
-        dirty_manpower = false;
+        dirtyManpower = false;
     }
 
     public double CalculateArmyUpkeep()
     {
         var activeDivisions = 0;
-        foreach (var troop in GetTroops(country_name))
-            activeDivisions += troop.divisions_count;
+        foreach (var troop in GetTroops(countryName))
+            activeDivisions += troop.divisionsCount;
 
         var reserveDivisions = 0;
-        foreach (var readyTroop in ready_troops)
+        foreach (var readyTroop in readyTroops)
             reserveDivisions += readyTroop.count;
 
-        return (activeDivisions + (reserveDivisions * 0.25)) * army_level * BASE_ARMY_COST * divCostMod;
+        return (activeDivisions + (reserveDivisions * 0.25)) * armyLevel * BASE_ARMY_COST * divCostMod;
     }
-
-    public double calculate_army_upkeep() => CalculateArmyUpkeep();
-
-    private IReadOnlyList<TroopData> GetTroops(string country)
-        => TroopManager.Instance.troops_by_country.TryGetValue(country, out var troops)
+private IReadOnlyList<TroopData> GetTroops(string country)
+        => TroopManager.Instance.troopsByCountry.TryGetValue(country, out var troops)
             ? troops
             : Array.Empty<TroopData>();
 
     private void _SetupStartingArmy()
     {
-        var projectedIncome = ((gdp * 0.0000228310502) + factories_amount * factory_income) * 0.25;
-        var upkeep = Math.Max(1.0, army_level * BASE_ARMY_COST);
+        var projectedIncome = ((gdp * 0.0000228310502) + factoriesAmount * factoryIncome) * 0.25;
+        var upkeep = Math.Max(1.0, armyLevel * BASE_ARMY_COST);
         var finalCount = Math.Clamp((int)(projectedIncome / upkeep), 1, 6);
 
         var template = DivisionData.TEMPLATES["infantry"];
-        var manpowerPerDivision = template["manpower"].AsInt32();
+        var manpowerPerDivision = template.Get("manpower").Int();
 
         if (manpower < finalCount * manpowerPerDivision)
             finalCount = (int)(manpower / Math.Max(1, manpowerPerDivision));
@@ -568,26 +547,26 @@ public partial class CountryData : ProcessDay
         if (finalCount <= 0)
             return;
 
-        var startingDivisions = new Godot.Collections.Array<DivisionData>();
+        var startingDivisions = new List<DivisionData>();
         for (var i = 0; i < finalCount; i++)
-            startingDivisions.Add(DivisionData.create_division("infantry"));
+            startingDivisions.Add(DivisionData.CreateDivision("infantry"));
 
         manpower -= finalCount * manpowerPerDivision;
-        CallDeferred("_deploy_initial_force", startingDivisions);
+        _DeployInitialForce(startingDivisions);
     }
 
-    private void _DeployInitialForce(Godot.Collections.Array<DivisionData> divisions)
+    private void _DeployInitialForce(List<DivisionData> divisions)
     {
-        var provincesDict = MapManager.Instance.country_to_provinces;
-        if (!provincesDict.TryGetValue(country_name, out var provinces))
+        var provincesDict = MapManager.Instance.countryToProvinces;
+        if (!provincesDict.TryGetValue(countryName, out var provinces))
             return;
 
         if (provinces.Count == 0)
             return;
 
-        var cities = MapManager.Instance.GetCitiesProvinceCountry(country_name);
+        var cities = MapManager.Instance.GetCitiesProvinceCountry(countryName);
 
-        var currentBatch = new Godot.Collections.Array<DivisionData>();
+        var currentBatch = new List<DivisionData>();
         for (var i = 0; i < divisions.Count; i++)
         {
             currentBatch.Add(divisions[i]);
@@ -595,32 +574,29 @@ public partial class CountryData : ProcessDay
                 continue;
 
             var targetPid = cities.Count > 0
-                ? cities[GD.RandRange(0, cities.Count - 1)].AsInt32()
-                : provinces[GD.RandRange(0, provinces.Count - 1)];
-            var payload = new Godot.Collections.Array();
-            foreach (var division in currentBatch)
-                payload.Add(division);
-            TroopManager.Instance.deploy_specific_divisions(country_name, payload, targetPid);
-            currentBatch = new Godot.Collections.Array<DivisionData>();
+                ? cities[SimRandom.Shared.RandRange(0, cities.Count - 1)].AsInt32()
+                : provinces[SimRandom.Shared.RandRange(0, provinces.Count - 1)];
+            TroopManager.Instance.DeploySpecificDivisions(countryName, currentBatch, targetPid);
+            currentBatch = new List<DivisionData>();
         }
     }
 
     private void _ProcessReinforcements()
     {
-        foreach (var troop in GetTroops(country_name))
+        foreach (var troop in GetTroops(countryName))
         {
-            if (troop.is_moving)
+            if (troop.isMoving)
                 continue;
 
-            foreach (var division in troop.stored_divisions)
+            foreach (var division in troop.storedDivisions)
             {
-                if (division.hp >= division.max_hp || division.max_hp <= 0)
+                if (division.hp >= division.maxHp || division.maxHp <= 0)
                     continue;
 
-                var percentage = Math.Min(0.05, (division.max_hp - division.hp) / division.max_hp);
+                var percentage = Math.Min(0.05, (division.maxHp - division.hp) / division.maxHp);
                 var template = DivisionData.TEMPLATES[division.type];
-                var menNeeded = (int)(template["manpower"].AsInt32() * percentage);
-                var moneyNeeded = (int)(template["cost"].AsDouble() * percentage * divCostMod);
+                var menNeeded = (int)(template.Get("manpower").Int() * percentage);
+                var moneyNeeded = (int)(template.Get("cost").Double() * percentage * divCostMod);
 
                 if (manpower < menNeeded || money < moneyNeeded)
                     continue;
@@ -628,31 +604,31 @@ public partial class CountryData : ProcessDay
                 money -= moneyNeeded;
                 manpower -= menNeeded;
                 mobilized += menNeeded;
-                division.hp += (float)(percentage * division.max_hp);
+                division.hp += (float)(percentage * division.maxHp);
             }
         }
     }
 
-    public bool deploy_ready_troop(ReadyTroop troop, int specific_pid = -1)
+    public bool DeployReadyTroop(ReadyTroop troop, int specificPid = -1)
     {
-        var index = ready_troops.IndexOf(troop);
+        var index = readyTroops.IndexOf(troop);
         if (index == -1)
             return false;
 
-        var targetPid = specific_pid;
+        var targetPid = specificPid;
         if (targetPid == -1)
         {
-            var provincesDict = MapManager.Instance.country_to_provinces;
-            if (!provincesDict.TryGetValue(country_name, out var provinces))
+            var provincesDict = MapManager.Instance.countryToProvinces;
+            if (!provincesDict.TryGetValue(countryName, out var provinces))
                 return false;
 
             if (provinces.Count == 0)
                 return false;
-            targetPid = provinces[GD.RandRange(0, provinces.Count - 1)];
+            targetPid = provinces[SimRandom.Shared.RandRange(0, provinces.Count - 1)];
         }
 
-        TroopManager.Instance.DeployReady(country_name, troop, targetPid);
-        ready_troops.RemoveAt(index);
+        TroopManager.Instance.DeployReady(countryName, troop, targetPid);
+        readyTroops.RemoveAt(index);
         return true;
     }
     //endregion
@@ -661,44 +637,33 @@ public partial class CountryData : ProcessDay
     public double GetArmyPressure()
     {
         var armySize = 0;
-        foreach (var troop in GetTroops(country_name))
-            armySize += troop.divisions_count;
+        foreach (var troop in GetTroops(countryName))
+            armySize += troop.divisionsCount;
 
-        var capacity = Math.Max(1.0, (gdp * 0.03) + factories_amount * 5);
+        var capacity = Math.Max(1.0, (gdp * 0.03) + factoriesAmount * 5);
         return armySize / capacity;
     }
-
-    public double get_army_pressure() => GetArmyPressure();
-
-    public double GetMaxMorale()
+public double GetMaxMorale()
     {
-        return (60.0 + (stability * 40.0) + (army_level * 5.0)) * (money < 0 ? 0.5 : 1.0);
+        return (60.0 + (stability * 40.0) + (armyLevel * 5.0)) * (money < 0 ? 0.5 : 1.0);
     }
-
-    public double get_max_morale() => GetMaxMorale();
-
-    public double GetAttackEfficiency()
+public double GetAttackEfficiency()
     {
-        return (troopAttackAdd + 0.9 + (war_support * 0.3) + (army_level * 0.05)) * (money < 0 ? 0.7 : 1.0) * troopAttackMod;
+        return (troopAttackAdd + 0.9 + (warSupport * 0.3) + (armyLevel * 0.05)) * (money < 0 ? 0.7 : 1.0) * troopAttackMod;
     }
-
-    public double get_attack_efficiency() => GetAttackEfficiency();
-
-    public double GetDefenseEfficiency()
+public double GetDefenseEfficiency()
     {
-        return (troopDefendAdd + 1.0 + (stability * 0.15) + (army_level * 0.05)) * (money < 0 ? 0.8 : 1.0) * troopDefendMod;
+        return (troopDefendAdd + 1.0 + (stability * 0.15) + (armyLevel * 0.05)) * (money < 0 ? 0.8 : 1.0) * troopDefendMod;
     }
-
-    public double get_defense_efficiency() => GetDefenseEfficiency();
-    //endregion
+//endregion
 
     //region --- Relations & War ---
-    public void set_relation_with(string other_country_name, int value)
+    public void SetRelationWith(string otherCountryName, int value)
     {
-        relations[other_country_name] = Math.Clamp(value, 0, 100);
+        relations[otherCountryName] = Math.Clamp(value, 0, 100);
     }
 
-    public void update_relations()
+    public void UpdateRelations()
     {
         var countries = CountryManager.Instance.countries;
         foreach (var key in new List<string>(relations.Keys))
@@ -715,23 +680,23 @@ public partial class CountryData : ProcessDay
         }
     }
 
-    public override int get_relation_with(string other_country_name)
+    public int GetRelationWith(string otherCountryName)
     {
         var countries = CountryManager.Instance.countries;
-        if (!countries.ContainsKey(other_country_name))
+        if (!countries.ContainsKey(otherCountryName))
         {
-            relations.Remove(other_country_name);
+            relations.Remove(otherCountryName);
             return 0;
         }
 
-        return relations.ContainsKey(other_country_name) ? relations[other_country_name] : 50;
+        return relations.ContainsKey(otherCountryName) ? relations[otherCountryName] : 50;
     }
 
     public void UpdateIsAtWar()
     {
-        enemies = WarManager.Instance.get_enemies_of(country_name);
-        is_at_war = enemies.Count > 0;
-        war_dirty = false;
+        enemies = WarManager.Instance.GetEnemiesOf(countryName);
+        IsAtWar = enemies.Count > 0;
+        warDirty = false;
     }
     //endregion
 }

@@ -28,8 +28,11 @@ buses/default_bus_layout="uid://c7rfusvsmxw0h"
 [autoload]
 
 MapManager="*res://Managers/MapManager.cs"
+ProvinceManager="*res://Managers/ProvinceManager.cs"
 GameState="*res://Managers/GameState.cs"
+PlayerController="*res://Scripts/Controllers/PlayerController.cs"
 CountryManager="*res://Managers/CountryManager.cs"
+ActionDispatcher="*res://Managers/ActionDispatcher.cs"
 TroopManager="*res://Managers/TroopManager.cs"
 MusicManager="*res://Managers/MusicManager.cs"
 SettingsManager="*res://Managers/SettingsManager.cs"

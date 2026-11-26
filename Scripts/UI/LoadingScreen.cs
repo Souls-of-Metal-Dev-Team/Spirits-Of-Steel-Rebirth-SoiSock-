@@ -4,26 +4,26 @@ namespace Sosr;
 
 public partial class LoadingScreen : CanvasLayer
 {
-	private ProgressBar progress_bar;
-	private Label status_label;
+	private ProgressBar progressBar;
+	private Label statusLabel;
 	private Panel panel;
 
 	public override void _Ready()
 	{
-		progress_bar = GetNode<ProgressBar>("Panel/ProgressBar");
-		status_label = GetNode<Label>("Panel/Label");
+		progressBar = GetNode<ProgressBar>("Panel/ProgressBar");
+		statusLabel = GetNode<Label>("Panel/Label");
 		panel = GetNode<Panel>("Panel");
 		// Start invisible
 		panel.Modulate = panel.Modulate with { A = 0 };
 		Hide();
 	}
 
-	public void set_progress(float value)
+	public void SetProgress(float value)
 	{
-		progress_bar.Value = value * 100;
+		progressBar.Value = value * 100;
 	}
 
-	public async void show_screen()
+	public async void ShowScreen()
 	{
 		if (!IsNodeReady())
 			await ToSignal(this, Node.SignalName.Ready);
@@ -33,7 +33,7 @@ public partial class LoadingScreen : CanvasLayer
 		tween.TweenProperty(panel, "modulate:a", 1.0, 0.3).SetTrans(Tween.TransitionType.Sine);
 	}
 
-	public async void hide_screen()
+	public async void HideScreen()
 	{
 		var tween = CreateTween();
 		tween.TweenProperty(panel, "modulate:a", 0.0, 0.3).SetTrans(Tween.TransitionType.Sine);

@@ -6,134 +6,140 @@ namespace Sosr;
 [GlobalClass]
 public partial class World : Node2D
 {
-	[Export] public Shader map_shader;
+	[Export] public Shader mapShader;
 
-	public Sprite2D map_sprite;
-	public Node map_container;
+	public Sprite2D mapSprite;
+	public Node mapContainer;
 	public GameClock clock;
 	public Camera2D camera;
 
-	public Vector2 water_offset = Vector2.Zero;
+	public Vector2 waterOffset = Vector2.Zero;
 
-	public Image type_img;
+	public Image typeImg;
 
 	public ShaderMaterial mat;
 
+	private bool _clockConnected;
+
 	private void EnsureNodeRefs()
 	{
-		if (map_sprite == null || !GodotObject.IsInstanceValid(map_sprite))
-			map_sprite = GetNodeOrNull<Sprite2D>("../../MapContainer/CultureSprite");
-		if (map_container == null || !GodotObject.IsInstanceValid(map_container))
-			map_container = GetNodeOrNull<Node>("../../MapContainer");
+		if (mapSprite == null || !GodotObject.IsInstanceValid(mapSprite))
+			mapSprite = GetNodeOrNull<Sprite2D>("../../MapContainer/CultureSprite");
+		if (mapContainer == null || !GodotObject.IsInstanceValid(mapContainer))
+			mapContainer = GetNodeOrNull<Node>("../../MapContainer");
 	}
 
 	public override void _Process(double delta)
 	{
 		EnsureNodeRefs();
-		if (map_sprite == null || MapManager.Instance.id_map_image == null)
+		if (mapSprite == null || MapManager.Instance.idMapImage == null)
 			return;
 
-		var material = map_sprite.Material as ShaderMaterial;
+		var material = mapSprite.Material as ShaderMaterial;
 		if (material != null && clock != null && !clock.paused)
 		{
-			var move_amount = clock.time_scale * 0.001f * (float)delta;
-			water_offset.X += move_amount;
-			material.SetShaderParameter("ocean_offset", water_offset);
-			material.SetShaderParameter("absolute_days", clock.get_absolute_days());
+			var moveAmount = clock.timeScale * 0.001f * (float)delta;
+			waterOffset.X += moveAmount;
+			material.SetShaderParameter("ocean_offset", waterOffset);
+			material.SetShaderParameter("absolute_days", clock.GetAbsoluteDays());
 		}
 	}
 
 	public override void _EnterTree()
 	{
-		GameState.Instance.current_world = this;
+		GameState.Instance.currentWorld = this;
 		clock = GetNodeOrNull<GameClock>("/root/Main/Clock");
 		if (clock != null)
-			clock.FromDict(GameState.Instance.clock_cache);
+			clock.FromDict(GameState.Instance.clockCache);
 		KeyboardManager.Instance.settings = GetNodeOrNull<CanvasLayer>("/root/Main/SettingsLayer");
-		TroopManager.Instance.troop_selection = GetNodeOrNull<TroopSelection>("TroopSelection");
+		TroopManager.Instance.troopSelection = GetNodeOrNull<TroopSelection>("TroopSelection");
 		camera = GetNodeOrNull<Camera2D>("/root/Main/Camera2D");
 		// TODO(pol): Load CountryManager after map instead of an autoload to avoid this.
 	}
 
-	public void DoSetup(Godot.Collections.Array a_progress)
+	public void DoSetup(Godot.Collections.Array aProgress)
 	{
 		EnsureNodeRefs();
 
-		var path = $"res://starts/{GameState.Instance.current_start}";
-		var save_state = new Godot.Collections.Dictionary();
+		var path = $"res://starts/{GameState.Instance.currentStart}";
+		var saveState = new Godot.Collections.Dictionary();
 
-		var pending_save = GameState.Instance.pending_load_save;
-		if (pending_save != "")
+		var pendingSave = GameState.Instance.pendingLoadSave;
+		if (pendingSave != "")
 		{
-			var save_path = "res://saves/" + pending_save + ".json";
-			if (FileAccess.FileExists(save_path))
+			var savePath = "user://saves/" + pendingSave + ".json";
+			if (FileAccess.FileExists(savePath))
 			{
-				save_state = MapData.Instance.LoadSaveState(save_path);
-				if (save_state.Count > 0)
+				saveState = MapData.Instance.LoadSaveState(savePath);
+				if (saveState.Count > 0)
 				{
-					var scenario_path = save_state.ContainsKey("scenario_path")
-						? save_state["scenario_path"].AsString()
+					var scenarioPath = saveState.ContainsKey("scenario_path")
+						? saveState["scenario_path"].AsString()
 						: "";
-					if (scenario_path != "")
+					if (scenarioPath != "")
 					{
-						path = MapData.Instance.ScenarioDirFromPath(scenario_path);
-						GameState.Instance.current_start = path.GetFile();
+						path = MapData.Instance.ScenarioDirFromPath(scenarioPath);
+						GameState.Instance.currentStart = path.GetFile();
 					}
-					GameState.Instance.is_loading_game = true;
-					GD.Print("World: Pending save found. Loading from: ", pending_save);
+					GameState.Instance.isLoadingGame = true;
+					GD.Print("World: Pending save found. Loading from: ", pendingSave);
 				}
 				else
 				{
-					GD.PushError("World: Failed to load save state from: " + save_path);
+					GD.PushError("World: Failed to load save state from: " + savePath);
 				}
 			}
 		}
 
-		a_progress[0] = 0.05;
+		aProgress[0] = 0.05;
 
 		// NOTE(soi): this is here bcuz sometimes main menu is used and im too lazy to comment this out
-		if (MapManager.Instance.province_objects.Count == 0 ||
-			GameState.Instance.is_loading_game)
+		var otherStart = MapData.Instance.loadedStart != "" && MapData.Instance.loadedStart != path;
+		if (MapManager.Instance.provinceObjects.Count == 0 ||
+			GameState.Instance.isLoadingGame || otherStart)
 		{
-			MapData.Instance.LoadMapData(path, a_progress, save_state);
+			// Same reset as load_game: the last game's troops and wars would survive a reload.
+			TroopManager.Instance.ClearAllTroops();
+			WarManager.Instance.ResetState();
+			MapData.Instance.LoadMapData(path, aProgress, saveState);
 		}
 
-		if (GameState.Instance.is_loading_game)
+		if (GameState.Instance.isLoadingGame)
 		{
-			GameState.Instance.is_loading_game = false;
-			GameState.Instance.pending_load_save = "";
+			GameState.Instance.isLoadingGame = false;
+			GameState.Instance.pendingLoadSave = "";
 		}
-		a_progress[0] = 0.2;
+		aProgress[0] = 0.2;
 
 		GD.Print("World: Map is ready -> configuring visuals...");
 
-		MapManager.Instance.all_cities = MapManager.Instance.GetAllCities();
-		a_progress[0] = 0.21;
+		MapManager.Instance.allCities = MapManager.Instance.GetAllCities();
+		aProgress[0] = 0.21;
 
-		if (CountryManager.Instance.player_country == null)
+		if (CountryManager.Instance.playerCountry == null)
 		{
 			// CountryManager.set_player_country(CountryManager.countries.keys().pick_random())
 			GameState.Instance.interactionType = GameState.InteractionType.SELECT_COUNTRY;
 			// NOTE(soi): wait so like when i click on a country this should magically play as it?????. damm
 		}
 		// For debugging purposes. Create some troops first
-		a_progress[0] = 0.30;
+		aProgress[0] = 0.30;
 		MapManager.Instance._BuildGlobalRegistry();
-		a_progress[0] = 0.35;
-		var map_width = MapManager.Instance.map_width;
-		var map_height = MapManager.Instance.map_height;
+		aProgress[0] = 0.35;
+		var mapWidth = MapManager.Instance.mapWidth;
+		var mapHeight = MapManager.Instance.mapHeight;
 
 		mat = new ShaderMaterial();
-		mat.Shader = map_shader;
+		mat.Shader = mapShader;
 		mat.SetShaderParameter("region_id_map",
-			ImageTexture.CreateFromImage(MapManager.Instance.id_map_image as Image));
-		mat.SetShaderParameter("state_colors", MapManager.Instance.state_color_texture);
+			ImageTexture.CreateFromImage(MapManager.Instance.idMapImage as Image));
+		mat.SetShaderParameter("state_colors", MapManager.Instance.stateColorTexture);
 
 		// @warning_ignore("narrowing_conversion")
-		type_img = Image.CreateEmpty(map_width, map_height, false, Image.Format.L8);
+		typeImg = Image.CreateEmpty(mapWidth, mapHeight, false, Image.Format.L8);
 
-		GD.Print(map_width, map_height);
-		MapManager.Instance._SetTypeMap(mat, type_img);
+		GD.Print(mapWidth, mapHeight);
+		MapManager.Instance._SetTypeMap(mat, typeImg);
 
 		var noise = new FastNoiseLite();
 		noise.Seed = (int)GD.Randi();
@@ -144,48 +150,54 @@ public partial class World : Node2D
 		noise.FractalLacunarity = 3.0f;
 		noise.FractalGain = 0.5f;
 
-		var noise_tex = new NoiseTexture2D();
-		noise_tex.Seamless = true;
-		noise_tex.Width = 512;
-		noise_tex.Height = 512;
-		noise_tex.Noise = noise;
+		var noiseTex = new NoiseTexture2D();
+		noiseTex.Seamless = true;
+		noiseTex.Width = 512;
+		noiseTex.Height = 512;
+		noiseTex.Noise = noise;
 
 		// GDScript: await noise_tex.changed
-		noise_tex.Connect("changed",
-			Callable.From(() => FinishSetupAfterNoise(a_progress, map_width, map_height, noise_tex)),
+		noiseTex.Connect("changed",
+			Callable.From(() => FinishSetupAfterNoise(aProgress, mapWidth, mapHeight, noiseTex)),
 			(uint)GodotObject.ConnectFlags.OneShot);
 	}
 
-	private void FinishSetupAfterNoise(Godot.Collections.Array a_progress, int map_width, int map_height, NoiseTexture2D noise_tex)
+	private void FinishSetupAfterNoise(Godot.Collections.Array aProgress, int mapWidth, int mapHeight, NoiseTexture2D noiseTex)
 	{
 		EnsureNodeRefs();
 
-		mat.SetShaderParameter("ocean_noise", noise_tex);
-		mat.SetShaderParameter("original_texture", map_sprite.Texture);
+		mat.SetShaderParameter("ocean_noise", noiseTex);
+		mat.SetShaderParameter("original_texture", mapSprite.Texture);
 		mat.SetShaderParameter("sea_speed", 0.00); // Changed by MainClock
-		mat.SetShaderParameter("tex_size", new Vector2(map_width, map_height));
+		mat.SetShaderParameter("tex_size", new Vector2(mapWidth, mapHeight));
 		mat.SetShaderParameter("country_border_color", Colors.Black);
 
-		map_sprite.Material = mat;
-		a_progress[0] = 0.9;
+		mapSprite.Material = mat;
+		aProgress[0] = 0.9;
 
-		if (map_container != null)
+		if (mapContainer != null)
 		{
-			map_container.Set("map_width", map_width);
+			mapContainer.Set("mapWidth", mapWidth);
 		}
 		else
 		{
 			GD.PushError("MapContainer node not found!");
 		}
 
-		SettingsManager.Instance.apply_settings(SettingsManager.Instance.settings);
+		SettingsManager.Instance.ApplySettings(SettingsManager.Instance.settings);
 
-		a_progress[0] = 1.0;
+		aProgress[0] = 1.0;
 
-		if (clock != null)
+		// The world scene is cached, so DoSetup runs again for every new game; connect once.
+		if (clock != null && !_clockConnected)
 		{
+			_clockConnected = true;
 			clock.Connect(GameClock.SignalName.HourPassed,
 				Callable.From(() => CountryManager.Instance._on_hour_passed()));
+			clock.Connect(GameClock.SignalName.HourPassed,
+				Callable.From(() => TroopManager.Instance.OnHourPassed()));
+			clock.Connect(GameClock.SignalName.HourPassed,
+				Callable.From(() => WarManager.Instance.OnHourPassed()));
 			clock.Connect(GameClock.SignalName.DayPassed,
 				Callable.From(() => CountryManager.Instance._on_day_passed()));
 			clock.Connect(GameClock.SignalName.DayPassed,
@@ -197,18 +209,19 @@ public partial class World : Node2D
 
 	public void _refresh_map_visuals()
 	{
-		var state_color_texture = MapManager.Instance.state_color_texture;
-		if (mat != null && state_color_texture != null)
-			mat.SetShaderParameter("state_colors", state_color_texture);
+		var stateColorTexture = MapManager.Instance.stateColorTexture;
+		if (mat != null && stateColorTexture != null)
+			mat.SetShaderParameter("state_colors", stateColorTexture);
 	}
 
 	public void SaveGame(string slot)
 	{
 		// Construct a unified save dictionary
-		var clock_dict = clock != null ? clock.ToDict() : new Godot.Collections.Dictionary();
-		var save_data = new Godot.Collections.Dictionary
+		var clockDict = clock != null ? clock.ToDict() : new Godot.Collections.Dictionary();
+		var saveData = new Godot.Collections.Dictionary
 		{
-			{ "clock", clock_dict },
+			{ "clock", clockDict },
+			{ "sim_seed", GameState.Instance.SimSeed.ToString() },
 			{ "resources", MapManager.Instance.SaveResourcesData() },
 			{ "biomes", MapManager.Instance.SaveBiomeData() },
 			{ "buildings", MapManager.Instance.SaveBuildingData() },
@@ -216,44 +229,44 @@ public partial class World : Node2D
 			{ "polities", CountryManager.Instance.SaveCountries() },
 			{ "ideologies", IdeologyManager.Instance.ideologies },
 			{ "factions", FactionManager.Instance.SaveFactions() },
-			{ "wars", WarManager.Instance.save_wars() },
-			{ "original_territories", WarManager.Instance.save_original_territories() },
-			{ "scheduled_events", EventManager.Instance.save_events() },
+			{ "wars", WarManager.Instance.SaveWars() },
+			{ "original_territories", WarManager.Instance.SaveOriginalTerritories() },
+			{ "scheduled_events", EventManager.Instance.SaveEvents() },
+			{ "significant_figures", SaveFigures() },
 		};
 
 		// Store only what changed since the start; the start is loaded again on load.
 		// Normalize both sides through JSON so ints in live state match floats parsed
 		// from the start files. Otherwise every number looks changed.
-		var scenario_path = $"res://starts/{GameState.Instance.current_start}/map_data.json";
-		var start_state = MapData.Instance.LoadStartState(
-			MapData.Instance.ScenarioDirFromPath(scenario_path));
-		if (start_state.Count == 0)
+		var scenarioPath = $"res://starts/{GameState.Instance.currentStart}/map_data.json";
+		var startState = MapData.Instance.LoadStartState(
+			MapData.Instance.ScenarioDirFromPath(scenarioPath));
+		if (startState.Count == 0)
 		{
-			GD.PushError("Save failed! Could not load start state: " + scenario_path);
+			GD.PushError("Save failed! Could not load start state: " + scenarioPath);
 			return;
 		}
 
-		var baseline = Json.ParseString(Json.Stringify(start_state)).AsGodotDictionary();
-		var current = Json.ParseString(Json.Stringify(save_data)).AsGodotDictionary();
-		var save_file_data = new Godot.Collections.Dictionary
-		{
-			{ "scenario_path", scenario_path },
-			{ "diff", SettingsManager.Instance.diff(baseline, current) },
-		};
+		var saveFileData = VariantState.ToVariant(
+			SaveService.CreateSave(startState.AsState(), saveData.AsState(), scenarioPath));
 
-		// Ensure directory exists
-		using var dir = DirAccess.Open("res://");
-		if (dir != null && !dir.DirExists("saves/"))
-			dir.MakeDirRecursive("saves/");
-
-		var path = "res://saves/" + slot + ".json";
-		if (MapData.Instance.SaveJSON(path, save_file_data))
+		DirAccess.MakeDirRecursiveAbsolute("user://saves");
+		var path = "user://saves/" + slot + ".json";
+		if (MapData.Instance.SaveJSON(path, saveFileData))
 			GD.Print("Game State saved successfully to: ", ProjectSettings.GlobalizePath(path));
 	}
 
-	public void load_game(string save_name)
+	private static Godot.Collections.Array SaveFigures()
 	{
-		var path = "res://saves/" + save_name + ".json";
+		var figures = new Godot.Collections.Array();
+		foreach (var figure in MapManager.Instance.significantFigures.Values)
+			figures.Add(VariantState.ToVariant(figure.ToDict()));
+		return figures;
+	}
+
+	public void LoadGame(string saveName)
+	{
+		var path = "user://saves/" + saveName + ".json";
 
 		if (!FileAccess.FileExists(path))
 		{
@@ -262,41 +275,41 @@ public partial class World : Node2D
 		}
 
 		// Diff saves are merged with their start; legacy full saves are used as-is.
-		var save_data = MapData.Instance.LoadSaveState(path);
-		if (save_data.Count == 0)
+		var saveData = MapData.Instance.LoadSaveState(path);
+		if (saveData.Count == 0)
 		{
 			GD.PushError("Failed to load save state: " + path);
 			return;
 		}
 
-		var scenario_path = save_data.ContainsKey("scenario_path")
-			? save_data["scenario_path"].AsString()
-			: $"res://starts/{GameState.Instance.current_start}/map_data.json";
-		var start_dir = MapData.Instance.ScenarioDirFromPath(scenario_path);
+		var scenarioPath = saveData.ContainsKey("scenario_path")
+			? saveData["scenario_path"].AsString()
+			: $"res://starts/{GameState.Instance.currentStart}/map_data.json";
+		var startDir = MapData.Instance.ScenarioDirFromPath(scenarioPath);
 
 		// Pause systems that react to state
-		if (map_container != null)
-			map_container.SetProcess(false);
+		if (mapContainer != null)
+			mapContainer.SetProcess(false);
 
 		// Full State Reset
-		TroopManager.Instance.clear_all_troops();
-		WarManager.Instance.reset_state();
+		TroopManager.Instance.ClearAllTroops();
+		WarManager.Instance.ResetState();
 
 		// Close Peace UI if open
-		var peace_ui = GetTree().Root.FindChild("PeaceProcessUI", true, false);
-		if (peace_ui != null && peace_ui.HasMethod("force_close"))
-			peace_ui.Call("force_close");
-		GameState.Instance.in_peace_process = false;
+		var peaceUi = GetTree().Root.FindChild("PeaceProcessUI", true, false);
+		if (peaceUi != null && peaceUi.HasMethod("ForceClose"))
+			peaceUi.Call("ForceClose");
+		GameState.Instance.inPeaceProcess = false;
 
-		GameState.Instance.current_start = start_dir.GetFile();
-		GameState.Instance.is_loading_game = true;
-		MapData.Instance.LoadMapData(start_dir, new Godot.Collections.Array { 0.0 }, save_data);
-		GameState.Instance.is_loading_game = false;
+		GameState.Instance.currentStart = startDir.GetFile();
+		GameState.Instance.isLoadingGame = true;
+		MapData.Instance.LoadMapData(startDir, new Godot.Collections.Array { 0.0 }, saveData);
+		GameState.Instance.isLoadingGame = false;
 		_refresh_map_visuals();
 
-		if (map_container != null)
-			map_container.SetProcess(true);
+		if (mapContainer != null)
+			mapContainer.SetProcess(true);
 
-		GD.Print("Game loaded successfully:", save_name);
+		GD.Print("Game loaded successfully:", saveName);
 	}
 }

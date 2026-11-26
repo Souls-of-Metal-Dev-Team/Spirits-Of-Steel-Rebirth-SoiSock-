@@ -2,7 +2,7 @@ extends Node
 
 # Run: godot-mono --headless --path . res://scratch/test_save_diff_flow.tscn
 
-const SAVE_PATH := "res://saves/__test_save_diff_flow.json"
+const SAVE_PATH := "user://__test_save_diff_flow.json"
 
 var _checks: int = 0
 var _failures: int = 0
@@ -14,7 +14,7 @@ func _ready() -> void:
 	_check(not start_state.is_empty(), "LoadStartState: not empty")
 	_check(start_state.has("provinces"), "LoadStartState: has provinces")
 	_check(start_state.has("polities"), "LoadStartState: has polities")
-	_check(not start_state.has("significant_figures"), "LoadStartState: drops non-state keys")
+	_check(start_state.has("significant_figures"), "LoadStartState: has significant_figures")
 
 	# Synthetic "current state": change a scalar, edit a nested value,
 	# add a key, remove a province, append a polity, add scheduled events.

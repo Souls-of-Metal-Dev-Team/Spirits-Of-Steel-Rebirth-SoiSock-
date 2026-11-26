@@ -8,11 +8,12 @@ Spirits of Steel Rebirth is a grand-strategy / RTS game built in **Godot 4.7** (
 
 ## Commands
 
-There is no build system, linter, or test suite beyond Godot itself.
+There is no linter. Unit tests cover only the engine-free `Core/` library.
 
 - Open the editor: `godot-mono --editor --path .`
 - Run the game: `godot-mono --path .` (the main scene is set in `project.godot`)
 - Build the C# assembly: `dotnet build` (the Godot editor also does this)
+- Run unit tests: `dotnet test Tests/Sosr.Tests.csproj` (xUnit, no Godot needed)
 - Run a standalone script headless: `godot-mono --headless --path . --script res://scratch/test_interpreter.gd` (the script must `extends SceneTree`). Autoloads aren't available in this mode, so most manager code can't be tested this way.
 - Smoke-test the game headless: `godot-mono --headless --path . --quit-after 300` (a non-zero exit, e.g. 139, is a crash).
 - Export targets are in `export_presets.cfg`.
@@ -33,12 +34,14 @@ Global state lives in autoloads registered in `project.godot` (`MapManager`, `Co
 
 ### Scenarios ("starts") and saves
 Each folder in `starts/<Name>/` is a playable scenario:
-- `map_data.json`: polities, provinces, biomes, resources, buildings, ideologies, wars, factions, significant figures, and the clock
+- `map_data.json`: biomes, resources, buildings, ideologies, wars and the clock
+- `provinces.json`: the provinces, keyed by province ID
+- `scenario_data.json`: polities, factions and significant figures
 - `regions.png`: the province ID map
 - `decisions/`: `default.json` plus optional `<CountryName>.json` overrides. If a start has no `default.json`, the root `decisions/default.json` is used.
 - `superevents.json`, `building_functions.json`, and an optional `flags/` folder
 
-`World.DoSetup` / `load_map_data` loads `res://starts/<GameState.current_start>/map_data.json`. If `GameState.pending_load_save` is set, it loads `res://saves/<name>.json` instead; a save has the same shape plus `scenario_path`. The `tmp/` subfolders in starts are scratch copies.
+`World.DoSetup` / `MapData.LoadMapData` loads these three files from `res://starts/<GameState.current_start>/`. If `GameState.pending_load_save` is set, it loads `user://saves/<name>.json` instead; a save has the same shape plus `scenario_path`.
 
 ### Data-driven scripting
 Decisions and super events are written as JSON expression trees of the form `{"func": "<name>", "args": [...]}`. `InterpreterManager` evaluates them. To add a new scriptable function:
@@ -51,6 +54,7 @@ Building recipes in `building_functions.json` work differently. Their values are
 `Docs/ImportantFigureSkillsReference.md` lists the skill modifiers that significant figures can have (additive vs. multiplicative).
 
 ### Code layout
+- `Core/`: `Sosr.Core`, a plain .NET library with no Godot reference, so `Tests/` can run it headless. State there is a plain tree (`Dictionary<string, object?>`, `List<object?>`, `double`, `string`, `bool`, `null`; see `StateJson`). `Scripts/VariantState.cs` converts it to and from Godot Variants. The Godot `.csproj` excludes `Core/**` and `Tests/**` from its own compile glob
 - `Scripts/Map/`: data classes (`CountryData`, `Province`, `BuildingData`, `ResourceData`, ...), mostly with `FromDict`/`ToDict` serialization
 - `Scripts/Diplomacy/`, `Scripts/Divisions/`, `Scripts/Events/`: domain data classes and popups
 - `Scripts/UI/`: UI controllers; `GameUI.cs` is the main in-game HUD. Scene `[connection]`s and `[Export]` node paths bind to UI members by name, so renaming a UI method or exported field means updating the `.tscn` too

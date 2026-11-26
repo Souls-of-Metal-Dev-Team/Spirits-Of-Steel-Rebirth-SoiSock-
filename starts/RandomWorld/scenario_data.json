@@ -1,0 +1,186 @@
+{
+	"factions": [],
+	"polities": [
+		{
+			"accepted_cultures": [
+				"Commoner"
+			],
+			"color": "#2431A5",
+			"figures": [],
+			"ideology": [
+				-33,
+				59
+			],
+			"manpower": 253091,
+			"money": 10000.0,
+			"name": "Democratic_Soveria_Federation",
+			"political_power": 150.0,
+			"puppets": [],
+			"stability": 0.5409370978108723,
+			"war_support": 0.4070180147671344
+		},
+		{
+			"accepted_cultures": [
+				"Commoner"
+			],
+			"color": "#5405AB",
+			"figures": [],
+			"ideology": [
+				85,
+				-63
+			],
+			"manpower": 187149,
+			"money": 10000.0,
+			"name": "Imperial_Soveria_Federation",
+			"political_power": 150.0,
+			"puppets": [],
+			"stability": 0.6649589167283364,
+			"war_support": 0.4310645383770441
+		},
+		{
+			"accepted_cultures": [
+				"Commoner"
+			],
+			"color": "#DEDB00",
+			"figures": [],
+			"ideology": [
+				-3,
+				59
+			],
+			"manpower": 279103,
+			"money": 10000.0,
+			"name": "United_Aethel_Union",
+			"political_power": 150.0,
+			"puppets": [],
+			"stability": 0.7814179037111159,
+			"war_support": 0.48368322957315846
+		},
+		{
+			"accepted_cultures": [
+				"Commoner"
+			],
+			"color": "#1B6ADF",
+			"figures": [],
+			"ideology": [
+				-69,
+				6
+			],
+			"manpower": 147498,
+			"money": 10000.0,
+			"name": "Democratic_Eridu_Kingdom",
+			"political_power": 150.0,
+			"puppets": [],
+			"stability": 0.776248410963515,
+			"war_support": 0.3699781698980646
+		},
+		{
+			"accepted_cultures": [
+				"Commoner"
+			],
+			"color": "#8E77E5",
+			"figures": [],
+			"ideology": [
+				-21,
+				-9
+			],
+			"manpower": 252990,
+			"money": 10000.0,
+			"name": "Imperial_Valoria_Domain",
+			"political_power": 150.0,
+			"puppets": [],
+			"stability": 0.5183255262755788,
+			"war_support": 0.5892566827925072
+		},
+		{
+			"accepted_cultures": [
+				"Commoner"
+			],
+			"color": "#DA7BED",
+			"figures": [],
+			"ideology": [
+				-76,
+				-50
+			],
+			"manpower": 346290,
+			"money": 10000.0,
+			"name": "Democratic_Gondor_Federation",
+			"political_power": 150.0,
+			"puppets": [],
+			"stability": 0.6113681592060988,
+			"war_support": 0.5556499994901941
+		},
+		{
+			"accepted_cultures": [
+				"Commoner"
+			],
+			"color": "#ED6CFA",
+			"figures": [],
+			"ideology": [
+				-62,
+				76
+			],
+			"manpower": 410304,
+			"money": 10000.0,
+			"name": "Federal_Eridu_Domain",
+			"political_power": 150.0,
+			"puppets": [],
+			"stability": 0.4761977872415907,
+			"war_support": 0.4334758928615549
+		},
+		{
+			"accepted_cultures": [
+				"Commoner"
+			],
+			"color": "#2A7634",
+			"figures": [],
+			"ideology": [
+				-94,
+				86
+			],
+			"manpower": 135709,
+			"money": 10000.0,
+			"name": "Democratic_Arnor_Union",
+			"political_power": 150.0,
+			"puppets": [],
+			"stability": 0.7755935431355144,
+			"war_support": 0.45111040610244585
+		},
+		{
+			"accepted_cultures": [
+				"Commoner"
+			],
+			"color": "#3FFC5C",
+			"figures": [],
+			"ideology": [
+				-60,
+				-98
+			],
+			"manpower": 68688,
+			"money": 10000.0,
+			"name": "Imperial_Eridu_Republic",
+			"political_power": 150.0,
+			"puppets": [],
+			"stability": 0.7047713760486248,
+			"war_support": 0.2403231754509823
+		},
+		{
+			"accepted_cultures": [
+				"Commoner"
+			],
+			"color": "#012FF7",
+			"figures": [],
+			"ideology": [
+				-16,
+				-89
+			],
+			"manpower": 421194,
+			"money": 10000.0,
+			"name": "Federal_Zandalar_State",
+			"political_power": 150.0,
+			"puppets": [],
+			"stability": 0.7981588891264493,
+			"war_support": 0.27819082840665676
+		}
+	],
+	"significant_figures": []
+}

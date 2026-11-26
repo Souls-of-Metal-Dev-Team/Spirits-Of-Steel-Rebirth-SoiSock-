@@ -13,10 +13,10 @@ public partial class PeaceProcessUI : CanvasLayer
 		ANNEX_NEW,
 	}
 
-	[Export] public PanelContainer sidebar_panel;
-	[Export] public Label summary_label;
-	[Export] public Label stats_label;
-	[Export] public Label loser_label;
+	[Export] public PanelContainer sidebarPanel;
+	[Export] public Label summaryLabel;
+	[Export] public Label statsLabel;
+	[Export] public Label loserLabel;
 
 	[Export] public OptionButton newDropdown;
 	[Export] public LineEdit newName;
@@ -30,17 +30,17 @@ public partial class PeaceProcessUI : CanvasLayer
 	// Country dictionaries handed to MapManager.InstantiateCountryFromProvinces.
 	private readonly List<Godot.Collections.Dictionary> creating = new();
 	private readonly List<CountryData> winners = new();
-	private int creating_selected = 0;
-	private CountryData current_selected;
-	private CountryData current_loser;
-	private readonly Dictionary<int, CountryData> provinces_to_take = new();
+	private int creatingSelected = 0;
+	private CountryData currentSelected;
+	private CountryData currentLoser;
+	private readonly Dictionary<int, CountryData> provincesToTake = new();
 	private readonly Dictionary<int, string> provincesCreating = new(); // PID -> name of the new country
 	private readonly Dictionary<string, List<int>> creatingProvinces = new();
 	private readonly Dictionary<string, CountryData> ownersCreating = new();
-	private int hovered_pid = -1;
+	private int hoveredPid = -1;
 	private readonly Dictionary<CountryData, CountryData> puppeting = new();
-	[Export] public OptionButton participant_selector;
-	private List<int> provinces_discussing = new();
+	[Export] public OptionButton participantSelector;
+	private List<int> provincesDiscussing = new();
 
 	// Color Palette
 	private static readonly Color COLOR_BG = new(0.1f, 0.1f, 0.12f, 0.98f);
@@ -51,17 +51,17 @@ public partial class PeaceProcessUI : CanvasLayer
 	public override void _Ready()
 	{
 		Hide();
-		WarManager.Instance.PeaceConferenceRequested += (p_winners, p_loser) =>
-			open_menu(p_winners.Select(w => w.As<CountryData>()).ToList(), (CountryData)p_loser);
+		WarManager.Instance.PeaceConferenceRequested += (pWinners, pLoser) =>
+			OpenMenu(pWinners.Select(w => w.As<CountryData>()).ToList(), (CountryData)pLoser);
 	}
 
-	private static Province Prov(int pid) => MapManager.Instance.province_objects[pid];
+	private static Province Prov(int pid) => MapManager.Instance.provinceObjects[pid];
 
 	private static Color CountryColor(string country) => CountryManager.Instance.GetCountryColor(country);
 
-	private string SelectedName => creating[creating_selected]["name"].AsString();
+	private string SelectedName => creating[creatingSelected]["name"].AsString();
 
-	private Color SelectedColor => Color.FromString(creating[creating_selected]["color"].AsString(), Colors.DeepSkyBlue);
+	private Color SelectedColor => Color.FromString(creating[creatingSelected]["color"].AsString(), Colors.DeepSkyBlue);
 
 	private List<int> CreatingList(string name)
 	{
@@ -79,43 +79,43 @@ public partial class PeaceProcessUI : CanvasLayer
 			return;
 
 		// 1. Ignore input if clicking on the sidebar itself
-		if (GetViewport().GetMousePosition().X < sidebar_panel.Size.X)
+		if (GetViewport().GetMousePosition().X < sidebarPanel.Size.X)
 			return;
 
 		// 2. Convert Screen position to Map/World position
-		var world = GameState.Instance.current_world;
+		var world = GameState.Instance.currentWorld;
 		if (world == null)
 			return;
 
-		var map_pos = world.GetGlobalMousePosition();
+		var mapPos = world.GetGlobalMousePosition();
 
 		// 3. Handle Hover (Motion) and Click (Button) separately
 		if (@event is InputEventMouseMotion)
-			_process_hover(map_pos);
+			_process_hover(mapPos);
 		else if (@event is InputEventMouseButton { Pressed: true, ButtonIndex: MouseButton.Left })
-			_process_click(map_pos);
+			_process_click(mapPos);
 	}
 
-	private void _process_hover(Vector2 map_pos)
+	private void _process_hover(Vector2 mapPos)
 	{
-		var pid = get_province_with_radius(map_pos, GameState.Instance.current_world.map_sprite, 5);
-		if (pid == hovered_pid)
+		var pid = GetProvinceWithRadius(mapPos, GameState.Instance.currentWorld.mapSprite, 5);
+		if (pid == hoveredPid)
 			return;
 
 		// Reset the visual of the PREVIOUS hovered province
-		if (hovered_pid > 1)
-			_reset_province_visual(hovered_pid);
+		if (hoveredPid > 1)
+			_reset_province_visual(hoveredPid);
 
-		hovered_pid = pid;
+		hoveredPid = pid;
 
 		// Apply NEW hover visual (if it's a valid land province belonging to the loser)
-		if (hovered_pid > 1)
+		if (hoveredPid > 1)
 		{
-			var objects = MapManager.Instance.province_objects;
-			var province = objects.TryGetValue(hovered_pid, out var p) ? p : null;
-			if (province != null && province.country == current_loser.country_name)
+			var objects = MapManager.Instance.provinceObjects;
+			var province = objects.TryGetValue(hoveredPid, out var p) ? p : null;
+			if (province != null && province.country == currentLoser.countryName)
 			{
-				_update_map_visual(hovered_pid, new Color(1.5f, 1.5f, 1.5f), CountryColor(province.country));
+				_update_map_visual(hoveredPid, new Color(1.5f, 1.5f, 1.5f), CountryColor(province.country));
 				Input.SetDefaultCursorShape(Input.CursorShape.PointingHand);
 			}
 			else
@@ -131,28 +131,28 @@ public partial class PeaceProcessUI : CanvasLayer
 
 	private void ShadeUntakenForPuppet(CountryData puppet)
 	{
-		foreach (var province in provinces_discussing)
+		foreach (var province in provincesDiscussing)
 		{
-			if (provinces_to_take.ContainsKey(province) || provincesCreating.ContainsKey(province))
+			if (provincesToTake.ContainsKey(province) || provincesCreating.ContainsKey(province))
 				continue;
 			var baseColor = CountryColor(Prov(province).country);
-			_update_map_visual(province, baseColor * 0.8f + puppeting[puppet].country_color * 0.2f, baseColor);
+			_update_map_visual(province, baseColor * 0.8f + puppeting[puppet].countryColor * 0.2f, baseColor);
 		}
 	}
 
-	private void _process_click(Vector2 map_pos)
+	private void _process_click(Vector2 mapPos)
 	{
-		var pid = get_province_with_radius(map_pos, GameState.Instance.current_world.map_sprite, 5);
+		var pid = GetProvinceWithRadius(mapPos, GameState.Instance.currentWorld.mapSprite, 5);
 		if (pid <= 1)
 			return;
 
 		if (Input.IsKeyPressed(Key.Ctrl))
 		{
-			current_selected = CountryManager.Instance.GetCountry(Prov(pid).country);
+			currentSelected = CountryManager.Instance.GetCountry(Prov(pid).country);
 		}
 		else
 		{
-			if (!provinces_discussing.Contains(pid))
+			if (!provincesDiscussing.Contains(pid))
 				return;
 
 			switch (mouseMode)
@@ -164,41 +164,41 @@ public partial class PeaceProcessUI : CanvasLayer
 						provincesCreating.Remove(pid);
 					}
 
-					if (provinces_to_take.TryGetValue(pid, out var taker) && taker == current_selected)
+					if (provincesToTake.TryGetValue(pid, out var taker) && taker == currentSelected)
 					{
-						provinces_to_take.Remove(pid);
+						provincesToTake.Remove(pid);
 						_reset_province_visual(pid);
 					}
 					else
 					{
-						provinces_to_take[pid] = current_selected;
-						_update_map_visual(pid, current_selected.country_color.Lightened(0.2f), CountryColor(Prov(pid).country));
+						provincesToTake[pid] = currentSelected;
+						_update_map_visual(pid, currentSelected.countryColor.Lightened(0.2f), CountryColor(Prov(pid).country));
 					}
 					break;
 				case MouseMode.PUPPET:
 				{
 					var count = CountryManager.Instance.GetCountry(Prov(pid).country);
-					if (count == current_selected)
+					if (count == currentSelected)
 						break;
-					if (puppeting.TryGetValue(count, out var puppeter) && puppeter == current_selected)
+					if (puppeting.TryGetValue(count, out var puppeter) && puppeter == currentSelected)
 					{
 						puppeting.Remove(count);
-						foreach (var province in provinces_discussing)
+						foreach (var province in provincesDiscussing)
 						{
-							if (!provinces_to_take.ContainsKey(province) && !provincesCreating.ContainsKey(province))
+							if (!provincesToTake.ContainsKey(province) && !provincesCreating.ContainsKey(province))
 								_reset_province_visual(province);
 						}
 					}
 					else
 					{
-						puppeting[count] = current_selected;
+						puppeting[count] = currentSelected;
 						ShadeUntakenForPuppet(count);
 					}
 					break;
 				}
 				case MouseMode.ANNEX_NEW:
 				{
-					provinces_to_take.Remove(pid);
+					provincesToTake.Remove(pid);
 
 					var name = SelectedName;
 					if (provincesCreating.TryGetValue(pid, out var existing) && existing == name)
@@ -224,11 +224,11 @@ public partial class PeaceProcessUI : CanvasLayer
 		_update_summary();
 	}
 
-	public void m_OnDropdownSelected(int a_selected)
+	public void MOnDropdownSelected(int aSelected)
 	{
-		if (a_selected == 0)
+		if (aSelected == 0)
 		{
-			creating_selected = newDropdown.ItemCount - 1;
+			creatingSelected = newDropdown.ItemCount - 1;
 			newDropdown.AddItem("...");
 			newName.Text = "...";
 			newOwner.Select(0);
@@ -250,7 +250,7 @@ public partial class PeaceProcessUI : CanvasLayer
 		}
 		else
 		{
-			creating_selected = a_selected - 1;
+			creatingSelected = aSelected - 1;
 			newName.Text = SelectedName;
 			if (!ownersCreating.TryGetValue(SelectedName, out var owner))
 			{
@@ -260,7 +260,7 @@ public partial class PeaceProcessUI : CanvasLayer
 			{
 				for (var i = 0; i < newOwner.ItemCount; i++)
 				{
-					if (newOwner.GetItemText(i) == owner.country_name)
+					if (newOwner.GetItemText(i) == owner.countryName)
 					{
 						newOwner.Select(i);
 						break;
@@ -271,55 +271,55 @@ public partial class PeaceProcessUI : CanvasLayer
 		}
 	}
 
-	public void m_OnNameNewSubmitted(string a_value)
+	public void MOnNameNewSubmitted(string aValue)
 	{
-		if (creating_selected < 0)
+		if (creatingSelected < 0)
 			return;
 		var oldName = SelectedName;
 		if (creatingProvinces.TryGetValue(oldName, out var pids))
 		{
-			creatingProvinces[a_value] = new List<int>(pids);
+			creatingProvinces[aValue] = new List<int>(pids);
 			foreach (var pid in pids)
-				provincesCreating[pid] = a_value;
+				provincesCreating[pid] = aValue;
 		}
-		if (oldName != a_value)
+		if (oldName != aValue)
 			creatingProvinces.Remove(oldName);
-		newDropdown.SetItemText(creating_selected + 1, a_value);
+		newDropdown.SetItemText(creatingSelected + 1, aValue);
 		if (ownersCreating.TryGetValue(oldName, out var owner))
 		{
 			ownersCreating.Remove(oldName);
-			ownersCreating[a_value] = owner;
+			ownersCreating[aValue] = owner;
 		}
-		creating[creating_selected]["name"] = a_value;
+		creating[creatingSelected]["name"] = aValue;
 	}
 
-	public void m_OnColorNewSubmitted(Color a_value)
+	public void MOnColorNewSubmitted(Color aValue)
 	{
-		creating[creating_selected]["color"] = "#" + a_value.ToHtml(false).ToUpper();
+		creating[creatingSelected]["color"] = "#" + aValue.ToHtml(false).ToUpper();
 		if (!creatingProvinces.TryGetValue(SelectedName, out var pids))
 			return;
 		foreach (var pid in pids)
-			_update_map_visual(pid, a_value.Lightened(0.2f), CountryColor(Prov(pid).country));
+			_update_map_visual(pid, aValue.Lightened(0.2f), CountryColor(Prov(pid).country));
 	}
 
-	public void m_OnOwnerNewSelected(int a_index)
+	public void MOnOwnerNewSelected(int aIndex)
 	{
-		if (a_index == 0)
+		if (aIndex == 0)
 			ownersCreating.Remove(SelectedName);
 		else
 			// The last entry is the loser; the GDScript compared against item_count, which never matched.
-			ownersCreating[SelectedName] = a_index == newOwner.ItemCount - 1 ? current_loser : winners[a_index - 1];
+			ownersCreating[SelectedName] = aIndex == newOwner.ItemCount - 1 ? currentLoser : winners[aIndex - 1];
 	}
 
-	public void m_OnAnnexNewPressed()
+	public void MOnAnnexNewPressed()
 	{
 		mouseMode = MouseMode.ANNEX_NEW;
 		subsumeButton.Disabled = false;
 	}
 
-	public void m_OnDeleteNewPressed()
+	public void MOnDeleteNewPressed()
 	{
-		if (creating_selected < 0)
+		if (creatingSelected < 0)
 			return;
 		if (creatingProvinces.TryGetValue(SelectedName, out var pids))
 		{
@@ -327,10 +327,10 @@ public partial class PeaceProcessUI : CanvasLayer
 				provincesCreating.Remove(pid);
 		}
 		creatingProvinces.Remove(SelectedName);
-		newDropdown.RemoveItem(creating_selected + 1);
+		newDropdown.RemoveItem(creatingSelected + 1);
 
-		creating.RemoveAt(creating_selected);
-		creating_selected = -1;
+		creating.RemoveAt(creatingSelected);
+		creatingSelected = -1;
 	}
 
 	public void _on_annex_all_pressed()
@@ -341,7 +341,7 @@ public partial class PeaceProcessUI : CanvasLayer
 
 	public void _on_winner_selected(int index)
 	{
-		current_selected = index < winners.Count ? winners[index] : current_loser;
+		currentSelected = index < winners.Count ? winners[index] : currentLoser;
 		mouseMode = MouseMode.ANNEX;
 	}
 
@@ -353,8 +353,8 @@ public partial class PeaceProcessUI : CanvasLayer
 
 	public void _on_clear_selection_pressed()
 	{
-		var pids = provinces_to_take.Keys.ToList();
-		provinces_to_take.Clear();
+		var pids = provincesToTake.Keys.ToList();
+		provincesToTake.Clear();
 		foreach (var pid in pids)
 			_reset_province_visual_immediate(pid);
 		_update_summary();
@@ -367,23 +367,23 @@ public partial class PeaceProcessUI : CanvasLayer
 		_update_map_visual(pid, cm.GetCountryColor(prov.GetFunctionalOwner(), Colors.White), cm.GetCountryColor(prov.country, Colors.White));
 	}
 
-	public void m_AnnexAll()
+	public void MAnnexAll()
 	{
 		switch (mouseMode)
 		{
 			case MouseMode.ANNEX:
-				foreach (var province in provinces_discussing)
+				foreach (var province in provincesDiscussing)
 				{
-					if (provinces_to_take.ContainsKey(province) || provincesCreating.ContainsKey(province))
+					if (provincesToTake.ContainsKey(province) || provincesCreating.ContainsKey(province))
 						continue;
-					provinces_to_take[province] = current_selected;
-					_update_map_visual(province, current_selected.country_color.Lightened(0.2f), CountryColor(Prov(province).country));
+					provincesToTake[province] = currentSelected;
+					_update_map_visual(province, currentSelected.countryColor.Lightened(0.2f), CountryColor(Prov(province).country));
 				}
 				break;
 			case MouseMode.ANNEX_NEW:
-				foreach (var province in provinces_discussing)
+				foreach (var province in provincesDiscussing)
 				{
-					if (provinces_to_take.ContainsKey(province) || provincesCreating.ContainsKey(province))
+					if (provincesToTake.ContainsKey(province) || provincesCreating.ContainsKey(province))
 						continue;
 					provincesCreating[province] = SelectedName;
 					CreatingList(SelectedName).Add(province);
@@ -397,21 +397,21 @@ public partial class PeaceProcessUI : CanvasLayer
 
 	// --- Logic & Integration ---
 
-	public void open_menu(List<CountryData> p_winners, CountryData p_loser)
+	public void OpenMenu(List<CountryData> pWinners, CountryData pLoser)
 	{
 		mouseMode = MouseMode.ANNEX;
 		subsumeButton.Disabled = false;
 		Show();
 		winners.Clear();
-		winners.AddRange(p_winners);
-		current_loser = p_loser;
-		provinces_to_take.Clear();
-		provinces_discussing = MapManager.Instance.country_to_owned_provinces[p_loser.country_name].ToList();
+		winners.AddRange(pWinners);
+		currentLoser = pLoser;
+		provincesToTake.Clear();
+		provincesDiscussing = MapManager.Instance.countryToOwnedProvinces[pLoser.countryName].ToList();
 		puppeting.Clear();
 		creating.Clear();
 		creatingProvinces.Clear();
 		provincesCreating.Clear();
-		creating_selected = -1;
+		creatingSelected = -1;
 		ownersCreating.Clear();
 
 		newName.Text = "";
@@ -421,67 +421,70 @@ public partial class PeaceProcessUI : CanvasLayer
 		newDropdown.AddItem("New");
 		newOwner.Clear();
 		newOwner.AddItem("None");
-		participant_selector.Clear();
-		var player_index = -1;
+		participantSelector.Clear();
+		var playerIndex = -1;
 		for (var i = 0; i < winners.Count; i++)
 		{
-			newOwner.AddItem(winners[i].country_name);
-			participant_selector.AddItem(winners[i].country_name);
-			if (winners[i].is_player)
-				player_index = i;
+			newOwner.AddItem(winners[i].countryName);
+			participantSelector.AddItem(winners[i].countryName);
+			if (winners[i].isPlayer)
+				playerIndex = i;
 		}
-		newOwner.AddItem(p_loser.country_name);
-		participant_selector.AddItem(p_loser.country_name);
+		newOwner.AddItem(pLoser.countryName);
+		participantSelector.AddItem(pLoser.countryName);
 
-		if (player_index != -1)
+		if (playerIndex != -1)
 		{
-			participant_selector.Selected = player_index;
-			current_selected = winners[player_index];
+			participantSelector.Selected = playerIndex;
+			currentSelected = winners[playerIndex];
 		}
 		else
 		{
-			participant_selector.Selected = 0;
-			current_selected = winners[0];
+			participantSelector.Selected = 0;
+			currentSelected = winners[0];
 		}
 
 		SetGameUiVisible(false);
-		GameState.Instance.current_world.clock.pause();
-		loser_label.Text = $"Negotations: {p_loser.country_name}";
-		GameState.Instance.in_peace_process = true;
+		GameState.Instance.currentWorld.clock.pause();
+		loserLabel.Text = $"Negotations: {pLoser.countryName}";
+		GameState.Instance.inPeaceProcess = true;
 		_update_summary();
 	}
 
-	private void SetGameUiVisible(bool a_visible)
+	private void SetGameUiVisible(bool aVisible)
 	{
-		if (GetTree().Root.FindChild("ui_game", true, false) is CanvasLayer game_ui)
-			game_ui.Visible = a_visible;
+		if (GetTree().Root.FindChild("ui_game", true, false) is CanvasLayer gameUi)
+			gameUi.Visible = aVisible;
 	}
 
 	private void _update_summary()
 	{
-		summary_label.Text = $"Provinces Selected: {provinces_to_take.Count}";
+		summaryLabel.Text = $"Provinces Selected: {provincesToTake.Count}";
 
 		// Calculate percentage for flavor
-		var total_loser_provinces = 0;
-		foreach (var p in MapManager.Instance.province_objects.Values)
+		var totalLoserProvinces = 0;
+		foreach (var p in MapManager.Instance.provinceObjects.Values)
 		{
-			if (p.country == current_loser.country_name)
-				total_loser_provinces++;
+			if (p.country == currentLoser.countryName)
+				totalLoserProvinces++;
 		}
 
-		if (total_loser_provinces > 0)
-			stats_label.Text = $"Total Country Loss: {(int)((float)provinces_to_take.Count / total_loser_provinces * 100)}%";
+		if (totalLoserProvinces > 0)
+			statsLabel.Text = $"Total Country Loss: {(int)((float)provincesToTake.Count / totalLoserProvinces * 100)}%";
 	}
 
 	public void _on_confirm_pressed()
 	{
 		var map = MapManager.Instance;
 		var cm = CountryManager.Instance;
-		foreach (var (pid, recipient) in provinces_to_take)
-			map.TransferOwnership(pid, recipient.country_name);
+		foreach (var (pid, recipient) in provincesToTake)
+			ActionDispatcher.Instance.Submit(new TransferProvinceAction
+			{
+				Issuer = recipient.countryName, ProvinceId = pid, NewOwner = recipient.countryName,
+			});
 
 		foreach (var (puppet, puppeter) in puppeting)
-			cm.make_puppet(puppeter, puppet);
+			cm.MakePuppet(puppeter, puppet);
 
 		foreach (var country in creating)
 		{
@@ -493,53 +496,53 @@ public partial class PeaceProcessUI : CanvasLayer
 		foreach (var (puppet, owner) in ownersCreating)
 		{
 			if (cm.countries.ContainsKey(puppet))
-				cm.make_puppet(owner, cm.GetCountry(puppet));
+				cm.MakePuppet(owner, cm.GetCountry(puppet));
 		}
 
 		SetGameUiVisible(true);
-		GameState.Instance.in_peace_process = false;
-		GameState.Instance.current_world.clock.resume();
+		GameState.Instance.inPeaceProcess = false;
+		GameState.Instance.currentWorld.clock.resume();
 
 		Hide();
 	}
 
-	public void force_close()
+	public void ForceClose()
 	{
 		SetProcess(false);
 		SetPhysicsProcess(false);
 		Hide();
 
 		// Clear selections & state
-		provinces_to_take.Clear();
+		provincesToTake.Clear();
 		winners.Clear();
-		current_loser = null;
+		currentLoser = null;
 		puppeting.Clear();
-		hovered_pid = -1;
+		hoveredPid = -1;
 
 		// Reset global flags
-		GameState.Instance.in_peace_process = false;
+		GameState.Instance.inPeaceProcess = false;
 
 		// Restore standard UI if possible
 		SetGameUiVisible(true);
 
 		// Essential to resume clock if we were paused by the peace menu
-		GameState.Instance.current_world?.clock?.resume();
+		GameState.Instance.currentWorld?.clock?.resume();
 	}
 
-	public int get_province_with_radius(Vector2 global_pos, Sprite2D map_sprite, int radius)
-		=> MapManager.Instance.GetProvinceWithRadius(global_pos, map_sprite, radius);
+	public int GetProvinceWithRadius(Vector2 globalPos, Sprite2D mapSprite, int radius)
+		=> MapManager.Instance.GetProvinceWithRadius(globalPos, mapSprite, radius);
 
-	private static void _update_map_visual(int pid, Color color, Color secondary_color)
+	private static void _update_map_visual(int pid, Color color, Color secondaryColor)
 	{
 		// We call MapManager's lookup update to refresh the shader texture
-		MapManager.Instance.SetProvinceColors(pid, color, secondary_color);
+		MapManager.Instance.SetProvinceColors(pid, color, secondaryColor);
 	}
 
 	private void _reset_province_visual(int pid)
 	{
-		if (provinces_to_take.TryGetValue(pid, out var taker))
+		if (provincesToTake.TryGetValue(pid, out var taker))
 		{
-			_update_map_visual(pid, taker.country_color.Lightened(0.2f), CountryColor(Prov(pid).country));
+			_update_map_visual(pid, taker.countryColor.Lightened(0.2f), CountryColor(Prov(pid).country));
 		}
 		else if (provincesCreating.TryGetValue(pid, out var name))
 		{
@@ -550,15 +553,15 @@ public partial class PeaceProcessUI : CanvasLayer
 		else
 		{
 			// Otherwise, revert to the original country color (legal owner)
-			var objects = MapManager.Instance.province_objects;
+			var objects = MapManager.Instance.provinceObjects;
 			var province = objects.TryGetValue(pid, out var p) ? p : null;
 			if (province != null && province.country != "Sea")
 				_update_map_visual(pid, CountryColor(province.GetFunctionalOwner()), CountryColor(province.country));
 		}
 	}
 
-	public void m_OnLineEditFocusExited()
+	public void MOnLineEditFocusExited()
 	{
-		m_OnNameNewSubmitted(newName.Text);
+		MOnNameNewSubmitted(newName.Text);
 	}
 }

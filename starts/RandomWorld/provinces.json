@@ -1,0 +1,4602 @@
+{
+	"10011253": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 60034,
+		"name": "Province 132",
+		"polity": "Imperial_Eridu_Republic",
+		"population": [
+			{
+				"amount": 347332,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"10050035": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 70705,
+		"name": "Province 4",
+		"polity": "Imperial_Valoria_Domain",
+		"population": [
+			{
+				"amount": 623795,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"1020697": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 86327,
+		"name": "Province 19",
+		"polity": "Imperial_Eridu_Republic",
+		"population": [
+			{
+				"amount": 756822,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"10217945": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 10382,
+		"name": "Province 88",
+		"polity": "Federal_Eridu_Domain",
+		"population": [
+			{
+				"amount": 256855,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"10301565": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "Capital City",
+		"claims": [],
+		"gdp": 64616,
+		"name": "Province 29",
+		"polity": "Imperial_Eridu_Republic",
+		"population": [
+			{
+				"amount": 850579,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"10350865": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 69760,
+		"name": "Province 194",
+		"polity": "United_Aethel_Union",
+		"population": [
+			{
+				"amount": 775142,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"10507696": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 78103,
+		"name": "Province 33",
+		"polity": "Democratic_Soveria_Federation",
+		"population": [
+			{
+				"amount": 307407,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"10542341": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 59471,
+		"name": "Province 182",
+		"polity": "Imperial_Eridu_Republic",
+		"population": [
+			{
+				"amount": 149005,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"10610604": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 20021,
+		"name": "Province 117",
+		"polity": "Democratic_Gondor_Federation",
+		"population": [
+			{
+				"amount": 942664,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"1074014": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 94885,
+		"name": "Province 75",
+		"polity": "Federal_Eridu_Domain",
+		"population": [
+			{
+				"amount": 804273,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"10816804": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 34965,
+		"name": "Province 106",
+		"polity": "Federal_Eridu_Domain",
+		"population": [
+			{
+				"amount": 590251,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"10829462": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 38741,
+		"name": "Province 73",
+		"polity": "Federal_Zandalar_State",
+		"population": [
+			{
+				"amount": 179583,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"10942902": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 72903,
+		"name": "Province 67",
+		"polity": "Democratic_Soveria_Federation",
+		"population": [
+			{
+				"amount": 955063,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"11002510": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 18087,
+		"name": "Province 96",
+		"polity": "Democratic_Soveria_Federation",
+		"population": [
+			{
+				"amount": 393364,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"11018051": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 29297,
+		"name": "Province 196",
+		"polity": "Democratic_Soveria_Federation",
+		"population": [
+			{
+				"amount": 876298,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"11024574": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 62940,
+		"name": "Province 63",
+		"polity": "Imperial_Eridu_Republic",
+		"population": [
+			{
+				"amount": 654075,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"11223102": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 29342,
+		"name": "Province 148",
+		"polity": "Democratic_Soveria_Federation",
+		"population": [
+			{
+				"amount": 679574,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"11310399": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 29501,
+		"name": "Province 20",
+		"polity": "Federal_Zandalar_State",
+		"population": [
+			{
+				"amount": 399929,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"11441278": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 38990,
+		"name": "Province 1",
+		"polity": "Federal_Zandalar_State",
+		"population": [
+			{
+				"amount": 755801,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"11536723": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "Capital City",
+		"claims": [],
+		"gdp": 24173,
+		"name": "Province 185",
+		"polity": "Federal_Zandalar_State",
+		"population": [
+			{
+				"amount": 251278,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"11588370": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 57298,
+		"name": "Province 45",
+		"polity": "United_Aethel_Union",
+		"population": [
+			{
+				"amount": 403793,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"11778044": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 86766,
+		"name": "Province 154",
+		"polity": "Imperial_Valoria_Domain",
+		"population": [
+			{
+				"amount": 270259,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"11840845": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 28124,
+		"name": "Province 173",
+		"polity": "Federal_Eridu_Domain",
+		"population": [
+			{
+				"amount": 130285,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"11907430": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 39052,
+		"name": "Province 82",
+		"polity": "Democratic_Soveria_Federation",
+		"population": [
+			{
+				"amount": 860851,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"11947785": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 87532,
+		"name": "Province 99",
+		"polity": "Imperial_Eridu_Republic",
+		"population": [
+			{
+				"amount": 228856,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"12200564": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 61652,
+		"name": "Province 13",
+		"polity": "Democratic_Soveria_Federation",
+		"population": [
+			{
+				"amount": 441355,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"12268101": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 91351,
+		"name": "Province 195",
+		"polity": "Democratic_Arnor_Union",
+		"population": [
+			{
+				"amount": 533587,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"12274531": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 28346,
+		"name": "Province 142",
+		"polity": "Imperial_Eridu_Republic",
+		"population": [
+			{
+				"amount": 583958,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"12425269": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 17324,
+		"name": "Province 85",
+		"polity": "Imperial_Valoria_Domain",
+		"population": [
+			{
+				"amount": 998600,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"12555472": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 26599,
+		"name": "Province 190",
+		"polity": "Democratic_Gondor_Federation",
+		"population": [
+			{
+				"amount": 216324,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"12560280": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 91109,
+		"name": "Province 157",
+		"polity": "Federal_Zandalar_State",
+		"population": [
+			{
+				"amount": 902664,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"12658068": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 54449,
+		"name": "Province 114",
+		"polity": "Imperial_Valoria_Domain",
+		"population": [
+			{
+				"amount": 357280,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"1273709": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 26158,
+		"name": "Province 121",
+		"polity": "Imperial_Valoria_Domain",
+		"population": [
+			{
+				"amount": 905284,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"1300130": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 95574,
+		"name": "Province 109",
+		"polity": "Democratic_Soveria_Federation",
+		"population": [
+			{
+				"amount": 127254,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"13026424": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 89364,
+		"name": "Province 137",
+		"polity": "Federal_Eridu_Domain",
+		"population": [
+			{
+				"amount": 193207,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"13112253": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 38639,
+		"name": "Province 6",
+		"polity": "Democratic_Gondor_Federation",
+		"population": [
+			{
+				"amount": 770499,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"13283450": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 45550,
+		"name": "Province 11",
+		"polity": "Democratic_Gondor_Federation",
+		"population": [
+			{
+				"amount": 475394,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"13392276": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 47451,
+		"name": "Province 51",
+		"polity": "United_Aethel_Union",
+		"population": [
+			{
+				"amount": 420906,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"13538910": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 36453,
+		"name": "Province 143",
+		"polity": "Democratic_Gondor_Federation",
+		"population": [
+			{
+				"amount": 710416,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"13540213": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 18589,
+		"name": "Province 66",
+		"polity": "United_Aethel_Union",
+		"population": [
+			{
+				"amount": 199900,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"13686131": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 93932,
+		"name": "Province 12",
+		"polity": "Imperial_Soveria_Federation",
+		"population": [
+			{
+				"amount": 997331,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"13798706": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 53756,
+		"name": "Province 93",
+		"polity": "Imperial_Soveria_Federation",
+		"population": [
+			{
+				"amount": 790451,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"1380987": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 54450,
+		"name": "Province 188",
+		"polity": "Democratic_Gondor_Federation",
+		"population": [
+			{
+				"amount": 141042,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"13924748": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 70613,
+		"name": "Province 27",
+		"polity": "Imperial_Soveria_Federation",
+		"population": [
+			{
+				"amount": 687970,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"13970875": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 35295,
+		"name": "Province 164",
+		"polity": "Democratic_Arnor_Union",
+		"population": [
+			{
+				"amount": 984286,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"14014173": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 41263,
+		"name": "Province 112",
+		"polity": "Democratic_Eridu_Kingdom",
+		"population": [
+			{
+				"amount": 869115,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"14043240": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 82319,
+		"name": "Province 83",
+		"polity": "Democratic_Gondor_Federation",
+		"population": [
+			{
+				"amount": 373899,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"14056675": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 67255,
+		"name": "Province 78",
+		"polity": "Imperial_Eridu_Republic",
+		"population": [
+			{
+				"amount": 860233,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"14081514": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 51611,
+		"name": "Province 128",
+		"polity": "Federal_Zandalar_State",
+		"population": [
+			{
+				"amount": 483951,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"14260599": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 68454,
+		"name": "Province 9",
+		"polity": "Federal_Eridu_Domain",
+		"population": [
+			{
+				"amount": 261184,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"14314736": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 67147,
+		"name": "Province 76",
+		"polity": "Democratic_Eridu_Kingdom",
+		"population": [
+			{
+				"amount": 448503,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"14329196": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "Capital City",
+		"claims": [],
+		"gdp": 48039,
+		"name": "Province 165",
+		"polity": "Imperial_Eridu_Republic",
+		"population": [
+			{
+				"amount": 702596,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"14347197": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 83494,
+		"name": "Province 135",
+		"polity": "Federal_Zandalar_State",
+		"population": [
+			{
+				"amount": 518198,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"1448936": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 73500,
+		"name": "Province 90",
+		"polity": "Imperial_Eridu_Republic",
+		"population": [
+			{
+				"amount": 288754,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"14515177": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 29365,
+		"name": "Province 153",
+		"polity": "Imperial_Eridu_Republic",
+		"population": [
+			{
+				"amount": 870484,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"1453599": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 29789,
+		"name": "Province 36",
+		"polity": "Democratic_Eridu_Kingdom",
+		"population": [
+			{
+				"amount": 824300,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"14567709": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 41528,
+		"name": "Province 170",
+		"polity": "Federal_Zandalar_State",
+		"population": [
+			{
+				"amount": 358697,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"14568058": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 61162,
+		"name": "Province 149",
+		"polity": "Imperial_Eridu_Republic",
+		"population": [
+			{
+				"amount": 189323,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"1463507": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 94716,
+		"name": "Province 110",
+		"polity": "Federal_Eridu_Domain",
+		"population": [
+			{
+				"amount": 893047,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"14638512": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 99944,
+		"name": "Province 180",
+		"polity": "Imperial_Valoria_Domain",
+		"population": [
+			{
+				"amount": 320610,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"14720407": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 69867,
+		"name": "Province 3",
+		"polity": "Federal_Eridu_Domain",
+		"population": [
+			{
+				"amount": 991338,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"14769405": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 20399,
+		"name": "Province 72",
+		"polity": "Federal_Eridu_Domain",
+		"population": [
+			{
+				"amount": 658067,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"14802593": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 66958,
+		"name": "Province 48",
+		"polity": "Federal_Eridu_Domain",
+		"population": [
+			{
+				"amount": 230539,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"14893050": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 81059,
+		"name": "Province 101",
+		"polity": "Democratic_Eridu_Kingdom",
+		"population": [
+			{
+				"amount": 850891,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"14954860": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 17081,
+		"name": "Province 174",
+		"polity": "Federal_Zandalar_State",
+		"population": [
+			{
+				"amount": 752300,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"14984982": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 33346,
+		"name": "Province 16",
+		"polity": "Imperial_Valoria_Domain",
+		"population": [
+			{
+				"amount": 212950,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"15022148": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 87042,
+		"name": "Province 35",
+		"polity": "Imperial_Soveria_Federation",
+		"population": [
+			{
+				"amount": 930372,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"15094257": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 83620,
+		"name": "Province 21",
+		"polity": "Democratic_Arnor_Union",
+		"population": [
+			{
+				"amount": 890466,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"15134453": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 35609,
+		"name": "Province 134",
+		"polity": "United_Aethel_Union",
+		"population": [
+			{
+				"amount": 128460,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"15206442": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 92803,
+		"name": "Province 89",
+		"polity": "Imperial_Valoria_Domain",
+		"population": [
+			{
+				"amount": 263531,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"15215858": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 21985,
+		"name": "Province 74",
+		"polity": "Democratic_Gondor_Federation",
+		"population": [
+			{
+				"amount": 117304,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"15251668": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 59307,
+		"name": "Province 111",
+		"polity": "Democratic_Soveria_Federation",
+		"population": [
+			{
+				"amount": 839517,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"15260018": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 91524,
+		"name": "Province 146",
+		"polity": "Democratic_Eridu_Kingdom",
+		"population": [
+			{
+				"amount": 778563,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"1527243": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 86702,
+		"name": "Province 34",
+		"polity": "Democratic_Gondor_Federation",
+		"population": [
+			{
+				"amount": 495886,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"1570735": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 71429,
+		"name": "Province 139",
+		"polity": "Federal_Zandalar_State",
+		"population": [
+			{
+				"amount": 220373,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"1577869": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 41106,
+		"name": "Province 166",
+		"polity": "Democratic_Gondor_Federation",
+		"population": [
+			{
+				"amount": 795282,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"15818555": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 50315,
+		"name": "Province 168",
+		"polity": "Democratic_Soveria_Federation",
+		"population": [
+			{
+				"amount": 614777,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"15827370": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 52025,
+		"name": "Province 69",
+		"polity": "Democratic_Arnor_Union",
+		"population": [
+			{
+				"amount": 887852,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"15844101": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 75075,
+		"name": "Province 37",
+		"polity": "Democratic_Arnor_Union",
+		"population": [
+			{
+				"amount": 603622,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"15885540": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 58638,
+		"name": "Province 84",
+		"polity": "United_Aethel_Union",
+		"population": [
+			{
+				"amount": 867144,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"15927324": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 24276,
+		"name": "Province 192",
+		"polity": "Democratic_Soveria_Federation",
+		"population": [
+			{
+				"amount": 369422,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"15954180": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "Capital City",
+		"claims": [],
+		"gdp": 27791,
+		"name": "Province 39",
+		"polity": "Imperial_Valoria_Domain",
+		"population": [
+			{
+				"amount": 292539,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"16256942": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 69828,
+		"name": "Province 46",
+		"polity": "Federal_Zandalar_State",
+		"population": [
+			{
+				"amount": 861899,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"1633672": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 22955,
+		"name": "Province 87",
+		"polity": "Imperial_Soveria_Federation",
+		"population": [
+			{
+				"amount": 822762,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"16351773": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 67186,
+		"name": "Province 65",
+		"polity": "Imperial_Valoria_Domain",
+		"population": [
+			{
+				"amount": 247891,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"1635258": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "Capital City",
+		"claims": [],
+		"gdp": 94874,
+		"name": "Province 107",
+		"polity": "Federal_Eridu_Domain",
+		"population": [
+			{
+				"amount": 844702,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"16357203": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 59290,
+		"name": "Province 145",
+		"polity": "Federal_Zandalar_State",
+		"population": [
+			{
+				"amount": 766022,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"16398820": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "Capital City",
+		"claims": [],
+		"gdp": 94047,
+		"name": "Province 138",
+		"polity": "Imperial_Soveria_Federation",
+		"population": [
+			{
+				"amount": 669389,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"16409036": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 48136,
+		"name": "Province 147",
+		"polity": "Democratic_Soveria_Federation",
+		"population": [
+			{
+				"amount": 425445,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"16437256": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 59082,
+		"name": "Province 71",
+		"polity": "Federal_Zandalar_State",
+		"population": [
+			{
+				"amount": 841775,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"16536569": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 74134,
+		"name": "Province 64",
+		"polity": "Democratic_Arnor_Union",
+		"population": [
+			{
+				"amount": 569544,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"16559225": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 10900,
+		"name": "Province 60",
+		"polity": "Democratic_Eridu_Kingdom",
+		"population": [
+			{
+				"amount": 709503,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"1658039": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 40462,
+		"name": "Province 159",
+		"polity": "Democratic_Soveria_Federation",
+		"population": [
+			{
+				"amount": 867995,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"1757628": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 78087,
+		"name": "Province 119",
+		"polity": "Imperial_Soveria_Federation",
+		"population": [
+			{
+				"amount": 887292,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"183971": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 69797,
+		"name": "Province 193",
+		"polity": "Democratic_Eridu_Kingdom",
+		"population": [
+			{
+				"amount": 356489,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"1904310": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "Capital City",
+		"claims": [],
+		"gdp": 52210,
+		"name": "Province 124",
+		"polity": "Imperial_Soveria_Federation",
+		"population": [
+			{
+				"amount": 922428,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"1909763": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 41033,
+		"name": "Province 86",
+		"polity": "Imperial_Valoria_Domain",
+		"population": [
+			{
+				"amount": 482232,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"1981382": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 70163,
+		"name": "Province 25",
+		"polity": "Democratic_Soveria_Federation",
+		"population": [
+			{
+				"amount": 276968,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"2010997": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 37953,
+		"name": "Province 125",
+		"polity": "Democratic_Arnor_Union",
+		"population": [
+			{
+				"amount": 688365,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"2020398": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "Capital City",
+		"claims": [],
+		"gdp": 40334,
+		"name": "Province 70",
+		"polity": "Imperial_Valoria_Domain",
+		"population": [
+			{
+				"amount": 417901,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"2023115": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 54986,
+		"name": "Province 144",
+		"polity": "Democratic_Gondor_Federation",
+		"population": [
+			{
+				"amount": 454759,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"2038997": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "Capital City",
+		"claims": [],
+		"gdp": 54493,
+		"name": "Province 156",
+		"polity": "United_Aethel_Union",
+		"population": [
+			{
+				"amount": 877377,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"2057264": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 40770,
+		"name": "Province 140",
+		"polity": "United_Aethel_Union",
+		"population": [
+			{
+				"amount": 477220,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"2375762": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 94007,
+		"name": "Province 177",
+		"polity": "Democratic_Eridu_Kingdom",
+		"population": [
+			{
+				"amount": 934114,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"2465202": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 63256,
+		"name": "Province 197",
+		"polity": "Federal_Eridu_Domain",
+		"population": [
+			{
+				"amount": 735661,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"2510669": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 50116,
+		"name": "Province 44",
+		"polity": "Democratic_Arnor_Union",
+		"population": [
+			{
+				"amount": 908485,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"2600376": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 23290,
+		"name": "Province 42",
+		"polity": "Imperial_Soveria_Federation",
+		"population": [
+			{
+				"amount": 775116,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"275898": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 23499,
+		"name": "Province 59",
+		"polity": "Democratic_Gondor_Federation",
+		"population": [
+			{
+				"amount": 455517,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"2807345": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "Capital City",
+		"claims": [],
+		"gdp": 65638,
+		"name": "Province 187",
+		"polity": "Federal_Eridu_Domain",
+		"population": [
+			{
+				"amount": 474146,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"2880955": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "Capital City",
+		"claims": [],
+		"gdp": 32263,
+		"name": "Province 40",
+		"polity": "Imperial_Eridu_Republic",
+		"population": [
+			{
+				"amount": 152052,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"3048081": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 77515,
+		"name": "Province 115",
+		"polity": "Democratic_Soveria_Federation",
+		"population": [
+			{
+				"amount": 279549,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"3373333": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 24080,
+		"name": "Province 17",
+		"polity": "Democratic_Eridu_Kingdom",
+		"population": [
+			{
+				"amount": 296533,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"3387774": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 21188,
+		"name": "Province 178",
+		"polity": "Imperial_Soveria_Federation",
+		"population": [
+			{
+				"amount": 616657,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"3493391": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "Capital City",
+		"claims": [],
+		"gdp": 47818,
+		"name": "Province 31",
+		"polity": "Democratic_Arnor_Union",
+		"population": [
+			{
+				"amount": 985144,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"352740": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 60822,
+		"name": "Province 108",
+		"polity": "Imperial_Eridu_Republic",
+		"population": [
+			{
+				"amount": 416944,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"3839191": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 12081,
+		"name": "Province 181",
+		"polity": "United_Aethel_Union",
+		"population": [
+			{
+				"amount": 134527,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"3879380": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 13592,
+		"name": "Province 57",
+		"polity": "Imperial_Eridu_Republic",
+		"population": [
+			{
+				"amount": 174996,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"399384": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 81050,
+		"name": "Province 104",
+		"polity": "Democratic_Gondor_Federation",
+		"population": [
+			{
+				"amount": 909979,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"4135397": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 36685,
+		"name": "Province 183",
+		"polity": "Federal_Eridu_Domain",
+		"population": [
+			{
+				"amount": 885102,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"4167082": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 17070,
+		"name": "Province 158",
+		"polity": "Imperial_Eridu_Republic",
+		"population": [
+			{
+				"amount": 856762,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"4177823": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 82209,
+		"name": "Province 41",
+		"polity": "Democratic_Arnor_Union",
+		"population": [
+			{
+				"amount": 208174,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"4188152": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 84575,
+		"name": "Province 2",
+		"polity": "Democratic_Soveria_Federation",
+		"population": [
+			{
+				"amount": 256603,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"4222154": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 82809,
+		"name": "Province 77",
+		"polity": "Democratic_Soveria_Federation",
+		"population": [
+			{
+				"amount": 112201,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"4305355": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 63746,
+		"name": "Province 127",
+		"polity": "Democratic_Arnor_Union",
+		"population": [
+			{
+				"amount": 719656,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"4309687": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 54155,
+		"name": "Province 184",
+		"polity": "Imperial_Valoria_Domain",
+		"population": [
+			{
+				"amount": 822358,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"4383952": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 70457,
+		"name": "Province 151",
+		"polity": "Imperial_Valoria_Domain",
+		"population": [
+			{
+				"amount": 951350,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"4398569": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 17407,
+		"name": "Province 43",
+		"polity": "Democratic_Gondor_Federation",
+		"population": [
+			{
+				"amount": 530934,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"4435587": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 43804,
+		"name": "Province 103",
+		"polity": "Imperial_Valoria_Domain",
+		"population": [
+			{
+				"amount": 997589,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"4448172": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 69477,
+		"name": "Province 56",
+		"polity": "Imperial_Soveria_Federation",
+		"population": [
+			{
+				"amount": 776615,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"454422": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 95461,
+		"name": "Province 80",
+		"polity": "United_Aethel_Union",
+		"population": [
+			{
+				"amount": 529897,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"4565331": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 28854,
+		"name": "Province 133",
+		"polity": "Imperial_Soveria_Federation",
+		"population": [
+			{
+				"amount": 432224,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"4611948": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 42161,
+		"name": "Province 68",
+		"polity": "Imperial_Eridu_Republic",
+		"population": [
+			{
+				"amount": 278283,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"4622153": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 92115,
+		"name": "Province 14",
+		"polity": "Federal_Eridu_Domain",
+		"population": [
+			{
+				"amount": 776858,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"4648142": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 20179,
+		"name": "Province 15",
+		"polity": "Democratic_Eridu_Kingdom",
+		"population": [
+			{
+				"amount": 793420,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"4651429": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 25642,
+		"name": "Province 130",
+		"polity": "Imperial_Eridu_Republic",
+		"population": [
+			{
+				"amount": 339020,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"4806364": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 96836,
+		"name": "Province 62",
+		"polity": "Democratic_Gondor_Federation",
+		"population": [
+			{
+				"amount": 282008,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"4870186": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 27308,
+		"name": "Province 24",
+		"polity": "Imperial_Soveria_Federation",
+		"population": [
+			{
+				"amount": 759955,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"4872158": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 89934,
+		"name": "Province 23",
+		"polity": "Imperial_Eridu_Republic",
+		"population": [
+			{
+				"amount": 103669,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"4937536": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 26384,
+		"name": "Province 116",
+		"polity": "Imperial_Eridu_Republic",
+		"population": [
+			{
+				"amount": 658142,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"5105046": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 84084,
+		"name": "Province 97",
+		"polity": "Democratic_Arnor_Union",
+		"population": [
+			{
+				"amount": 714098,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"512003": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 36537,
+		"name": "Province 186",
+		"polity": "Imperial_Soveria_Federation",
+		"population": [
+			{
+				"amount": 973117,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"5160110": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 84486,
+		"name": "Province 141",
+		"polity": "Federal_Eridu_Domain",
+		"population": [
+			{
+				"amount": 117657,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"5200191": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 36936,
+		"name": "Province 8",
+		"polity": "Imperial_Eridu_Republic",
+		"population": [
+			{
+				"amount": 607642,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"5241361": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 36598,
+		"name": "Province 161",
+		"polity": "Imperial_Valoria_Domain",
+		"population": [
+			{
+				"amount": 848943,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"5328983": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 39115,
+		"name": "Province 126",
+		"polity": "Democratic_Arnor_Union",
+		"population": [
+			{
+				"amount": 755187,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"5412680": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 70045,
+		"name": "Province 55",
+		"polity": "Imperial_Eridu_Republic",
+		"population": [
+			{
+				"amount": 167848,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"5428799": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 39054,
+		"name": "Province 52",
+		"polity": "Democratic_Soveria_Federation",
+		"population": [
+			{
+				"amount": 969645,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"5515746": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 45421,
+		"name": "Province 169",
+		"polity": "Democratic_Eridu_Kingdom",
+		"population": [
+			{
+				"amount": 484429,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"5530846": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "Capital City",
+		"claims": [],
+		"gdp": 12546,
+		"name": "Province 172",
+		"polity": "United_Aethel_Union",
+		"population": [
+			{
+				"amount": 513255,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"5731220": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 35352,
+		"name": "Province 7",
+		"polity": "Federal_Eridu_Domain",
+		"population": [
+			{
+				"amount": 690429,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"5939893": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 71768,
+		"name": "Province 175",
+		"polity": "Federal_Eridu_Domain",
+		"population": [
+			{
+				"amount": 164188,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"605968": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 58005,
+		"name": "Province 50",
+		"polity": "Democratic_Arnor_Union",
+		"population": [
+			{
+				"amount": 521664,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"6070149": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 35238,
+		"name": "Province 152",
+		"polity": "Democratic_Eridu_Kingdom",
+		"population": [
+			{
+				"amount": 978308,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"6114554": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 15623,
+		"name": "Province 162",
+		"polity": "United_Aethel_Union",
+		"population": [
+			{
+				"amount": 235184,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"6126027": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 11685,
+		"name": "Province 167",
+		"polity": "Imperial_Eridu_Republic",
+		"population": [
+			{
+				"amount": 299259,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"6142206": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 54171,
+		"name": "Province 176",
+		"polity": "Imperial_Eridu_Republic",
+		"population": [
+			{
+				"amount": 970218,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"6230412": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 54983,
+		"name": "Province 179",
+		"polity": "United_Aethel_Union",
+		"population": [
+			{
+				"amount": 632926,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"6333718": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 71010,
+		"name": "Province 5",
+		"polity": "Democratic_Gondor_Federation",
+		"population": [
+			{
+				"amount": 378922,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"6414936": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 18285,
+		"name": "Province 38",
+		"polity": "Imperial_Eridu_Republic",
+		"population": [
+			{
+				"amount": 468186,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"6428750": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 60159,
+		"name": "Province 94",
+		"polity": "Democratic_Eridu_Kingdom",
+		"population": [
+			{
+				"amount": 118623,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"6540583": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 47736,
+		"name": "Province 58",
+		"polity": "Federal_Zandalar_State",
+		"population": [
+			{
+				"amount": 213391,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"6577903": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 38796,
+		"name": "Province 81",
+		"polity": "Federal_Eridu_Domain",
+		"population": [
+			{
+				"amount": 812163,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"6643420": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 99817,
+		"name": "Province 100",
+		"polity": "Imperial_Eridu_Republic",
+		"population": [
+			{
+				"amount": 233346,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"6716481": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 65828,
+		"name": "Province 92",
+		"polity": "Democratic_Arnor_Union",
+		"population": [
+			{
+				"amount": 609788,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"6740309": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 36441,
+		"name": "Province 136",
+		"polity": "Imperial_Soveria_Federation",
+		"population": [
+			{
+				"amount": 409841,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"6885642": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "Capital City",
+		"claims": [],
+		"gdp": 37595,
+		"name": "Province 199",
+		"polity": "United_Aethel_Union",
+		"population": [
+			{
+				"amount": 229744,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"714021": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 99612,
+		"name": "Province 200",
+		"polity": "Democratic_Gondor_Federation",
+		"population": [
+			{
+				"amount": 562486,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"73513": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 11163,
+		"name": "Province 22",
+		"polity": "Imperial_Soveria_Federation",
+		"population": [
+			{
+				"amount": 844556,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"744440": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 62753,
+		"name": "Province 61",
+		"polity": "United_Aethel_Union",
+		"population": [
+			{
+				"amount": 721798,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"7766775": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 42441,
+		"name": "Province 118",
+		"polity": "Federal_Zandalar_State",
+		"population": [
+			{
+				"amount": 134237,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"7876033": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 30749,
+		"name": "Province 189",
+		"polity": "Democratic_Arnor_Union",
+		"population": [
+			{
+				"amount": 518907,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"7893363": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 43111,
+		"name": "Province 18",
+		"polity": "Democratic_Gondor_Federation",
+		"population": [
+			{
+				"amount": 441696,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"7898523": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 61223,
+		"name": "Province 150",
+		"polity": "Federal_Eridu_Domain",
+		"population": [
+			{
+				"amount": 810285,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"7996519": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 71555,
+		"name": "Province 54",
+		"polity": "Federal_Zandalar_State",
+		"population": [
+			{
+				"amount": 260662,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"8037380": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 81925,
+		"name": "Province 198",
+		"polity": "Democratic_Eridu_Kingdom",
+		"population": [
+			{
+				"amount": 709856,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"8108710": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "Capital City",
+		"claims": [],
+		"gdp": 67030,
+		"name": "Province 113",
+		"polity": "Democratic_Soveria_Federation",
+		"population": [
+			{
+				"amount": 813081,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"8167301": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 87856,
+		"name": "Province 28",
+		"polity": "Democratic_Eridu_Kingdom",
+		"population": [
+			{
+				"amount": 840719,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"8265756": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 60564,
+		"name": "Province 30",
+		"polity": "Federal_Eridu_Domain",
+		"population": [
+			{
+				"amount": 117418,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"8373585": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 65864,
+		"name": "Province 105",
+		"polity": "Imperial_Valoria_Domain",
+		"population": [
+			{
+				"amount": 849520,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"8389658": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 27762,
+		"name": "Province 160",
+		"polity": "United_Aethel_Union",
+		"population": [
+			{
+				"amount": 374802,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"8510097": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 65110,
+		"name": "Province 91",
+		"polity": "Imperial_Soveria_Federation",
+		"population": [
+			{
+				"amount": 543787,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"8516143": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "Capital City",
+		"claims": [],
+		"gdp": 88126,
+		"name": "Province 32",
+		"polity": "Imperial_Soveria_Federation",
+		"population": [
+			{
+				"amount": 811393,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"8538273": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 74007,
+		"name": "Province 129",
+		"polity": "Democratic_Gondor_Federation",
+		"population": [
+			{
+				"amount": 566749,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"8567967": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 54034,
+		"name": "Province 122",
+		"polity": "Imperial_Soveria_Federation",
+		"population": [
+			{
+				"amount": 330704,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"8688570": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 12571,
+		"name": "Province 53",
+		"polity": "Democratic_Eridu_Kingdom",
+		"population": [
+			{
+				"amount": 209411,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"8812762": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 16440,
+		"name": "Province 191",
+		"polity": "United_Aethel_Union",
+		"population": [
+			{
+				"amount": 903655,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"8815716": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 53113,
+		"name": "Province 47",
+		"polity": "Imperial_Soveria_Federation",
+		"population": [
+			{
+				"amount": 685399,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"8827114": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 31874,
+		"name": "Province 98",
+		"polity": "Federal_Zandalar_State",
+		"population": [
+			{
+				"amount": 857691,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"8899592": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 71582,
+		"name": "Province 155",
+		"polity": "Imperial_Soveria_Federation",
+		"population": [
+			{
+				"amount": 937671,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"8952866": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 66760,
+		"name": "Province 26",
+		"polity": "Democratic_Gondor_Federation",
+		"population": [
+			{
+				"amount": 762272,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"9067205": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 68490,
+		"name": "Province 120",
+		"polity": "United_Aethel_Union",
+		"population": [
+			{
+				"amount": 115804,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"920914": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 54800,
+		"name": "Province 123",
+		"polity": "Democratic_Eridu_Kingdom",
+		"population": [
+			{
+				"amount": 901542,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"923665": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 12131,
+		"name": "Province 171",
+		"polity": "Imperial_Soveria_Federation",
+		"population": [
+			{
+				"amount": 549416,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"9345956": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 64612,
+		"name": "Province 49",
+		"polity": "Democratic_Eridu_Kingdom",
+		"population": [
+			{
+				"amount": 319956,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 1,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"9422476": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 96146,
+		"name": "Province 163",
+		"polity": "Imperial_Valoria_Domain",
+		"population": [
+			{
+				"amount": 330376,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"9435917": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 70665,
+		"name": "Province 10",
+		"polity": "United_Aethel_Union",
+		"population": [
+			{
+				"amount": 202846,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 4,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"9474031": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 87402,
+		"name": "Province 79",
+		"polity": "Democratic_Arnor_Union",
+		"population": [
+			{
+				"amount": 559395,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 3,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"9536184": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 70788,
+		"name": "Province 131",
+		"polity": "Federal_Eridu_Domain",
+		"population": [
+			{
+				"amount": 278244,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"9937326": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "Capital City",
+		"claims": [],
+		"gdp": 78117,
+		"name": "Province 102",
+		"polity": "Imperial_Valoria_Domain",
+		"population": [
+			{
+				"amount": 456628,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 2,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	},
+	"9939604": {
+		"biome": "140, 204, 189",
+		"buildings": [],
+		"city": "",
+		"claims": [],
+		"gdp": 90194,
+		"name": "Province 95",
+		"polity": "Democratic_Gondor_Federation",
+		"population": [
+			{
+				"amount": 778324,
+				"ethnicity": "Commoner"
+			}
+		],
+		"resources": [
+			{
+				"amount": 5,
+				"quality": 0.5,
+				"type": "Iron"
+			}
+		],
+		"type": 1
+	}
+}

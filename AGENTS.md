@@ -8,13 +8,13 @@ Compact orientation for this repository. `CLAUDE.md` has broader architecture no
 - Editor: `godot-mono --editor --path .`
 - Run: `godot-mono --path .`
 - Build: `dotnet build`
+- Unit tests: `dotnet test Tests/Sosr.Tests.csproj` (xUnit over `Core/`, the engine-free `Sosr.Core` library; it must never reference Godot)
 - Headless smoke test: `godot-mono --headless --path . --quit-after 300`. A non-zero exit (e.g. 139) is a crash.
 - Scratch checks:
   - `godot-mono --headless --path . --script res://scratch/test_port_parity.gd`
   - `godot-mono --headless --path . res://scratch/test_save_diff_flow.tscn`
-  - `godot-mono --headless --path . res://scratch/test_settings_manager_diff.tscn`
 - `--script` harnesses cannot see autoloads; autoload-dependent checks use the matching `.tscn`.
-- There is no code CI, linter, formatter, or formal test suite beyond Godot and those scratch checks. `.github/workflows/docs.yml` only publishes `docs/` to GitHub Pages. Export targets are in `export_presets.cfg`; the Windows preset still points at 4.6.1 templates in a personal path.
+- There is no code CI, linter, or formatter. The only formal tests are the `Tests/` xUnit suite. `.github/workflows/docs.yml` only publishes `docs/` to GitHub Pages. Export targets are in `export_presets.cfg`; the Windows preset still points at 4.6.1 templates in a personal path.
 - Commit `.uid` files alongside their scripts/shaders. Scenes and `project.godot` reference many resources by `uid://`.
 
 ## Runtime wiring

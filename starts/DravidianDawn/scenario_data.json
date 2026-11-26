@@ -1,0 +1,4848 @@
+{
+	"factions": [],
+	"polities": [
+		{
+			"accepted_cultures": [
+				"Inuit",
+				"Canada",
+				"Quebecs"
+			],
+			"color": "#74554C",
+			"figures": [
+				"Canada_BenitoMussolini",
+				"Canada_YukawaHideki",
+				"Canada_TrofimLysenko",
+				"Canada_JaneAustenCassandra",
+				"Canada_BenitoMussolini",
+				"Canada_ChevalierDEon",
+				"Canada_ChevalierDEon",
+				"Canada_UrNammu",
+				"Canada_TrofimLysenko",
+				"Canada_BenitoMussolini",
+				"Canada_ChevalierDEon",
+				"Canada_UrNammu",
+				"Canada_ChevalierDEon",
+				"RogerirmydeCyveu"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "RogerirmydeCyveu"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Canada",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Anglo-americans"
+			],
+			"color": "#B58B57",
+			"figures": [
+				"Shaurya_nadu_ChevalierDEon",
+				"Shaurya_nadu_YukawaHideki",
+				"Shaurya_nadu_UrNammu",
+				"Shaurya_nadu_TrofimLysenko",
+				"Shaurya_nadu_ChevalierDEon",
+				"Shaurya_nadu_TrofimLysenko",
+				"Shaurya_nadu_BenitoMussolini",
+				"Shaurya_nadu_YukawaHideki",
+				"Shaurya_nadu_JaneAustenCassandra",
+				"Shaurya_nadu_UrNammu",
+				"Shaurya_nadu_YukawaHideki",
+				"Shaurya_nadu_ChevalierDEon",
+				"Shaurya_nadu_BenitoMussolini",
+				"YrkiJaikiddayEfai"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "YrkiJaikiddayEfai"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Shaurya_nadu",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Scottish",
+				"English",
+				"Ireland",
+				"Welish",
+				"Spaniards",
+				"Montserrat",
+				"Indian-ocean"
+			],
+			"color": "#C8385D",
+			"figures": [
+				"Brittany_UrNammu",
+				"Brittany_TrofimLysenko",
+				"Brittany_ChevalierDEon",
+				"Brittany_JaneAustenCassandra",
+				"Brittany_BenjaminFranklin",
+				"Brittany_YukawaHideki",
+				"Brittany_JaneAustenCassandra",
+				"Brittany_BenitoMussolini",
+				"Brittany_UrNammu",
+				"Brittany_JaneAustenCassandra",
+				"Brittany_JaneAustenCassandra",
+				"Brittany_YukawaHideki",
+				"Brittany_TrofimLysenko",
+				"ImmiscecAovitiwetedd"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "ImmiscecAovitiwetedd"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Brittany",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Germans",
+				"Unknown"
+			],
+			"color": "#49484D",
+			"figures": [
+				"Germania_BenjaminFranklin",
+				"Germania_YukawaHideki",
+				"Germania_UrNammu",
+				"Germania_TrofimLysenko",
+				"Germania_UrNammu",
+				"Germania_YukawaHideki",
+				"Germania_UrNammu",
+				"Germania_BenjaminFranklin",
+				"Germania_JaneAustenCassandra",
+				"Germania_TrofimLysenko",
+				"Germania_YukawaHideki",
+				"Germania_BenitoMussolini",
+				"Germania_TrofimLysenko",
+				"EzzaceelkegoVoeveespousm"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "EzzaceelkegoVoeveespousm"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Germania",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Russians",
+				"Mongols",
+				"Han-chinise",
+				"East-turks",
+				"Koreans",
+				"Tajiks",
+				"Tibet",
+				"Yunnans",
+				"Thai"
+			],
+			"color": "#A7575A",
+			"figures": [
+				"China_BenjaminFranklin",
+				"China_UrNammu",
+				"China_YukawaHideki",
+				"China_UrNammu",
+				"China_BenitoMussolini",
+				"China_BenjaminFranklin",
+				"China_ChevalierDEon",
+				"China_JaneAustenCassandra",
+				"China_BenjaminFranklin",
+				"China_TrofimLysenko",
+				"China_YukawaHideki",
+				"China_UrNammu",
+				"China_UrNammu",
+				"KnidEyeramaAkea"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "KnidEyeramaAkea"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "China",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Mongols"
+			],
+			"color": "#A38E4B",
+			"figures": [
+				"Mongolia_BenitoMussolini",
+				"Mongolia_BenjaminFranklin",
+				"Mongolia_BenjaminFranklin",
+				"Mongolia_BenjaminFranklin",
+				"Mongolia_YukawaHideki",
+				"Mongolia_TrofimLysenko",
+				"Mongolia_UrNammu",
+				"Mongolia_BenitoMussolini",
+				"Mongolia_UrNammu",
+				"Mongolia_BenitoMussolini",
+				"Mongolia_YukawaHideki",
+				"Mongolia_UrNammu",
+				"Mongolia_JaneAustenCassandra",
+				"GekUhiouro"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "GekUhiouro"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Mongolia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Gaul",
+				"",
+				"Guadeloupe",
+				"French-guyanese",
+				"Mayotte",
+				"French-polynesian",
+				"New-caledonia",
+				"Reunion-creole",
+				"French-antartic"
+			],
+			"color": "#446F54",
+			"figures": [
+				"Gaul_ChevalierDEon",
+				"Gaul_TrofimLysenko",
+				"Gaul_BenjaminFranklin",
+				"Gaul_JaneAustenCassandra",
+				"Gaul_BenjaminFranklin",
+				"Gaul_YukawaHideki",
+				"Gaul_JaneAustenCassandra",
+				"Gaul_JaneAustenCassandra",
+				"Gaul_ChevalierDEon",
+				"Gaul_BenjaminFranklin",
+				"Gaul_BenitoMussolini",
+				"Gaul_BenjaminFranklin",
+				"Gaul_UrNammu",
+				"EfuiOce"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "EfuiOce"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Gaul",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Germans",
+				"Italians",
+				"Gaul"
+			],
+			"color": "#402626",
+			"figures": [
+				"Roma_TrofimLysenko",
+				"Roma_BenitoMussolini",
+				"Roma_JaneAustenCassandra",
+				"Roma_YukawaHideki",
+				"Roma_YukawaHideki",
+				"Roma_YukawaHideki",
+				"Roma_BenitoMussolini",
+				"Roma_BenitoMussolini",
+				"Roma_ChevalierDEon",
+				"Roma_BenjaminFranklin",
+				"Roma_BenjaminFranklin",
+				"Roma_JaneAustenCassandra",
+				"Roma_YukawaHideki",
+				"QyvejoascOacosperpal"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "QyvejoascOacosperpal"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Roma",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Japanase"
+			],
+			"color": "#FFC9B2",
+			"figures": [
+				"Japan_BenjaminFranklin",
+				"Japan_ChevalierDEon",
+				"Japan_TrofimLysenko",
+				"Japan_ChevalierDEon",
+				"Japan_JaneAustenCassandra",
+				"Japan_JaneAustenCassandra",
+				"Japan_BenjaminFranklin",
+				"Japan_TrofimLysenko",
+				"Japan_ChevalierDEon",
+				"Japan_ChevalierDEon",
+				"Japan_BenjaminFranklin",
+				"Japan_UrNammu",
+				"Japan_BenjaminFranklin",
+				"AutuotIhepuhoollYitchechoge"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "AutuotIhepuhoollYitchechoge"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Japan",
+			"political_power": 500.56,
+			"puppets": [
+				"Korea",
+				"China"
+			],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Spaniards",
+				"Basque",
+				"Catalonians",
+				"Portugese",
+				"Canary-islander"
+			],
+			"color": "#F2CD5E",
+			"figures": [
+				"Spain_BenitoMussolini",
+				"Spain_YukawaHideki",
+				"Spain_BenjaminFranklin",
+				"Spain_BenitoMussolini",
+				"Spain_YukawaHideki",
+				"Spain_UrNammu",
+				"Spain_ChevalierDEon",
+				"Spain_TrofimLysenko",
+				"Spain_BenitoMussolini",
+				"Spain_UrNammu",
+				"Spain_TrofimLysenko",
+				"Spain_UrNammu",
+				"Spain_YukawaHideki",
+				"AurtoagYnesuose"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "AurtoagYnesuose"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Spain",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Portugese"
+			],
+			"color": "#277446",
+			"figures": [
+				"Portugal_TrofimLysenko",
+				"Portugal_UrNammu",
+				"Portugal_UrNammu",
+				"Portugal_YukawaHideki",
+				"Portugal_TrofimLysenko",
+				"Portugal_BenjaminFranklin",
+				"Portugal_JaneAustenCassandra",
+				"Portugal_TrofimLysenko",
+				"Portugal_JaneAustenCassandra",
+				"Portugal_JaneAustenCassandra",
+				"Portugal_UrNammu",
+				"Portugal_ChevalierDEon",
+				"Portugal_UrNammu",
+				"FysaeswizUinat"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "FysaeswizUinat"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Portugal",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Hellenics"
+			],
+			"color": "#3C54AE",
+			"figures": [
+				"Makedonia_JaneAustenCassandra",
+				"Makedonia_JaneAustenCassandra",
+				"Makedonia_UrNammu",
+				"Makedonia_YukawaHideki",
+				"Makedonia_YukawaHideki",
+				"Makedonia_ChevalierDEon",
+				"Makedonia_JaneAustenCassandra",
+				"Makedonia_TrofimLysenko",
+				"Makedonia_JaneAustenCassandra",
+				"Makedonia_BenjaminFranklin",
+				"Makedonia_BenitoMussolini",
+				"Makedonia_ChevalierDEon",
+				"Makedonia_UrNammu",
+				"OqeyNermizanuyAsce"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "OqeyNermizanuyAsce"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Makedonia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab"
+			],
+			"color": "#B9566A",
+			"figures": [
+				"Carthage_BenitoMussolini",
+				"Carthage_UrNammu",
+				"Carthage_JaneAustenCassandra",
+				"Carthage_YukawaHideki",
+				"Carthage_YukawaHideki",
+				"Carthage_ChevalierDEon",
+				"Carthage_BenitoMussolini",
+				"Carthage_JaneAustenCassandra",
+				"Carthage_TrofimLysenko",
+				"Carthage_BenjaminFranklin",
+				"Carthage_ChevalierDEon",
+				"Carthage_BenjaminFranklin",
+				"Carthage_TrofimLysenko",
+				"FasplowylledEepiwaeyufu"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "FasplowylledEepiwaeyufu"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Carthage",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab",
+				"",
+				"Western-sahara"
+			],
+			"color": "#9B4A59",
+			"figures": [
+				"Atlantis_YukawaHideki",
+				"Atlantis_TrofimLysenko",
+				"Atlantis_YukawaHideki",
+				"Atlantis_BenitoMussolini",
+				"Atlantis_BenitoMussolini",
+				"Atlantis_BenjaminFranklin",
+				"Atlantis_UrNammu",
+				"Atlantis_UrNammu",
+				"Atlantis_TrofimLysenko",
+				"Atlantis_BenjaminFranklin",
+				"Atlantis_YukawaHideki",
+				"Atlantis_BenjaminFranklin",
+				"Atlantis_JaneAustenCassandra",
+				"ApalaurainuknIakreh"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "ApalaurainuknIakreh"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Atlantis",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Ladakashi",
+				"Kashmiri",
+				"Kinnauris",
+				"Bbagris",
+				"",
+				"Saraikis",
+				"Adi",
+				"Kaurais",
+				"Marwais",
+				"Chakma",
+				"Sikinn",
+				"Tada",
+				"Awashis",
+				"Kannaujis",
+				"Maithils",
+				"Bangla",
+				"Bundelis",
+				"Magahis",
+				"Gukarati",
+				"Baghelis",
+				"Mizo",
+				"Chhattisgrahiya",
+				"Bhils",
+				"Nimads",
+				"Odia",
+				"Marathi",
+				"Gond",
+				"Teiugu",
+				"Kannada",
+				"Tami",
+				"Malayali",
+				"India"
+			],
+			"color": "#D0A36C",
+			"figures": [
+				"India_JaneAustenCassandra",
+				"India_BenjaminFranklin",
+				"India_TrofimLysenko",
+				"India_UrNammu",
+				"India_YukawaHideki",
+				"India_BenjaminFranklin",
+				"India_BenjaminFranklin",
+				"India_BenjaminFranklin",
+				"India_BenjaminFranklin",
+				"India_JaneAustenCassandra",
+				"India_UrNammu",
+				"India_UrNammu",
+				"India_UrNammu",
+				"QueleebiEequbEfluw"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "QueleebiEequbEfluw"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "India",
+			"political_power": 500.56,
+			"puppets": [
+				"Tibet-Rouran"
+			],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab"
+			],
+			"color": "#ABBE98",
+			"figures": [
+				"Arabia_BenjaminFranklin",
+				"Arabia_UrNammu",
+				"Arabia_JaneAustenCassandra",
+				"Arabia_TrofimLysenko",
+				"Arabia_JaneAustenCassandra",
+				"Arabia_BenitoMussolini",
+				"Arabia_TrofimLysenko",
+				"Arabia_BenjaminFranklin",
+				"Arabia_TrofimLysenko",
+				"Arabia_BenjaminFranklin",
+				"Arabia_ChevalierDEon",
+				"Arabia_ChevalierDEon",
+				"Arabia_ChevalierDEon",
+				"EwylylpeSauvechufl"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "EwylylpeSauvechufl"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Arabia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab"
+			],
+			"color": "#867C3D",
+			"figures": [
+				"Blemmys_UrNammu",
+				"Blemmys_TrofimLysenko",
+				"Blemmys_BenjaminFranklin",
+				"Blemmys_TrofimLysenko",
+				"Blemmys_ChevalierDEon",
+				"Blemmys_ChevalierDEon",
+				"Blemmys_ChevalierDEon",
+				"Blemmys_BenitoMussolini",
+				"Blemmys_BenjaminFranklin",
+				"Blemmys_UrNammu",
+				"Blemmys_YukawaHideki",
+				"Blemmys_BenjaminFranklin",
+				"Blemmys_UrNammu",
+				"UcytiUknirtIkiwe"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "UcytiUknirtIkiwe"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Blemmys",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				""
+			],
+			"color": "#2A6F53",
+			"figures": [
+				"Mauritania_UrNammu",
+				"Mauritania_BenjaminFranklin",
+				"Mauritania_BenjaminFranklin",
+				"Mauritania_YukawaHideki",
+				"Mauritania_BenjaminFranklin",
+				"Mauritania_BenjaminFranklin",
+				"Mauritania_YukawaHideki",
+				"Mauritania_TrofimLysenko",
+				"Mauritania_BenitoMussolini",
+				"Mauritania_BenjaminFranklin",
+				"Mauritania_UrNammu",
+				"Mauritania_JaneAustenCassandra",
+				"Mauritania_UrNammu",
+				"PemelonusaeToquulmaskYjaur"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "PemelonusaeToquulmaskYjaur"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Mauritania",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Cuba"
+			],
+			"color": "#9744B0",
+			"figures": [
+				"Cuba_UrNammu",
+				"Cuba_TrofimLysenko",
+				"Cuba_UrNammu",
+				"Cuba_UrNammu",
+				"Cuba_TrofimLysenko",
+				"Cuba_TrofimLysenko",
+				"Cuba_TrofimLysenko",
+				"Cuba_UrNammu",
+				"Cuba_BenjaminFranklin",
+				"Cuba_UrNammu",
+				"Cuba_JaneAustenCassandra",
+				"Cuba_UrNammu",
+				"Cuba_TrofimLysenko",
+				"EosprumIsughytDyv"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "EosprumIsughytDyv"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Cuba",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Haiti"
+			],
+			"color": "#A5746F",
+			"figures": [
+				"Haiti_BenitoMussolini",
+				"Haiti_BenjaminFranklin",
+				"Haiti_ChevalierDEon",
+				"Haiti_BenjaminFranklin",
+				"Haiti_UrNammu",
+				"Haiti_UrNammu",
+				"Haiti_JaneAustenCassandra",
+				"Haiti_ChevalierDEon",
+				"Haiti_JaneAustenCassandra",
+				"Haiti_BenjaminFranklin",
+				"Haiti_JaneAustenCassandra",
+				"Haiti_BenitoMussolini",
+				"Haiti_JaneAustenCassandra",
+				"AxiVawuqei"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "AxiVawuqei"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Haiti",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Dominican-republic"
+			],
+			"color": "#728877",
+			"figures": [
+				"Dominican_republic_BenjaminFranklin",
+				"Dominican_republic_YukawaHideki",
+				"Dominican_republic_UrNammu",
+				"Dominican_republic_TrofimLysenko",
+				"Dominican_republic_JaneAustenCassandra",
+				"Dominican_republic_BenitoMussolini",
+				"Dominican_republic_TrofimLysenko",
+				"Dominican_republic_YukawaHideki",
+				"Dominican_republic_BenjaminFranklin",
+				"Dominican_republic_JaneAustenCassandra",
+				"Dominican_republic_UrNammu",
+				"Dominican_republic_YukawaHideki",
+				"Dominican_republic_BenjaminFranklin",
+				"UxtucurlOpaystrelaYedaerrewe"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "UxtucurlOpaystrelaYedaerrewe"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Dominican_republic",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Arab"
+			],
+			"color": "#4E3235",
+			"figures": [
+				"Yemen_YukawaHideki",
+				"Yemen_YukawaHideki",
+				"Yemen_BenjaminFranklin",
+				"Yemen_UrNammu",
+				"Yemen_TrofimLysenko",
+				"Yemen_YukawaHideki",
+				"Yemen_JaneAustenCassandra",
+				"Yemen_BenjaminFranklin",
+				"Yemen_BenjaminFranklin",
+				"Yemen_ChevalierDEon",
+				"Yemen_BenitoMussolini",
+				"Yemen_JaneAustenCassandra",
+				"Yemen_TrofimLysenko",
+				"HydoroblaPyccynLobeh"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "HydoroblaPyccynLobeh"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Yemen",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Jamaica"
+			],
+			"color": "#8BDC0A",
+			"figures": [
+				"Jamaica_ChevalierDEon",
+				"Jamaica_BenitoMussolini",
+				"Jamaica_ChevalierDEon",
+				"Jamaica_JaneAustenCassandra",
+				"Jamaica_BenjaminFranklin",
+				"Jamaica_YukawaHideki",
+				"Jamaica_BenitoMussolini",
+				"Jamaica_ChevalierDEon",
+				"Jamaica_BenitoMussolini",
+				"Jamaica_ChevalierDEon",
+				"Jamaica_BenitoMussolini",
+				"Jamaica_ChevalierDEon",
+				"Jamaica_YukawaHideki",
+				"CaghirgeEssaungaebrermupRojekamau"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "CaghirgeEssaungaebrermupRojekamau"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Jamaica",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Cabo-verde"
+			],
+			"color": "#CE2027",
+			"figures": [
+				"Cabo_verde_ChevalierDEon",
+				"Cabo_verde_ChevalierDEon",
+				"Cabo_verde_UrNammu",
+				"Cabo_verde_UrNammu",
+				"Cabo_verde_UrNammu",
+				"Cabo_verde_JaneAustenCassandra",
+				"Cabo_verde_JaneAustenCassandra",
+				"Cabo_verde_JaneAustenCassandra",
+				"Cabo_verde_ChevalierDEon",
+				"Cabo_verde_BenitoMussolini",
+				"Cabo_verde_UrNammu",
+				"Cabo_verde_BenitoMussolini",
+				"Cabo_verde_ChevalierDEon",
+				"EmosloGhouvavewuh"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "EmosloGhouvavewuh"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Cabo_verde",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"St-kitts-and-nevis"
+			],
+			"color": "#3B3800",
+			"figures": [
+				"St_kitts_and_nevis_TrofimLysenko",
+				"St_kitts_and_nevis_YukawaHideki",
+				"St_kitts_and_nevis_UrNammu",
+				"St_kitts_and_nevis_BenitoMussolini",
+				"St_kitts_and_nevis_TrofimLysenko",
+				"St_kitts_and_nevis_UrNammu",
+				"St_kitts_and_nevis_YukawaHideki",
+				"St_kitts_and_nevis_TrofimLysenko",
+				"St_kitts_and_nevis_ChevalierDEon",
+				"St_kitts_and_nevis_BenitoMussolini",
+				"St_kitts_and_nevis_TrofimLysenko",
+				"St_kitts_and_nevis_UrNammu",
+				"St_kitts_and_nevis_UrNammu",
+				"EeleUgafuqo"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "EeleUgafuqo"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "St_kitts_and_nevis",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Dominica"
+			],
+			"color": "#7670B2",
+			"figures": [
+				"Dominica_UrNammu",
+				"Dominica_BenjaminFranklin",
+				"Dominica_BenjaminFranklin",
+				"Dominica_YukawaHideki",
+				"Dominica_ChevalierDEon",
+				"Dominica_YukawaHideki",
+				"Dominica_BenitoMussolini",
+				"Dominica_ChevalierDEon",
+				"Dominica_BenitoMussolini",
+				"Dominica_BenjaminFranklin",
+				"Dominica_TrofimLysenko",
+				"Dominica_JaneAustenCassandra",
+				"Dominica_BenitoMussolini",
+				"JayextuAuwionOtovobonaey"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "JayextuAuwionOtovobonaey"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Dominica",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Hausa-&-fulani",
+				"Yaruba",
+				"Igbo"
+			],
+			"color": "#C27A6B",
+			"figures": [
+				"Yoruba_UrNammu",
+				"Yoruba_UrNammu",
+				"Yoruba_BenjaminFranklin",
+				"Yoruba_BenjaminFranklin",
+				"Yoruba_TrofimLysenko",
+				"Yoruba_ChevalierDEon",
+				"Yoruba_BenjaminFranklin",
+				"Yoruba_ChevalierDEon",
+				"Yoruba_BenjaminFranklin",
+				"Yoruba_TrofimLysenko",
+				"Yoruba_TrofimLysenko",
+				"Yoruba_UrNammu",
+				"Yoruba_BenitoMussolini",
+				"LobicauvAudourrotonu"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "LobicauvAudourrotonu"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Yoruba",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Barbados"
+			],
+			"color": "#FCD116",
+			"figures": [
+				"Barbados_BenjaminFranklin",
+				"Barbados_TrofimLysenko",
+				"Barbados_UrNammu",
+				"Barbados_BenitoMussolini",
+				"Barbados_ChevalierDEon",
+				"Barbados_BenjaminFranklin",
+				"Barbados_BenjaminFranklin",
+				"Barbados_UrNammu",
+				"Barbados_TrofimLysenko",
+				"Barbados_ChevalierDEon",
+				"Barbados_JaneAustenCassandra",
+				"Barbados_BenitoMussolini",
+				"Barbados_UrNammu",
+				"EweInuFruouvozop"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "EweInuFruouvozop"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Barbados",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"St-lucia"
+			],
+			"color": "#5DB7E6",
+			"figures": [
+				"St_lucia_BenjaminFranklin",
+				"St_lucia_UrNammu",
+				"St_lucia_BenjaminFranklin",
+				"St_lucia_UrNammu",
+				"St_lucia_TrofimLysenko",
+				"St_lucia_BenitoMussolini",
+				"St_lucia_BenitoMussolini",
+				"St_lucia_JaneAustenCassandra",
+				"St_lucia_UrNammu",
+				"St_lucia_ChevalierDEon",
+				"St_lucia_UrNammu",
+				"St_lucia_YukawaHideki",
+				"St_lucia_JaneAustenCassandra",
+				"UnkodEnuottupayiv"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "UnkodEnuottupayiv"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "St_lucia",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Grenada"
+			],
+			"color": "#007B5F",
+			"figures": [
+				"Grenada_BenjaminFranklin",
+				"Grenada_BenjaminFranklin",
+				"Grenada_YukawaHideki",
+				"Grenada_BenjaminFranklin",
+				"Grenada_BenitoMussolini",
+				"Grenada_ChevalierDEon",
+				"Grenada_ChevalierDEon",
+				"Grenada_YukawaHideki",
+				"Grenada_BenjaminFranklin",
+				"Grenada_BenitoMussolini",
+				"Grenada_YukawaHideki",
+				"Grenada_BenjaminFranklin",
+				"Grenada_BenitoMussolini",
+				"QoiroyiOhofrystuj"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "QoiroyiOhofrystuj"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Grenada",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"",
+				"Central-african-republic",
+				"Gbaya",
+				"Nzakara"
+			],
+			"color": "#A64D63",
+			"figures": [
+				"Central_african_republic_YukawaHideki",
+				"Central_african_republic_YukawaHideki",
+				"Central_african_republic_YukawaHideki",
+				"Central_african_republic_TrofimLysenko",
+				"Central_african_republic_TrofimLysenko",
+				"Central_african_republic_BenitoMussolini",
+				"Central_african_republic_BenjaminFranklin",
+				"Central_african_republic_YukawaHideki",
+				"Central_african_republic_BenjaminFranklin",
+				"Central_african_republic_BenjaminFranklin",
+				"Central_african_republic_JaneAustenCassandra",
+				"Central_african_republic_UrNammu",
+				"Central_african_republic_UrNammu",
+				"EsesopooArroukaunuLemm"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "EsesopooArroukaunuLemm"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Central_african_republic",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Sri-lankan"
+			],
+			"color": "#564B39",
+			"figures": [
+				"Sri_lanka_UrNammu",
+				"Sri_lanka_TrofimLysenko",
+				"Sri_lanka_ChevalierDEon",
+				"Sri_lanka_TrofimLysenko",
+				"Sri_lanka_BenjaminFranklin",
+				"Sri_lanka_BenjaminFranklin",
+				"Sri_lanka_JaneAustenCassandra",
+				"Sri_lanka_BenjaminFranklin",
+				"Sri_lanka_YukawaHideki",
+				"Sri_lanka_YukawaHideki",
+				"Sri_lanka_ChevalierDEon",
+				"Sri_lanka_BenjaminFranklin",
+				"Sri_lanka_YukawaHideki",
+				"OqekucYaskuniuDosyda"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "OqekucYaskuniuDosyda"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Sri_lanka",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Palau"
+			],
+			"color": "#FFC90E",
+			"figures": [
+				"Palau_TrofimLysenko",
+				"Palau_ChevalierDEon",
+				"Palau_UrNammu",
+				"Palau_YukawaHideki",
+				"Palau_ChevalierDEon",
+				"Palau_JaneAustenCassandra",
+				"Palau_TrofimLysenko",
+				"Palau_TrofimLysenko",
+				"Palau_JaneAustenCassandra",
+				"Palau_ChevalierDEon",
+				"Palau_UrNammu",
+				"Palau_BenitoMussolini",
+				"Palau_BenjaminFranklin",
+				"EtiyielOkeqaufafaufl"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "EtiyielOkeqaufafaufl"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Palau",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Nauru",
+				"Maldives"
+			],
+			"color": "#292F85",
+			"figures": [
+				"Nauru_BenjaminFranklin",
+				"Nauru_JaneAustenCassandra",
+				"Nauru_UrNammu",
+				"Nauru_TrofimLysenko",
+				"Nauru_UrNammu",
+				"Nauru_BenjaminFranklin",
+				"Nauru_JaneAustenCassandra",
+				"Nauru_ChevalierDEon",
+				"Nauru_UrNammu",
+				"Nauru_JaneAustenCassandra",
+				"Nauru_UrNammu",
+				"Nauru_UrNammu",
+				"Nauru_UrNammu",
+				"SchaejesoxeiAuminnaydOhuc"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "SchaejesoxeiAuminnaydOhuc"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Nauru",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Acio",
+				"Javanese",
+				"Batak",
+				"Tobelo",
+				"Malau",
+				"Mihanasa",
+				"Kaili",
+				"Gorontalo",
+				"Minangkabau",
+				"",
+				"Papuans",
+				"Banjarese",
+				"Srivijaya",
+				"Rejang",
+				"Tolaki",
+				"Javaenese",
+				"Batanese",
+				"Atoni",
+				"Mollucans"
+			],
+			"color": "#DDBEC4",
+			"figures": [
+				"Srivijaya_TrofimLysenko",
+				"Srivijaya_UrNammu",
+				"Srivijaya_BenjaminFranklin",
+				"Srivijaya_ChevalierDEon",
+				"Srivijaya_BenitoMussolini",
+				"Srivijaya_TrofimLysenko",
+				"Srivijaya_YukawaHideki",
+				"Srivijaya_BenjaminFranklin",
+				"Srivijaya_BenjaminFranklin",
+				"Srivijaya_YukawaHideki",
+				"Srivijaya_UrNammu",
+				"Srivijaya_BenitoMussolini",
+				"Srivijaya_ChevalierDEon",
+				"UrtuschuddMotept"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "UrtuschuddMotept"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Srivijaya",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Brazilian-natives",
+				"Brazilians",
+				"Colombia",
+				"Uruguay"
+			],
+			"color": "#4C913F",
+			"figures": [
+				"Brazil_ChevalierDEon",
+				"Brazil_JaneAustenCassandra",
+				"Brazil_JaneAustenCassandra",
+				"Brazil_TrofimLysenko",
+				"Brazil_BenitoMussolini",
+				"Brazil_ChevalierDEon",
+				"Brazil_ChevalierDEon",
+				"Brazil_JaneAustenCassandra",
+				"Brazil_ChevalierDEon",
+				"Brazil_JaneAustenCassandra",
+				"Brazil_BenjaminFranklin",
+				"Brazil_ChevalierDEon",
+				"Brazil_UrNammu",
+				"OretteauwenoyYaerduneduUyskutyknech"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "OretteauwenoyYaerduneduUyskutyknech"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Brazil",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Zande",
+				"Gbaya",
+				"",
+				"Komo-birra",
+				"Mongo",
+				"Lega",
+				"Kongo",
+				"Katanga",
+				"Lunda"
+			],
+			"color": "#416893",
+			"figures": [
+				"Dr_congo_ChevalierDEon",
+				"Dr_congo_UrNammu",
+				"Dr_congo_UrNammu",
+				"Dr_congo_TrofimLysenko",
+				"Dr_congo_TrofimLysenko",
+				"Dr_congo_UrNammu",
+				"Dr_congo_BenjaminFranklin",
+				"Dr_congo_BenjaminFranklin",
+				"Dr_congo_YukawaHideki",
+				"Dr_congo_BenitoMussolini",
+				"Dr_congo_BenjaminFranklin",
+				"Dr_congo_ChevalierDEon",
+				"Dr_congo_TrofimLysenko",
+				"OupuajauErpaeyaqu"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "OupuajauErpaeyaqu"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Dr_congo",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Equatorial-guinea"
+			],
+			"color": "#5090AB",
+			"figures": [
+				"Equatorial_guinea_JaneAustenCassandra",
+				"Equatorial_guinea_YukawaHideki",
+				"Equatorial_guinea_ChevalierDEon",
+				"Equatorial_guinea_UrNammu",
+				"Equatorial_guinea_BenjaminFranklin",
+				"Equatorial_guinea_UrNammu",
+				"Equatorial_guinea_JaneAustenCassandra",
+				"Equatorial_guinea_BenitoMussolini",
+				"Equatorial_guinea_UrNammu",
+				"Equatorial_guinea_JaneAustenCassandra",
+				"Equatorial_guinea_ChevalierDEon",
+				"Equatorial_guinea_UrNammu",
+				"Equatorial_guinea_BenjaminFranklin",
+				"AhejakocunEjeeguEurdasmurtauf"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "AhejakocunEjeeguEurdasmurtauf"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Equatorial_guinea",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Han-chinise"
+			],
+			"color": "#4D4986",
+			"figures": [
+				"Singapore_BenjaminFranklin",
+				"Singapore_YukawaHideki",
+				"Singapore_ChevalierDEon",
+				"Singapore_BenjaminFranklin",
+				"Singapore_YukawaHideki",
+				"Singapore_ChevalierDEon",
+				"Singapore_UrNammu",
+				"Singapore_JaneAustenCassandra",
+				"Singapore_BenitoMussolini",
+				"Singapore_JaneAustenCassandra",
+				"Singapore_JaneAustenCassandra",
+				"Singapore_ChevalierDEon",
+				"Singapore_YukawaHideki",
+				"EsmakeheEtweyytyVulgyf"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "EsmakeheEtweyytyVulgyf"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Singapore",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Sao-tome-and-principe"
+			],
+			"color": "#12AD2B",
+			"figures": [
+				"Sao_tome_and_principe_BenitoMussolini",
+				"Sao_tome_and_principe_UrNammu",
+				"Sao_tome_and_principe_TrofimLysenko",
+				"Sao_tome_and_principe_BenitoMussolini",
+				"Sao_tome_and_principe_YukawaHideki",
+				"Sao_tome_and_principe_ChevalierDEon",
+				"Sao_tome_and_principe_BenitoMussolini",
+				"Sao_tome_and_principe_UrNammu",
+				"Sao_tome_and_principe_YukawaHideki",
+				"Sao_tome_and_principe_ChevalierDEon",
+				"Sao_tome_and_principe_YukawaHideki",
+				"Sao_tome_and_principe_YukawaHideki",
+				"Sao_tome_and_principe_YukawaHideki",
+				"IferaqiougyhWeeliqaub"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "IferaqiougyhWeeliqaub"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Sao_tome_and_principe",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Burundi"
+			],
+			"color": "#9A4BA0",
+			"figures": [
+				"Burundi_TrofimLysenko",
+				"Burundi_TrofimLysenko",
+				"Burundi_ChevalierDEon",
+				"Burundi_ChevalierDEon",
+				"Burundi_BenitoMussolini",
+				"Burundi_BenitoMussolini",
+				"Burundi_ChevalierDEon",
+				"Burundi_TrofimLysenko",
+				"Burundi_BenjaminFranklin",
+				"Burundi_UrNammu",
+				"Burundi_TrofimLysenko",
+				"Burundi_UrNammu",
+				"Burundi_BenitoMussolini",
+				"DruteyoJaulkizz"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "DruteyoJaulkizz"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Burundi",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Angan",
+				"Osapminlk",
+				"Papuans"
+			],
+			"color": "#2B385A",
+			"figures": [
+				"Papua_new_guinea_UrNammu",
+				"Papua_new_guinea_UrNammu",
+				"Papua_new_guinea_TrofimLysenko",
+				"Papua_new_guinea_BenitoMussolini",
+				"Papua_new_guinea_ChevalierDEon",
+				"Papua_new_guinea_BenjaminFranklin",
+				"Papua_new_guinea_BenitoMussolini",
+				"Papua_new_guinea_UrNammu",
+				"Papua_new_guinea_JaneAustenCassandra",
+				"Papua_new_guinea_UrNammu",
+				"Papua_new_guinea_TrofimLysenko",
+				"Papua_new_guinea_UrNammu",
+				"Papua_new_guinea_BenjaminFranklin",
+				"YikoothrawAttiquifok"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "YikoothrawAttiquifok"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Papua_new_guinea",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Seychelles"
+			],
+			"color": "#A11E24",
+			"figures": [
+				"Seychelles_YukawaHideki",
+				"Seychelles_UrNammu",
+				"Seychelles_ChevalierDEon",
+				"Seychelles_ChevalierDEon",
+				"Seychelles_ChevalierDEon",
+				"Seychelles_YukawaHideki",
+				"Seychelles_YukawaHideki",
+				"Seychelles_BenitoMussolini",
+				"Seychelles_BenjaminFranklin",
+				"Seychelles_BenitoMussolini",
+				"Seychelles_UrNammu",
+				"Seychelles_ChevalierDEon",
+				"Seychelles_TrofimLysenko",
+				"EelmekaSprewennegHewheetoviyy"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "EelmekaSprewennegHewheetoviyy"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Seychelles",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"East-timor"
+			],
+			"color": "#28AA4C",
+			"figures": [
+				"East_timor_TrofimLysenko",
+				"East_timor_ChevalierDEon",
+				"East_timor_UrNammu",
+				"East_timor_UrNammu",
+				"East_timor_UrNammu",
+				"East_timor_ChevalierDEon",
+				"East_timor_ChevalierDEon",
+				"East_timor_YukawaHideki",
+				"East_timor_YukawaHideki",
+				"East_timor_BenitoMussolini",
+				"East_timor_UrNammu",
+				"East_timor_JaneAustenCassandra",
+				"East_timor_ChevalierDEon",
+				"YyiwezeiBiulkeku"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "YyiwezeiBiulkeku"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "East_timor",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Lemuria"
+			],
+			"color": "#398F61",
+			"figures": [
+				"Lemuria_JaneAustenCassandra",
+				"Lemuria_UrNammu",
+				"Lemuria_BenitoMussolini",
+				"Lemuria_YukawaHideki",
+				"Lemuria_BenitoMussolini",
+				"Lemuria_BenitoMussolini",
+				"Lemuria_TrofimLysenko",
+				"Lemuria_TrofimLysenko",
+				"Lemuria_ChevalierDEon",
+				"Lemuria_TrofimLysenko",
+				"Lemuria_TrofimLysenko",
+				"Lemuria_JaneAustenCassandra",
+				"Lemuria_TrofimLysenko",
+				"HepyrmywerdoYodula"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "HepyrmywerdoYodula"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Lemuria",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"",
+				"Madagascar"
+			],
+			"color": "#2C8C04",
+			"figures": [
+				"Madagascar_JaneAustenCassandra",
+				"Madagascar_YukawaHideki",
+				"Madagascar_BenitoMussolini",
+				"Madagascar_ChevalierDEon",
+				"Madagascar_JaneAustenCassandra",
+				"Madagascar_BenitoMussolini",
+				"Madagascar_BenjaminFranklin",
+				"Madagascar_UrNammu",
+				"Madagascar_BenjaminFranklin",
+				"Madagascar_ChevalierDEon",
+				"Madagascar_TrofimLysenko",
+				"Madagascar_UrNammu",
+				"Madagascar_ChevalierDEon",
+				"RefaulollBosCufupogrytto"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "RefaulollBosCufupogrytto"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Madagascar",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Shona",
+				"Northen-ndebele",
+				"Makonde",
+				"Tswa"
+			],
+			"color": "#AD585D",
+			"figures": [
+				"Zimbabwe_ChevalierDEon",
+				"Zimbabwe_ChevalierDEon",
+				"Zimbabwe_TrofimLysenko",
+				"Zimbabwe_TrofimLysenko",
+				"Zimbabwe_YukawaHideki",
+				"Zimbabwe_ChevalierDEon",
+				"Zimbabwe_UrNammu",
+				"Zimbabwe_UrNammu",
+				"Zimbabwe_TrofimLysenko",
+				"Zimbabwe_BenitoMussolini",
+				"Zimbabwe_BenjaminFranklin",
+				"Zimbabwe_BenitoMussolini",
+				"Zimbabwe_BenjaminFranklin",
+				"EcyrtedisYlithauyimOudyhauddew"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "EcyrtedisYlithauyimOudyhauddew"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Zimbabwe",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"Mauritius"
+			],
+			"color": "#B39500",
+			"figures": [
+				"Mauritius_ChevalierDEon",
+				"Mauritius_ChevalierDEon",
+				"Mauritius_ChevalierDEon",
+				"Mauritius_BenjaminFranklin",
+				"Mauritius_BenitoMussolini",
+				"Mauritius_UrNammu",
+				"Mauritius_BenjaminFranklin",
+				"Mauritius_TrofimLysenko",
+				"Mauritius_YukawaHideki",
+				"Mauritius_BenjaminFranklin",
+				"Mauritius_YukawaHideki",
+				"Mauritius_JaneAustenCassandra",
+				"Mauritius_JaneAustenCassandra",
+				"LibbofaxtoilmNaigelyh"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "LibbofaxtoilmNaigelyh"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "Mauritius",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [
+				"New-zealand"
+			],
+			"color": "#DAD1E9",
+			"figures": [
+				"New_zealand_YukawaHideki",
+				"New_zealand_YukawaHideki",
+				"New_zealand_BenjaminFranklin",
+				"New_zealand_YukawaHideki",
+				"New_zealand_TrofimLysenko",
+				"New_zealand_YukawaHideki",
+				"New_zealand_ChevalierDEon",
+				"New_zealand_ChevalierDEon",
+				"New_zealand_BenjaminFranklin",
+				"New_zealand_BenitoMussolini",
+				"New_zealand_YukawaHideki",
+				"New_zealand_ChevalierDEon",
+				"New_zealand_ChevalierDEon",
+				"AtayahuyuFetahoojUruoudoteel"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "AtayahuyuFetahoojUruoudoteel"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 100000.0,
+			"name": "New_zealand",
+			"political_power": 500.56,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#FDFDFD",
+			"figures": [
+				"Antartica_ChevalierDEon",
+				"Antartica_JaneAustenCassandra",
+				"Antartica_ChevalierDEon",
+				"Antartica_TrofimLysenko",
+				"Antartica_UrNammu",
+				"Antartica_TrofimLysenko",
+				"Antartica_BenjaminFranklin",
+				"Antartica_BenitoMussolini",
+				"Antartica_UrNammu",
+				"Antartica_YukawaHideki",
+				"Antartica_TrofimLysenko",
+				"Antartica_BenitoMussolini",
+				"AcudoujeyuwHylgaw"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "AcudoujeyuwHylgaw"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Antartica",
+			"political_power": 0.56,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#7C7020",
+			"figures": [
+				"Tibet-Rouran_ChevalierDEon",
+				"Tibet-Rouran_BenitoMussolini",
+				"Tibet-Rouran_ChevalierDEon",
+				"Tibet-Rouran_JaneAustenCassandra",
+				"Tibet-Rouran_YukawaHideki",
+				"Tibet-Rouran_ChevalierDEon",
+				"Tibet-Rouran_ChevalierDEon",
+				"Tibet-Rouran_BenitoMussolini",
+				"PhaulvuouwreaufleIstrusnitchufItepuyovae"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "PhaulvuouwreaufleIstrusnitchufItepuyovae"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Tibet-Rouran",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#0E5AA1",
+			"figures": [
+				"Korea_UrNammu",
+				"Korea_UrNammu",
+				"Korea_BenjaminFranklin",
+				"Korea_TrofimLysenko",
+				"Korea_TrofimLysenko",
+				"Korea_BenjaminFranklin",
+				"Korea_UrNammu",
+				"Korea_YukawaHideki",
+				"EowilgotwoVantauveemaykeEemmoy"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "EowilgotwoVantauveemaykeEemmoy"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Korea",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#AFAFAF",
+			"figures": [
+				"Basque_county_TrofimLysenko",
+				"Basque_county_BenjaminFranklin",
+				"Basque_county_BenitoMussolini",
+				"Basque_county_ChevalierDEon",
+				"Basque_county_BenitoMussolini",
+				"Basque_county_BenjaminFranklin",
+				"Basque_county_BenitoMussolini",
+				"Basque_county_TrofimLysenko",
+				"GeaqigunaEfodameegupWraeqi"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "GeaqigunaEfodameegupWraeqi"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Basque_county",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#23224D",
+			"figures": [
+				"Scandinavia_TrofimLysenko",
+				"Scandinavia_TrofimLysenko",
+				"Scandinavia_TrofimLysenko",
+				"Scandinavia_BenitoMussolini",
+				"Scandinavia_JaneAustenCassandra",
+				"Scandinavia_UrNammu",
+				"Scandinavia_BenjaminFranklin",
+				"Scandinavia_ChevalierDEon",
+				"YvusosimperBeeshoaloevide"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "YvusosimperBeeshoaloevide"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Scandinavia",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#B0B0B0",
+			"figures": [
+				"Prussia_UrNammu",
+				"Prussia_UrNammu",
+				"Prussia_BenjaminFranklin",
+				"Prussia_JaneAustenCassandra",
+				"Prussia_BenitoMussolini",
+				"Prussia_UrNammu",
+				"Prussia_BenjaminFranklin",
+				"Prussia_BenitoMussolini",
+				"UjitenteAqaqYommub"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "UjitenteAqaqYommub"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Prussia",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#D78C3E",
+			"figures": [
+				"Vyadhore_BenjaminFranklin",
+				"Vyadhore_YukawaHideki",
+				"Vyadhore_BenitoMussolini",
+				"Vyadhore_BenjaminFranklin",
+				"Vyadhore_BenjaminFranklin",
+				"Vyadhore_UrNammu",
+				"Vyadhore_UrNammu",
+				"Vyadhore_TrofimLysenko",
+				"NitchijaePeaschebaugyUewaekiwotub"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "NitchijaePeaschebaugyUewaekiwotub"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Vyadhore",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#3A6443",
+			"figures": [
+				"Bangla_BenitoMussolini",
+				"Bangla_BenjaminFranklin",
+				"Bangla_ChevalierDEon",
+				"Bangla_ChevalierDEon",
+				"Bangla_BenjaminFranklin",
+				"Bangla_ChevalierDEon",
+				"Bangla_JaneAustenCassandra",
+				"Bangla_BenitoMussolini",
+				"BruypyhidiqKehycugoovHiyyretchykn"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "BruypyhidiqKehycugoovHiyyretchykn"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Bangla",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#511E14",
+			"figures": [
+				"Dravida_JaneAustenCassandra",
+				"Dravida_ChevalierDEon",
+				"Dravida_ChevalierDEon",
+				"Dravida_UrNammu",
+				"Dravida_BenitoMussolini",
+				"Dravida_BenjaminFranklin",
+				"Dravida_UrNammu",
+				"Dravida_BenitoMussolini",
+				"EqaitirkaufleeOpecajGlouquwadug"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "EqaitirkaufleeOpecajGlouquwadug"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Dravida",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#985B03",
+			"figures": [
+				"Maratha_YukawaHideki",
+				"Maratha_ChevalierDEon",
+				"Maratha_ChevalierDEon",
+				"Maratha_UrNammu",
+				"Maratha_BenjaminFranklin",
+				"Maratha_YukawaHideki",
+				"Maratha_BenitoMussolini",
+				"Maratha_YukawaHideki",
+				"OnteccutamTrealmatodutIkemm"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "OnteccutamTrealmatodutIkemm"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Maratha",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#6E4914",
+			"figures": [
+				"Mazdarya_BenjaminFranklin",
+				"Mazdarya_UrNammu",
+				"Mazdarya_TrofimLysenko",
+				"Mazdarya_ChevalierDEon",
+				"Mazdarya_YukawaHideki",
+				"Mazdarya_UrNammu",
+				"Mazdarya_BenjaminFranklin",
+				"Mazdarya_BenjaminFranklin",
+				"IpunacuYegaDidepsewra"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "IpunacuYegaDidepsewra"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Mazdarya",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#B0B206",
+			"figures": [
+				"Khalistan_YukawaHideki",
+				"Khalistan_ChevalierDEon",
+				"Khalistan_YukawaHideki",
+				"Khalistan_BenjaminFranklin",
+				"Khalistan_TrofimLysenko",
+				"Khalistan_ChevalierDEon",
+				"Khalistan_TrofimLysenko",
+				"Khalistan_TrofimLysenko",
+				"SuqawruhuAfeheenau"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "SuqawruhuAfeheenau"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Khalistan",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#8A5622",
+			"figures": [
+				"Kurdistan_BenjaminFranklin",
+				"Kurdistan_UrNammu",
+				"Kurdistan_YukawaHideki",
+				"Kurdistan_TrofimLysenko",
+				"Kurdistan_BenitoMussolini",
+				"Kurdistan_BenjaminFranklin",
+				"Kurdistan_UrNammu",
+				"Kurdistan_YukawaHideki",
+				"KuroesnilYevuneppesOdysesitruac"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "KuroesnilYevuneppesOdysesitruac"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Kurdistan",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#E5B60F",
+			"figures": [
+				"Armenia_BenitoMussolini",
+				"Armenia_TrofimLysenko",
+				"Armenia_JaneAustenCassandra",
+				"Armenia_ChevalierDEon",
+				"Armenia_YukawaHideki",
+				"Armenia_BenjaminFranklin",
+				"Armenia_UrNammu",
+				"Armenia_TrofimLysenko",
+				"EdozzaibEsudeqaySukossyrau"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "EdozzaibEsudeqaySukossyrau"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Armenia",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#BE9090",
+			"figures": [
+				"Siber-nippon_ChevalierDEon",
+				"Siber-nippon_ChevalierDEon",
+				"Siber-nippon_YukawaHideki",
+				"Siber-nippon_YukawaHideki",
+				"Siber-nippon_ChevalierDEon",
+				"Siber-nippon_ChevalierDEon",
+				"Siber-nippon_YukawaHideki",
+				"Siber-nippon_UrNammu",
+				"OlaekikeOujoOyo"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "OlaekikeOujoOyo"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Siber-nippon",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#6A503E",
+			"figures": [
+				"Gothia_BenjaminFranklin",
+				"Gothia_ChevalierDEon",
+				"Gothia_UrNammu",
+				"Gothia_YukawaHideki",
+				"Gothia_YukawaHideki",
+				"Gothia_YukawaHideki",
+				"Gothia_BenjaminFranklin",
+				"Gothia_JaneAustenCassandra",
+				"RekozzijoXiniy"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "RekozzijoXiniy"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Gothia",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#AC7148",
+			"figures": [
+				"Gotinia_UrNammu",
+				"Gotinia_JaneAustenCassandra",
+				"Gotinia_TrofimLysenko",
+				"Gotinia_YukawaHideki",
+				"Gotinia_ChevalierDEon",
+				"Gotinia_ChevalierDEon",
+				"Gotinia_TrofimLysenko",
+				"Gotinia_JaneAustenCassandra",
+				"WuntalluijIoumaulStraudau"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "WuntalluijIoumaulStraudau"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Gotinia",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#9E7458",
+			"figures": [
+				"Puddu_dravida_JaneAustenCassandra",
+				"Puddu_dravida_YukawaHideki",
+				"Puddu_dravida_TrofimLysenko",
+				"Puddu_dravida_BenitoMussolini",
+				"Puddu_dravida_JaneAustenCassandra",
+				"Puddu_dravida_JaneAustenCassandra",
+				"Puddu_dravida_BenjaminFranklin",
+				"IaskuheRowymEauqogebiru"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "IaskuheRowymEauqogebiru"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Puddu_dravida",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#A77F3E",
+			"figures": [
+				"Devanadu_YukawaHideki",
+				"Devanadu_ChevalierDEon",
+				"Devanadu_BenjaminFranklin",
+				"Devanadu_BenjaminFranklin",
+				"Devanadu_ChevalierDEon",
+				"Devanadu_TrofimLysenko",
+				"LubulvoeYdevyntikau"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "LubulvoeYdevyntikau"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Devanadu",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#DD7853",
+			"figures": [
+				"Ryu_nippon_JaneAustenCassandra",
+				"Ryu_nippon_BenjaminFranklin",
+				"Ryu_nippon_TrofimLysenko",
+				"Ryu_nippon_ChevalierDEon",
+				"Ryu_nippon_UrNammu",
+				"Ryu_nippon_YukawaHideki",
+				"NalgaupangUschespy"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "NalgaupangUschespy"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Ryu_nippon",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#C1B8F4",
+			"figures": [
+				"New_brittany_YukawaHideki",
+				"New_brittany_TrofimLysenko",
+				"New_brittany_YukawaHideki",
+				"New_brittany_YukawaHideki",
+				"New_brittany_BenitoMussolini",
+				"AtyltongertiFlaecagafilmoEyoa"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "AtyltongertiFlaecagafilmoEyoa"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "New_brittany",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#3C3C47",
+			"figures": [
+				"Neu_germania_TrofimLysenko",
+				"Neu_germania_UrNammu",
+				"Neu_germania_ChevalierDEon",
+				"Neu_germania_YukawaHideki",
+				"Neu_germania_JaneAustenCassandra",
+				"EeptekrezzinPloguaxymouyi"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "EeptekrezzinPloguaxymouyi"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Neu_germania",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#797C66",
+			"figures": [
+				"Amazgha_YukawaHideki",
+				"Amazgha_BenjaminFranklin",
+				"Amazgha_JaneAustenCassandra",
+				"Amazgha_TrofimLysenko",
+				"Amazgha_YukawaHideki",
+				"StuirlomijIeflataivipuQyceyjaus"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "StuirlomijIeflataivipuQyceyjaus"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Amazgha",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#C67E54",
+			"figures": [
+				"Nippon_dravida_ChevalierDEon",
+				"Nippon_dravida_BenitoMussolini",
+				"Nippon_dravida_UrNammu",
+				"Nippon_dravida_JaneAustenCassandra",
+				"Nippon_dravida_YukawaHideki",
+				"NesaLiojavuoutueglo"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "NesaLiojavuoutueglo"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Nippon_dravida",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#AE953B",
+			"figures": [
+				"Coptic_BenjaminFranklin",
+				"Coptic_JaneAustenCassandra",
+				"Coptic_YukawaHideki",
+				"Coptic_ChevalierDEon",
+				"Coptic_TrofimLysenko",
+				"KymipulyEynev"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "KymipulyEynev"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Coptic",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#317E0D",
+			"figures": [
+				"Masr_ChevalierDEon",
+				"Masr_TrofimLysenko",
+				"Masr_JaneAustenCassandra",
+				"Masr_UrNammu",
+				"Masr_JaneAustenCassandra",
+				"OnticokaequaScheqewaelazi"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "OnticokaequaScheqewaelazi"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Masr",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#3A3823",
+			"figures": [
+				"Ghana_BenjaminFranklin",
+				"Ghana_BenjaminFranklin",
+				"Ghana_JaneAustenCassandra",
+				"Ghana_JaneAustenCassandra",
+				"Ghana_BenitoMussolini",
+				"WhacJyrasututu"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "WhacJyrasututu"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Ghana",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#5698A3",
+			"figures": [
+				"Columbia_TrofimLysenko",
+				"Columbia_BenitoMussolini",
+				"Columbia_TrofimLysenko",
+				"Columbia_BenjaminFranklin",
+				"ItraOfaerag"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "ItraOfaerag"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Columbia",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#3B0014",
+			"figures": [
+				"Inca_ChevalierDEon",
+				"Inca_YukawaHideki",
+				"Inca_ChevalierDEon",
+				"Inca_BenitoMussolini",
+				"WemagMafasche"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "WemagMafasche"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Inca",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#E085C9",
+			"figures": [
+				"Patagonia_TrofimLysenko",
+				"Patagonia_BenitoMussolini",
+				"Patagonia_BenitoMussolini",
+				"Patagonia_JaneAustenCassandra",
+				"AsmipheYfeejo"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "AsmipheYfeejo"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Patagonia",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#3B2335",
+			"figures": [
+				"Abyssinia_TrofimLysenko",
+				"Abyssinia_ChevalierDEon",
+				"Abyssinia_BenitoMussolini",
+				"Abyssinia_ChevalierDEon",
+				"AveEevaumabapraulvEesomasuzzy"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "AveEevaumabapraulvEesomasuzzy"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Abyssinia",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#092704",
+			"figures": [
+				"Kilwa_TrofimLysenko",
+				"Kilwa_BenjaminFranklin",
+				"Kilwa_UrNammu",
+				"Kilwa_ChevalierDEon",
+				"ThefononaunEghtachytHurlisiejan"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "ThefononaunEghtachytHurlisiejan"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Kilwa",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#434322",
+			"figures": [
+				"Xhosa_JaneAustenCassandra",
+				"Xhosa_BenjaminFranklin",
+				"Xhosa_JaneAustenCassandra",
+				"AudaTiggiOufuaw"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "AudaTiggiOufuaw"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Xhosa",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#320707",
+			"figures": [
+				"Zulu_BenjaminFranklin",
+				"Zulu_JaneAustenCassandra",
+				"Zulu_YukawaHideki",
+				"AlpusyslehouwAseghtirifVekefly"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "AlpusyslehouwAseghtirifVekefly"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Zulu",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#0E5455",
+			"figures": [
+				"Kushan_ChevalierDEon",
+				"AutaumolebRylvoufaerteJimimoo"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "AutaumolebRylvoufaerteJimimoo"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Kushan",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#C5CB6E",
+			"figures": [
+				"Xin_zhongguo_BenitoMussolini",
+				"SataunepSom"
+			],
+			"finished_decisions": [],
+			"government_positions": {
+				"Leader": "SataunepSom"
+			},
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"is_player": false,
+			"money": 0.0,
+			"name": "Xin_zhongguo",
+			"political_power": 0.0,
+			"puppets": [],
+			"stability": 0.0,
+			"war_support": 0.0
+		}
+	],
+	"significant_figures": [
+		{
+			"allegiance": "Canada",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "RogerirmydeCyveu",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/BenjaminFranklin.png",
+			"skills": {
+				"attackerAttackMitigation": 0.97,
+				"dailyPPGain": -0.03,
+				"defenderAttackMitigation": 0.98,
+				"divCostMod": 1.01,
+				"stability": -0.04,
+				"troopAttackAdd": -0.1,
+				"troopAttackMod": 0.97,
+				"troopDefendAdd": -0.025,
+				"troopDefendMod": 0.99,
+				"troopSpeed": 0.025,
+				"warSupport": -0.01
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Shaurya_nadu",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "YrkiJaikiddayEfai",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/JaneAustenCassandra.png",
+			"skills": {
+				"dailyPPGain": 0.01,
+				"defenderAttackMitigation": 1.02,
+				"troopDefendAdd": 0.075,
+				"troopDefendMod": 1.03,
+				"troopSpeed": -0.02
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Brittany",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "ImmiscecAovitiwetedd",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/ChevalierDEon.png",
+			"skills": {
+				"attackerAttackMitigation": 0.97,
+				"defenderAttackMitigation": 0.97,
+				"stability": 0.04,
+				"troopAttackAdd": -0.075,
+				"troopDefendAdd": 0.025,
+				"troopDefendMod": 0.98,
+				"troopSpeed": -0.025
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Germania",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "EzzaceelkegoVoeveespousm",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/ChevalierDEon.png",
+			"skills": {
+				"dailyPPGain": 0.01,
+				"stability": 0.02,
+				"troopAttackAdd": -0.075,
+				"troopAttackMod": 0.99,
+				"warSupport": 0.02
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "China",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "KnidEyeramaAkea",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/TrofimLysenko.png",
+			"skills": {
+				"divCostMod": 0.99,
+				"warSupport": -0.04
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Mongolia",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "GekUhiouro",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/BenitoMussolini.png",
+			"skills": {
+				"dailyPPGain": 0.05,
+				"divCostMod": 0.95,
+				"stability": -0.04,
+				"troopAttackAdd": 0.025,
+				"troopAttackMod": 0.99,
+				"troopDefendAdd": -0.025,
+				"troopDefendMod": 0.96,
+				"troopSpeed": -0.005,
+				"warSupport": -0.01
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Gaul",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "EfuiOce",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/TrofimLysenko.png",
+			"skills": {
+				"divCostMod": 1.03,
+				"troopAttackAdd": 0.025,
+				"troopAttackMod": 0.97,
+				"troopDefendAdd": 0.1,
+				"troopSpeed": 0.005
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Roma",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "QyvejoascOacosperpal",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/TrofimLysenko.png",
+			"skills": {
+				"attackerAttackMitigation": 1.01,
+				"dailyPPGain": -0.03,
+				"defenderAttackMitigation": 0.98,
+				"divCostMod": 1.03,
+				"stability": 0.02,
+				"troopAttackAdd": 0.075,
+				"troopAttackMod": 0.99,
+				"troopDefendAdd": 0.025,
+				"troopDefendMod": 0.99,
+				"troopSpeed": 0.01,
+				"warSupport": -0.01
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Japan",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "AutuotIhepuhoollYitchechoge",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/ChevalierDEon.png",
+			"skills": {
+				"attackerAttackMitigation": 1.01,
+				"dailyPPGain": -0.03,
+				"divCostMod": 1.01,
+				"troopDefendAdd": 0.125,
+				"troopDefendMod": 1.04,
+				"troopSpeed": -0.01
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Spain",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "AurtoagYnesuose",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/TrofimLysenko.png",
+			"skills": {
+				"dailyPPGain": -0.02,
+				"stability": 0.04
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Portugal",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "FysaeswizUinat",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/YukawaHideki.png",
+			"skills": {
+				"attackerAttackMitigation": 1.01,
+				"dailyPPGain": 0.04,
+				"defenderAttackMitigation": 1.01,
+				"divCostMod": 1.04,
+				"stability": 0.05,
+				"troopAttackAdd": 0.075,
+				"troopAttackMod": 0.99,
+				"troopDefendAdd": -0.025,
+				"troopDefendMod": 1.05,
+				"troopSpeed": 0.01,
+				"warSupport": -0.01
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Makedonia",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "OqeyNermizanuyAsce",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/YukawaHideki.png",
+			"skills": {
+				"divCostMod": 1.03,
+				"stability": 0.03,
+				"troopAttackMod": 0.95,
+				"troopDefendMod": 1.01,
+				"troopSpeed": 0.02
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Carthage",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "FasplowylledEepiwaeyufu",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/YukawaHideki.png",
+			"skills": {
+				"defenderAttackMitigation": 1.04,
+				"divCostMod": 1.02,
+				"stability": 0.02,
+				"troopAttackAdd": 0.025,
+				"troopAttackMod": 1.03,
+				"troopDefendAdd": 0.025,
+				"troopSpeed": -0.01,
+				"warSupport": -0.01
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Atlantis",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "ApalaurainuknIakreh",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/ChevalierDEon.png",
+			"skills": {
+				"attackerAttackMitigation": 1.01,
+				"dailyPPGain": -0.03,
+				"divCostMod": 0.97,
+				"troopAttackAdd": -0.1,
+				"troopAttackMod": 0.99,
+				"troopDefendAdd": -0.075,
+				"troopSpeed": 0.015,
+				"warSupport": 0.04
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "India",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "QueleebiEequbEfluw",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/JaneAustenCassandra.png",
+			"skills": {
+				"attackerAttackMitigation": 1.03,
+				"stability": 0.04,
+				"troopAttackMod": 1.01,
+				"troopSpeed": 0.005,
+				"warSupport": 0.02
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Arabia",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "EwylylpeSauvechufl",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/YukawaHideki.png",
+			"skills": {
+				"attackerAttackMitigation": 1.01,
+				"divCostMod": 1.01,
+				"troopAttackAdd": 0.075,
+				"troopDefendMod": 0.96,
+				"troopSpeed": 0.015,
+				"warSupport": 0.01
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Blemmys",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "UcytiUknirtIkiwe",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/BenjaminFranklin.png",
+			"skills": {
+				"dailyPPGain": 0.03,
+				"defenderAttackMitigation": 0.99,
+				"divCostMod": 1.01,
+				"stability": -0.01,
+				"troopAttackAdd": -0.075,
+				"troopAttackMod": 0.98,
+				"troopDefendAdd": 0.05,
+				"troopDefendMod": 0.95
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Mauritania",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "PemelonusaeToquulmaskYjaur",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/JaneAustenCassandra.png",
+			"skills": {
+				"dailyPPGain": 0.04,
+				"divCostMod": 0.98,
+				"stability": -0.01,
+				"troopAttackAdd": 0.025,
+				"troopAttackMod": 1.01,
+				"troopDefendAdd": -0.125,
+				"troopSpeed": -0.02
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Cuba",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "EosprumIsughytDyv",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/TrofimLysenko.png",
+			"skills": {
+				"defenderAttackMitigation": 1.05,
+				"divCostMod": 0.99,
+				"troopAttackAdd": 0.075,
+				"troopDefendAdd": 0.025,
+				"troopSpeed": 0.015
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Haiti",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "AxiVawuqei",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/BenjaminFranklin.png",
+			"skills": {
+				"attackerAttackMitigation": 0.96,
+				"dailyPPGain": 0.01,
+				"stability": -0.01,
+				"troopAttackAdd": -0.075,
+				"troopAttackMod": 0.96,
+				"troopDefendMod": 0.99
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Dominican_republic",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "UxtucurlOpaystrelaYedaerrewe",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/ChevalierDEon.png",
+			"skills": {
+				"attackerAttackMitigation": 1.05,
+				"dailyPPGain": 0.04,
+				"divCostMod": 0.98,
+				"stability": 0.02,
+				"troopAttackMod": 0.97,
+				"troopDefendAdd": -0.075,
+				"troopDefendMod": 1.01
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Yemen",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "HydoroblaPyccynLobeh",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/UrNammu.png",
+			"skills": {
+				"stability": 0.01,
+				"troopAttackAdd": 0.075,
+				"troopAttackMod": 0.97,
+				"troopDefendMod": 0.99,
+				"warSupport": -0.01
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Jamaica",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "CaghirgeEssaungaebrermupRojekamau",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/BenitoMussolini.png",
+			"skills": {
+				"divCostMod": 0.96,
+				"troopDefendAdd": -0.125,
+				"troopDefendMod": 0.97
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Cabo_verde",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "EmosloGhouvavewuh",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/JaneAustenCassandra.png",
+			"skills": {
+				"attackerAttackMitigation": 0.97,
+				"dailyPPGain": 0.01,
+				"defenderAttackMitigation": 1.01,
+				"divCostMod": 1.02,
+				"stability": 0.01,
+				"troopAttackAdd": -0.05,
+				"troopDefendMod": 0.96
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "St_kitts_and_nevis",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "EeleUgafuqo",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/TrofimLysenko.png",
+			"skills": {
+				"attackerAttackMitigation": 0.98,
+				"troopAttackMod": 0.95
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Dominica",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "JayextuAuwionOtovobonaey",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/YukawaHideki.png",
+			"skills": {
+				"attackerAttackMitigation": 0.97,
+				"dailyPPGain": 0.04,
+				"defenderAttackMitigation": 1.04,
+				"divCostMod": 0.99,
+				"troopAttackAdd": -0.075,
+				"troopDefendAdd": -0.1,
+				"troopDefendMod": 1.02,
+				"troopSpeed": -0.01,
+				"warSupport": -0.03
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Yoruba",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "LobicauvAudourrotonu",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/ChevalierDEon.png",
+			"skills": {
+				"attackerAttackMitigation": 1.01,
+				"dailyPPGain": -0.01,
+				"defenderAttackMitigation": 1.01,
+				"divCostMod": 1.01,
+				"stability": -0.01,
+				"troopAttackAdd": 0.075,
+				"troopAttackMod": 0.99,
+				"troopDefendAdd": -0.075,
+				"troopDefendMod": 1.04,
+				"troopSpeed": 0.02,
+				"warSupport": -0.04
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Barbados",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "EweInuFruouvozop",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/UrNammu.png",
+			"skills": {
+				"troopDefendAdd": 0.1,
+				"troopDefendMod": 0.98,
+				"warSupport": 0.01
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "St_lucia",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "UnkodEnuottupayiv",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/YukawaHideki.png",
+			"skills": {
+				"defenderAttackMitigation": 0.96,
+				"troopAttackAdd": -0.025,
+				"troopDefendAdd": 0.025,
+				"troopDefendMod": 0.99,
+				"troopSpeed": -0.02
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Grenada",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "QoiroyiOhofrystuj",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/UrNammu.png",
+			"skills": {
+				"dailyPPGain": -0.04,
+				"troopAttackMod": 0.99,
+				"troopDefendMod": 1.01,
+				"warSupport": 0.02
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Central_african_republic",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "EsesopooArroukaunuLemm",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/UrNammu.png",
+			"skills": {
+				"attackerAttackMitigation": 1.01,
+				"dailyPPGain": 0.04,
+				"defenderAttackMitigation": 0.95,
+				"divCostMod": 0.95,
+				"stability": -0.03,
+				"troopAttackAdd": -0.025,
+				"troopAttackMod": 0.99,
+				"troopDefendAdd": 0.025,
+				"troopDefendMod": 1.03,
+				"troopSpeed": -0.015,
+				"warSupport": -0.02
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Sri_lanka",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "OqekucYaskuniuDosyda",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/BenjaminFranklin.png",
+			"skills": {
+				"attackerAttackMitigation": 0.99,
+				"dailyPPGain": 0.04,
+				"defenderAttackMitigation": 1.02,
+				"divCostMod": 1.01,
+				"stability": -0.05,
+				"troopAttackAdd": 0.025,
+				"troopAttackMod": 0.99,
+				"troopDefendAdd": -0.1,
+				"troopDefendMod": 1.03,
+				"troopSpeed": -0.005,
+				"warSupport": 0.03
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Palau",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "EtiyielOkeqaufafaufl",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/ChevalierDEon.png",
+			"skills": {
+				"dailyPPGain": -0.04,
+				"troopDefendAdd": 0.075,
+				"troopDefendMod": 1.01
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Nauru",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "SchaejesoxeiAuminnaydOhuc",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/BenitoMussolini.png",
+			"skills": {
+				"defenderAttackMitigation": 0.99,
+				"troopAttackMod": 0.98
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Srivijaya",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "UrtuschuddMotept",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/JaneAustenCassandra.png",
+			"skills": {
+				"attackerAttackMitigation": 0.98,
+				"dailyPPGain": -0.01,
+				"defenderAttackMitigation": 1.03,
+				"troopAttackMod": 0.97,
+				"troopDefendAdd": 0.075,
+				"troopSpeed": 0.01,
+				"warSupport": 0.01
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Brazil",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "OretteauwenoyYaerduneduUyskutyknech",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/BenitoMussolini.png",
+			"skills": {
+				"attackerAttackMitigation": 1.01,
+				"dailyPPGain": -0.01,
+				"defenderAttackMitigation": 1.05,
+				"troopAttackAdd": -0.025,
+				"troopDefendMod": 0.99,
+				"troopSpeed": 0.015
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Dr_congo",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "OupuajauErpaeyaqu",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/ChevalierDEon.png",
+			"skills": {
+				"attackerAttackMitigation": 0.99,
+				"dailyPPGain": -0.03,
+				"defenderAttackMitigation": 0.95,
+				"divCostMod": 1.02,
+				"stability": -0.01,
+				"troopAttackAdd": -0.025,
+				"troopAttackMod": 0.99,
+				"troopDefendAdd": -0.025,
+				"troopDefendMod": 1.01,
+				"troopSpeed": -0.005,
+				"warSupport": 0.01
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Equatorial_guinea",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "AhejakocunEjeeguEurdasmurtauf",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/ChevalierDEon.png",
+			"skills": {
+				"dailyPPGain": 0.03,
+				"defenderAttackMitigation": 1.01,
+				"divCostMod": 0.99,
+				"stability": 0.01,
+				"troopAttackAdd": 0.125,
+				"troopDefendMod": 0.97,
+				"warSupport": -0.04
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Singapore",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "EsmakeheEtweyytyVulgyf",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/YukawaHideki.png",
+			"skills": {
+				"attackerAttackMitigation": 1.01,
+				"dailyPPGain": 0.02,
+				"defenderAttackMitigation": 1.01,
+				"divCostMod": 1.01,
+				"troopAttackAdd": -0.025,
+				"troopAttackMod": 0.95,
+				"troopDefendMod": 1.03,
+				"warSupport": 0.04
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Sao_tome_and_principe",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "IferaqiougyhWeeliqaub",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/BenitoMussolini.png",
+			"skills": {
+				"attackerAttackMitigation": 1.03,
+				"troopDefendAdd": 0.075
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Burundi",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "DruteyoJaulkizz",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/BenjaminFranklin.png",
+			"skills": {
+				"defenderAttackMitigation": 1.04,
+				"troopDefendAdd": 0.025
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Papua_new_guinea",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "YikoothrawAttiquifok",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/JaneAustenCassandra.png",
+			"skills": {
+				"attackerAttackMitigation": 1.01,
+				"defenderAttackMitigation": 0.96,
+				"divCostMod": 1.02,
+				"troopDefendMod": 0.98,
+				"troopSpeed": -0.015,
+				"warSupport": 0.02
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Seychelles",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "EelmekaSprewennegHewheetoviyy",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/YukawaHideki.png",
+			"skills": {
+				"defenderAttackMitigation": 1.01,
+				"divCostMod": 0.99
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "East_timor",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "YyiwezeiBiulkeku",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/JaneAustenCassandra.png",
+			"skills": {
+				"troopAttackAdd": 0.125,
+				"troopDefendAdd": 0.075,
+				"troopSpeed": -0.02
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Lemuria",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "HepyrmywerdoYodula",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/YukawaHideki.png",
+			"skills": {
+				"divCostMod": 0.98,
+				"troopAttackMod": 1.01,
+				"troopDefendMod": 0.95
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Madagascar",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "RefaulollBosCufupogrytto",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/TrofimLysenko.png",
+			"skills": {
+				"attackerAttackMitigation": 1.01,
+				"dailyPPGain": 0.02,
+				"defenderAttackMitigation": 1.03,
+				"divCostMod": 0.99,
+				"stability": -0.03,
+				"troopAttackAdd": 0.1,
+				"troopAttackMod": 0.99,
+				"troopDefendMod": 1.03,
+				"troopSpeed": -0.005,
+				"warSupport": 0.03
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Zimbabwe",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "EcyrtedisYlithauyimOudyhauddew",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/UrNammu.png",
+			"skills": {
+				"attackerAttackMitigation": 1.01,
+				"dailyPPGain": -0.01,
+				"defenderAttackMitigation": 0.96,
+				"divCostMod": 0.96,
+				"stability": 0.03,
+				"troopDefendAdd": -0.075,
+				"troopDefendMod": 0.97,
+				"troopSpeed": -0.015,
+				"warSupport": 0.04
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Mauritius",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "LibbofaxtoilmNaigelyh",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/UrNammu.png",
+			"skills": {
+				"attackerAttackMitigation": 0.99,
+				"dailyPPGain": 0.04,
+				"defenderAttackMitigation": 1.03,
+				"divCostMod": 1.03,
+				"stability": -0.01,
+				"troopAttackAdd": 0.1,
+				"troopAttackMod": 0.99,
+				"troopDefendAdd": -0.025,
+				"troopDefendMod": 0.99
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "New_zealand",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "AtayahuyuFetahoojUruoudoteel",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/ChevalierDEon.png",
+			"skills": {
+				"defenderAttackMitigation": 0.98,
+				"stability": 0.01,
+				"troopAttackAdd": -0.05,
+				"troopAttackMod": 0.96,
+				"troopDefendAdd": 0.025,
+				"troopSpeed": 0.005
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Antartica",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "AcudoujeyuwHylgaw",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/JaneAustenCassandra.png",
+			"skills": {
+				"attackerAttackMitigation": 1.01,
+				"dailyPPGain": -0.03,
+				"defenderAttackMitigation": 1.02,
+				"divCostMod": 0.96,
+				"stability": -0.03,
+				"troopAttackAdd": 0.075,
+				"troopAttackMod": 1.03,
+				"troopDefendAdd": -0.025,
+				"troopDefendMod": 0.99,
+				"troopSpeed": 0.005,
+				"warSupport": -0.02
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Tibet-Rouran",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "PhaulvuouwreaufleIstrusnitchufItepuyovae",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/JaneAustenCassandra.png",
+			"skills": {
+				"attackerAttackMitigation": 0.98,
+				"dailyPPGain": -0.03,
+				"defenderAttackMitigation": 0.96,
+				"divCostMod": 1.03,
+				"stability": -0.01,
+				"troopAttackAdd": 0.075,
+				"troopAttackMod": 0.99,
+				"troopDefendAdd": -0.075,
+				"troopDefendMod": 0.99,
+				"troopSpeed": 0.01,
+				"warSupport": 0.01
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Korea",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "EowilgotwoVantauveemaykeEemmoy",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/TrofimLysenko.png",
+			"skills": {
+				"dailyPPGain": 0.02,
+				"divCostMod": 1.01,
+				"troopAttackAdd": 0.025,
+				"troopAttackMod": 0.98,
+				"troopDefendMod": 1.02,
+				"troopSpeed": -0.005,
+				"warSupport": -0.02
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Basque_county",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "GeaqigunaEfodameegupWraeqi",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/JaneAustenCassandra.png",
+			"skills": {
+				"attackerAttackMitigation": 0.99,
+				"troopSpeed": -0.015
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Scandinavia",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "YvusosimperBeeshoaloevide",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/ChevalierDEon.png",
+			"skills": {
+				"dailyPPGain": 0.01,
+				"troopAttackAdd": -0.1
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Prussia",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "UjitenteAqaqYommub",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/BenjaminFranklin.png",
+			"skills": {
+				"dailyPPGain": -0.01,
+				"divCostMod": 0.96,
+				"troopAttackMod": 1.02,
+				"troopDefendAdd": -0.025,
+				"troopDefendMod": 0.99,
+				"troopSpeed": -0.01,
+				"warSupport": -0.01
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Vyadhore",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "NitchijaePeaschebaugyUewaekiwotub",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/YukawaHideki.png",
+			"skills": {
+				"attackerAttackMitigation": 1.01,
+				"dailyPPGain": 0.04,
+				"defenderAttackMitigation": 1.01,
+				"divCostMod": 0.97,
+				"stability": -0.03,
+				"troopAttackAdd": -0.075,
+				"troopAttackMod": 1.01,
+				"troopDefendAdd": 0.025,
+				"troopDefendMod": 0.99,
+				"troopSpeed": -0.005,
+				"warSupport": 0.03
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Bangla",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "BruypyhidiqKehycugoovHiyyretchykn",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/UrNammu.png",
+			"skills": {
+				"defenderAttackMitigation": 1.01,
+				"stability": 0.01,
+				"troopAttackAdd": 0.05,
+				"warSupport": -0.01
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Dravida",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "EqaitirkaufleeOpecajGlouquwadug",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/ChevalierDEon.png",
+			"skills": {
+				"divCostMod": 0.99,
+				"troopAttackAdd": -0.125,
+				"warSupport": 0.01
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Maratha",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "OnteccutamTrealmatodutIkemm",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/ChevalierDEon.png",
+			"skills": {
+				"defenderAttackMitigation": 1.01,
+				"divCostMod": 1.02,
+				"stability": -0.01,
+				"troopDefendAdd": -0.025,
+				"troopDefendMod": 1.02
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Mazdarya",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "IpunacuYegaDidepsewra",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/YukawaHideki.png",
+			"skills": {
+				"dailyPPGain": -0.01,
+				"stability": -0.01,
+				"troopDefendAdd": -0.025,
+				"warSupport": 0.04
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Khalistan",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "SuqawruhuAfeheenau",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/BenjaminFranklin.png",
+			"skills": {
+				"attackerAttackMitigation": 1.03,
+				"dailyPPGain": -0.03,
+				"stability": -0.01,
+				"troopAttackAdd": 0.025,
+				"troopAttackMod": 1.05,
+				"troopDefendAdd": -0.025,
+				"troopDefendMod": 1.01,
+				"warSupport": -0.01
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Kurdistan",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "KuroesnilYevuneppesOdysesitruac",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/UrNammu.png",
+			"skills": {
+				"attackerAttackMitigation": 1.01,
+				"defenderAttackMitigation": 0.97,
+				"divCostMod": 1.04,
+				"troopAttackMod": 0.99,
+				"troopDefendAdd": 0.025
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Armenia",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "EdozzaibEsudeqaySukossyrau",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/TrofimLysenko.png",
+			"skills": {
+				"attackerAttackMitigation": 1.02,
+				"dailyPPGain": -0.01,
+				"defenderAttackMitigation": 0.99,
+				"divCostMod": 1.01,
+				"stability": -0.01,
+				"troopAttackAdd": -0.075,
+				"troopAttackMod": 1.03,
+				"troopDefendAdd": -0.125,
+				"troopDefendMod": 0.99,
+				"troopSpeed": 0.015,
+				"warSupport": 0.02
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Siber-nippon",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "OlaekikeOujoOyo",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/BenjaminFranklin.png",
+			"skills": {
+				"attackerAttackMitigation": 0.99,
+				"divCostMod": 1.03,
+				"stability": 0.01,
+				"troopDefendAdd": 0.025,
+				"troopDefendMod": 0.95
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Gothia",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "RekozzijoXiniy",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/ChevalierDEon.png",
+			"skills": {
+				"attackerAttackMitigation": 0.98,
+				"dailyPPGain": 0.04,
+				"defenderAttackMitigation": 1.04,
+				"divCostMod": 1.04,
+				"stability": -0.01,
+				"troopAttackAdd": 0.025,
+				"troopAttackMod": 0.97,
+				"troopDefendAdd": 0.025,
+				"troopDefendMod": 1.05,
+				"troopSpeed": -0.01,
+				"warSupport": -0.04
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Gotinia",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "WuntalluijIoumaulStraudau",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/UrNammu.png",
+			"skills": {
+				"troopAttackAdd": 0.025,
+				"troopAttackMod": 0.99
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Puddu_dravida",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "IaskuheRowymEauqogebiru",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/TrofimLysenko.png",
+			"skills": {
+				"attackerAttackMitigation": 1.02,
+				"dailyPPGain": -0.01,
+				"defenderAttackMitigation": 0.97,
+				"divCostMod": 1.02,
+				"stability": 0.03,
+				"troopAttackAdd": 0.025,
+				"troopSpeed": -0.01
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Devanadu",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "LubulvoeYdevyntikau",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/TrofimLysenko.png",
+			"skills": {
+				"attackerAttackMitigation": 0.98,
+				"defenderAttackMitigation": 1.01,
+				"divCostMod": 1.03,
+				"stability": -0.01,
+				"troopDefendAdd": -0.025
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Ryu_nippon",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "NalgaupangUschespy",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/TrofimLysenko.png",
+			"skills": {
+				"attackerAttackMitigation": 1.03,
+				"divCostMod": 1.01,
+				"troopDefendMod": 0.98,
+				"troopSpeed": 0.015,
+				"warSupport": 0.03
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "New_brittany",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "AtyltongertiFlaecagafilmoEyoa",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/TrofimLysenko.png",
+			"skills": {
+				"divCostMod": 0.99,
+				"stability": -0.04,
+				"troopAttackAdd": -0.1,
+				"troopAttackMod": 1.03,
+				"troopDefendAdd": -0.025,
+				"troopDefendMod": 0.98,
+				"warSupport": 0.01
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Neu_germania",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "EeptekrezzinPloguaxymouyi",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/BenitoMussolini.png",
+			"skills": {
+				"stability": 0.04,
+				"troopSpeed": -0.005
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Amazgha",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "StuirlomijIeflataivipuQyceyjaus",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/UrNammu.png",
+			"skills": {
+				"attackerAttackMitigation": 0.99,
+				"dailyPPGain": -0.05,
+				"defenderAttackMitigation": 1.01,
+				"divCostMod": 1.01,
+				"stability": -0.02,
+				"troopAttackAdd": -0.075,
+				"troopAttackMod": 1.03,
+				"troopDefendAdd": -0.05,
+				"troopDefendMod": 1.04,
+				"troopSpeed": -0.02,
+				"warSupport": -0.02
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Nippon_dravida",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "NesaLiojavuoutueglo",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/YukawaHideki.png",
+			"skills": {
+				"stability": 0.01,
+				"troopDefendAdd": -0.05
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Coptic",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "KymipulyEynev",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/YukawaHideki.png",
+			"skills": {
+				"dailyPPGain": -0.01,
+				"defenderAttackMitigation": 1.04,
+				"divCostMod": 0.99,
+				"troopDefendMod": 1.03,
+				"warSupport": -0.04
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Masr",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "OnticokaequaScheqewaelazi",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/BenitoMussolini.png",
+			"skills": {
+				"troopAttackMod": 0.95,
+				"troopDefendAdd": 0.025,
+				"warSupport": 0.04
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Ghana",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "WhacJyrasututu",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/ChevalierDEon.png",
+			"skills": {
+				"troopAttackAdd": 0.025,
+				"troopSpeed": -0.01,
+				"warSupport": 0.04
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Columbia",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "ItraOfaerag",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/YukawaHideki.png",
+			"skills": {
+				"attackerAttackMitigation": 1.03,
+				"dailyPPGain": -0.02,
+				"defenderAttackMitigation": 0.96,
+				"divCostMod": 0.99,
+				"stability": -0.03,
+				"troopAttackMod": 0.99,
+				"troopDefendAdd": -0.125,
+				"troopDefendMod": 0.99,
+				"troopSpeed": 0.01,
+				"warSupport": 0.02
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Inca",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "WemagMafasche",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/YukawaHideki.png",
+			"skills": {
+				"attackerAttackMitigation": 0.95,
+				"dailyPPGain": -0.03,
+				"defenderAttackMitigation": 1.01,
+				"divCostMod": 1.03,
+				"stability": -0.04,
+				"troopAttackAdd": -0.075,
+				"troopAttackMod": 0.99,
+				"troopDefendAdd": -0.05,
+				"troopDefendMod": 1.05,
+				"troopSpeed": -0.005,
+				"warSupport": -0.02
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Patagonia",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "AsmipheYfeejo",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/BenjaminFranklin.png",
+			"skills": {
+				"attackerAttackMitigation": 1.03,
+				"dailyPPGain": -0.01,
+				"defenderAttackMitigation": 0.98,
+				"divCostMod": 1.01,
+				"stability": -0.05,
+				"troopAttackAdd": -0.025,
+				"troopAttackMod": 1.05,
+				"troopDefendAdd": -0.025,
+				"troopDefendMod": 1.01,
+				"troopSpeed": -0.005,
+				"warSupport": -0.02
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Abyssinia",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "AveEevaumabapraulvEesomasuzzy",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/BenjaminFranklin.png",
+			"skills": {
+				"defenderAttackMitigation": 1.01,
+				"warSupport": 0.03
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Kilwa",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "ThefononaunEghtachytHurlisiejan",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/UrNammu.png",
+			"skills": {
+				"attackerAttackMitigation": 1.03,
+				"dailyPPGain": 0.04,
+				"defenderAttackMitigation": 0.99,
+				"divCostMod": 1.01,
+				"stability": -0.02,
+				"troopAttackAdd": -0.025,
+				"troopAttackMod": 0.99,
+				"troopDefendAdd": 0.025,
+				"troopDefendMod": 0.99,
+				"troopSpeed": -0.005,
+				"warSupport": 0.02
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Xhosa",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "AudaTiggiOufuaw",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/TrofimLysenko.png",
+			"skills": {
+				"attackerAttackMitigation": 1.01,
+				"dailyPPGain": -0.04,
+				"defenderAttackMitigation": 1.01,
+				"divCostMod": 0.96,
+				"troopAttackAdd": 0.1,
+				"troopAttackMod": 1.01
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Zulu",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "AlpusyslehouwAseghtirifVekefly",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/UrNammu.png",
+			"skills": {
+				"attackerAttackMitigation": 0.97,
+				"dailyPPGain": 0.01,
+				"defenderAttackMitigation": 1.01,
+				"divCostMod": 0.96,
+				"stability": -0.02,
+				"troopDefendAdd": 0.025,
+				"troopDefendMod": 0.98,
+				"troopSpeed": -0.015,
+				"warSupport": -0.03
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Kushan",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "AutaumolebRylvoufaerteJimimoo",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/ChevalierDEon.png",
+			"skills": {
+				"attackerAttackMitigation": 1.01,
+				"dailyPPGain": 0.05,
+				"stability": -0.03,
+				"troopAttackAdd": 0.025,
+				"troopAttackMod": 1.01,
+				"troopDefendAdd": 0.025,
+				"troopDefendMod": 0.97,
+				"warSupport": -0.05
+			},
+			"status": 0,
+			"traits": []
+		},
+		{
+			"allegiance": "Xin_zhongguo",
+			"ideology": [
+				0,
+				0
+			],
+			"legitimacy": 0,
+			"name": "SataunepSom",
+			"occupation": "Leader",
+			"portrait_path": "res://starts/DravidianDawn/assets/portraits/random/TrofimLysenko.png",
+			"skills": {
+				"attackerAttackMitigation": 0.99,
+				"dailyPPGain": -0.01,
+				"defenderAttackMitigation": 1.02,
+				"divCostMod": 1.05,
+				"stability": -0.03,
+				"troopAttackAdd": -0.075,
+				"troopAttackMod": 0.99,
+				"troopDefendAdd": 0.125,
+				"troopDefendMod": 1.02,
+				"troopSpeed": 0.01,
+				"warSupport": 0.03
+			},
+			"status": 0,
+			"traits": []
+		}
+	]
+}

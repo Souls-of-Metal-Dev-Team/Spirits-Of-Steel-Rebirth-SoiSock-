@@ -1,0 +1,201 @@
+{
+	"factions": [],
+	"polities": [
+		{
+			"accepted_cultures": [],
+			"color": "#F9FF44",
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"money": 100000.0,
+			"name": "Qhosh",
+			"political_power": 205.23999999999,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#F0A9FF",
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"money": 100000.0,
+			"name": "Chavos",
+			"political_power": 205.23999999999,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#4EFF55",
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"money": 100000.0,
+			"name": "Enqian",
+			"political_power": 205.23999999999,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#AF7AEA",
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"money": 100000.0,
+			"name": "Ynead",
+			"political_power": 205.23999999999,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#7FFFE1",
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"money": 100000.0,
+			"name": "Ermelhei",
+			"political_power": 205.23999999999,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#918B68",
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"money": 100000.0,
+			"name": "Banilrendyn",
+			"political_power": 205.23999999999,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#FFEE87",
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"money": 100000.0,
+			"name": "Liben",
+			"political_power": 205.23999999999,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#FFC02B",
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"money": 100000.0,
+			"name": "Timwal",
+			"political_power": 205.23999999999,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#F4BDFF",
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"money": 100000.0,
+			"name": "Smot",
+			"political_power": 205.23999999999,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#F6FF54",
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"money": 100000.0,
+			"name": "Nightan",
+			"political_power": 205.23999999999,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#488022",
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"money": 100000.0,
+			"name": "Mithlon",
+			"political_power": 205.23999999999,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#55FFE3",
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"money": 100000.0,
+			"name": "Grastormian",
+			"political_power": 205.23999999999,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		},
+		{
+			"accepted_cultures": [],
+			"color": "#ABAA7E",
+			"hostedGovernments": [],
+			"ideology": [
+				0.0,
+				0.0
+			],
+			"money": 100000.0,
+			"name": "Deadcalia",
+			"political_power": 205.23999999999,
+			"puppets": [],
+			"stability": 1.0,
+			"war_support": 1.0
+		}
+	],
+	"significant_figures": []
+}

@@ -12,33 +12,33 @@ public partial class EventManager : Node
 	// object properties, so use the numeric value as EconomyManager does.
 	private const int SfxPopup = 8;
 
-	public Godot.Collections.Array<Node> active_dialogs = new();
-	public Godot.Collections.Array scheduled_events = new();
-	public Godot.Collections.Array super_events = new();
+	public Godot.Collections.Array<Node> activeDialogs = new();
+	public Godot.Collections.Array scheduledEvents = new();
+	public Godot.Collections.Array superEvents = new();
 
-	public CanvasLayer ui_layer = new CanvasLayer();
+	public CanvasLayer uiLayer = new CanvasLayer();
 
 	public override void _Ready()
 	{
-		ui_layer.Layer = 100;
-		AddChild(ui_layer);
+		uiLayer.Layer = 100;
+		AddChild(uiLayer);
 
 		var vp = GetViewport();
 		if (vp != null)
 			vp.GuiEmbedSubwindows = true;
 
 		WarManager.Instance.WarDeclared += (warer, waree) =>
-			show_alert(new Godot.Collections.Dictionary
+			ShowAlert(new Godot.Collections.Dictionary
 			{
 				{ "event", "war" },
 				{ "c1", warer },
 				{ "c2", waree },
 			});
-		load_super_events("res://superevents.json");
+		LoadSuperEvents("res://superevents.json");
 	}
 
 	// UNIFIED ENTRY POINT
-	public void show_alert(Godot.Collections.Dictionary data)
+	public void ShowAlert(Godot.Collections.Dictionary data)
 	{
 		Window dialog;
 		switch (GetOrDefault(data, "event", "default").AsString())
@@ -58,15 +58,15 @@ public partial class EventManager : Node
 
 	public void _add_dialog(Window dialog)
 	{
-		ui_layer.AddChild(dialog);
-		active_dialogs.Add(dialog);
+		uiLayer.AddChild(dialog);
+		activeDialogs.Add(dialog);
 		_setup_middle_click_close(dialog);
 		dialog.Connect("close_requested", Callable.From(() =>
 		{
 			if (GodotObject.IsInstanceValid(dialog))
 				dialog.QueueFree();
 		}));
-		dialog.Connect("tree_exited", Callable.From(() => active_dialogs.Remove(dialog)));
+		dialog.Connect("tree_exited", Callable.From(() => activeDialogs.Remove(dialog)));
 		dialog.PopupCentered();
 	}
 
@@ -126,7 +126,7 @@ public partial class EventManager : Node
 			if (IsTruthy(c1))
 			{
 				var country = c1.AsGodotObject();
-				flags.AddChild(_create_flag(country.Get("country_name").AsString(), country.Get("ideology_name").AsString()));
+				flags.AddChild(_create_flag(country.Get("countryName").AsString(), country.Get("ideologyName").AsString()));
 				var spacer = new Control();
 				spacer.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
 				flags.AddChild(spacer);
@@ -135,12 +135,12 @@ public partial class EventManager : Node
 			{
 				if (!IsTruthy(c1))
 				{
-					var spacer_left = new Control();
-					spacer_left.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
-					flags.AddChild(spacer_left);
+					var spacerLeft = new Control();
+					spacerLeft.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
+					flags.AddChild(spacerLeft);
 				}
 				var country = c2.AsGodotObject();
-				flags.AddChild(_create_flag(country.Get("country_name").AsString(), country.Get("ideology_name").AsString()));
+				flags.AddChild(_create_flag(country.Get("countryName").AsString(), country.Get("ideologyName").AsString()));
 			}
 			body.AddChild(flags);
 		}
@@ -152,11 +152,11 @@ public partial class EventManager : Node
 		label.Text = _get_default_text(data);
 		body.AddChild(label);
 
-		var ok_button = new Button();
-		ok_button.Text = "Ok";
-		ok_button.SizeFlagsHorizontal = Control.SizeFlags.ShrinkCenter;
-		ok_button.Connect("pressed", Callable.From(() => dialog.QueueFree()));
-		body.AddChild(ok_button);
+		var okButton = new Button();
+		okButton.Text = "Ok";
+		okButton.SizeFlagsHorizontal = Control.SizeFlags.ShrinkCenter;
+		okButton.Connect("pressed", Callable.From(() => dialog.QueueFree()));
+		body.AddChild(okButton);
 
 		dialog.Connect("close_requested", Callable.From(() => dialog.QueueFree()));
 		return dialog;
@@ -181,9 +181,9 @@ public partial class EventManager : Node
 	{
 		var c1 = GetOrDefault(data, "c1");
 		var c2 = GetOrDefault(data, "c2");
-		var custom_text = GetOrDefault(data, "text", "").AsString();
-		if (custom_text != "")
-			return custom_text;
+		var customText = GetOrDefault(data, "text", "").AsString();
+		if (customText != "")
+			return customText;
 
 		switch (GetOrDefault(data, "event", "event").AsString())
 		{
@@ -217,24 +217,24 @@ public partial class EventManager : Node
 		margin.AddThemeConstantOverride("margin_bottom", 10);
 		dialog.AddChild(margin);
 
-		var content_list = new VBoxContainer();
-		content_list.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
-		content_list.AddThemeConstantOverride("separation", 10);
-		margin.AddChild(content_list);
+		var contentList = new VBoxContainer();
+		contentList.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
+		contentList.AddThemeConstantOverride("separation", 10);
+		margin.AddChild(contentList);
 
 		if (data.TryGetValue("contents", out var contents) && contents.VariantType == Variant.Type.Array)
 		{
 			foreach (var element in contents.AsGodotArray())
 			{
-				var count_before = content_list.GetChildCount();
-				InterpreterManager.Instance.get_element(element, content_list, CountryManager.Instance.player_country);
-				var count_after = content_list.GetChildCount();
-				if (count_after > count_before)
-					_connect_buttons_to_close(content_list.GetChild(count_after - 1), dialog);
+				var countBefore = contentList.GetChildCount();
+				InterpreterManager.Instance.GetElement(element, contentList, CountryManager.Instance.playerCountry);
+				var countAfter = contentList.GetChildCount();
+				if (countAfter > countBefore)
+					_connect_buttons_to_close(contentList.GetChild(countAfter - 1), dialog);
 			}
 		}
 
-		dialog.content_root = content_list;
+		dialog.contentRoot = contentList;
 		return dialog;
 	}
 
@@ -254,28 +254,28 @@ public partial class EventManager : Node
 		root.AddThemeConstantOverride("separation", 8);
 		panel.AddChild(root);
 
-		var background_rect = new TextureRect();
-		background_rect.CustomMinimumSize = new Vector2(0, 200);
-		background_rect.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
-		background_rect.SizeFlagsVertical = Control.SizeFlags.ExpandFill;
-		background_rect.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
-		background_rect.StretchMode = TextureRect.StretchModeEnum.KeepAspectCovered;
+		var backgroundRect = new TextureRect();
+		backgroundRect.CustomMinimumSize = new Vector2(0, 200);
+		backgroundRect.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
+		backgroundRect.SizeFlagsVertical = Control.SizeFlags.ExpandFill;
+		backgroundRect.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
+		backgroundRect.StretchMode = TextureRect.StretchModeEnum.KeepAspectCovered;
 		if (data.TryGetValue("background", out var background))
 		{
 			var path = "res://assets/superevents/" + background.AsString() + ".png";
 			if (FileAccess.FileExists(path) || ResourceLoader.Exists(path))
-				background_rect.Texture = GD.Load<Texture2D>(path);
+				backgroundRect.Texture = GD.Load<Texture2D>(path);
 			else
 				GD.PushWarning($"SuperEvent: Background image not found at {path}");
 		}
-		root.AddChild(background_rect);
+		root.AddChild(backgroundRect);
 
-		var desc_label = new Label();
-		desc_label.AutowrapMode = TextServer.AutowrapMode.WordSmart;
-		desc_label.HorizontalAlignment = HorizontalAlignment.Center;
-		desc_label.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
-		desc_label.Text = GetOrDefault(data, "desc", "").AsString();
-		root.AddChild(desc_label);
+		var descLabel = new Label();
+		descLabel.AutowrapMode = TextServer.AutowrapMode.WordSmart;
+		descLabel.HorizontalAlignment = HorizontalAlignment.Center;
+		descLabel.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
+		descLabel.Text = GetOrDefault(data, "desc", "").AsString();
+		root.AddChild(descLabel);
 
 		var button = new Button();
 		button.Text = GetOrDefault(data, "button", "Ok").AsString();
@@ -287,15 +287,15 @@ public partial class EventManager : Node
 
 		if (data.TryGetValue("music", out var music))
 		{
-			var base_path = "res://assets/music/superevents/" + music.AsString();
-			if (FileAccess.FileExists(base_path + ".mp3"))
-				MusicManager.Instance.play_custom_file(base_path + ".mp3");
-			else if (FileAccess.FileExists(base_path + ".ogg"))
-				MusicManager.Instance.play_custom_file(base_path + ".ogg");
+			var basePath = "res://assets/music/superevents/" + music.AsString();
+			if (FileAccess.FileExists(basePath + ".mp3"))
+				MusicManager.Instance.PlayCustomFile(basePath + ".mp3");
+			else if (FileAccess.FileExists(basePath + ".ogg"))
+				MusicManager.Instance.PlayCustomFile(basePath + ".ogg");
 		}
 		else
 		{
-			MusicManager.Instance.play_sfx(SfxPopup);
+			MusicManager.Instance.PlaySfx(SfxPopup);
 		}
 
 		return dialog;
@@ -316,7 +316,7 @@ public partial class EventManager : Node
 	public TextureRect _create_flag(string country, string ideology = "")
 	{
 		var tr = new TextureRect();
-		tr.Texture = TroopManager.Instance.get_flag(country, ideology);
+		tr.Texture = TroopManager.Instance.GetFlag(country, ideology);
 		tr.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
 		tr.StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered;
 		tr.CustomMinimumSize = new Vector2(50, 25);
@@ -324,53 +324,53 @@ public partial class EventManager : Node
 	}
 
 	// SUPER EVENT MIGRATED LOGIC
-	public void load_super_events(string path)
+	public void LoadSuperEvents(string path)
 	{
-		super_events.Clear();
+		superEvents.Clear();
 		var json = MapData.Instance.LoadJSON(path);
 		if (json.VariantType == Variant.Type.Dictionary)
 		{
 			var root = json.AsGodotDictionary();
 			if (root.TryGetValue("events", out var events))
 			{
-				foreach (var event_data in events.AsGodotArray())
+				foreach (var eventData in events.AsGodotArray())
 				{
-					var event_dict = event_data.AsGodotDictionary();
-					if (event_dict.TryGetValue("cause", out var cause) && IsNotEmpty(cause))
-						super_events.Add(event_dict);
+					var eventDict = eventData.AsGodotDictionary();
+					if (eventDict.TryGetValue("cause", out var cause) && IsNotEmpty(cause))
+						superEvents.Add(eventDict);
 				}
 			}
 		}
 	}
 
-	public void check_super_events()
+	public void CheckSuperEvents()
 	{
 		var remove = new List<int>();
-		var index_cur = 0;
-		foreach (var superEvent in super_events)
+		var indexCur = 0;
+		foreach (var superEvent in superEvents)
 		{
-			var event_dict = superEvent.AsGodotDictionary();
-			if (InterpreterManager.Instance.get_function(GetOrDefault(event_dict, "cause", new Godot.Collections.Dictionary())).AsBool())
+			var eventDict = superEvent.AsGodotDictionary();
+			if (InterpreterManager.Instance.GetFunction(GetOrDefault(eventDict, "cause", new Godot.Collections.Dictionary())).AsBool())
 			{
-				_add_dialog(_create_super_event_dialog(event_dict));
-				remove.Add(index_cur);
+				_add_dialog(_create_super_event_dialog(eventDict));
+				remove.Add(indexCur);
 			}
-			index_cur++;
+			indexCur++;
 		}
 		remove.Reverse();
 		foreach (var index in remove)
-			super_events.RemoveAt(index);
+			superEvents.RemoveAt(index);
 	}
 
-	public void schedule_event(int days, Godot.Collections.Dictionary data)
+	public void ScheduleEvent(int days, Godot.Collections.Dictionary data)
 	{
 		var clock = CurrentClock();
 		if (clock == null)
 			return;
-		var target_time = (int)clock.get_absolute_days() + days;
-		scheduled_events.Add(new Godot.Collections.Dictionary
+		var targetTime = (int)clock.GetAbsoluteDays() + days;
+		scheduledEvents.Add(new Godot.Collections.Dictionary
 		{
-			{ "trigger_time", target_time },
+			{ "trigger_time", targetTime },
 			{ "event_data", data },
 		});
 	}
@@ -380,31 +380,31 @@ public partial class EventManager : Node
 		var clock = CurrentClock();
 		if (clock == null)
 			return;
-		var current = (int)clock.get_absolute_days();
-		var to_trigger = new Godot.Collections.Array();
+		var current = (int)clock.GetAbsoluteDays();
+		var toTrigger = new Godot.Collections.Array();
 
-		for (var i = scheduled_events.Count - 1; i >= 0; i--)
+		for (var i = scheduledEvents.Count - 1; i >= 0; i--)
 		{
-			var entry = scheduled_events[i].AsGodotDictionary();
+			var entry = scheduledEvents[i].AsGodotDictionary();
 			if (current >= GetOrDefault(entry, "trigger_time", 0).AsInt32())
 			{
-				to_trigger.Add(GetOrDefault(entry, "event_data"));
-				scheduled_events.RemoveAt(i);
+				toTrigger.Add(GetOrDefault(entry, "event_data"));
+				scheduledEvents.RemoveAt(i);
 			}
 		}
 
-		foreach (var ev in to_trigger)
-			show_alert(ev.AsGodotDictionary());
+		foreach (var ev in toTrigger)
+			ShowAlert(ev.AsGodotDictionary());
 	}
 
-	public Godot.Collections.Array save_events()
+	public Godot.Collections.Array SaveEvents()
 	{
-		return scheduled_events.Duplicate(true);
+		return scheduledEvents.Duplicate(true);
 	}
 
-	public void load_events(Godot.Collections.Array data)
+	public void LoadEvents(Godot.Collections.Array data)
 	{
-		scheduled_events = data.Duplicate(true);
+		scheduledEvents = data.Duplicate(true);
 	}
 
 	private static Variant GetOrDefault(Godot.Collections.Dictionary dict, Variant key, Variant fallback = default)
@@ -447,11 +447,11 @@ public partial class EventManager : Node
 	}
 
 	private static string CountryLabel(Variant country)
-		=> country.AsGodotObject().Get("country_name").AsString().Capitalize();
+		=> country.AsGodotObject().Get("countryName").AsString().Capitalize();
 
 	private static GameClock CurrentClock()
 	{
-		var world = GameState.Instance.current_world;
+		var world = GameState.Instance.currentWorld;
 		if (world == null || !GodotObject.IsInstanceValid(world))
 			return null;
 		var clock = world.clock;
@@ -461,7 +461,7 @@ public partial class EventManager : Node
 
 public partial class EventDialog : Window
 {
-	public VBoxContainer content_root;
+	public VBoxContainer contentRoot;
 
 	public override void _Ready()
 	{
@@ -470,7 +470,7 @@ public partial class EventDialog : Window
 
 	public override void _Process(double delta)
 	{
-		if (content_root != null && GodotObject.IsInstanceValid(content_root))
-			InterpreterManager.Instance.refresh_buttons(content_root);
+		if (contentRoot != null && GodotObject.IsInstanceValid(contentRoot))
+			InterpreterManager.Instance.RefreshButtons(contentRoot);
 	}
 }

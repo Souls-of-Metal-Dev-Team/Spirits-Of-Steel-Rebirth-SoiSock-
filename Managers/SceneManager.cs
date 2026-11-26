@@ -27,29 +27,29 @@ public partial class SceneManager : Node
 	public override void _Ready()
 	{
 		// Instantiate loading screen and add it as a persistent sibling of CurrentScene.
-		var ls_scene = GD.Load<PackedScene>("res://Scenes/LoadingScreen.tscn");
-		if (ls_scene != null)
+		var lsScene = GD.Load<PackedScene>("res://Scenes/LoadingScreen.tscn");
+		if (lsScene != null)
 		{
-			_loading_screen = ls_scene.Instantiate();
+			_loading_screen = lsScene.Instantiate();
 			AddChild(_loading_screen);
 		}
 	}
 
-	public bool has_active_world() => GodotObject.IsInstanceValid(_world_cache);
+	public bool HasActiveWorld() => GodotObject.IsInstanceValid(_world_cache);
 
-	public bool is_world_active() => _current_type == TypeWorld;
+	public bool IsWorldActive() => _current_type == TypeWorld;
 
-	public void switch_to(int scene_type) => switch_to(scene_type, new Callable());
+	public void SwitchTo(int sceneType) => SwitchTo(sceneType, new Callable());
 
-	public async void switch_to(int scene_type, Callable init_callback)
+	public async void SwitchTo(int sceneType, Callable initCallback)
 	{
-		if (scene_type == _current_type)
+		if (sceneType == _current_type)
 			return;
 
 		if (_loading_screen != null)
 		{
-			_loading_screen.Call("show_screen");
-			_loading_screen.Call("set_progress", 0.0f);
+			_loading_screen.Call("ShowScreen");
+			_loading_screen.Call("SetProgress", 0.0f);
 		}
 
 		// Small delay to ensure loading screen is visible
@@ -61,32 +61,32 @@ public partial class SceneManager : Node
 		// 1. Handle the scene we are LEAVING
 		if (container.GetChildCount() > 0)
 		{
-			var old_scene = container.GetChild(0);
+			var oldScene = container.GetChild(0);
 			if (_current_type == TypeWorld)
-				container.RemoveChild(old_scene);
+				container.RemoveChild(oldScene);
 			else
-				old_scene.QueueFree();
+				oldScene.QueueFree();
 		}
 
 		// 2. Handle the scene we are ENTERING
-		Node next_scene;
+		Node nextScene;
 		var progress = new Godot.Collections.Array { 0.0f };
-		var progress_lock = new object();
+		var progressLock = new object();
 
-		if (scene_type == TypeWorld && _world_cache != null)
+		if (sceneType == TypeWorld && _world_cache != null)
 		{
-			next_scene = _world_cache;
+			nextScene = _world_cache;
 			if (_loading_screen != null)
-				_loading_screen.Call("set_progress", 1.0f);
+				_loading_screen.Call("SetProgress", 1.0f);
 		}
 		else
 		{
-			if (!SCENE_MAP.ContainsKey(scene_type))
+			if (!SCENE_MAP.ContainsKey(sceneType))
 			{
-				GD.PushError("Failed to load scene: unknown scene type " + scene_type);
+				GD.PushError("Failed to load scene: unknown scene type " + sceneType);
 				return;
 			}
-			var path = SCENE_MAP[scene_type].AsString();
+			var path = SCENE_MAP[sceneType].AsString();
 			ResourceLoader.LoadThreadedRequest(path);
 
 			var done = false;
@@ -98,10 +98,10 @@ public partial class SceneManager : Node
 						done = true;
 						break;
 					case ResourceLoader.ThreadLoadStatus.InProgress:
-						lock (progress_lock)
+						lock (progressLock)
 						{
 							if (_loading_screen != null && progress.Count > 0)
-								_loading_screen.Call("set_progress", progress[0].AsSingle());
+								_loading_screen.Call("SetProgress", progress[0].AsSingle());
 						}
 						break;
 					default:
@@ -113,30 +113,30 @@ public partial class SceneManager : Node
 					await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 			}
 
-			var packed_scene = ResourceLoader.LoadThreadedGet(path) as PackedScene;
-			next_scene = packed_scene?.Instantiate();
-			if (scene_type == TypeWorld)
-				_world_cache = next_scene;
+			var packedScene = ResourceLoader.LoadThreadedGet(path) as PackedScene;
+			nextScene = packedScene?.Instantiate();
+			if (sceneType == TypeWorld)
+				_world_cache = nextScene;
 		}
 
 		// 2.5 Execute initialization callback if provided
-		if (init_callback.Target != null && init_callback.Method.ToString() != "")
+		if (initCallback.Target != null && initCallback.Method.ToString() != "")
 		{
-			lock (progress_lock)
+			lock (progressLock)
 			{
 				progress.Clear();
 				progress.Add(0.0f);
 			}
-			var callback_progress = progress;
+			var callbackProgress = progress;
 			var bongo = new GodotThread();
-			bongo.Start(Callable.From(() => init_callback.Call(callback_progress)));
+			bongo.Start(Callable.From(() => initCallback.Call(callbackProgress)));
 
 			while (bongo.IsAlive())
 			{
-				lock (progress_lock)
+				lock (progressLock)
 				{
 					if (_loading_screen != null && progress.Count > 0 && progress[0].AsSingle() != 0.0f)
-						_loading_screen.Call("set_progress", progress[0].AsSingle());
+						_loading_screen.Call("SetProgress", progress[0].AsSingle());
 				}
 				await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 			}
@@ -144,18 +144,18 @@ public partial class SceneManager : Node
 		}
 
 		// 3. Add to tree
-		if (next_scene != null)
+		if (nextScene != null)
 		{
-			container.AddChild(next_scene);
-			if (_current_type == TypeMenu && scene_type == TypeWorld)
+			container.AddChild(nextScene);
+			if (_current_type == TypeMenu && sceneType == TypeWorld)
 			{
 				// DoSetup touches the scene tree; run it on the main thread.
-				var setup_progress = new Godot.Collections.Array { 0 };
-				next_scene.Call("DoSetup", setup_progress);
+				var setupProgress = new Godot.Collections.Array { 0 };
+				nextScene.Call("DoSetup", setupProgress);
 			}
-			else if (scene_type == TypeEditor)
+			else if (sceneType == TypeEditor)
 			{
-				GameState.Instance.current_world?.clock?.pause();
+				GameState.Instance.currentWorld?.clock?.pause();
 			}
 			else if (_current_type == TypeWorld)
 			{
@@ -163,14 +163,14 @@ public partial class SceneManager : Node
 				if (tooltip != null && GodotObject.IsInstanceValid(tooltip))
 					tooltip.shouldBeVisible = false;
 			}
-			_current_type = scene_type;
+			_current_type = sceneType;
 		}
 
 		if (_loading_screen != null)
 		{
-			_loading_screen.Call("set_progress", 1.0f);
+			_loading_screen.Call("SetProgress", 1.0f);
 			await ToSignal(GetTree().CreateTimer(0.2), SceneTreeTimer.SignalName.Timeout); // Stay at 100% briefly
-			_loading_screen.Call("hide_screen");
+			_loading_screen.Call("HideScreen");
 		}
 	}
 
@@ -178,7 +178,7 @@ public partial class SceneManager : Node
 	{
 		if (!SCENE_MAP.ContainsKey(type))
 			return null;
-		var packed_scene = GD.Load<PackedScene>(SCENE_MAP[type].AsString());
-		return packed_scene?.Instantiate();
+		var packedScene = GD.Load<PackedScene>(SCENE_MAP[type].AsString());
+		return packedScene?.Instantiate();
 	}
 }

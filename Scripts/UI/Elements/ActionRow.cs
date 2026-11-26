@@ -11,9 +11,9 @@ public partial class ActionRow : HBoxContainer
 	private Button button;
 
 	public Godot.Collections.Dictionary data = new();
-	public string base_text = "";
+	public string baseText = "";
 	private Action _callback;
-	public GodotObject source_object = null;
+	public object? sourceObject = null;
 
 	public override void _Ready()
 	{
@@ -24,74 +24,74 @@ public partial class ActionRow : HBoxContainer
 	}
 
 	// 1. Standard Setup
-	public async void setup(Godot.Collections.Dictionary item_data, Action on_click)
+	public async void setup(Godot.Collections.Dictionary itemData, Action onClick)
 	{
-		data = item_data;
-		_callback = on_click;
-		source_object = null;
-		base_text = data.TryGetValue("text", out var text) ? text.AsString() : "Unknown Action";
+		data = itemData;
+		_callback = onClick;
+		sourceObject = null;
+		baseText = data.TryGetValue("text", out var text) ? text.AsString() : "Unknown Action";
 		if (!IsNodeReady())
 			await ToSignal(this, Node.SignalName.Ready);
-		refresh_ui();
+		RefreshUi();
 	}
 
 	// 2. Training Setup
-	public async void setup_training(TroopTraining training_obj)
+	public async void SetupTraining(TroopTraining trainingObj)
 	{
-		source_object = training_obj;
+		sourceObject = trainingObj;
 		data = new Godot.Collections.Dictionary { { "is_status", true } };
 		_callback = null;
-		base_text = $"Training {training_obj.divisions_count} Divs";
+		baseText = $"Training {trainingObj.divisionsCount} Divs";
 
 		if (!IsNodeReady())
 			await ToSignal(this, Node.SignalName.Ready);
 		button.Disabled = true;
 		button.Modulate = Colors.Gold;
-		refresh_ui();
+		RefreshUi();
 	}
 
 	// 3. Ready Setup
-	public async void setup_ready(ReadyTroop ready_troop_obj, Action on_click)
+	public async void SetupReady(ReadyTroop readyTroopObj, Action onClick)
 	{
 		data = new Godot.Collections.Dictionary { { "is_deploy", true } };
-		_callback = on_click;
-		base_text = $"Deploy {ready_troop_obj.count} Divisions";
+		_callback = onClick;
+		baseText = $"Deploy {readyTroopObj.count} Divisions";
 
 		if (!IsNodeReady())
 			await ToSignal(this, Node.SignalName.Ready);
 		button.Disabled = false;
 		button.Modulate = Colors.SpringGreen;
-		refresh_ui();
+		RefreshUi();
 	}
 
 	private bool Flag(string key) => data.TryGetValue(key, out var v) && v.AsBool();
 
 	private double Number(string key) => data.TryGetValue(key, out var v) ? v.AsDouble() : 0.0;
 
-	public void refresh_ui()
+	public void RefreshUi()
 	{
 		var player = CountryManager.Instance.Player;
 		if (player == null)
 			return;
 
 		// Special Logic: Troop Training
-		if (source_object != null && Flag("is_status"))
+		if (sourceObject != null && Flag("is_status"))
 		{
-			if (source_object is TroopTraining training)
+			if (sourceObject is TroopTraining training)
 			{
 				// CountryData.TrainingFinished rebuilds the list once days_left hits 0.
-				if (training.days_left <= 0)
+				if (training.daysLeft <= 0)
 					return;
-				button.Text = $"{base_text} ({training.days_left} Days)";
+				button.Text = $"{baseText} ({training.daysLeft} Days)";
 			}
 			return;
 		}
 
 		// Special Logic: Ready Troop. The GDScript original never set source_object for
 		// ready rows, so this branch was unreachable; kept for parity.
-		if (source_object != null && Flag("is_deploy"))
+		if (sourceObject != null && Flag("is_deploy"))
 		{
-			button.Text = base_text;
+			button.Text = baseText;
 			return;
 		}
 
@@ -100,25 +100,25 @@ public partial class ActionRow : HBoxContainer
 
 	private void _update_standard_text_and_cost(CountryData player)
 	{
-		var cost_pp = Number("cost");
-		var cost_mp = Number("manpower");
+		var costPp = Number("cost");
+		var costMp = Number("manpower");
 		var suffix = "";
 
-		if (cost_pp > 0)
-			suffix = $" ({(int)cost_pp} PP)";
-		else if (cost_mp > 0)
-			suffix = $" ({cost_mp * 0.001}k MP)";
+		if (costPp > 0)
+			suffix = $" ({(int)costPp} PP)";
+		else if (costMp > 0)
+			suffix = $" ({costMp * 0.001}k MP)";
 
-		button.Text = base_text + suffix;
+		button.Text = baseText + suffix;
 
-		var can_afford = player.political_power >= cost_pp && player.manpower >= cost_mp;
-		button.Disabled = !can_afford;
-		button.Modulate = can_afford ? Colors.White : new Color(1, 0.5f, 0.5f);
+		var canAfford = player.politicalPower >= costPp && player.manpower >= costMp;
+		button.Disabled = !canAfford;
+		button.Modulate = canAfford ? Colors.White : new Color(1, 0.5f, 0.5f);
 	}
 
 	private void _on_button_pressed()
 	{
-		CountryManager.Instance.Player.political_power -= Number("cost");
+		CountryManager.Instance.Player.politicalPower -= Number("cost");
 		_callback?.Invoke();
 	}
 }
